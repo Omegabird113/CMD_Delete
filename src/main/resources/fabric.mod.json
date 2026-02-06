@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "cmd_delete",
+  "version": "${version}",
+  "name": "CMD Delete",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/cmd_delete/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "mc.omegabird.cmd_delete.client.cmd_deleteClient"
+    ],
+    "main": [
+      "mc.omegabird.cmd_delete.cmd_delete"
+    ]
+  },
+  "mixins": [
+    "cmd_delete.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
