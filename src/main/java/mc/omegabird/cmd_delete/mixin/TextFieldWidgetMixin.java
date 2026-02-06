@@ -16,6 +16,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class TextFieldWidgetMixin {
     @Shadow
     protected abstract void erase(int offset, boolean words);
+    @Shadow
+    public abstract void moveCursor(int offset, boolean select);
+    @Shadow
+    public abstract void setCursor(int cursor, boolean select);
+    @Shadow
+    public abstract String getText();
+    @Shadow
+    protected abstract int getWordSkipPosition(int wordOffset, int cursorPosition, boolean skipOverSpaces);
+    @Shadow
+    protected abstract int getCursorPosWithOffset(int offset);
 
     @Inject(
             method = "keyPressed",
@@ -54,6 +64,41 @@ public abstract class TextFieldWidgetMixin {
         }
 
         this.erase(direction, false);
+        cir.setReturnValue(true);
+    }
+
+    @Inject(
+            method = "keyPressed",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void cmd_delete$arrowNavigation(KeyInput input, CallbackInfoReturnable<Boolean> cir) {
+        int key = input.key();
+
+        if (key != GLFW.GLFW_KEY_LEFT && key != GLFW.GLFW_KEY_RIGHT) {
+            return;
+        }
+
+        var window = MinecraftClient.getInstance().getWindow();
+        boolean shift = InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_LEFT_SHIFT) || InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_RIGHT_SHIFT);
+        boolean wordModifierPressed = InputUtil.isKeyPressed(window, cmd_delete_client.WORD_MODIFIER_KEY);
+        boolean lineModifierPressed = InputUtil.isKeyPressed(window, cmd_delete_client.LINE_MODIFIER_KEY);
+
+        int direction = (key == GLFW.GLFW_KEY_LEFT) ? -1 : 1;
+
+        if (lineModifierPressed) {
+            int target = (direction < 0) ? 0 : this.getText().length();
+            this.setCursor(target, shift);
+            cir.setReturnValue(true);
+            return;
+        }
+        if (wordModifierPressed) {
+            this.setCursor(this.getWordSkipPosition(direction, this.getCursorPosWithOffset(0), true), shift);
+            cir.setReturnValue(true);
+            return;
+        }
+
+        this.moveCursor(direction, shift);
         cir.setReturnValue(true);
     }
 }
