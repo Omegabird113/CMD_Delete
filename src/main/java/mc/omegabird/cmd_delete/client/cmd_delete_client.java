@@ -4,7 +4,7 @@ import net.fabricmc.api.ClientModInitializer;
 
 import org.lwjgl.glfw.GLFW;
 
-public class cmd_deleteClient implements ClientModInitializer {
+public class cmd_delete_client implements ClientModInitializer {
     static int control = GLFW.GLFW_KEY_LEFT_CONTROL;
     static int altOption = GLFW.GLFW_KEY_LEFT_ALT;
     static int WindowsCommand = GLFW.GLFW_KEY_LEFT_SUPER;

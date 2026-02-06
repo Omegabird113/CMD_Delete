@@ -1,6 +1,6 @@
 package mc.omegabird.cmd_delete.mixin;
 
-import mc.omegabird.cmd_delete.client.cmd_deleteClient;
+import mc.omegabird.cmd_delete.client.cmd_delete_client;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.input.KeyInput;
@@ -34,8 +34,8 @@ public abstract class TextFieldWidgetMixin {
         }
 
         var window = MinecraftClient.getInstance().getWindow();
-        int wordKey = cmd_deleteClient.WORD_MODIFIER_KEY;
-        int lineKey = cmd_deleteClient.LINE_MODIFIER_KEY;
+        int wordKey = cmd_delete_client.WORD_MODIFIER_KEY;
+        int lineKey = cmd_delete_client.LINE_MODIFIER_KEY;
 
         boolean wordPressed = wordKey != GLFW.GLFW_KEY_UNKNOWN && InputUtil.isKeyPressed(window, wordKey);
         boolean linePressed = lineKey != GLFW.GLFW_KEY_UNKNOWN && InputUtil.isKeyPressed(window, lineKey);
