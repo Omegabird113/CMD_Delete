@@ -44,11 +44,9 @@ public abstract class TextFieldWidgetMixin {
         }
 
         var window = MinecraftClient.getInstance().getWindow();
-        int wordKey = cmd_delete_client.WORD_MODIFIER_KEY;
-        int lineKey = cmd_delete_client.LINE_MODIFIER_KEY;
 
-        boolean wordPressed = wordKey != GLFW.GLFW_KEY_UNKNOWN && InputUtil.isKeyPressed(window, wordKey);
-        boolean linePressed = lineKey != GLFW.GLFW_KEY_UNKNOWN && InputUtil.isKeyPressed(window, lineKey);
+        boolean wordPressed = InputUtil.isKeyPressed(window, cmd_delete_client.WORD_MODIFIER_KEY) || InputUtil.isKeyPressed(window, cmd_delete_client.RIGHT_WORD_MODIFIER_KEY);
+        boolean linePressed = (cmd_delete_client.LINE_MODIFIER_KEY != GLFW.GLFW_KEY_UNKNOWN && InputUtil.isKeyPressed(window, cmd_delete_client.LINE_MODIFIER_KEY)) || (cmd_delete_client.RIGHT_LINE_MODIFIER_KEY != GLFW.GLFW_KEY_UNKNOWN && InputUtil.isKeyPressed(window, cmd_delete_client.RIGHT_LINE_MODIFIER_KEY));
 
         int direction = backspace ? -1 : 1;
 
@@ -81,8 +79,8 @@ public abstract class TextFieldWidgetMixin {
 
         var window = MinecraftClient.getInstance().getWindow();
         boolean shift = InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_LEFT_SHIFT) || InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_RIGHT_SHIFT);
-        boolean wordModifierPressed = InputUtil.isKeyPressed(window, cmd_delete_client.WORD_MODIFIER_KEY);
-        boolean lineModifierPressed = InputUtil.isKeyPressed(window, cmd_delete_client.LINE_MODIFIER_KEY);
+        boolean wordModifierPressed = InputUtil.isKeyPressed(window, cmd_delete_client.WORD_MODIFIER_KEY) || InputUtil.isKeyPressed(window, cmd_delete_client.RIGHT_WORD_MODIFIER_KEY) ;
+        boolean lineModifierPressed = (cmd_delete_client.LINE_MODIFIER_KEY != GLFW.GLFW_KEY_UNKNOWN && InputUtil.isKeyPressed(window, cmd_delete_client.LINE_MODIFIER_KEY)) || (cmd_delete_client.RIGHT_LINE_MODIFIER_KEY != GLFW.GLFW_KEY_UNKNOWN && InputUtil.isKeyPressed(window, cmd_delete_client.RIGHT_LINE_MODIFIER_KEY));
 
         int direction = (key == GLFW.GLFW_KEY_LEFT) ? -1 : 1;
 
