@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(TextFieldWidget.class)
+@Mixin(value = TextFieldWidget.class, priority = 2000)
 public abstract class TextFieldWidgetMixin {
     @Shadow
     protected abstract void erase(int offset, boolean words);
@@ -25,7 +25,7 @@ public abstract class TextFieldWidgetMixin {
     @Shadow
     protected abstract int getCursorPosWithOffset(int offset);
 
-    @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "keyPressed(Lnet/minecraft/client/input/KeyInput;)Z", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideDelete(KeyInput input, CallbackInfoReturnable<Boolean> cir) {
         int key = input.key();
         boolean backspace = key == GLFW.GLFW_KEY_BACKSPACE;
@@ -54,7 +54,7 @@ public abstract class TextFieldWidgetMixin {
         cir.setReturnValue(true);
     }
 
-    @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "keyPressed(Lnet/minecraft/client/input/KeyInput;)Z", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$arrowNavigation(KeyInput input, CallbackInfoReturnable<Boolean> cir) {
         int key = input.key();
         if (key != GLFW.GLFW_KEY_LEFT && key != GLFW.GLFW_KEY_RIGHT) {
