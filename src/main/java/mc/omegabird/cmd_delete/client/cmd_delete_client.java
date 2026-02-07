@@ -1,7 +1,6 @@
 package mc.omegabird.cmd_delete.client;
 
 import net.fabricmc.api.ClientModInitializer;
-
 import org.lwjgl.glfw.GLFW;
 
 public class cmd_delete_client implements ClientModInitializer {
@@ -21,7 +20,6 @@ public class cmd_delete_client implements ClientModInitializer {
     public static int LINE_MODIFIER_KEY = ifUserOnMac() ? WindowsCommand : GLFW.GLFW_KEY_UNKNOWN;
     public static int RIGHT_WORD_MODIFIER_KEY = ifUserOnMac() ? rightAltOption : rightControl;
     public static int RIGHT_LINE_MODIFIER_KEY = ifUserOnMac() ? rightWindowsCommand : GLFW.GLFW_KEY_UNKNOWN;
-
 
     @Override
     public void onInitializeClient() {
