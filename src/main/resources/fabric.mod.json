@@ -12,9 +12,6 @@
   "entrypoints": {
     "client": [
       "mc.omegabird.cmd_delete.client.cmd_delete_client"
-    ],
-    "main": [
-      "mc.omegabird.cmd_delete.cmd_delete"
     ]
   },
   "mixins": [
