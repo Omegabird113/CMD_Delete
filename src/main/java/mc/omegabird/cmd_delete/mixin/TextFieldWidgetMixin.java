@@ -1,6 +1,6 @@
 package mc.omegabird.cmd_delete.mixin;
 
-import mc.omegabird.cmd_delete.client.cmd_delete_client;
+import mc.omegabird.cmd_delete.client.cmdDeleteClient;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.input.KeyInput;
@@ -26,8 +26,6 @@ public abstract class TextFieldWidgetMixin {
     public abstract String getText();
     @Shadow
     public abstract int getWordSkipPosition(int wordOffset);
-    @Shadow
-    public abstract int getCursor();
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideDelete(KeyInput input, CallbackInfoReturnable<Boolean> cir) {
@@ -36,8 +34,8 @@ public abstract class TextFieldWidgetMixin {
         boolean shift = input.hasShift(); // gets is shift down
 
         // gets left/right word/line keys down
-        boolean word = InputUtil.isKeyPressed(window, cmd_delete_client.WORD_MODIFIER_KEY) || InputUtil.isKeyPressed(window, cmd_delete_client.RIGHT_WORD_MODIFIER_KEY);
-        boolean line = InputUtil.isKeyPressed(window, cmd_delete_client.LINE_MODIFIER_KEY) || InputUtil.isKeyPressed(window, cmd_delete_client.RIGHT_LINE_MODIFIER_KEY);
+        boolean word = InputUtil.isKeyPressed(window, cmdDeleteClient.WORD_MODIFIER_KEY) || InputUtil.isKeyPressed(window, cmdDeleteClient.RIGHT_WORD_MODIFIER_KEY);
+        boolean line = InputUtil.isKeyPressed(window, cmdDeleteClient.LINE_MODIFIER_KEY) || InputUtil.isKeyPressed(window, cmdDeleteClient.RIGHT_LINE_MODIFIER_KEY);
 
         // delete handling
         if (key == GLFW.GLFW_KEY_BACKSPACE || key == GLFW.GLFW_KEY_DELETE) {
