@@ -51,6 +51,7 @@ public abstract class TextFieldWidgetMixin {
         if (key == GLFW.GLFW_KEY_BACKSPACE || key == GLFW.GLFW_KEY_DELETE) {
             // if no word or line, then let vanilla delete
             if (!word && !line) {
+                LOGGER.debug("returned from deletion because word and line are false");
                 return;
             }
 
@@ -65,6 +66,7 @@ public abstract class TextFieldWidgetMixin {
                 this.erase(direction, true);
             }
 
+            LOGGER.debug("Deletion handled. Direction = {}", direction);
             cir.setReturnValue(true); // stops vanilla sense in this case, I handled
             return;
         }
@@ -72,6 +74,7 @@ public abstract class TextFieldWidgetMixin {
         // Handle arrow key navigation
         if (key == GLFW.GLFW_KEY_LEFT || key == GLFW.GLFW_KEY_RIGHT) {
             if (!word && !line) {
+                LOGGER.debug("returned from navigation because word and line are false");
                 return; // sends to vanilla if no modifiers
             }
 
@@ -85,6 +88,7 @@ public abstract class TextFieldWidgetMixin {
                 this.setCursor(this.getWordSkipPosition(direction), shift);
             }
 
+            LOGGER.debug("Navigation handled. Direction = {}", direction);
             cir.setReturnValue(true); // stops vanilla sense I handled
         }
         // let vanilla handle other stuff
