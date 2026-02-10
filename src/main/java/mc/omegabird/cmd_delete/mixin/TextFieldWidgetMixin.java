@@ -12,6 +12,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+/**
+ * This mixin overrides the keyPressed method in TextFieldWidget to add:
+ * word/line modifier based deletion and arrow navigation.
+ */
 @Mixin(value = TextFieldWidget.class, priority = 2000)
 public abstract class TextFieldWidgetMixin {
     @Shadow
@@ -21,43 +25,60 @@ public abstract class TextFieldWidgetMixin {
     @Shadow
     public abstract String getText();
     @Shadow
-    protected abstract int getWordSkipPosition(int wordOffset, int cursorPosition, boolean skipOverSpaces);
+    public abstract int getWordSkipPosition(int wordOffset);
     @Shadow
-    protected abstract int getCursorPosWithOffset(int offset);
+    public abstract int getCursor();
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideDelete(KeyInput input, CallbackInfoReturnable<Boolean> cir) {
         int key = input.key();
         var window = MinecraftClient.getInstance().getWindow();
-        boolean backspace = key == GLFW.GLFW_KEY_BACKSPACE;
-        boolean delete = key == GLFW.GLFW_KEY_DELETE;
-        boolean shift = InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_LEFT_SHIFT) || InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_RIGHT_SHIFT);
-        boolean word = InputUtil.isKeyPressed(window, cmd_delete_client.WORD_MODIFIER_KEY) || InputUtil.isKeyPressed(window, cmd_delete_client.RIGHT_WORD_MODIFIER_KEY);
-        boolean line = (cmd_delete_client.LINE_MODIFIER_KEY != GLFW.GLFW_KEY_UNKNOWN && InputUtil.isKeyPressed(window, cmd_delete_client.LINE_MODIFIER_KEY)) || (cmd_delete_client.RIGHT_LINE_MODIFIER_KEY != GLFW.GLFW_KEY_UNKNOWN && InputUtil.isKeyPressed(window, cmd_delete_client.RIGHT_LINE_MODIFIER_KEY));
+        boolean shift = input.hasShift(); // gets is shift down
 
-        if (backspace || delete) {
+        // gets left/right word/line keys down
+        boolean word = InputUtil.isKeyPressed(window, cmd_delete_client.WORD_MODIFIER_KEY) || InputUtil.isKeyPressed(window, cmd_delete_client.RIGHT_WORD_MODIFIER_KEY);
+        boolean line = InputUtil.isKeyPressed(window, cmd_delete_client.LINE_MODIFIER_KEY) || InputUtil.isKeyPressed(window, cmd_delete_client.RIGHT_LINE_MODIFIER_KEY);
+
+        // delete handling
+        if (key == GLFW.GLFW_KEY_BACKSPACE || key == GLFW.GLFW_KEY_DELETE) {
+            // if no word or line, then let vanilla delete
             if (!word && !line) {
                 return;
             }
-            int direction = backspace ? -1 : 1;
+
+            // If backspace delete before, if delete key, delete after
+            int direction = (key == GLFW.GLFW_KEY_BACKSPACE) ? -1 : 1;
+
             if (line) {
-                this.erase(direction > 0 ? Integer.MAX_VALUE : Integer.MIN_VALUE, false);
+                // Deletes begining/end based off direction. If backspace before, delete to 0, else delete after delete to end length.
+                this.erase(direction < 0 ? 0 : this.getText().length(), false);
             } else {
+                // This handles the word deletion
                 this.erase(direction, true);
             }
+
+            cir.setReturnValue(true); // stops vanilla sense in this case, I handled
+            return;
         }
 
+        // Handle arrow key navigation
         if (key == GLFW.GLFW_KEY_LEFT || key == GLFW.GLFW_KEY_RIGHT) {
             if (!word && !line) {
-                return;
+                return; // sends to vanilla if no modifiers
             }
-            int direction = (key == GLFW.GLFW_KEY_LEFT) ? -1 : 1;
+
+            int direction = (key == GLFW.GLFW_KEY_LEFT) ? -1 : 1; // left -1, right 1
+
             if (line) {
+                // moves to begining/end based on direction (if -1 left, then move to first, else move to right based opn length) & passes shift
                 this.setCursor(direction < 0 ? 0 : this.getText().length(), shift);
             } else {
-                this.setCursor(this.getWordSkipPosition(direction, this.getCursorPosWithOffset(0), true), shift);
+                // moves to position based on word skip position passing direction and shift
+                this.setCursor(this.getWordSkipPosition(direction), shift);
             }
+
+            cir.setReturnValue(true); // stops vanilla sense I handled
         }
-        cir.setReturnValue(true);
+        // let vanilla handle other stuff
     }
 }
