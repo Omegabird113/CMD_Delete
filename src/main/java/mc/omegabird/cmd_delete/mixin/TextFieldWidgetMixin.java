@@ -21,6 +21,8 @@ public abstract class TextFieldWidgetMixin {
     @Shadow
     protected abstract void erase(int offset, boolean words);
     @Shadow
+    public abstract void eraseCharactersTo(int position);
+    @Shadow
     public abstract void setCursor(int cursor, boolean select);
     @Shadow
     public abstract String getText();
@@ -49,7 +51,7 @@ public abstract class TextFieldWidgetMixin {
 
             if (line) {
                 // Deletes begining/end based off direction. If backspace before, delete to 0, else delete after delete to end length.
-                this.erase(direction < 0 ? 0 : this.getText().length(), false);
+                this.eraseCharactersTo(direction < 0 ? 0 : this.getText().length());
             } else {
                 // This handles the word deletion
                 this.erase(direction, true);
