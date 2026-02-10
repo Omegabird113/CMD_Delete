@@ -6,8 +6,10 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.input.KeyInput;
 import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
+import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -28,6 +30,8 @@ public abstract class TextFieldWidgetMixin {
     public abstract String getText();
     @Shadow
     public abstract int getWordSkipPosition(int wordOffset);
+    @Unique
+    Logger LOGGER = cmdDeleteClient.LOGGER;
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideDelete(KeyInput input, CallbackInfoReturnable<Boolean> cir) {
@@ -38,6 +42,10 @@ public abstract class TextFieldWidgetMixin {
         // gets left/right word/line keys down
         boolean word = InputUtil.isKeyPressed(window, cmdDeleteClient.WORD_MODIFIER_KEY) || InputUtil.isKeyPressed(window, cmdDeleteClient.RIGHT_WORD_MODIFIER_KEY);
         boolean line = InputUtil.isKeyPressed(window, cmdDeleteClient.LINE_MODIFIER_KEY) || InputUtil.isKeyPressed(window, cmdDeleteClient.RIGHT_LINE_MODIFIER_KEY);
+
+        // Logs debug info
+        LOGGER.debug("keyPressed triggered, key = {}, shift = {}", key, shift);
+        LOGGER.debug("keyPressed trigger continued, word = {}. line = {}", word, line);
 
         // delete handling
         if (key == GLFW.GLFW_KEY_BACKSPACE || key == GLFW.GLFW_KEY_DELETE) {
