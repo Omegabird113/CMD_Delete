@@ -25,59 +25,39 @@ public abstract class TextFieldWidgetMixin {
     @Shadow
     protected abstract int getCursorPosWithOffset(int offset);
 
-    @Inject(method = "keyPressed(Lnet/minecraft/client/input/KeyInput;)Z", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideDelete(KeyInput input, CallbackInfoReturnable<Boolean> cir) {
         int key = input.key();
+        var window = MinecraftClient.getInstance().getWindow();
         boolean backspace = key == GLFW.GLFW_KEY_BACKSPACE;
         boolean delete = key == GLFW.GLFW_KEY_DELETE;
-
-        if (!backspace && !delete) {
-            return;
-        }
-
-        var window = MinecraftClient.getInstance().getWindow();
-        boolean wordPressed = InputUtil.isKeyPressed(window, cmd_delete_client.WORD_MODIFIER_KEY) || InputUtil.isKeyPressed(window, cmd_delete_client.RIGHT_WORD_MODIFIER_KEY);
-        boolean linePressed = (cmd_delete_client.LINE_MODIFIER_KEY != GLFW.GLFW_KEY_UNKNOWN && InputUtil.isKeyPressed(window, cmd_delete_client.LINE_MODIFIER_KEY)) || (cmd_delete_client.RIGHT_LINE_MODIFIER_KEY != GLFW.GLFW_KEY_UNKNOWN && InputUtil.isKeyPressed(window, cmd_delete_client.RIGHT_LINE_MODIFIER_KEY));
-
-        if (!wordPressed && !linePressed) {
-            return;
-        }
-
-        int direction = backspace ? -1 : 1;
-
-        if (linePressed) {
-            this.erase(direction > 0 ? Integer.MAX_VALUE : Integer.MIN_VALUE, false);
-        } else {
-            this.erase(direction, true);
-        }
-
-        cir.setReturnValue(true);
-    }
-
-    @Inject(method = "keyPressed(Lnet/minecraft/client/input/KeyInput;)Z", at = @At("HEAD"), cancellable = true)
-    private void cmd_delete$arrowNavigation(KeyInput input, CallbackInfoReturnable<Boolean> cir) {
-        int key = input.key();
-        if (key != GLFW.GLFW_KEY_LEFT && key != GLFW.GLFW_KEY_RIGHT) {
-            return;
-        }
-
-        var window = MinecraftClient.getInstance().getWindow();
         boolean shift = InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_LEFT_SHIFT) || InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_RIGHT_SHIFT);
         boolean word = InputUtil.isKeyPressed(window, cmd_delete_client.WORD_MODIFIER_KEY) || InputUtil.isKeyPressed(window, cmd_delete_client.RIGHT_WORD_MODIFIER_KEY);
         boolean line = (cmd_delete_client.LINE_MODIFIER_KEY != GLFW.GLFW_KEY_UNKNOWN && InputUtil.isKeyPressed(window, cmd_delete_client.LINE_MODIFIER_KEY)) || (cmd_delete_client.RIGHT_LINE_MODIFIER_KEY != GLFW.GLFW_KEY_UNKNOWN && InputUtil.isKeyPressed(window, cmd_delete_client.RIGHT_LINE_MODIFIER_KEY));
 
-        if (!word && !line) {
-            return;
+        if (backspace || delete) {
+            if (!word && !line) {
+                return;
+            }
+            int direction = backspace ? -1 : 1;
+            if (line) {
+                this.erase(direction > 0 ? Integer.MAX_VALUE : Integer.MIN_VALUE, false);
+            } else {
+                this.erase(direction, true);
+            }
         }
 
-        int direction = (key == GLFW.GLFW_KEY_LEFT) ? -1 : 1;
-
-        if (line) {
-            this.setCursor(direction < 0 ? 0 : this.getText().length(), shift);
-        } else {
-            this.setCursor(this.getWordSkipPosition(direction, this.getCursorPosWithOffset(0), true), shift);
+        if (key == GLFW.GLFW_KEY_LEFT || key == GLFW.GLFW_KEY_RIGHT) {
+            if (!word && !line) {
+                return;
+            }
+            int direction = (key == GLFW.GLFW_KEY_LEFT) ? -1 : 1;
+            if (line) {
+                this.setCursor(direction < 0 ? 0 : this.getText().length(), shift);
+            } else {
+                this.setCursor(this.getWordSkipPosition(direction, this.getCursorPosWithOffset(0), true), shift);
+            }
         }
-
         cir.setReturnValue(true);
     }
 }
