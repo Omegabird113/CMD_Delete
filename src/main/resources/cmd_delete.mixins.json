@@ -4,6 +4,7 @@
   "package": "mc.omegabird.cmd_delete.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "TextFieldWidgetMixin"
   ],
   "client": [
     "TextFieldWidgetMixin"
