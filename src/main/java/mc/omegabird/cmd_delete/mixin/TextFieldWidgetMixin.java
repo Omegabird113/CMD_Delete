@@ -43,12 +43,12 @@ public abstract class TextFieldWidgetMixin {
         boolean word = InputUtil.isKeyPressed(window, cmdDeleteClient.WORD_MODIFIER_KEY) || InputUtil.isKeyPressed(window, cmdDeleteClient.RIGHT_WORD_MODIFIER_KEY);
         boolean line = InputUtil.isKeyPressed(window, cmdDeleteClient.LINE_MODIFIER_KEY) || InputUtil.isKeyPressed(window, cmdDeleteClient.RIGHT_LINE_MODIFIER_KEY);
 
-        // Logs debug info
-        cmdDeleteClient.LOGGER.debug("keyPressed triggered, key = {}, shift = {}", key, shift);
-        cmdDeleteClient.LOGGER.debug("keyPressed trigger continued, word = {}. line = {}", word, line);
-
         // delete handling
         if (key == GLFW.GLFW_KEY_BACKSPACE || key == GLFW.GLFW_KEY_DELETE) {
+            // Logs debug info
+            cmdDeleteClient.LOGGER.debug("keyPressed from Delete handle triggered, key = {}, shift = {}", key, shift);
+            cmdDeleteClient.LOGGER.debug("keyPressed trigger continued, word = {}. line = {}", word, line);
+
             // if no word or line, then let vanilla delete
             if (!word && !line) {
                 cmdDeleteClient.LOGGER.debug("returned from deletion because word and line are false");
@@ -74,6 +74,10 @@ public abstract class TextFieldWidgetMixin {
 
         // Handle arrow key navigation
         if (key == GLFW.GLFW_KEY_LEFT || key == GLFW.GLFW_KEY_RIGHT) {
+            // Logs debug info
+            cmdDeleteClient.LOGGER.debug("keyPressed from navigation handle triggered, key = {}, shift = {}", key, shift);
+            cmdDeleteClient.LOGGER.debug("keyPressed trigger continued, word = {}. line = {}", word, line);
+
             if (!word && !line) {
                 cmdDeleteClient.LOGGER.debug("returned from navigation because word and line are false");
                 return; // sends to vanilla if no modifiers
