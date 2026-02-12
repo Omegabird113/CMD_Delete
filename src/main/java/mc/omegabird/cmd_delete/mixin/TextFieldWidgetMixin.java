@@ -6,10 +6,8 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.input.KeyInput;
 import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
-import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -30,9 +28,11 @@ public abstract class TextFieldWidgetMixin {
     public abstract String getText();
     @Shadow
     public abstract int getWordSkipPosition(int wordOffset);
-    @Unique
-    Logger LOGGER = cmdDeleteClient.LOGGER;
 
+    static {
+        cmdDeleteClient.LOGGER.info("Registering TextFieldWidgetMixin");
+    }
+    
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideDelete(KeyInput input, CallbackInfoReturnable<Boolean> cir) {
         int key = input.key();
@@ -44,14 +44,14 @@ public abstract class TextFieldWidgetMixin {
         boolean line = InputUtil.isKeyPressed(window, cmdDeleteClient.LINE_MODIFIER_KEY) || InputUtil.isKeyPressed(window, cmdDeleteClient.RIGHT_LINE_MODIFIER_KEY);
 
         // Logs debug info
-        LOGGER.debug("keyPressed triggered, key = {}, shift = {}", key, shift);
-        LOGGER.debug("keyPressed trigger continued, word = {}. line = {}", word, line);
+        cmdDeleteClient.LOGGER.debug("keyPressed triggered, key = {}, shift = {}", key, shift);
+        cmdDeleteClient.LOGGER.debug("keyPressed trigger continued, word = {}. line = {}", word, line);
 
         // delete handling
         if (key == GLFW.GLFW_KEY_BACKSPACE || key == GLFW.GLFW_KEY_DELETE) {
             // if no word or line, then let vanilla delete
             if (!word && !line) {
-                LOGGER.debug("returned from deletion because word and line are false");
+                cmdDeleteClient.LOGGER.debug("returned from deletion because word and line are false");
                 return;
             }
 
@@ -61,12 +61,13 @@ public abstract class TextFieldWidgetMixin {
             if (line) {
                 // Deletes begining/end based off direction. If backspace before, delete to 0, else delete after delete to end length.
                 this.eraseCharactersTo(direction < 0 ? 0 : this.getText().length());
+                cmdDeleteClient.LOGGER.debug("Deletion handled as LINE. Direction = {}", direction);
             } else {
                 // This handles the word deletion
                 this.erase(direction, true);
+                cmdDeleteClient.LOGGER.debug("Deletion handled as WORD. Direction = {}", direction);
             }
 
-            LOGGER.debug("Deletion handled. Direction = {}", direction);
             cir.setReturnValue(true); // stops vanilla sense in this case, I handled
             return;
         }
@@ -74,7 +75,7 @@ public abstract class TextFieldWidgetMixin {
         // Handle arrow key navigation
         if (key == GLFW.GLFW_KEY_LEFT || key == GLFW.GLFW_KEY_RIGHT) {
             if (!word && !line) {
-                LOGGER.debug("returned from navigation because word and line are false");
+                cmdDeleteClient.LOGGER.debug("returned from navigation because word and line are false");
                 return; // sends to vanilla if no modifiers
             }
 
@@ -83,12 +84,13 @@ public abstract class TextFieldWidgetMixin {
             if (line) {
                 // moves to begining/end based on direction (if -1 left, then move to first, else move to right based opn length) & passes shift
                 this.setCursor(direction < 0 ? 0 : this.getText().length(), shift);
+                cmdDeleteClient.LOGGER.debug("Navigation handled as LINE. Direction = {}", direction);
             } else {
                 // moves to position based on word skip position passing direction and shift
                 this.setCursor(this.getWordSkipPosition(direction), shift);
+                cmdDeleteClient.LOGGER.debug("Navigation handled as WORD. Direction = {}", direction);
             }
 
-            LOGGER.debug("Navigation handled. Direction = {}", direction);
             cir.setReturnValue(true); // stops vanilla sense I handled
         }
         // let vanilla handle other stuff
