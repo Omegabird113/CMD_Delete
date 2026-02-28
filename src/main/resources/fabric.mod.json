@@ -7,7 +7,7 @@
   "authors": ["Omegabird113"],
   "contact": {},
   "license": "MIT",
-  "icon": "assets/cmd_delete/icon.png",
+  "icon": "assets/cmd-delete/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
@@ -15,7 +15,7 @@
     ]
   },
   "mixins": [
-    "cmd_delete.mixins.json"
+    "cmd-delete.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",
@@ -28,7 +28,7 @@
         "id": "cmd_delete",
         "name": "CMD + Delete",
         "description": "Fixes Minecraft's chat so it respects the Command/Option keys proper functionality when it comes to deleting, moving through, and selecting text.",
-        "icon": "assets/cmd_delete/icon.png",
+        "icon": "assets/cmd-delete/icon.png",
         "badges": []
       }
     }
