@@ -1,10 +1,14 @@
 package mc.omegabird.cmd_delete.mixin;
 
 import mc.omegabird.cmd_delete.client.cmdDeleteClient;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.input.KeyInput;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -12,12 +16,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/**
- * This mixin overrides the keyPressed method in TextFieldWidget to add:
- * word/line modifier based deletion and arrow navigation.
- */
 @Mixin(value = TextFieldWidget.class, priority = 2000)
-public abstract class TextFieldWidgetMixin {
+public abstract class TextFieldWidgetMixin extends ClickableWidget {
+    @Environment(EnvType.CLIENT)
+    public TextFieldWidgetMixin(int x, int y, int width, int height, Text message) {
+        super(x, y, width, height, message);
+    }
+
     @Shadow
     protected abstract void erase(int offset, boolean words);
     @Shadow

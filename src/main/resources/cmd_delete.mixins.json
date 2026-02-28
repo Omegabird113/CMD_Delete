@@ -3,9 +3,7 @@
   "minVersion": "0.8",
   "package": "mc.omegabird.cmd_delete.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [
-    "TextFieldWidgetMixin"
-  ],
+  "mixins": [],
   "client": [
     "TextFieldWidgetMixin"
   ],
