@@ -9,7 +9,7 @@ public class cmdDeleteClient implements ClientModInitializer {
     public static final String MOD_ID = "cmd-delete";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-    // Ints w/ all the Keys
+    // Ints w/ all the key values
     private static final int leftControl = GLFW.GLFW_KEY_LEFT_CONTROL;
     private static final int leftAltOption = GLFW.GLFW_KEY_LEFT_ALT;
     private static final int leftSuperCommand = GLFW.GLFW_KEY_LEFT_SUPER;
