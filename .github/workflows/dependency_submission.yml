@@ -5,7 +5,7 @@ on:
     branches: ['master']
 
 jobs:
-  build:
+  dependency_submission:
     runs-on: ubuntu-latest
     permissions:
       contents: write
