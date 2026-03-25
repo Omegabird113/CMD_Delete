@@ -6,7 +6,7 @@
   "description": "Fixes Minecraft's chat so it respects the Command/Option keys proper functionality when it comes to deleting, moving through, and selecting text.",
   "authors": ["Omegabird113"],
   "contact": {},
-  "license": "MIT",
+  "license": "Apache License 2.0",
   "icon": "assets/cmd-delete/icon.png",
   "environment": "client",
   "entrypoints": {
@@ -19,7 +19,7 @@
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",
-    "fabric-api": ">=0.141.3+1.21.11",
+    "fabric-api": ">=0.144.0+26.1",
     "minecraft": "${minecraft_version}"
   },
   "custom": {
