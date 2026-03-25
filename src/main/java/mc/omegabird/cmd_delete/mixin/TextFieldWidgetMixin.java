@@ -42,66 +42,54 @@ public abstract class TextFieldWidgetMixin extends AbstractWidget {
     private void cmd_delete$overrideDelete(KeyEvent input, CallbackInfoReturnable<Boolean> cir) {
         int key = input.key();
         var window = Minecraft.getInstance().getWindow();
-        boolean shift = input.hasShiftDown(); // gets is shift down
+        boolean shift = input.hasShiftDown();
 
-        // gets left/right word/line keys down
         boolean word = InputConstants.isKeyDown(window, cmdDeleteClient.WORD_MODIFIER_KEY) || InputConstants.isKeyDown(window, cmdDeleteClient.RIGHT_WORD_MODIFIER_KEY);
         boolean line = InputConstants.isKeyDown(window, cmdDeleteClient.LINE_MODIFIER_KEY) || InputConstants.isKeyDown(window, cmdDeleteClient.RIGHT_LINE_MODIFIER_KEY);
 
-        // delete handling
         if (key == GLFW.GLFW_KEY_BACKSPACE || key == GLFW.GLFW_KEY_DELETE) {
-            // Logs debug info
             cmdDeleteClient.LOGGER.debug("keyPressed from Delete handle triggered, key = {}, shift = {}", key, shift);
             cmdDeleteClient.LOGGER.debug("keyPressed trigger continued, word = {}. line = {}", word, line);
 
-            // if no word or line, then let vanilla delete
             if (!word && !line) {
                 cmdDeleteClient.LOGGER.debug("returned from deletion because word and line are false");
                 return;
             }
 
-            // If backspace delete before, if delete key, delete after
             int direction = (key == GLFW.GLFW_KEY_BACKSPACE) ? -1 : 1;
 
             if (line) {
-                // Deletes begining/end based off direction. If backspace before, delete to 0, else delete after delete to end length.
                 this.deleteCharsToPos(direction < 0 ? 0 : this.getValue().length());
                 cmdDeleteClient.LOGGER.debug("Deletion handled as LINE. Direction = {}", direction);
             } else {
-                // This handles the word deletion
                 this.deleteText(direction, true);
                 cmdDeleteClient.LOGGER.debug("Deletion handled as WORD. Direction = {}", direction);
             }
 
-            cir.setReturnValue(true); // stops vanilla sense in this case, I handled
+            cir.setReturnValue(true);
             return;
         }
 
-        // Handle arrow key navigation
         if (key == GLFW.GLFW_KEY_LEFT || key == GLFW.GLFW_KEY_RIGHT) {
-            // Logs debug info
             cmdDeleteClient.LOGGER.debug("keyPressed from navigation handle triggered, key = {}, shift = {}", key, shift);
             cmdDeleteClient.LOGGER.debug("keyPressed trigger continued, word = {}. line = {}", word, line);
 
             if (!word && !line) {
                 cmdDeleteClient.LOGGER.debug("returned from navigation because word and line are false");
-                return; // sends to vanilla if no modifiers
+                return;
             }
 
             int direction = (key == GLFW.GLFW_KEY_LEFT) ? -1 : 1; // left -1, right 1
 
             if (line) {
-                // moves to begining/end based on direction (if -1 left, then move to first, else move to right based opn length) & passes shift
                 this.moveCursorTo(direction < 0 ? 0 : this.getValue().length(), shift);
                 cmdDeleteClient.LOGGER.debug("Navigation handled as LINE. Direction = {}", direction);
             } else {
-                // moves to position based on word skip position passing direction and shift
                 this.moveCursorTo(this.getWordPosition(direction), shift);
                 cmdDeleteClient.LOGGER.debug("Navigation handled as WORD. Direction = {}", direction);
             }
 
-            cir.setReturnValue(true); // stops vanilla sense I handled
+            cir.setReturnValue(true);
         }
-        // let vanilla handle other stuff
     }
 }
