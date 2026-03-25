@@ -48,22 +48,15 @@ public abstract class TextFieldWidgetMixin extends AbstractWidget {
         boolean line = InputConstants.isKeyDown(window, cmdDeleteClient.LINE_MODIFIER_KEY) || InputConstants.isKeyDown(window, cmdDeleteClient.RIGHT_LINE_MODIFIER_KEY);
 
         if (key == GLFW.GLFW_KEY_BACKSPACE || key == GLFW.GLFW_KEY_DELETE) {
-            cmdDeleteClient.LOGGER.debug("keyPressed from Delete handle triggered, key = {}, shift = {}", key, shift);
-            cmdDeleteClient.LOGGER.debug("keyPressed trigger continued, word = {}. line = {}", word, line);
-
-            if (!word && !line) {
-                cmdDeleteClient.LOGGER.debug("returned from deletion because word and line are false");
+            if (!word && !line)
                 return;
-            }
 
             int direction = (key == GLFW.GLFW_KEY_BACKSPACE) ? -1 : 1;
 
             if (line) {
                 this.deleteCharsToPos(direction < 0 ? 0 : this.getValue().length());
-                cmdDeleteClient.LOGGER.debug("Deletion handled as LINE. Direction = {}", direction);
             } else {
                 this.deleteText(direction, true);
-                cmdDeleteClient.LOGGER.debug("Deletion handled as WORD. Direction = {}", direction);
             }
 
             cir.setReturnValue(true);
@@ -71,22 +64,15 @@ public abstract class TextFieldWidgetMixin extends AbstractWidget {
         }
 
         if (key == GLFW.GLFW_KEY_LEFT || key == GLFW.GLFW_KEY_RIGHT) {
-            cmdDeleteClient.LOGGER.debug("keyPressed from navigation handle triggered, key = {}, shift = {}", key, shift);
-            cmdDeleteClient.LOGGER.debug("keyPressed trigger continued, word = {}. line = {}", word, line);
-
-            if (!word && !line) {
-                cmdDeleteClient.LOGGER.debug("returned from navigation because word and line are false");
+            if (!word && !line)
                 return;
-            }
 
             int direction = (key == GLFW.GLFW_KEY_LEFT) ? -1 : 1; // left -1, right 1
 
             if (line) {
                 this.moveCursorTo(direction < 0 ? 0 : this.getValue().length(), shift);
-                cmdDeleteClient.LOGGER.debug("Navigation handled as LINE. Direction = {}", direction);
             } else {
                 this.moveCursorTo(this.getWordPosition(direction), shift);
-                cmdDeleteClient.LOGGER.debug("Navigation handled as WORD. Direction = {}", direction);
             }
 
             cir.setReturnValue(true);
