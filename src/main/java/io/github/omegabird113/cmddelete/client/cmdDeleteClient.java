@@ -1,4 +1,4 @@
-package mc.omegabird.cmd_delete.client;
+package io.github.omegabird113.cmddelete.client;
 
 import net.fabricmc.api.ClientModInitializer;
 import org.lwjgl.glfw.GLFW;

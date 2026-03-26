@@ -1,7 +1,7 @@
-package mc.omegabird.cmd_delete.mixin;
+package io.github.omegabird113.cmddelete.mixin;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import mc.omegabird.cmd_delete.client.cmdDeleteClient;
+import io.github.omegabird113.cmddelete.client.cmdDeleteClient;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
