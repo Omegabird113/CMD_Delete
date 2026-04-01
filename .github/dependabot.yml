@@ -8,5 +8,6 @@ updates:
   - package-ecosystem: "gradle" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:
-      interval: "daily"
-    open-pull-requests-limit: 2
+      interval: "cron"
+      cronjob: "0 15 * *" # Runs everyday at 3pm ET
+      timezone: "America/New_York"
