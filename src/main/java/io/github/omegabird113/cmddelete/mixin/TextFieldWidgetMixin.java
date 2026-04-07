@@ -33,8 +33,8 @@ public abstract class TextFieldWidgetMixin {
     private void cmd_delete$overrideDelete(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
         int key = event.key();
         var window = Minecraft.getInstance().getWindow();
-        boolean shift = event.hasShiftDown();
 
+        boolean shift = event.hasShiftDown();
         boolean word = KeyConstants.wordKeyDown(window);
         boolean line = KeyConstants.lineKeyDown(window);
 
@@ -42,7 +42,7 @@ public abstract class TextFieldWidgetMixin {
             if (!word && !line)
                 return;
 
-            int direction = (key == GLFW.GLFW_KEY_BACKSPACE) ? -1 : 1;
+            int direction = KeyConstants.getDirectionForDelete(key);
 
             if (line) {
                 this.deleteCharsToPos(direction < 0 ? 0 : this.getValue().length());
@@ -58,7 +58,7 @@ public abstract class TextFieldWidgetMixin {
             if (!word && !line)
                 return;
 
-            int direction = (key == GLFW.GLFW_KEY_LEFT) ? -1 : 1; // left -1, right 1
+            int direction = KeyConstants.getDirectionForMove(key);
 
             if (line) {
                 this.moveCursorTo(direction < 0 ? 0 : this.getValue().length(), shift);

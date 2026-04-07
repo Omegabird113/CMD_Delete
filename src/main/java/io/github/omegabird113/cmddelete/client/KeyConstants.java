@@ -26,4 +26,12 @@ public class KeyConstants {
     public static boolean lineKeyDown(Window window) {
         return InputConstants.isKeyDown(window, KeyConstants.LEFT_LINE_MODIFIER_KEY) || InputConstants.isKeyDown(window, KeyConstants.RIGHT_LINE_MODIFIER_KEY);
     }
+
+    public static int getDirectionForDelete(int key) {
+        return (key == GLFW.GLFW_KEY_BACKSPACE) ? -1 : 1; // backspace left -1, delete right 1
+    }
+
+    public static int getDirectionForMove(int key) {
+        return (key == GLFW.GLFW_KEY_LEFT) ? -1 : 1; // left -1, right 1
+    }
 }
