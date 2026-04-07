@@ -12,8 +12,8 @@ public class KeyConstants {
     private static final int rightAltOption = GLFW.GLFW_KEY_RIGHT_ALT;
     private static final int rightSuperCommand = GLFW.GLFW_KEY_RIGHT_SUPER;
 
-    public static final int WORD_MODIFIER_KEY = USING_MACOS ? leftAltOption : leftControl;
-    public static final int LINE_MODIFIER_KEY = USING_MACOS ? leftSuperCommand : GLFW.GLFW_KEY_UNKNOWN;
+    public static final int LEFT_WORD_MODIFIER_KEY = USING_MACOS ? leftAltOption : leftControl;
+    public static final int LEFT_LINE_MODIFIER_KEY = USING_MACOS ? leftSuperCommand : GLFW.GLFW_KEY_UNKNOWN;
     public static final int RIGHT_WORD_MODIFIER_KEY = USING_MACOS ? rightAltOption : rightControl;
     public static final int RIGHT_LINE_MODIFIER_KEY = USING_MACOS ? rightSuperCommand : GLFW.GLFW_KEY_UNKNOWN;
 }
