@@ -13,10 +13,10 @@ public class cmdDeleteClient implements ClientModInitializer {
         return os.contains("mac");
     }
 
-    public static final boolean macOS = isUserOnMac();
+    public static final boolean USING_MACOS = isUserOnMac();
 
     @Override
     public void onInitializeClient() {
-        LOGGER.info("CMD Delete loaded. User {} using macOS.", isUserOnMac() ? "is" : "is not");
+        LOGGER.info("CMD Delete loaded. User {} using USING_MACOS.", isUserOnMac() ? "is" : "is not");
     }
 }
