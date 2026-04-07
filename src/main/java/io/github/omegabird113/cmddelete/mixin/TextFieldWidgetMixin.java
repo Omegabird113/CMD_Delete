@@ -5,7 +5,6 @@ import io.github.omegabird113.cmddelete.client.CmdDeleteClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.input.KeyEvent;
-import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -35,36 +34,32 @@ public abstract class TextFieldWidgetMixin {
         var window = Minecraft.getInstance().getWindow();
 
         boolean shift = event.hasShiftDown();
+        boolean delete = KeyConstants.isDeleteKey(key);
+        boolean move = KeyConstants.isMoveKey(key);
         boolean word = KeyConstants.wordKeyDown(window);
         boolean line = KeyConstants.lineKeyDown(window);
+        int direction = KeyConstants.getDirection(key);
 
-        if (key == GLFW.GLFW_KEY_BACKSPACE || key == GLFW.GLFW_KEY_DELETE) {
+        if (delete) {
             if (!word && !line)
                 return;
 
-            int direction = KeyConstants.getDirectionForDelete(key);
-
-            if (line) {
+            if (line)
                 this.deleteCharsToPos(direction < 0 ? 0 : this.getValue().length());
-            } else {
+            else
                 this.deleteText(direction, true);
-            }
 
             cir.setReturnValue(true);
-            return;
         }
 
-        if (key == GLFW.GLFW_KEY_LEFT || key == GLFW.GLFW_KEY_RIGHT) {
+        if (move) {
             if (!word && !line)
                 return;
 
-            int direction = KeyConstants.getDirectionForMove(key);
-
-            if (line) {
+            if (line)
                 this.moveCursorTo(direction < 0 ? 0 : this.getValue().length(), shift);
-            } else {
+            else
                 this.moveCursorTo(this.getWordPosition(direction), shift);
-            }
 
             cir.setReturnValue(true);
         }
