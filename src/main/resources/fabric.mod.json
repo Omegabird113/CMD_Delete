@@ -22,15 +22,4 @@
     "fabric-api": ">=0.145.4+26.1.1",
     "minecraft": "${minecraft_version}"
   },
-  "custom": {
-    "modmenu": {
-      "parent": {
-        "id": "cmd_delete",
-        "name": "CMD + Delete",
-        "description": "Fixes Minecraft's chat so it respects the Command/Option keys proper functionality when it comes to deleting, moving through, and selecting text.",
-        "icon": "assets/cmd-delete/icon.png",
-        "badges": []
-      }
-    }
-  }
 }
