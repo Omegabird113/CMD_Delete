@@ -17,6 +17,6 @@ public class CmdDeleteClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        LOGGER.info("CMD Delete loaded. User {} using USING_MACOS.", isUserOnMac() ? "is" : "is not");
+        LOGGER.info("CMD Delete loaded. User {} using macOS.", USING_MACOS ? "is" : "is not");
     }
 }

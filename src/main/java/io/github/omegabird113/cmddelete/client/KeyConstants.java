@@ -20,10 +20,10 @@ public class KeyConstants {
     public static final int RIGHT_LINE_MODIFIER_KEY = USING_MACOS ? rightSuperCommand : GLFW.GLFW_KEY_UNKNOWN;
 
     public static boolean wordKeyDown(Window window) {
-        return  InputConstants.isKeyDown(window, KeyConstants.LEFT_WORD_MODIFIER_KEY) || InputConstants.isKeyDown(window, KeyConstants.RIGHT_WORD_MODIFIER_KEY);
+        return InputConstants.isKeyDown(window, KeyConstants.LEFT_WORD_MODIFIER_KEY) || InputConstants.isKeyDown(window, KeyConstants.RIGHT_WORD_MODIFIER_KEY);
     }
 
     public static boolean lineKeyDown(Window window) {
-        return  InputConstants.isKeyDown(window, KeyConstants.LEFT_LINE_MODIFIER_KEY) || InputConstants.isKeyDown(window, KeyConstants.RIGHT_LINE_MODIFIER_KEY);
+        return InputConstants.isKeyDown(window, KeyConstants.LEFT_LINE_MODIFIER_KEY) || InputConstants.isKeyDown(window, KeyConstants.RIGHT_LINE_MODIFIER_KEY);
     }
 }
