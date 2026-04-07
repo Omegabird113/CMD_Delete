@@ -26,5 +26,4 @@ public class KeyConstants {
     public static boolean lineKeyDown(Window window) {
         return  InputConstants.isKeyDown(window, KeyConstants.LEFT_LINE_MODIFIER_KEY) || InputConstants.isKeyDown(window, KeyConstants.RIGHT_LINE_MODIFIER_KEY);
     }
-
 }

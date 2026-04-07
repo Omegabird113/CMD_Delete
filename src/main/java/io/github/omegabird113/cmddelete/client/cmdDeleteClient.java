@@ -8,7 +8,7 @@ public class cmdDeleteClient implements ClientModInitializer {
     public static final String MODID = "cmd-delete";
     public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
 
-    public static boolean isUserOnMac() {
+    private static boolean isUserOnMac() {
         String os = System.getProperty("os.name").toLowerCase(); // gets os name
         return os.contains("mac");
     }
