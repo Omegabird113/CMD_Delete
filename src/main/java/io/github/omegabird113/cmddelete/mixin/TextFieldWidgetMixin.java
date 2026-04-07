@@ -1,6 +1,5 @@
 package io.github.omegabird113.cmddelete.mixin;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import io.github.omegabird113.cmddelete.client.KeyConstants;
 import io.github.omegabird113.cmddelete.client.cmdDeleteClient;
 import net.fabricmc.api.EnvType;
@@ -45,8 +44,8 @@ public abstract class TextFieldWidgetMixin extends AbstractWidget {
         var window = Minecraft.getInstance().getWindow();
         boolean shift = input.hasShiftDown();
 
-        boolean word = InputConstants.isKeyDown(window, KeyConstants.LEFT_WORD_MODIFIER_KEY) || InputConstants.isKeyDown(window, KeyConstants.RIGHT_WORD_MODIFIER_KEY);
-        boolean line = InputConstants.isKeyDown(window, KeyConstants.LEFT_LINE_MODIFIER_KEY) || InputConstants.isKeyDown(window, KeyConstants.RIGHT_LINE_MODIFIER_KEY);
+        boolean word = KeyConstants.wordKeyDown(window);
+        boolean line = KeyConstants.lineKeyDown(window);
 
         if (key == GLFW.GLFW_KEY_BACKSPACE || key == GLFW.GLFW_KEY_DELETE) {
             if (!word && !line)

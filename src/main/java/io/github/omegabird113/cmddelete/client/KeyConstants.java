@@ -1,5 +1,7 @@
 package io.github.omegabird113.cmddelete.client;
 
+import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.platform.Window;
 import org.lwjgl.glfw.GLFW;
 
 import static io.github.omegabird113.cmddelete.client.cmdDeleteClient.USING_MACOS;
@@ -16,4 +18,13 @@ public class KeyConstants {
     public static final int LEFT_LINE_MODIFIER_KEY = USING_MACOS ? leftSuperCommand : GLFW.GLFW_KEY_UNKNOWN;
     public static final int RIGHT_WORD_MODIFIER_KEY = USING_MACOS ? rightAltOption : rightControl;
     public static final int RIGHT_LINE_MODIFIER_KEY = USING_MACOS ? rightSuperCommand : GLFW.GLFW_KEY_UNKNOWN;
+
+    public static boolean wordKeyDown(Window window) {
+        return  InputConstants.isKeyDown(window, KeyConstants.LEFT_WORD_MODIFIER_KEY) || InputConstants.isKeyDown(window, KeyConstants.RIGHT_WORD_MODIFIER_KEY);
+    }
+
+    public static boolean lineKeyDown(Window window) {
+        return  InputConstants.isKeyDown(window, KeyConstants.LEFT_LINE_MODIFIER_KEY) || InputConstants.isKeyDown(window, KeyConstants.RIGHT_LINE_MODIFIER_KEY);
+    }
+
 }
