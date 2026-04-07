@@ -4,7 +4,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Window;
 import org.lwjgl.glfw.GLFW;
 
-import static io.github.omegabird113.cmddelete.client.cmdDeleteClient.USING_MACOS;
+import static io.github.omegabird113.cmddelete.client.CmdDeleteClient.USING_MACOS;
 
 public class KeyConstants {
     private static final int leftControl = GLFW.GLFW_KEY_LEFT_CONTROL;

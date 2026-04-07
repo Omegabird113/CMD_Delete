@@ -11,7 +11,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "io.github.omegabird113.cmddelete.client.cmdDeleteClient"
+      "io.github.omegabird113.cmddelete.client.CmdDeleteClient"
     ]
   },
   "mixins": [

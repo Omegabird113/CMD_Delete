@@ -1,7 +1,7 @@
 package io.github.omegabird113.cmddelete.mixin;
 
 import io.github.omegabird113.cmddelete.client.KeyConstants;
-import io.github.omegabird113.cmddelete.client.cmdDeleteClient;
+import io.github.omegabird113.cmddelete.client.CmdDeleteClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.input.KeyEvent;
@@ -26,7 +26,7 @@ public abstract class TextFieldWidgetMixin {
     public abstract int getWordPosition(int dir);
 
     static {
-        cmdDeleteClient.LOGGER.info("Registering TextFieldWidgetMixin");
+        CmdDeleteClient.LOGGER.info("Registering TextFieldWidgetMixin");
     }
     
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
