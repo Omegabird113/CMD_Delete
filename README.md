@@ -1,6 +1,6 @@
 # CMD + Delete
 
-In Minecraft on MacOS, pressing `option` and `backspace` deletes a single character, and pressing `command` and `backspace` deletes a word. **This is completely inconsistent with the native OS**, so I fixed it:
+In Minecraft on macOS, pressing `option` and `backspace` deletes a single character, and pressing `command` and `backspace` deletes a word. **This is completely inconsistent with the native OS**, so I fixed it:
 
 ## Important Context
 
