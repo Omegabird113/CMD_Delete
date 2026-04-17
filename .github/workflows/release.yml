@@ -1,0 +1,105 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_title:
+        description: "Release title (e.g. CMD + Delete 1.3.0 Beta 2)"
+        required: true
+        type: string
+      release_type:
+        description: "Release type"
+        required: true
+        type: choice
+        options:
+          - release
+          - beta
+          - alpha
+      mc_versions:
+        description: "Supported Minecraft versions, comma-separated (e.g. 26.1, 26.1.1, 26.1.2)"
+        required: true
+        type: string
+      changelog:
+        description: "Changelog entries (comma-separated)"
+        required: true
+        type: string
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Read gradle.properties
+        id: props
+        run: |
+          version=$(grep -E '^version\s*=' gradle.properties | sed 's/.*=\s*//')
+          loader_version=$(grep -E '^loader_version\s*=' gradle.properties | sed 's/.*=\s*//')
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "loader_version=$loader_version" >> "$GITHUB_OUTPUT"
+
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          java-version: 25
+          distribution: temurin
+          cache: gradle
+
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      - name: Build
+        run: ./gradlew build
+
+      - name: Verify JAR exists
+        run: |
+          JAR="build/libs/cmd-delete-${{ steps.props.outputs.version }}.jar"
+          if [ ! -f "$JAR" ]; then
+            echo "ERROR: Expected JAR not found: $JAR"
+            ls build/libs/
+            exit 1
+          fi
+
+      - name: Format changelog
+        run: |
+          echo "${{ inputs.changelog }}" \
+            | tr ',' '\n' \
+            | sed 's/^[[:space:]]*//' \
+            | sed 's/[[:space:]]*$//' \
+            | sed '/^$/d' \
+            | sed 's/^/- /' > changelog_body.md
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PRERELEASE_FLAG=""
+          if [ "${{ inputs.release_type }}" != "release" ]; then
+            PRERELEASE_FLAG="--prerelease"
+          fi
+          gh release create "${{ steps.props.outputs.version }}" \
+            "build/libs/cmd-delete-${{ steps.props.outputs.version }}.jar" \
+            --title "${{ inputs.release_title }}" \
+            --notes-file changelog_body.md \
+            $PRERELEASE_FLAG
+
+      - name: Publish to Modrinth & CurseForge
+        uses: Kir-Antipov/mc-publish@v3
+        with:
+          modrinth-id: xrOWVab9
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          curseforge-id: 1455987
+          curseforge-token: ${{ secrets.CF_API_TOKEN }}
+          files: build/libs/cmd-delete-${{ steps.props.outputs.version }}.jar
+          name: ${{ inputs.release_title }}
+          version: ${{ steps.props.outputs.version }}
+          version-type: ${{ inputs.release_type }}
+          changelog-file: changelog_body.md
+          game-versions: ${{ inputs.mc_versions }}
+          loaders: fabric
+          dependencies: |
+            fabric-loader@>=${{ steps.props.outputs.loader_version }}(required)
