@@ -28,6 +28,7 @@
 # Gradle build system ignores
 .gradle/
 build/
+out/**
 
 # Minecraft client/server files
 run/
