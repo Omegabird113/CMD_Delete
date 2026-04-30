@@ -64,6 +64,14 @@ public abstract class SignEditScreenMixin {
             this.cmd_delete$clearMultilineSelection();
         }
 
+        if (move && !shift && !wordModifier && !lineModifier) {
+            // If line changed, we handled it, else continue
+            if (this.cmd_delete$tryMoveToNextLineByCharacter(direction)) {
+                cir.setReturnValue(true);
+                return;
+            }
+        }
+
         // Keep old line selected if shift move up/down
         if (shift && (event.isUp() || event.isDown())) {
             this.cmd_delete$updateSelectionStart();
@@ -154,6 +162,22 @@ public abstract class SignEditScreenMixin {
 
             graphics.textHighlight(Math.min(x1, x2), y, Math.max(x1, x2), y + textLineHeight, true);
         }
+    }
+
+    @Unique
+    private boolean cmd_delete$tryMoveToNextLineByCharacter(int direction) {
+        // At line edges, plain arrows move to the previous/next line
+        if (direction < 0 && this.signField.getCursorPos() == 0 && this.line > 0) {
+            this.line--;
+            this.signField.setCursorToEnd(false);
+            return true;
+        } else if (direction > 0 && this.signField.getCursorPos() == this.cmd_delete$currentLineMessage().length() && this.line < this.messages.length - 1) {
+            this.line++;
+            this.signField.setCursorToStart(false);
+            return true;
+        }
+
+        return false;
     }
 
     @Unique
