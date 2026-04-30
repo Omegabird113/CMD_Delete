@@ -88,7 +88,7 @@ public abstract class SignEditScreenMixin {
                 }
                 this.signField.insertText("");
             } else {
-                this.signField.removeWordsFromCursor(direction);
+                this.cmd_delete$deleteByWords(direction);
             }
 
             cir.setReturnValue(true);
@@ -154,6 +154,22 @@ public abstract class SignEditScreenMixin {
 
             graphics.textHighlight(Math.min(x1, x2), y, Math.max(x1, x2), y + textLineHeight, true);
         }
+    }
+
+    @Unique
+    private void cmd_delete$deleteByWords(int direction) {
+        // At line edges, delete from next line if needed
+        int nextLine = this.cmd_delete$getNextWordLine(direction);
+
+        if (direction < 0 && this.signField.getCursorPos() == 0 && nextLine != this.line) {
+            this.line = nextLine;
+            this.signField.setCursorToEnd(false);
+        } else if (direction > 0 && this.signField.getCursorPos() == this.cmd_delete$currentLineMessage().length() && nextLine != this.line) {
+            this.line = nextLine;
+            this.signField.setCursorToStart(false);
+        }
+
+        this.signField.removeWordsFromCursor(direction);
     }
 
     @Unique
