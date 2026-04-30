@@ -25,8 +25,7 @@ public class KeyConstants {
     public static final int DIRECTION_UP = -1;
 
     private static boolean isUserOnMac() {
-        String os = System.getProperty("os.name").toLowerCase();
-        return os.contains("mac");
+        return System.getProperty("os.name").toLowerCase().contains("mac");
     }
 
     public static boolean wordKeyDown(Window window) {
@@ -38,15 +37,15 @@ public class KeyConstants {
     }
 
     public static int getDeleteDirection(int key) {
-        return (key == GLFW.GLFW_KEY_BACKSPACE) ? DIRECTION_LEFT : DIRECTION_RIGHT; // backspace left, delete right
+        return key == GLFW.GLFW_KEY_BACKSPACE ? DIRECTION_LEFT : DIRECTION_RIGHT; // backspace left, delete right
     }
 
     public static int getSideDirection(int key) {
-        return (key == GLFW.GLFW_KEY_LEFT) ? DIRECTION_LEFT : DIRECTION_RIGHT;
+        return key == GLFW.GLFW_KEY_LEFT ? DIRECTION_LEFT : DIRECTION_RIGHT;
     }
 
     public static int getVerticalDirection(int key) {
-        return (key == GLFW.GLFW_KEY_DOWN) ? DIRECTION_DOWN : DIRECTION_UP;
+        return key == GLFW.GLFW_KEY_DOWN ? DIRECTION_DOWN : DIRECTION_UP;
     }
 
     public static boolean isDeleteKey(int key) {
