@@ -73,6 +73,18 @@ jobs:
             | sed '/^$/d' \
             | sed 's/^/- /' > changelog_body.md
 
+      - name: Format mc-versions
+        id: mc_versions
+        run: |
+          echo "${{ inputs.mc_versions }}" \
+            | tr ',' '\n' \
+            | sed 's/^[[:space:]]*//' \
+            | sed 's/[[:space:]]*$//' \
+            | sed '/^$/d' > mc_versions.txt
+            echo "list<<EOF" >> "$GITHUB_OUTPUT"
+            cat mc_versions.txt >> "$GITHUB_OUTPUT"
+            echo "EOF" >> "$GITHUB_OUTPUT"
+
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -99,7 +111,7 @@ jobs:
           version: ${{ steps.props.outputs.version }}
           version-type: ${{ inputs.release_type }}
           changelog-file: changelog_body.md
-          game-versions: ${{ inputs.mc_versions }}
+          game-versions: ${{ steps.mc_versions.outputs.list }}
           loaders: fabric
           dependencies: |
             fabric-loader@>=${{ steps.props.outputs.loader_version }}(required)
