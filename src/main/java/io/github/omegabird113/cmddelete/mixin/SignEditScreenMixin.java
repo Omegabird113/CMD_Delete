@@ -183,22 +183,18 @@ public abstract class SignEditScreenMixin {
 
     @Unique
     private void cmd_delete$deleteByWords(int direction) {
-        // At line edges, delete from next line if needed
-        int nextLine = this.cmd_delete$getNextWordLine(direction);
-
-        if (direction == KeyConstants.DIRECTION_LEFT && this.signField.getCursorPos() == 0 && nextLine != this.line) {
-            this.line = nextLine;
-            this.signField.setCursorToEnd(false);
-        } else if (direction == KeyConstants.DIRECTION_RIGHT && this.signField.getCursorPos() == this.cmd_delete$currentLineMessage().length() && nextLine != this.line) {
-            this.line = nextLine;
-            this.signField.setCursorToStart(false);
-        }
-
+        this.cmd_delete$moveToNextWordLineIfNeeded(direction);
         this.signField.removeWordsFromCursor(direction);
     }
 
     @Unique
     private void cmd_delete$moveByWords(int direction, boolean extendSelection) {
+        this.cmd_delete$moveToNextWordLineIfNeeded(direction);
+        this.signField.moveByWords(direction, extendSelection);
+    }
+
+    @Unique
+    private void cmd_delete$moveToNextWordLineIfNeeded(int direction) {
         // At line edges, move to next line if needed
         int nextLine = this.cmd_delete$getNextWordLine(direction);
 
@@ -209,8 +205,6 @@ public abstract class SignEditScreenMixin {
             this.line = nextLine;
             this.signField.setCursorToStart(false);
         }
-
-        this.signField.moveByWords(direction, extendSelection);
     }
 
     @Unique

@@ -21,8 +21,8 @@ public class KeyConstants {
 
     public static final int DIRECTION_LEFT = -1;
     public static final int DIRECTION_RIGHT = 1;
-    public static final int DIRECTION_DOWN = -1;
-    public static final int DIRECTION_UP = 1;
+    public static final int DIRECTION_DOWN = 1;
+    public static final int DIRECTION_UP = -1;
 
     private static boolean isUserOnMac() {
         String os = System.getProperty("os.name").toLowerCase(); // gets os name
@@ -46,7 +46,7 @@ public class KeyConstants {
     }
 
     public static int getVerticalDirection(int key) {
-        return (key == GLFW.GLFW_KEY_DOWN) ? DIRECTION_UP : DIRECTION_DOWN;
+        return (key == GLFW.GLFW_KEY_DOWN) ? DIRECTION_DOWN : DIRECTION_UP;
     }
 
     public static boolean isDeleteKey(int key) {
