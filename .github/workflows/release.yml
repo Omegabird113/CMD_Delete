@@ -37,7 +37,7 @@ jobs:
       - name: Read gradle.properties
         id: props
         run: |
-          version=$(grep -E '^version\s*=' gradle.properties | sed 's/.*=\s*//')
+          version=$(grep -E '^mod_version\s*=' gradle.properties | sed 's/.*=\s*//')
           loader_version=$(grep -E '^loader_version\s*=' gradle.properties | sed 's/.*=\s*//')
           echo "version=$version" >> "$GITHUB_OUTPUT"
           echo "loader_version=$loader_version" >> "$GITHUB_OUTPUT"
