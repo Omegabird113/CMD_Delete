@@ -7,15 +7,9 @@ import org.slf4j.LoggerFactory;
 public class CmdDeleteClient implements ClientModInitializer {
     public static final String MODID = "cmd-delete";
     public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
-    public static final boolean USING_MACOS = isUserOnMac();
-
-    private static boolean isUserOnMac() {
-        String os = System.getProperty("os.name").toLowerCase(); // gets os name
-        return os.contains("mac");
-    }
 
     @Override
     public void onInitializeClient() {
-        LOGGER.info("CMD Delete loaded. User {} using macOS.", USING_MACOS ? "is" : "is not");
+        LOGGER.info("CMD Delete loaded. User {} using macOS.", KeyConstants.USING_MACOS ? "is" : "is not");
     }
 }

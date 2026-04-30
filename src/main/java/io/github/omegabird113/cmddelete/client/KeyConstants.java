@@ -4,9 +4,9 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Window;
 import org.lwjgl.glfw.GLFW;
 
-import static io.github.omegabird113.cmddelete.client.CmdDeleteClient.USING_MACOS;
-
 public class KeyConstants {
+    public static final boolean USING_MACOS = isUserOnMac();
+
     private static final int leftControl = GLFW.GLFW_KEY_LEFT_CONTROL;
     private static final int leftAltOption = GLFW.GLFW_KEY_LEFT_ALT;
     private static final int leftSuperCommand = GLFW.GLFW_KEY_LEFT_SUPER;
@@ -18,6 +18,11 @@ public class KeyConstants {
     public static final int LEFT_LINE_MODIFIER_KEY = USING_MACOS ? leftSuperCommand : GLFW.GLFW_KEY_UNKNOWN;
     public static final int RIGHT_WORD_MODIFIER_KEY = USING_MACOS ? rightAltOption : rightControl;
     public static final int RIGHT_LINE_MODIFIER_KEY = USING_MACOS ? rightSuperCommand : GLFW.GLFW_KEY_UNKNOWN;
+
+    private static boolean isUserOnMac() {
+        String os = System.getProperty("os.name").toLowerCase(); // gets os name
+        return os.contains("mac");
+    }
 
     public static boolean wordKeyDown(Window window) {
         return InputConstants.isKeyDown(window, KeyConstants.LEFT_WORD_MODIFIER_KEY) || InputConstants.isKeyDown(window, KeyConstants.RIGHT_WORD_MODIFIER_KEY);
