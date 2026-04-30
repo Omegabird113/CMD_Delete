@@ -1,8 +1,9 @@
-name: Build
+name: Dependency Submission
 
 on:
   push:
-    branches: ['master']
+    branches:
+    - 'master'
 
 jobs:
   dependency_submission:
@@ -17,7 +18,8 @@ jobs:
         uses: actions/setup-java@v5
         with:
           java-version: '25'
-          distribution: 'oracle'
+          distribution: 'temurin'
+          cache: gradle
 
       - name: Generate and submit dependency graph
         uses: gradle/actions/dependency-submission@v5
