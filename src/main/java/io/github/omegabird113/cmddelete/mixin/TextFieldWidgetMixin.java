@@ -42,16 +42,17 @@ public abstract class TextFieldWidgetMixin {
         boolean move = KeyConstants.isMoveKey(key);
         boolean word = KeyConstants.wordKeyDown(window);
         boolean line = KeyConstants.lineKeyDown(window);
-        int direction = KeyConstants.getDirection(key);
+        int sideDirection = KeyConstants.getSideDirection(key);
+        int deleteDirection = KeyConstants.getDeleteDirection(key);
 
         if (delete) {
             if (!word && !line)
                 return;
 
             if (line)
-                this.deleteCharsToPos(direction < 0 ? 0 : this.getValue().length());
+                this.deleteCharsToPos(deleteDirection < 0 ? 0 : this.getValue().length());
             else
-                this.deleteText(direction, true);
+                this.deleteText(deleteDirection, true);
 
             cir.setReturnValue(true);
         }
@@ -61,9 +62,9 @@ public abstract class TextFieldWidgetMixin {
                 return;
 
             if (line)
-                this.moveCursorTo(direction < 0 ? 0 : this.getValue().length(), shift);
+                this.moveCursorTo(sideDirection < 0 ? 0 : this.getValue().length(), shift);
             else
-                this.moveCursorTo(this.getWordPosition(direction), shift);
+                this.moveCursorTo(this.getWordPosition(sideDirection), shift);
 
             cir.setReturnValue(true);
         }

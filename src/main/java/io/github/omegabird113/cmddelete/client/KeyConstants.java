@@ -19,6 +19,11 @@ public class KeyConstants {
     public static final int RIGHT_WORD_MODIFIER_KEY = USING_MACOS ? rightAltOption : rightControl;
     public static final int RIGHT_LINE_MODIFIER_KEY = USING_MACOS ? rightSuperCommand : GLFW.GLFW_KEY_UNKNOWN;
 
+    public static final int DIRECTION_LEFT = -1;
+    public static final int DIRECTION_RIGHT = 1;
+    public static final int DIRECTION_DOWN = -1;
+    public static final int DIRECTION_UP = 1;
+
     private static boolean isUserOnMac() {
         String os = System.getProperty("os.name").toLowerCase(); // gets os name
         return os.contains("mac");
@@ -32,8 +37,16 @@ public class KeyConstants {
         return InputConstants.isKeyDown(window, KeyConstants.LEFT_LINE_MODIFIER_KEY) || InputConstants.isKeyDown(window, KeyConstants.RIGHT_LINE_MODIFIER_KEY);
     }
 
-    public static int getDirection(int key) {
-        return (key == GLFW.GLFW_KEY_BACKSPACE || key == GLFW.GLFW_KEY_LEFT) ? -1 : 1; // backspace left -1, delete right 1
+    public static int getDeleteDirection(int key) {
+        return (key == GLFW.GLFW_KEY_BACKSPACE) ? DIRECTION_LEFT : DIRECTION_RIGHT; // backspace left, delete right
+    }
+
+    public static int getSideDirection(int key) {
+        return (key == GLFW.GLFW_KEY_LEFT) ? DIRECTION_LEFT : DIRECTION_RIGHT;
+    }
+
+    public static int getVerticalDirection(int key) {
+        return (key == GLFW.GLFW_KEY_DOWN) ? DIRECTION_UP : DIRECTION_DOWN;
     }
 
     public static boolean isDeleteKey(int key) {
