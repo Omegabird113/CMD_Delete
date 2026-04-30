@@ -81,9 +81,9 @@ jobs:
             | sed 's/^[[:space:]]*//' \
             | sed 's/[[:space:]]*$//' \
             | sed '/^$/d' > mc_versions.txt
-            echo "list<<EOF" >> "$GITHUB_OUTPUT"
-            cat mc_versions.txt >> "$GITHUB_OUTPUT"
-            echo "EOF" >> "$GITHUB_OUTPUT"
+          echo "list<<EOF" >> "$GITHUB_OUTPUT"
+          cat mc_versions.txt >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub Release
         env:
