@@ -56,7 +56,9 @@ public abstract class SignEditScreenMixin {
         boolean move = KeyConstants.isMoveKey(key);
         boolean wordModifier = KeyConstants.wordKeyDown(window);
         boolean lineModifier = KeyConstants.lineKeyDown(window);
-        int direction = KeyConstants.getDirection(key);
+        int sideDirection = KeyConstants.getSideDirection(key);
+        int deleteDirection = KeyConstants.getDeleteDirection(key);
+        int verticalDirection = KeyConstants.getVerticalDirection(key);
 
         // Reset selection if player moves w/o shift
         if (!shift && (event.isUp() || event.isDown() || move)) {
@@ -65,7 +67,7 @@ public abstract class SignEditScreenMixin {
 
         if (move && !shift && !wordModifier && !lineModifier) {
             // If line changed, we handled it, else continue
-            if (this.cmd_delete$tryMoveToNextLineByCharacter(direction)) {
+            if (this.cmd_delete$tryMoveToNextLineByCharacter(sideDirection)) {
                 cir.setReturnValue(true);
                 return;
             }
@@ -74,7 +76,7 @@ public abstract class SignEditScreenMixin {
         // Keep old line selected if shift move up/down
         if (shift && (event.isUp() || event.isDown())) {
             this.cmd_delete$updateSelectionStart();
-            this.line = (this.line + (event.isUp() ? -1 : 1)) & 3;
+            this.line = (this.line + verticalDirection) & 3;
             this.signField.setCursorPos(Math.min(this.cmd_delete$selectionEndPos, this.cmd_delete$currentLineMessage().length()), false);
             this.cmd_delete$updateSelectionEnd();
             this.cmd_delete$syncCurrentLineSelection();
@@ -88,14 +90,14 @@ public abstract class SignEditScreenMixin {
             this.cmd_delete$clearMultilineSelection();
 
             if (lineModifier) {
-                if (direction < 0) {
+                if (deleteDirection == KeyConstants.DIRECTION_LEFT) {
                     this.signField.setCursorToStart(true);
                 } else {
                     this.signField.setCursorToEnd(true);
                 }
                 this.signField.insertText("");
             } else {
-                this.cmd_delete$deleteByWords(direction);
+                this.cmd_delete$deleteByWords(deleteDirection);
             }
 
             cir.setReturnValue(true);
@@ -112,13 +114,13 @@ public abstract class SignEditScreenMixin {
             }
 
             if (lineModifier) {
-                if (direction < 0) {
+                if (sideDirection == KeyConstants.DIRECTION_LEFT) {
                     this.signField.setCursorToStart(shift);
                 } else {
                     this.signField.setCursorToEnd(shift);
                 }
             } else {
-                this.cmd_delete$moveByWords(direction, shift);
+                this.cmd_delete$moveByWords(sideDirection, shift);
             }
 
             if (shift) {
@@ -166,11 +168,11 @@ public abstract class SignEditScreenMixin {
     @Unique
     private boolean cmd_delete$tryMoveToNextLineByCharacter(int direction) {
         // At line edges, plain arrows move to the previous/next line
-        if (direction < 0 && this.signField.getCursorPos() == 0 && this.line > 0) {
+        if (direction == KeyConstants.DIRECTION_LEFT && this.signField.getCursorPos() == 0 && this.line > 0) {
             this.line--;
             this.signField.setCursorToEnd(false);
             return true;
-        } else if (direction > 0 && this.signField.getCursorPos() == this.cmd_delete$currentLineMessage().length() && this.line < this.messages.length - 1) {
+        } else if (direction == KeyConstants.DIRECTION_RIGHT && this.signField.getCursorPos() == this.cmd_delete$currentLineMessage().length() && this.line < this.messages.length - 1) {
             this.line++;
             this.signField.setCursorToStart(false);
             return true;
@@ -184,10 +186,10 @@ public abstract class SignEditScreenMixin {
         // At line edges, delete from next line if needed
         int nextLine = this.cmd_delete$getNextWordLine(direction);
 
-        if (direction < 0 && this.signField.getCursorPos() == 0 && nextLine != this.line) {
+        if (direction == KeyConstants.DIRECTION_LEFT && this.signField.getCursorPos() == 0 && nextLine != this.line) {
             this.line = nextLine;
             this.signField.setCursorToEnd(false);
-        } else if (direction > 0 && this.signField.getCursorPos() == this.cmd_delete$currentLineMessage().length() && nextLine != this.line) {
+        } else if (direction == KeyConstants.DIRECTION_RIGHT && this.signField.getCursorPos() == this.cmd_delete$currentLineMessage().length() && nextLine != this.line) {
             this.line = nextLine;
             this.signField.setCursorToStart(false);
         }
@@ -200,10 +202,10 @@ public abstract class SignEditScreenMixin {
         // At line edges, move to next line if needed
         int nextLine = this.cmd_delete$getNextWordLine(direction);
 
-        if (direction < 0 && this.signField.getCursorPos() == 0 && nextLine != this.line) {
+        if (direction == KeyConstants.DIRECTION_LEFT && this.signField.getCursorPos() == 0 && nextLine != this.line) {
             this.line = nextLine;
             this.signField.setCursorToEnd(false);
-        } else if (direction > 0 && this.signField.getCursorPos() == this.cmd_delete$currentLineMessage().length() && nextLine != this.line) {
+        } else if (direction == KeyConstants.DIRECTION_RIGHT && this.signField.getCursorPos() == this.cmd_delete$currentLineMessage().length() && nextLine != this.line) {
             this.line = nextLine;
             this.signField.setCursorToStart(false);
         }
