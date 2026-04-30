@@ -25,7 +25,7 @@ public class KeyConstants {
     public static final int DIRECTION_UP = -1;
 
     private static boolean isUserOnMac() {
-        String os = System.getProperty("os.name").toLowerCase(); // gets os name
+        String os = System.getProperty("os.name").toLowerCase();
         return os.contains("mac");
     }
 

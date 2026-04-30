@@ -1,6 +1,5 @@
 package io.github.omegabird113.cmddelete.mixin;
 
-import io.github.omegabird113.cmddelete.client.CmdDeleteClient;
 import io.github.omegabird113.cmddelete.client.KeyConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
@@ -13,10 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = EditBox.class, priority = 2000)
 public abstract class TextFieldWidgetMixin {
-    static {
-        CmdDeleteClient.LOGGER.info("Registering TextFieldWidgetMixin");
-    }
-
     @Shadow
     protected abstract void deleteText(int dir, boolean wholeWord);
 
