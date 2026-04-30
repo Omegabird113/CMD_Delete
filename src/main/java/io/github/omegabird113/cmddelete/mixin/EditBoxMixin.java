@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = EditBox.class, priority = 2000)
-public abstract class TextFieldWidgetMixin {
+public abstract class EditBoxMixin {
     @Shadow
     protected abstract void deleteText(int dir, boolean wholeWord);
 

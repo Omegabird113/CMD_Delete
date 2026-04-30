@@ -6,7 +6,7 @@
   "mixins": [],
   "client": [
     "SignEditScreenMixin",
-    "TextFieldWidgetMixin"
+    "EditBoxMixin"
   ],
   "injectors": {
     "defaultRequire": 1
