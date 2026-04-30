@@ -43,7 +43,6 @@ public abstract class SignEditScreenMixin {
     @Unique
     private int cmd_delete$selectionStartPos;
 
-
     @Unique
     private int cmd_delete$selectionEndPos;
 
