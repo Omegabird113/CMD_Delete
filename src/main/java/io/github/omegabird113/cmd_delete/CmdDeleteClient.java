@@ -1,7 +1,7 @@
-package io.github.omegabird113.cmddelete;
+package io.github.omegabird113.cmd_delete;
 
-import io.github.omegabird113.cmddelete.actions.NavActionManager;
-import io.github.omegabird113.cmddelete.actions.mapping.INavMapping;
+import io.github.omegabird113.cmd_delete.actions.NavActionManager;
+import io.github.omegabird113.cmd_delete.actions.mapping.INavMapping;
 import net.fabricmc.api.ClientModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,13 +1,13 @@
-package io.github.omegabird113.cmddelete.actions.mapping;
+package io.github.omegabird113.cmd_delete.actions.mapping;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Window;
-import io.github.omegabird113.cmddelete.actions.ActionConstant;
-import io.github.omegabird113.cmddelete.actions.OsConstant;
+import io.github.omegabird113.cmd_delete.actions.ActionConstant;
+import io.github.omegabird113.cmd_delete.actions.OsConstant;
 import net.minecraft.client.input.KeyEvent;
 import org.lwjgl.glfw.GLFW;
 
-import static io.github.omegabird113.cmddelete.actions.ActionConstant.*;
+import static io.github.omegabird113.cmd_delete.actions.ActionConstant.*;
 
 public class MacNavMapping implements INavMapping {
     private static final int LEFT_COMMAND = GLFW.GLFW_KEY_LEFT_SUPER;

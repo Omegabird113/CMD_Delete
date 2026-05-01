@@ -1,8 +1,8 @@
-package io.github.omegabird113.cmddelete.mixin;
+package io.github.omegabird113.cmd_delete.mixin;
 
-import io.github.omegabird113.cmddelete.CmdDeleteClient;
-import io.github.omegabird113.cmddelete.actions.ActionConstant;
-import io.github.omegabird113.cmddelete.actions.NavActionManager;
+import io.github.omegabird113.cmd_delete.CmdDeleteClient;
+import io.github.omegabird113.cmd_delete.actions.ActionConstant;
+import io.github.omegabird113.cmd_delete.actions.NavActionManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.input.KeyEvent;
