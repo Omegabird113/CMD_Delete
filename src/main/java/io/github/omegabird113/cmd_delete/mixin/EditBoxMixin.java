@@ -1,6 +1,8 @@
 package io.github.omegabird113.cmd_delete.mixin;
 
-import io.github.omegabird113.cmd_delete.client.KeyConstants;
+import io.github.omegabird113.cmd_delete.CmdDeleteClient;
+import io.github.omegabird113.cmd_delete.actions.ActionConstant;
+import io.github.omegabird113.cmd_delete.actions.NavActionManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.input.KeyEvent;
@@ -29,39 +31,23 @@ public abstract class EditBoxMixin {
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideDelete(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
-        int key = event.key();
-        var window = Minecraft.getInstance().getWindow();
+        ActionConstant action = CmdDeleteClient.NAV_MAPPING.getAction(event, Minecraft.getInstance().getWindow());
+        int direction = NavActionManager.getDirection(action);
 
-        boolean shift = event.hasShiftDown();
-        boolean delete = KeyConstants.isDeleteKey(key);
-        boolean move = KeyConstants.isMoveKey(key);
-        boolean word = KeyConstants.wordKeyDown(window);
-        boolean line = KeyConstants.lineKeyDown(window);
-        int sideDirection = KeyConstants.getSideDirection(key);
-        int deleteDirection = KeyConstants.getDeleteDirection(key);
-
-        if (delete) {
-            if (!word && !line)
+        switch (action) {
+            case DEL_LINE_LEFT, DEL_LINE_RIGHT -> this.deleteCharsToPos(direction < 0 ? 0 : this.getValue().length());
+            case DEL_WORD_LEFT, DEL_WORD_RIGHT -> this.deleteText(direction, true);
+            case NAV_LINE_LEFT, NAV_LINE_RIGHT, NAV_TEXT_START, NAV_TEXT_END ->
+                    this.moveCursorTo(direction < 0 ? 0 : this.getValue().length(), false);
+            case SEL_LINE_LEFT, SEL_LINE_RIGHT, SEL_TEXT_START, SEL_TEXT_END ->
+                    this.moveCursorTo(direction < 0 ? 0 : this.getValue().length(), true);
+            case NAV_WORD_LEFT, NAV_WORD_RIGHT -> this.moveCursorTo(this.getWordPosition(direction), false);
+            case SEL_WORD_LEFT, SEL_WORD_RIGHT -> this.moveCursorTo(this.getWordPosition(direction), true);
+            default -> {
                 return;
-
-            if (line)
-                this.deleteCharsToPos(deleteDirection < 0 ? 0 : this.getValue().length());
-            else
-                this.deleteText(deleteDirection, true);
-
-            cir.setReturnValue(true);
+            }
         }
 
-        if (move) {
-            if (!word && !line)
-                return;
-
-            if (line)
-                this.moveCursorTo(sideDirection < 0 ? 0 : this.getValue().length(), shift);
-            else
-                this.moveCursorTo(this.getWordPosition(sideDirection), shift);
-
-            cir.setReturnValue(true);
-        }
+        cir.setReturnValue(true);
     }
 }
