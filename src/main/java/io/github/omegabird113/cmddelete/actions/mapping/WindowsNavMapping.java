@@ -1,4 +1,4 @@
-package io.github.omegabird113.cmddelete.actions.mappings;
+package io.github.omegabird113.cmddelete.actions.mapping;
 
 import io.github.omegabird113.cmddelete.actions.ActionConstant;
 import io.github.omegabird113.cmddelete.actions.OsConstant;
@@ -41,6 +41,12 @@ public class WindowsNavMapping implements INavMapping {
         if (control && key == DELETE)
             return DEL_WORD_RIGHT;
 
+        // shift + up/down -> select previous/next text line
+        if (shift && key == GLFW.GLFW_KEY_UP)
+            return SEL_TEXT_UP;
+        if (shift && key == GLFW.GLFW_KEY_DOWN)
+            return SEL_TEXT_DOWN;
+
         return NONE;
     }
 
@@ -61,7 +67,8 @@ public class WindowsNavMapping implements INavMapping {
                 NAV_WORD_LEFT,  NAV_WORD_RIGHT,
                 SEL_WORD_LEFT,  SEL_WORD_RIGHT,
                 NAV_TEXT_START, NAV_TEXT_END,
-                SEL_TEXT_START, SEL_TEXT_END
+                SEL_TEXT_START, SEL_TEXT_END,
+                SEL_TEXT_UP, SEL_TEXT_DOWN
         };
     }
 
@@ -70,4 +77,3 @@ public class WindowsNavMapping implements INavMapping {
         return OsConstant.WINDOWS;
     }
 }
-

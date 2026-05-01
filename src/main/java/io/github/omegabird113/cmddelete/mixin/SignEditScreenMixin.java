@@ -1,6 +1,8 @@
 package io.github.omegabird113.cmddelete.mixin;
 
-import io.github.omegabird113.cmddelete.actions.KeyConstants;
+import io.github.omegabird113.cmddelete.CmdDeleteClient;
+import io.github.omegabird113.cmddelete.actions.ActionConstant;
+import io.github.omegabird113.cmddelete.actions.NavActionManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.font.TextFieldHelper;
@@ -48,88 +50,56 @@ public abstract class SignEditScreenMixin {
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideSignEditNavigation(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
-        int key = event.key();
-        var window = Minecraft.getInstance().getWindow();
-
+        ActionConstant action = CmdDeleteClient.NAV_MAPPING.getAction(event);
         boolean shift = event.hasShiftDown();
-        boolean delete = KeyConstants.isDeleteKey(key);
-        boolean move = KeyConstants.isMoveKey(key);
-        boolean wordModifier = KeyConstants.wordKeyDown(window);
-        boolean lineModifier = KeyConstants.lineKeyDown(window);
-        int sideDirection = KeyConstants.getSideDirection(key);
-        int deleteDirection = KeyConstants.getDeleteDirection(key);
-        int verticalDirection = KeyConstants.getVerticalDirection(key);
 
         // Reset selection if player moves w/o shift
-        if (!shift && (event.isUp() || event.isDown() || move)) {
+        if (!shift && (event.isUp() || event.isDown() || event.isLeft() || event.isRight() || NavActionManager.isMoveAction(action))) {
             this.cmd_delete$clearMultilineSelection();
         }
 
-        if (move && !shift && !wordModifier && !lineModifier) {
+        if (action == ActionConstant.NONE && !shift && (event.isLeft() || event.isRight())) {
             // If line changed, we handled it, else continue
+            int sideDirection = event.isLeft() ? NavActionManager.DIRECTION_LEFT : NavActionManager.DIRECTION_RIGHT;
             if (this.cmd_delete$tryMoveToNextLineByCharacter(sideDirection)) {
                 cir.setReturnValue(true);
                 return;
             }
         }
 
-        // Keep old line selected if shift move up/down
-        if (shift && (event.isUp() || event.isDown())) {
-            this.cmd_delete$updateSelectionStart();
-            this.line = (this.line + verticalDirection) & 3;
-            this.signField.setCursorPos(Math.min(this.cmd_delete$selectionEndPos, this.cmd_delete$currentLineMessage().length()), false);
-            this.cmd_delete$updateSelectionEnd();
-            this.cmd_delete$syncCurrentLineSelection();
-            cir.setReturnValue(true);
-            return;
-        }
+        int direction = NavActionManager.getDirection(action);
 
-        if (delete) {
-            if (!wordModifier && !lineModifier) return;
-
-            this.cmd_delete$clearMultilineSelection();
-
-            if (lineModifier) {
-                if (deleteDirection == KeyConstants.DIRECTION_LEFT) {
-                    this.signField.setCursorToStart(true);
-                } else {
-                    this.signField.setCursorToEnd(true);
-                }
-                this.signField.insertText("");
-            } else {
-                this.cmd_delete$deleteByWords(deleteDirection);
-            }
-
-            cir.setReturnValue(true);
-            return;
-        }
-
-        if (move) {
-            if (!wordModifier && !lineModifier) return;
-
-            if (shift) {
-                this.cmd_delete$updateSelectionStart();
-            } else {
+        switch (action) {
+            case SEL_TEXT_UP, SEL_TEXT_DOWN -> this.cmd_delete$selectVertical(direction);
+            case DEL_LINE_LEFT, DEL_LINE_RIGHT -> {
                 this.cmd_delete$clearMultilineSelection();
+                this.cmd_delete$deleteToLineEdge(direction);
             }
-
-            if (lineModifier) {
-                if (sideDirection == KeyConstants.DIRECTION_LEFT) {
-                    this.signField.setCursorToStart(shift);
-                } else {
-                    this.signField.setCursorToEnd(shift);
-                }
-            } else {
-                this.cmd_delete$moveByWords(sideDirection, shift);
+            case DEL_WORD_LEFT, DEL_WORD_RIGHT -> {
+                this.cmd_delete$clearMultilineSelection();
+                this.cmd_delete$deleteByWords(direction);
             }
-
-            if (shift) {
-                this.cmd_delete$updateSelectionEnd();
-                this.cmd_delete$syncCurrentLineSelection();
+            case NAV_LINE_LEFT, NAV_LINE_RIGHT -> {
+                this.cmd_delete$clearMultilineSelection();
+                this.cmd_delete$moveToLineEdge(direction, false);
             }
-
-            cir.setReturnValue(true);
+            case SEL_LINE_LEFT, SEL_LINE_RIGHT -> this.cmd_delete$selectToLineEdge(direction);
+            case NAV_WORD_LEFT, NAV_WORD_RIGHT -> {
+                this.cmd_delete$clearMultilineSelection();
+                this.cmd_delete$moveByWords(direction, false);
+            }
+            case SEL_WORD_LEFT, SEL_WORD_RIGHT -> this.cmd_delete$selectByWords(direction);
+            case NAV_TEXT_START, NAV_TEXT_END -> {
+                this.cmd_delete$clearMultilineSelection();
+                this.cmd_delete$moveToTextEdge(direction, false);
+            }
+            case SEL_TEXT_START, SEL_TEXT_END -> this.cmd_delete$selectToTextEdge(direction);
+            default -> {
+                return;
+            }
         }
+
+        cir.setReturnValue(true);
     }
 
     // Resets local selection after typing because typing changes it
@@ -168,11 +138,11 @@ public abstract class SignEditScreenMixin {
     @Unique
     private boolean cmd_delete$tryMoveToNextLineByCharacter(int direction) {
         // At line edges, plain arrows move to the previous/next line
-        if (direction == KeyConstants.DIRECTION_LEFT && this.signField.getCursorPos() == 0 && this.line > 0) {
+        if (direction == NavActionManager.DIRECTION_LEFT && this.signField.getCursorPos() == 0 && this.line > 0) {
             this.line--;
             this.signField.setCursorToEnd(false);
             return true;
-        } else if (direction == KeyConstants.DIRECTION_RIGHT && this.signField.getCursorPos() == this.cmd_delete$currentLineMessage().length() && this.line < this.messages.length - 1) {
+        } else if (direction == NavActionManager.DIRECTION_RIGHT && this.signField.getCursorPos() == this.cmd_delete$currentLineMessage().length() && this.line < this.messages.length - 1) {
             this.line++;
             this.signField.setCursorToStart(false);
             return true;
@@ -198,13 +168,72 @@ public abstract class SignEditScreenMixin {
         // At line edges, move to next line if needed
         int nextLine = this.cmd_delete$getNextWordLine(direction);
 
-        if (direction == KeyConstants.DIRECTION_LEFT && this.signField.getCursorPos() == 0 && nextLine != this.line) {
+        if (direction == NavActionManager.DIRECTION_LEFT && this.signField.getCursorPos() == 0 && nextLine != this.line) {
             this.line = nextLine;
             this.signField.setCursorToEnd(false);
-        } else if (direction == KeyConstants.DIRECTION_RIGHT && this.signField.getCursorPos() == this.cmd_delete$currentLineMessage().length() && nextLine != this.line) {
+        } else if (direction == NavActionManager.DIRECTION_RIGHT && this.signField.getCursorPos() == this.cmd_delete$currentLineMessage().length() && nextLine != this.line) {
             this.line = nextLine;
             this.signField.setCursorToStart(false);
         }
+    }
+
+    @Unique
+    private void cmd_delete$deleteToLineEdge(int direction) {
+        this.cmd_delete$moveToLineEdge(direction, true);
+        this.signField.insertText("");
+    }
+
+    @Unique
+    private void cmd_delete$moveToLineEdge(int direction, boolean extendSelection) {
+        if (direction == NavActionManager.DIRECTION_LEFT) {
+            this.signField.setCursorToStart(extendSelection);
+        } else {
+            this.signField.setCursorToEnd(extendSelection);
+        }
+    }
+
+    @Unique
+    private void cmd_delete$selectToLineEdge(int direction) {
+        this.cmd_delete$updateSelectionStart();
+        this.cmd_delete$moveToLineEdge(direction, true);
+        this.cmd_delete$updateSelectionEnd();
+        this.cmd_delete$syncCurrentLineSelection();
+    }
+
+    @Unique
+    private void cmd_delete$selectByWords(int direction) {
+        this.cmd_delete$updateSelectionStart();
+        this.cmd_delete$moveByWords(direction, true);
+        this.cmd_delete$updateSelectionEnd();
+        this.cmd_delete$syncCurrentLineSelection();
+    }
+
+    @Unique
+    private void cmd_delete$moveToTextEdge(int direction, boolean extendSelection) {
+        if (direction == NavActionManager.DIRECTION_UP) {
+            this.line = 0;
+            this.signField.setCursorToStart(extendSelection);
+        } else {
+            this.line = this.messages.length - 1;
+            this.signField.setCursorToEnd(extendSelection);
+        }
+    }
+
+    @Unique
+    private void cmd_delete$selectToTextEdge(int direction) {
+        this.cmd_delete$updateSelectionStart();
+        this.cmd_delete$moveToTextEdge(direction, true);
+        this.cmd_delete$updateSelectionEnd();
+        this.cmd_delete$syncCurrentLineSelection();
+    }
+
+    @Unique
+    private void cmd_delete$selectVertical(int direction) {
+        this.cmd_delete$updateSelectionStart();
+        this.line = (this.line + direction) & 3;
+        this.signField.setCursorPos(Math.min(this.cmd_delete$selectionEndPos, this.cmd_delete$currentLineMessage().length()), false);
+        this.cmd_delete$updateSelectionEnd();
+        this.cmd_delete$syncCurrentLineSelection();
     }
 
     @Unique

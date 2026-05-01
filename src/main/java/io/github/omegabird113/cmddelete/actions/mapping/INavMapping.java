@@ -1,4 +1,4 @@
-package io.github.omegabird113.cmddelete.actions.mappings;
+package io.github.omegabird113.cmddelete.actions.mapping;
 
 import io.github.omegabird113.cmddelete.actions.ActionConstant;
 import io.github.omegabird113.cmddelete.actions.OsConstant;

@@ -1,8 +1,7 @@
 package io.github.omegabird113.cmddelete;
 
-import io.github.omegabird113.cmddelete.actions.KeyConstants;
 import io.github.omegabird113.cmddelete.actions.NavActionManager;
-import io.github.omegabird113.cmddelete.actions.mappings.INavMapping;
+import io.github.omegabird113.cmddelete.actions.mapping.INavMapping;
 import net.fabricmc.api.ClientModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +13,6 @@ public class CmdDeleteClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-
+        LOGGER.info("Initializing '{}'. MappingOs='{}'", MODID, NAV_MAPPING.getMappingOs());
     }
 }

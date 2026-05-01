@@ -1,9 +1,9 @@
 package io.github.omegabird113.cmddelete.actions;
 
-import io.github.omegabird113.cmddelete.actions.mappings.INavMapping;
-import io.github.omegabird113.cmddelete.actions.mappings.LinuxNavMapping;
-import io.github.omegabird113.cmddelete.actions.mappings.MacNavMapping;
-import io.github.omegabird113.cmddelete.actions.mappings.WindowsNavMapping;
+import io.github.omegabird113.cmddelete.actions.mapping.INavMapping;
+import io.github.omegabird113.cmddelete.actions.mapping.LinuxNavMapping;
+import io.github.omegabird113.cmddelete.actions.mapping.MacNavMapping;
+import io.github.omegabird113.cmddelete.actions.mapping.WindowsNavMapping;
 
 public class NavActionManager {
     public static final int DIRECTION_LEFT = -1;
@@ -31,5 +31,12 @@ public class NavActionManager {
         };
     }
 
-
+    public static boolean isMoveAction(ActionConstant action) {
+        return switch (action) {
+            case NAV_LINE_LEFT, NAV_LINE_RIGHT,
+                 NAV_WORD_LEFT, NAV_WORD_RIGHT,
+                 NAV_TEXT_START, NAV_TEXT_END -> true;
+            default -> false;
+        };
+    }
 }

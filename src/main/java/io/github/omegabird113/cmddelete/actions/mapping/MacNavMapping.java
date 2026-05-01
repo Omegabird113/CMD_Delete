@@ -1,4 +1,4 @@
-package io.github.omegabird113.cmddelete.actions.mappings;
+package io.github.omegabird113.cmddelete.actions.mapping;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import io.github.omegabird113.cmddelete.actions.ActionConstant;
@@ -52,6 +52,12 @@ public class MacNavMapping implements INavMapping {
         if (altOption && key == DELETE)
             return DEL_WORD_RIGHT;
 
+        // shift + up/down -> select previous/next text line
+        if (shift && key == UP)
+            return SEL_TEXT_UP;
+        if (shift && key == DOWN)
+            return SEL_TEXT_DOWN;
+
         return NONE;
     }
 
@@ -78,7 +84,8 @@ public class MacNavMapping implements INavMapping {
                 SEL_WORD_LEFT, SEL_WORD_RIGHT,
                 DEL_WORD_LEFT, DEL_WORD_RIGHT,
                 NAV_TEXT_START, NAV_TEXT_END,
-                SEL_TEXT_START, SEL_TEXT_END
+                SEL_TEXT_START, SEL_TEXT_END,
+                SEL_TEXT_UP, SEL_TEXT_DOWN
         };
     }
 
