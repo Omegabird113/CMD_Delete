@@ -3,6 +3,7 @@ package io.github.omegabird113.cmddelete.mixin;
 import io.github.omegabird113.cmddelete.CmdDeleteClient;
 import io.github.omegabird113.cmddelete.actions.ActionConstant;
 import io.github.omegabird113.cmddelete.actions.NavActionManager;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.input.KeyEvent;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,7 +31,7 @@ public abstract class EditBoxMixin {
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideDelete(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
-        ActionConstant action = CmdDeleteClient.NAV_MAPPING.getAction(event);
+        ActionConstant action = CmdDeleteClient.NAV_MAPPING.getAction(event, Minecraft.getInstance().getWindow());
         int direction = NavActionManager.getDirection(action);
 
         switch (action) {

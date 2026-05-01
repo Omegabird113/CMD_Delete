@@ -50,7 +50,7 @@ public abstract class SignEditScreenMixin {
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideSignEditNavigation(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
-        ActionConstant action = CmdDeleteClient.NAV_MAPPING.getAction(event);
+        ActionConstant action = CmdDeleteClient.NAV_MAPPING.getAction(event, Minecraft.getInstance().getWindow());
         boolean shift = event.hasShiftDown();
 
         // Reset selection if player moves w/o shift

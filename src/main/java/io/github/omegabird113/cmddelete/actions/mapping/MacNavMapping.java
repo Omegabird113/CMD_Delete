@@ -1,9 +1,9 @@
 package io.github.omegabird113.cmddelete.actions.mapping;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.platform.Window;
 import io.github.omegabird113.cmddelete.actions.ActionConstant;
 import io.github.omegabird113.cmddelete.actions.OsConstant;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.input.KeyEvent;
 import org.lwjgl.glfw.GLFW;
 
@@ -62,9 +62,7 @@ public class MacNavMapping implements INavMapping {
     }
 
     @Override
-    public ActionConstant getAction(KeyEvent event) {
-        var window = Minecraft.getInstance().getWindow();
-
+    public ActionConstant getAction(KeyEvent event, Window window) {
         int key = event.key();
         boolean shift = event.hasShiftDown();
         boolean option = event.hasAltDown();
