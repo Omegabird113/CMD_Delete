@@ -1,6 +1,6 @@
 package io.github.omegabird113.cmddelete.mixin;
 
-import io.github.omegabird113.cmddelete.client.KeyConstants;
+import io.github.omegabird113.cmddelete.actions.KeyConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.font.TextFieldHelper;
