@@ -1,4 +1,4 @@
-package io.github.omegabird113.cmddelete.client;
+package io.github.omegabird113.cmd_delete.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Window;

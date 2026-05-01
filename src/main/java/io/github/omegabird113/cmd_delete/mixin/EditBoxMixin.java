@@ -1,6 +1,6 @@
-package io.github.omegabird113.cmddelete.mixin;
+package io.github.omegabird113.cmd_delete.mixin;
 
-import io.github.omegabird113.cmddelete.client.KeyConstants;
+import io.github.omegabird113.cmd_delete.client.KeyConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.input.KeyEvent;
