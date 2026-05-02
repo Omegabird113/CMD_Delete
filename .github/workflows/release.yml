@@ -15,14 +15,14 @@ on:
           - release
           - beta
           - alpha
-      mc_versions:
-        description: "Supported Minecraft versions, comma-separated (e.g. 26.1, 26.1.1, 26.1.2)"
-        required: true
-        type: string
       changelog:
         description: "Changelog entries (comma-separated)"
         required: true
         type: string
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   release:
@@ -55,14 +55,23 @@ jobs:
       - name: Build
         run: ./gradlew build
 
-      - name: Verify JAR exists
+      - name: Locate built JAR
+        id: jar
         run: |
-          JAR="build/libs/cmd-delete-${{ steps.props.outputs.version }}.jar"
-          if [ ! -f "$JAR" ]; then
-            echo "ERROR: Expected JAR not found: $JAR"
-            ls build/libs/
+          JARS=$(find build/libs -maxdepth 1 -type f -name "*.jar" \
+            ! -name "*-sources.jar" \
+            ! -name "*-javadoc.jar")
+
+          COUNT=$(echo "$JARS" | wc -l)
+
+          if [ "$COUNT" -ne 1 ]; then
+            echo "ERROR: Expected exactly 1 JAR, found $COUNT"
+            echo "$JARS"
             exit 1
           fi
+
+          JAR="$JARS"
+          echo "path=$JAR" >> "$GITHUB_OUTPUT"
 
       - name: Format changelog
         run: |
@@ -73,19 +82,16 @@ jobs:
             | sed '/^$/d' \
             | sed 's/^/- /' > changelog_body.md
 
-      - name: Format mc-versions
-        id: mc_versions
+      - name: Check if release already exists
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "${{ inputs.mc_versions }}" \
-            | tr ',' '\n' \
-            | sed 's/^[[:space:]]*//' \
-            | sed 's/[[:space:]]*$//' \
-            | sed '/^$/d' > mc_versions.txt
-          echo "list<<EOF" >> "$GITHUB_OUTPUT"
-          cat mc_versions.txt >> "$GITHUB_OUTPUT"
-          echo "EOF" >> "$GITHUB_OUTPUT"
+          if gh release view "${{ steps.props.outputs.version }}" >/dev/null 2>&1; then
+            echo "ERROR: Release ${{ steps.props.outputs.version }} already exists"
+            exit 1
+          fi
 
-      - name: Create GitHub Release
+      - name: Create GitHub release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -93,8 +99,10 @@ jobs:
           if [ "${{ inputs.release_type }}" != "release" ]; then
             PRERELEASE_FLAG="--prerelease"
           fi
+
           gh release create "${{ steps.props.outputs.version }}" \
-            "build/libs/cmd-delete-${{ steps.props.outputs.version }}.jar" \
+            "${{ steps.jar.outputs.path }}" \
+            --target "${{ github.sha }}" \
             --title "${{ inputs.release_title }}" \
             --notes-file changelog_body.md \
             $PRERELEASE_FLAG
@@ -106,12 +114,15 @@ jobs:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           curseforge-id: 1455987
           curseforge-token: ${{ secrets.CF_API_TOKEN }}
-          files: build/libs/cmd-delete-${{ steps.props.outputs.version }}.jar
+          files: ${{ steps.jar.outputs.path }}
           name: ${{ inputs.release_title }}
           version: ${{ steps.props.outputs.version }}
           version-type: ${{ inputs.release_type }}
           changelog-file: changelog_body.md
-          game-versions: ${{ steps.mc_versions.outputs.list }}
+          game-versions: |
+            26.1
+            26.1.1
+            26.1.2
           loaders: fabric
           dependencies: |
             fabric-loader@>=${{ steps.props.outputs.loader_version }}(required)
