@@ -11,14 +11,22 @@ public class NavActionManager {
     public static final int DIRECTION_DOWN = 1;
     public static final int DIRECTION_UP = -1;
 
-    public static INavMapping getMapping() {
+    public static Os getOs() {
         if (System.getProperty("os.name").toLowerCase().contains("mac")) {
-            return new MacNavMapping();
+            return Os.MAC;
         } else if (System.getProperty("os.name").toLowerCase().contains("win")) {
-            return new WindowsNavMapping();
+            return Os.WINDOWS;
         } else {
-            return new LinuxNavMapping();
+            return Os.LINUX;
         }
+    }
+
+    public static INavMapping getMapping() {
+        return switch(getOs()) {
+            case MAC -> new MacNavMapping();
+            case WINDOWS -> new WindowsNavMapping();
+            case LINUX -> new LinuxNavMapping();
+        };
     }
 
     public static int getDirection(NavAction action) {
@@ -38,5 +46,13 @@ public class NavActionManager {
                  NAV_TEXT_START, NAV_TEXT_END -> true;
             default -> false;
         };
+    }
+
+    public static double getCoverage(INavMapping mapping) {
+        int total = NavAction.values().length;
+        NavAction[] supported = mapping.getPossibleActions();
+        int supportCount = supported.length;
+
+        return ((double) supportCount) / total;
     }
 }

@@ -16,6 +16,6 @@ public class CmdDeleteClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         LOGGER.info("Initializing '{}'. MappingOs='{}'", MODID, NAV_MAPPING.getMappingOs());
-        LOGGER.info("The mapping says the supported actions are '{}'", List.of(NAV_MAPPING.getPossibleActions()));
+        LOGGER.info("The mapping has {}% coverage with the supported actions of '{}'", NavActionManager.getCoverage(NAV_MAPPING) * 100, List.of(NAV_MAPPING.getPossibleActions()));
     }
 }
