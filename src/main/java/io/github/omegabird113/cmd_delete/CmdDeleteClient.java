@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 public class CmdDeleteClient implements ClientModInitializer {
-    public static final String MODID = "cmd-delete";
+    public static final String MODID = "cmd_delete";
     public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
     public static final INavMapping NAV_MAPPING = NavActionManager.getMapping();
 
