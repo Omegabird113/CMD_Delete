@@ -1,18 +1,12 @@
 package io.github.omegabird113.cmd_delete.actions.mapping;
 
-import com.mojang.blaze3d.platform.InputConstants;
-import com.mojang.blaze3d.platform.Window;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.actions.Os;
-import net.minecraft.client.input.KeyEvent;
 import org.lwjgl.glfw.GLFW;
 
 import static io.github.omegabird113.cmd_delete.actions.NavAction.*;
 
 public class WindowsNavMapping implements INavMapping {
-    private static final int LEFT_SUPER = GLFW.GLFW_KEY_LEFT_SUPER;
-    private static final int RIGHT_SUPER = GLFW.GLFW_KEY_RIGHT_SUPER;
-
     private static final int LEFT = GLFW.GLFW_KEY_LEFT;
     private static final int RIGHT = GLFW.GLFW_KEY_RIGHT;
     private static final int HOME = GLFW.GLFW_KEY_HOME;
@@ -48,17 +42,6 @@ public class WindowsNavMapping implements INavMapping {
             return SEL_TEXT_DOWN;
 
         return NONE;
-    }
-
-    @Override
-    public NavAction getAction(KeyEvent event, Window window) {
-        int key = event.key();
-        boolean shift = event.hasShiftDown();
-        boolean alt = event.hasAltDown();
-        boolean control = event.hasControlDown();
-        boolean windows = InputConstants.isKeyDown(window, LEFT_SUPER) || InputConstants.isKeyDown(window, RIGHT_SUPER);
-
-        return getAction(key, shift, alt, control, windows);
     }
 
     @Override
