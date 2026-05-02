@@ -48,11 +48,11 @@ public class NavActionManager {
         };
     }
 
-    public static double getCoverage(INavMapping mapping) {
+    public static float getCoverage(INavMapping mapping) {
         int total = NavAction.values().length;
         NavAction[] supported = mapping.getPossibleActions();
         int supportCount = supported.length;
 
-        return ((double) supportCount) / total;
+        return ((float) supportCount) / total;
     }
 }
