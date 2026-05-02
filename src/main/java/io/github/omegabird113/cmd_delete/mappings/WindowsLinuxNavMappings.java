@@ -5,7 +5,7 @@ import org.lwjgl.glfw.GLFW;
 
 import static io.github.omegabird113.cmd_delete.actions.NavAction.*;
 
-class WindowsNavMappings implements INavMappings {
+class WindowsLinuxNavMappings implements INavMappings {
     private static final int LEFT = GLFW.GLFW_KEY_LEFT;
     private static final int RIGHT = GLFW.GLFW_KEY_RIGHT;
     private static final int HOME = GLFW.GLFW_KEY_HOME;
@@ -59,7 +59,9 @@ class WindowsNavMappings implements INavMappings {
     }
 
     @Override
-    public Os getMappingsOs() {
-        return Os.WINDOWS;
+    public Os[] getMappingsSupportedSystems() {
+        return new Os[] {
+            Os.WINDOWS, Os.LINUX
+        };
     }
 }

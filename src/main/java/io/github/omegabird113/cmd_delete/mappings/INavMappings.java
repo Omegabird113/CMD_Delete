@@ -18,5 +18,5 @@ public interface INavMappings {
         return getAction(key, shift, alt, control, windows);
     }
     NavAction[] getPossibleActions();
-    Os getMappingsOs();
+    Os[] getMappingsSupportedSystems();
 }

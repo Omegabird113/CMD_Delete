@@ -65,7 +65,9 @@ class MacNavMappings implements INavMappings {
     }
 
     @Override
-    public Os getMappingsOs() {
-        return Os.MAC;
+    public Os[] getMappingsSupportedSystems() {
+        return new Os[] {
+            Os.MAC
+        };
     }
 }

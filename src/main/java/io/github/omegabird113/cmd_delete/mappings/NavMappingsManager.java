@@ -23,10 +23,8 @@ abstract public class NavMappingsManager {
     }
 
     private static INavMappings getOsMappings() {
-        return switch(getOs()) {
-            case MAC -> new MacNavMappings();
-            case LINUX -> new LinuxNavMappings();
-            default -> new WindowsNavMappings();
-        };
+        if (getOs() == Os.MAC)
+            return new MacNavMappings();
+        return new WindowsLinuxNavMappings();
     }
 }
