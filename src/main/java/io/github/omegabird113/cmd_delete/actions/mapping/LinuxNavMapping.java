@@ -1,10 +1,10 @@
 package io.github.omegabird113.cmd_delete.actions.mapping;
 
-import io.github.omegabird113.cmd_delete.actions.OsConstant;
+import io.github.omegabird113.cmd_delete.actions.Os;
 
 public class LinuxNavMapping extends WindowsNavMapping {
     @Override
-    public OsConstant getMappingOs() {
-        return OsConstant.LINUX;
+    public Os getMappingOs() {
+        return Os.LINUX;
     }
 }

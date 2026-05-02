@@ -1,7 +1,7 @@
 package io.github.omegabird113.cmd_delete.mixin;
 
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
-import io.github.omegabird113.cmd_delete.actions.ActionConstant;
+import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.actions.NavActionManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -50,7 +50,7 @@ public abstract class SignEditScreenMixin {
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideSignEditNavigation(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
-        ActionConstant action = CmdDeleteClient.NAV_MAPPING.getAction(event, Minecraft.getInstance().getWindow());
+        NavAction action = CmdDeleteClient.NAV_MAPPING.getAction(event, Minecraft.getInstance().getWindow());
         boolean shift = event.hasShiftDown();
 
         // Reset selection if player moves w/o shift
@@ -58,7 +58,7 @@ public abstract class SignEditScreenMixin {
             this.cmd_delete$clearMultilineSelection();
         }
 
-        if (action == ActionConstant.NONE && !shift && (event.isLeft() || event.isRight())) {
+        if (action == NavAction.NONE && !shift && (event.isLeft() || event.isRight())) {
             // If line changed, we handled it, else continue
             int sideDirection = event.isLeft() ? NavActionManager.DIRECTION_LEFT : NavActionManager.DIRECTION_RIGHT;
             if (this.cmd_delete$tryMoveToNextLineByCharacter(sideDirection)) {

@@ -1,6 +1,6 @@
 package io.github.omegabird113.cmd_delete.actions;
 
-public enum OsConstant {
+public enum Os {
     WINDOWS,
     LINUX,
     MAC

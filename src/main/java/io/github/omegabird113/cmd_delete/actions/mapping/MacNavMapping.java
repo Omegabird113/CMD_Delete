@@ -2,12 +2,12 @@ package io.github.omegabird113.cmd_delete.actions.mapping;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Window;
-import io.github.omegabird113.cmd_delete.actions.ActionConstant;
-import io.github.omegabird113.cmd_delete.actions.OsConstant;
+import io.github.omegabird113.cmd_delete.actions.NavAction;
+import io.github.omegabird113.cmd_delete.actions.Os;
 import net.minecraft.client.input.KeyEvent;
 import org.lwjgl.glfw.GLFW;
 
-import static io.github.omegabird113.cmd_delete.actions.ActionConstant.*;
+import static io.github.omegabird113.cmd_delete.actions.NavAction.*;
 
 public class MacNavMapping implements INavMapping {
     private static final int LEFT_COMMAND = GLFW.GLFW_KEY_LEFT_SUPER;
@@ -21,38 +21,32 @@ public class MacNavMapping implements INavMapping {
     private static final int DELETE = GLFW.GLFW_KEY_DELETE;
 
     @Override
-    public ActionConstant getAction(int key, boolean shift, boolean altOption, boolean control, boolean superCommand) {
-        // cmd + up/down -> text start/end
+    public NavAction getAction(int key, boolean shift, boolean altOption, boolean control, boolean superCommand) {
         if (superCommand && key == UP)
             return shift ? SEL_TEXT_START : NAV_TEXT_START;
         if (superCommand && key == DOWN)
             return shift ? SEL_TEXT_END : NAV_TEXT_END;
 
-        // cmd + left/right -> line start/end
         if (superCommand && key == LEFT)
             return shift ? SEL_LINE_LEFT : NAV_LINE_LEFT;
         if (superCommand && key == RIGHT)
             return shift ? SEL_LINE_RIGHT : NAV_LINE_RIGHT;
 
-        // option + left/right -> word last/next
         if (altOption && key == LEFT)
             return shift ? SEL_WORD_LEFT : NAV_WORD_LEFT;
         if (altOption && key == RIGHT)
             return shift ? SEL_WORD_RIGHT : NAV_WORD_RIGHT;
 
-        // cmd + backspcae/delete -> delete to start/end line
         if (superCommand && key == BACKSPACE)
             return DEL_LINE_LEFT;
         if (superCommand && key == DELETE)
             return DEL_LINE_RIGHT;
 
-        // option + backspace/delete -> delete last/next word
         if (altOption && key == BACKSPACE)
             return DEL_WORD_LEFT;
         if (altOption && key == DELETE)
             return DEL_WORD_RIGHT;
 
-        // shift + up/down -> select previous/next text line
         if (shift && key == UP)
             return SEL_TEXT_UP;
         if (shift && key == DOWN)
@@ -62,7 +56,7 @@ public class MacNavMapping implements INavMapping {
     }
 
     @Override
-    public ActionConstant getAction(KeyEvent event, Window window) {
+    public NavAction getAction(KeyEvent event, Window window) {
         int key = event.key();
         boolean shift = event.hasShiftDown();
         boolean option = event.hasAltDown();
@@ -73,8 +67,8 @@ public class MacNavMapping implements INavMapping {
     }
 
     @Override
-    public ActionConstant[] getPossibleActions() {
-        return new ActionConstant[] {
+    public NavAction[] getPossibleActions() {
+        return new NavAction[] {
                 NAV_LINE_LEFT, NAV_LINE_RIGHT,
                 SEL_LINE_LEFT, SEL_LINE_RIGHT,
                 DEL_LINE_LEFT, DEL_LINE_RIGHT,
@@ -89,7 +83,7 @@ public class MacNavMapping implements INavMapping {
     }
 
     @Override
-    public OsConstant getMappingOs() {
-        return OsConstant.MAC;
+    public Os getMappingOs() {
+        return Os.MAC;
     }
 }

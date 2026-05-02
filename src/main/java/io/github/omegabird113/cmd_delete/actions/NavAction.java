@@ -1,6 +1,6 @@
 package io.github.omegabird113.cmd_delete.actions;
 
-public enum ActionConstant {
+public enum NavAction {
     NAV_LINE_LEFT,
     NAV_LINE_RIGHT,
     NAV_WORD_LEFT,
