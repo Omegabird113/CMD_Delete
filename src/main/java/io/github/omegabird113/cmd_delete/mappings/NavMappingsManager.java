@@ -22,7 +22,7 @@ abstract public class NavMappingsManager {
         }
     }
 
-    public static INavMappings getOsMappings() {
+    private static INavMappings getOsMappings() {
         return switch(getOs()) {
             case MAC -> new MacNavMappings();
             case WINDOWS -> new WindowsNavMappings();
