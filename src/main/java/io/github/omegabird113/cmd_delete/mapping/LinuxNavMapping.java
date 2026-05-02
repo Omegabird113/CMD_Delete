@@ -1,6 +1,4 @@
-package io.github.omegabird113.cmd_delete.actions.mapping;
-
-import io.github.omegabird113.cmd_delete.actions.Os;
+package io.github.omegabird113.cmd_delete.mapping;
 
 public class LinuxNavMapping extends WindowsNavMapping {
     @Override

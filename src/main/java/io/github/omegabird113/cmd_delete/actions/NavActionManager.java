@@ -1,33 +1,12 @@
 package io.github.omegabird113.cmd_delete.actions;
 
-import io.github.omegabird113.cmd_delete.actions.mapping.INavMapping;
-import io.github.omegabird113.cmd_delete.actions.mapping.LinuxNavMapping;
-import io.github.omegabird113.cmd_delete.actions.mapping.MacNavMapping;
-import io.github.omegabird113.cmd_delete.actions.mapping.WindowsNavMapping;
+import io.github.omegabird113.cmd_delete.mapping.INavMapping;
 
 public class NavActionManager {
     public static final int DIRECTION_LEFT = -1;
     public static final int DIRECTION_RIGHT = 1;
     public static final int DIRECTION_DOWN = 1;
     public static final int DIRECTION_UP = -1;
-
-    public static Os getOs() {
-        if (System.getProperty("os.name").toLowerCase().contains("mac")) {
-            return Os.MAC;
-        } else if (System.getProperty("os.name").toLowerCase().contains("win")) {
-            return Os.WINDOWS;
-        } else {
-            return Os.LINUX;
-        }
-    }
-
-    public static INavMapping getMapping() {
-        return switch(getOs()) {
-            case MAC -> new MacNavMapping();
-            case WINDOWS -> new WindowsNavMapping();
-            case LINUX -> new LinuxNavMapping();
-        };
-    }
 
     public static int getDirection(NavAction action) {
         return switch(action) {

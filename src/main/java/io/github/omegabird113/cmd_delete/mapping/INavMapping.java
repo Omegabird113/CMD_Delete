@@ -1,9 +1,8 @@
-package io.github.omegabird113.cmd_delete.actions.mapping;
+package io.github.omegabird113.cmd_delete.mapping;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Window;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
-import io.github.omegabird113.cmd_delete.actions.Os;
 import net.minecraft.client.input.KeyEvent;
 import org.lwjgl.glfw.GLFW;
 

@@ -1,8 +1,8 @@
 package io.github.omegabird113.cmd_delete.mixin;
 
-import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.actions.NavActionManager;
+import io.github.omegabird113.cmd_delete.mapping.NavMappingManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.font.TextFieldHelper;
@@ -50,7 +50,7 @@ public abstract class SignEditScreenMixin {
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideSignEditNavigation(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
-        NavAction action = CmdDeleteClient.NAV_MAPPING.getAction(event, Minecraft.getInstance().getWindow());
+        NavAction action = NavMappingManager.getCurrent().getAction(event, Minecraft.getInstance().getWindow());
         boolean shift = event.hasShiftDown();
 
         // Reset selection if player moves w/o shift
