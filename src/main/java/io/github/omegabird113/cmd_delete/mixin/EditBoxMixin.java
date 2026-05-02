@@ -31,7 +31,7 @@ public abstract class EditBoxMixin {
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideDelete(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
-        NavAction action = NavMappingsManager.getCurrent().getAction(event, Minecraft.getInstance().getWindow());
+        NavAction action = NavMappingsManager.getCurrentMappings().getAction(event, Minecraft.getInstance().getWindow());
         int direction = NavActionManager.getDirection(action);
 
         switch (action) {
