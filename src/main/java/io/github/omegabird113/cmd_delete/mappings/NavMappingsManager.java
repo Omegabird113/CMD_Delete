@@ -1,5 +1,10 @@
 package io.github.omegabird113.cmd_delete.mappings;
 
+import io.github.omegabird113.cmd_delete.CmdDeleteClient;
+import io.github.omegabird113.cmd_delete.actions.NavActionManager;
+
+import java.util.List;
+
 abstract public class NavMappingsManager {
     private static INavMappings current;
     private static boolean useCustomMapping = false;
@@ -10,6 +15,8 @@ abstract public class NavMappingsManager {
 
     public static void LoadMappings() {
         current = getOsMappings();
+        CmdDeleteClient.LOGGER.info("OS nav Mappings loaded for systems: {}", List.of(current.getMappingsSupportedSystems()));
+        CmdDeleteClient.LOGGER.info("The loaded mappings have {}% coverage with supported actions: {}", NavActionManager.getCoverage(current) * 100, current.getPossibleActions());
     }
 
     public static Os getOs() {
