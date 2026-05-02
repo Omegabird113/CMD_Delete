@@ -1,4 +1,4 @@
-package io.github.omegabird113.cmd_delete.mapping;
+package io.github.omegabird113.cmd_delete.mappings;
 
 public enum Os {
     WINDOWS,

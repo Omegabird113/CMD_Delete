@@ -1,6 +1,6 @@
 package io.github.omegabird113.cmd_delete;
 
-import io.github.omegabird113.cmd_delete.mapping.NavMappingManager;
+import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import net.fabricmc.api.ClientModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +11,6 @@ public class CmdDeleteClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        NavMappingManager.LoadMapping();
+        NavMappingsManager.LoadMappings();
     }
 }

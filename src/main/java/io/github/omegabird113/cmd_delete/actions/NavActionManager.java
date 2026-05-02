@@ -1,6 +1,6 @@
 package io.github.omegabird113.cmd_delete.actions;
 
-import io.github.omegabird113.cmd_delete.mapping.INavMapping;
+import io.github.omegabird113.cmd_delete.mappings.INavMappings;
 
 public class NavActionManager {
     public static final int DIRECTION_LEFT = -1;
@@ -27,7 +27,7 @@ public class NavActionManager {
         };
     }
 
-    public static float getCoverage(INavMapping mapping) {
+    public static float getCoverage(INavMappings mapping) {
         int total = NavAction.values().length;
         NavAction[] supported = mapping.getPossibleActions();
         int supportCount = supported.length;
