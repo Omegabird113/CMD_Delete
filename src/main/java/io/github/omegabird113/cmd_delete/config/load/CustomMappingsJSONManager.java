@@ -15,7 +15,7 @@ public class CustomMappingsJSONManager {
     private static final Path gamePath = FabricLoader.getInstance().getGameDir();
     private static final Path configPath = gamePath.resolve("/config/cmd_delete/mappings/");
 
-    public CustomMappingsRegistry loadFromCustomMappingsDir(String id) throws IOException {
+    private static CustomMappingsRegistry loadFromCustomMappingsDir(String id) throws IOException {
         Path path = configPath.resolve(id + ".json");
         if (!Files.exists(path)) {
             throw new FileNotFoundException("Custom mapping file not found at: " + path);
@@ -30,7 +30,7 @@ public class CustomMappingsJSONManager {
         }
     }
 
-    public INavMappings tryLoadCustomMappingsElse(String id, INavMappings customMappings, INavMappings fallback) {
+    public static INavMappings tryLoadCustomMappingsElse(String id, INavMappings customMappings, INavMappings fallback) {
         try {
             CustomMappingsRegistry registry = loadFromCustomMappingsDir(id);
             CustomMappingsRegistry.setCurrent(registry);

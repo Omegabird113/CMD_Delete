@@ -2,21 +2,54 @@ package io.github.omegabird113.cmd_delete.mappings;
 
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavActionManager;
+import io.github.omegabird113.cmd_delete.config.ActiveMappingsManager;
 
-import java.util.List;
+public class NavMappingsManager {
+    private static final INavMappings WINDOWS_MAPPINGS = new WindowsLinuxNavMappings();
+    private static final INavMappings MAC_MAPPINGS = new MacNavMappings();
+    private static final INavMappings LINUX_MAPPINGS = new WindowsLinuxNavMappings();
+    private static final INavMappings CUSTOM_MAPPINGS = new CustomNavMappings();
 
-abstract public class NavMappingsManager {
-    private static INavMappings currentMappings;
-    private static boolean useCustomMapping = false;
+    private static final ActiveMappingsManager activeMappingsManager = new ActiveMappingsManager(
+            WINDOWS_MAPPINGS, MAC_MAPPINGS, LINUX_MAPPINGS, CUSTOM_MAPPINGS, getOs()
+    );
+
+    private static ActiveMappingsManager.MappingWithState currentMappingsState;
 
     public static INavMappings getCurrentMappings() {
-        return currentMappings;
+        return currentMappingsState.mappings();
     }
 
     public static void LoadMappings() {
-        currentMappings = getOsMappings();
-        CmdDeleteClient.LOGGER.info("OS nav Mappings loaded for systems: {}", List.of(currentMappings.getMappingsSupportedSystems()));
-        CmdDeleteClient.LOGGER.info("The loaded mappings have {}% coverage with supported actions: {}", NavActionManager.getCoverage(currentMappings) * 100, currentMappings.getPossibleActions());
+        currentMappingsState = activeMappingsManager.tryGetMappings();
+        CmdDeleteClient.LOGGER.info("The loaded mappings have {}% coverage with supported actions: {}", NavActionManager.getCoverage(getCurrentMappings()) * 100, getCurrentMappings().getPossibleActions());
+    }
+
+    public static void updateMappingsToCustom(String id) {
+        currentMappingsState = activeMappingsManager.resolveMappings(
+                activeMappingsManager.resolveNamespacedId(ActiveMappingsManager.Type.custom, id)
+        );
+        activeMappingsManager.trySaveMappings(
+                activeMappingsManager.resolveNamespacedId(currentMappingsState)
+        );
+    }
+
+    public static void updateMappingsToBuiltIn(Os os) {
+        currentMappingsState = activeMappingsManager.resolveMappings(
+                activeMappingsManager.resolveNamespacedId(ActiveMappingsManager.Type.builtin, os)
+        );
+        activeMappingsManager.trySaveMappings(
+                activeMappingsManager.resolveNamespacedId(currentMappingsState)
+        );
+    }
+
+    public static void updateMappingsToDefault() {
+        currentMappingsState = activeMappingsManager.resolveMappings(
+                activeMappingsManager.resolveNamespacedId(ActiveMappingsManager.Type.defaultMappings, "")
+        );
+        activeMappingsManager.trySaveMappings(
+                activeMappingsManager.resolveNamespacedId(currentMappingsState)
+        );
     }
 
     public static Os getOs() {
@@ -27,11 +60,5 @@ abstract public class NavMappingsManager {
         } else {
             return Os.LINUX;
         }
-    }
-
-    private static INavMappings getOsMappings() {
-        if (getOs() == Os.MAC)
-            return new MacNavMappings();
-        return new WindowsLinuxNavMappings();
     }
 }
