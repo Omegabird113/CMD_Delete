@@ -1,8 +1,8 @@
 package io.github.omegabird113.cmd_delete.mappings;
 
 import io.github.omegabird113.cmd_delete.actions.NavAction;
-import io.github.omegabird113.cmd_delete.config.CustomMappingsRegistry;
-import io.github.omegabird113.cmd_delete.config.CustomMappingsRegistryKey;
+import io.github.omegabird113.cmd_delete.config.registry.CustomMappingsRegistry;
+import io.github.omegabird113.cmd_delete.config.registry.CustomMappingsRegistryKey;
 
 import static io.github.omegabird113.cmd_delete.actions.NavAction.*;
 

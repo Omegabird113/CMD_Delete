@@ -1,3 +1,3 @@
-package io.github.omegabird113.cmd_delete.config;
+package io.github.omegabird113.cmd_delete.config.registry;
 
 public record CustomMappingsRegistryKey(int key, boolean shift, boolean altOption, boolean control, boolean superCommand) {}
