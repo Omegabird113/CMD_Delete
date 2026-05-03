@@ -4,6 +4,8 @@ import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.registry.CustomMappingsRegistry;
 import io.github.omegabird113.cmd_delete.config.registry.CustomMappingsRegistryKey;
 
+import java.util.ArrayList;
+
 import static io.github.omegabird113.cmd_delete.actions.NavAction.*;
 
 public class CustomNavMappings implements INavMappings {
@@ -23,12 +25,18 @@ public class CustomNavMappings implements INavMappings {
     @Override
     public NavAction[] getPossibleActions() {
         CustomMappingsRegistry registry = CustomMappingsRegistry.getCurrent();
-        return registry.getValues();
+        ArrayList<NavAction> supported = new ArrayList<NavAction>();
+        for (NavAction action : registry.getValues()) {
+            if (!supported.contains(action)){
+                supported.add(action);
+            }
+        }
+        return supported.toArray(new NavAction[0]);
     }
 
     @Override
     public Os[] getMappingsSupportedSystems() {
         CustomMappingsRegistry registry = CustomMappingsRegistry.getCurrent();
-        return registry.getSystems().toArray(new Os[3]);
+        return registry.getSystems().toArray(new Os[0]);
     }
 }
