@@ -31,7 +31,9 @@ build/
 out/**
 
 # Minecraft client/server files
-run/
+run/*
+!run/config/cmd_delete/.active_mappings
+!run/config/cmd_delete/mappings/sample.json
 
 # ---- MacOS system files ----
 .DS_STORE
