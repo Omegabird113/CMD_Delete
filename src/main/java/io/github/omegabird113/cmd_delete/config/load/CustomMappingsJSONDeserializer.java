@@ -95,6 +95,7 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
         map.put("enter", GLFW.GLFW_KEY_ENTER);
         map.put("escape", GLFW.GLFW_KEY_ESCAPE);
         map.put("tab", GLFW.GLFW_KEY_TAB);
+        map.put("insert", GLFW.GLFW_KEY_INSERT);
 
         map.put("0", GLFW.GLFW_KEY_0);
         map.put("1", GLFW.GLFW_KEY_1);
