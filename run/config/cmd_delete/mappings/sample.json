@@ -1,0 +1,22 @@
+
+{
+  "fv": 1,
+  "meta": {
+    "name": "My custom mapping",
+    "author": "Omegabird113",
+    "systems": [
+      "mac"
+    ]
+  },
+  "actions": {
+    "NAV_TEXT_START": [
+      {
+        "key": "e",
+        "superCommand": true
+      },
+      {
+        "key": "home"
+      }
+    ]
+  }
+}

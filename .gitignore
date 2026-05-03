@@ -32,8 +32,10 @@ out/**
 
 # Minecraft client/server files
 run/*
-!run/config/cmd_delete/.active_mappings
-!run/config/cmd_delete/mappings/sample.json
+!run/config/
+run/config/*
+!run/config/cmd_delete/
+!run/config/cmd_delete/*
 
 # ---- MacOS system files ----
 .DS_STORE
