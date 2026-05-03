@@ -96,6 +96,44 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
         map.put("escape", GLFW.GLFW_KEY_ESCAPE);
         map.put("tab", GLFW.GLFW_KEY_TAB);
 
+        map.put("0", GLFW.GLFW_KEY_0);
+        map.put("1", GLFW.GLFW_KEY_1);
+        map.put("2", GLFW.GLFW_KEY_2);
+        map.put("3", GLFW.GLFW_KEY_3);
+        map.put("4", GLFW.GLFW_KEY_4);
+        map.put("5", GLFW.GLFW_KEY_5);
+        map.put("6", GLFW.GLFW_KEY_6);
+        map.put("7", GLFW.GLFW_KEY_7);
+        map.put("8", GLFW.GLFW_KEY_8);
+        map.put("9", GLFW.GLFW_KEY_9);
+
+        map.put("a", GLFW.GLFW_KEY_A);
+        map.put("b", GLFW.GLFW_KEY_B);
+        map.put("c", GLFW.GLFW_KEY_C);
+        map.put("d", GLFW.GLFW_KEY_D);
+        map.put("e", GLFW.GLFW_KEY_E);
+        map.put("f", GLFW.GLFW_KEY_F);
+        map.put("g", GLFW.GLFW_KEY_G);
+        map.put("h", GLFW.GLFW_KEY_H);
+        map.put("i", GLFW.GLFW_KEY_I);
+        map.put("j", GLFW.GLFW_KEY_J);
+        map.put("k", GLFW.GLFW_KEY_K);
+        map.put("l", GLFW.GLFW_KEY_L);
+        map.put("m", GLFW.GLFW_KEY_M);
+        map.put("n", GLFW.GLFW_KEY_N);
+        map.put("o", GLFW.GLFW_KEY_O);
+        map.put("p", GLFW.GLFW_KEY_P);
+        map.put("q", GLFW.GLFW_KEY_Q);
+        map.put("r", GLFW.GLFW_KEY_R);
+        map.put("s", GLFW.GLFW_KEY_S);
+        map.put("t", GLFW.GLFW_KEY_T);
+        map.put("u", GLFW.GLFW_KEY_U);
+        map.put("v", GLFW.GLFW_KEY_V);
+        map.put("w", GLFW.GLFW_KEY_W);
+        map.put("x", GLFW.GLFW_KEY_X);
+        map.put("y", GLFW.GLFW_KEY_Y);
+        map.put("z", GLFW.GLFW_KEY_Z);
+
         return map;
     }
 
