@@ -22,6 +22,9 @@ public class NavMappingsManager {
 
     public static void LoadMappings() {
         currentMappingsState = activeMappingsManager.tryGetMappings();
+        activeMappingsManager.trySaveMappings(
+                activeMappingsManager.resolveNamespacedId(currentMappingsState)
+        );
         CmdDeleteClient.LOGGER.info("The loaded mappings have {}% coverage with supported actions: {}", NavActionManager.getCoverage(getCurrentMappings()) * 100, getCurrentMappings().getPossibleActions());
     }
 
