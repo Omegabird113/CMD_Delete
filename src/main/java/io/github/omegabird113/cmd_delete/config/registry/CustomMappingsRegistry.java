@@ -12,6 +12,8 @@ public class CustomMappingsRegistry {
 
     private final Map<CustomMappingsRegistryKey, NavAction> registry = new HashMap<>();
     private final ArrayList<Os> systems = new ArrayList<>(3);
+    private String name;
+    private String author;
 
     public static CustomMappingsRegistry getCurrent() {
         return current;
@@ -48,5 +50,21 @@ public class CustomMappingsRegistry {
 
     public void RemoveSystem(Os system) {
         systems.remove(system);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 }
