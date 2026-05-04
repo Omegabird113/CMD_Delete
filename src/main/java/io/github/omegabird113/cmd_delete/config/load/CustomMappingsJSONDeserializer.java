@@ -1,6 +1,7 @@
 package io.github.omegabird113.cmd_delete.config.load;
 
 import com.google.gson.*;
+import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.registry.CustomMappingsRegistry;
 import io.github.omegabird113.cmd_delete.config.registry.CustomMappingsRegistryKey;
@@ -80,7 +81,8 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
 
                 for (CustomMappingsRegistryKey key : keys) {
                     if (registeredKeys.contains(key)) {
-                        throw new JsonParseException("Duplicate key binding in action \"" + actionName + "\": " + keyName);
+                        CmdDeleteClient.LOGGER.warn("Duplicate key binding in custom action \"{}\": {}", actionName, keyName);
+                        continue;
                     }
                     registeredKeys.add(key);
                     registry.register(key, action);
