@@ -79,7 +79,7 @@ public class ActiveMappingsManager {
         return prefixText + os.toString();
     }
 
-    public String resolveNamespacedId(MappingState mappingState) {
+    public String resolveNamespacedId(MappingsState mappingState) {
         Type type = mappingState.type();
         String id = mappingState.id();
         return resolveNamespacedId(type, id);
@@ -99,7 +99,7 @@ public class ActiveMappingsManager {
         return namespacedId.replaceFirst("custom:|builtin:", "");
     }
 
-    public MappingState resolveMappings(String namespacedId) {
+    public MappingsState resolveMappings(String namespacedId) {
         String id = removeNamespaceFromId(namespacedId);
         Type type = resolveType(namespacedId);
         INavMappings mappings = switch (type) {
@@ -107,7 +107,7 @@ public class ActiveMappingsManager {
             case Type.builtin -> resolveOsMappings(id);
             default -> resolveDefaultMappings();
         };
-        return new MappingState(mappings, type, id);
+        return new MappingsState(mappings, type, id);
     }
 
     void writeActiveMappings(String namespacedId) throws IOException {
@@ -118,7 +118,7 @@ public class ActiveMappingsManager {
         return Files.readString(activeFilePath);
     }
 
-    public MappingState tryGetMappings() {
+    public MappingsState tryGetMappings() {
         String namespacedId = "";
         try {
             namespacedId = readActiveMappings();
