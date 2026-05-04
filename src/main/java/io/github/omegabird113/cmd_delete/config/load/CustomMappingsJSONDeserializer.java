@@ -72,7 +72,7 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
                 boolean hasSuperCommand = binding.has("superCommand");
                 boolean superCommandValue = hasSuperCommand && binding.get("superCommand").getAsBoolean();
 
-                CustomMappingsRegistryKey[] keys = keyModifierWildcardLogicParser(keyCode,
+                List<CustomMappingsRegistryKey> keys = keyModifierWildcardLogicParser(keyCode,
                         hasShift, shiftValue,
                         hasAltOption, altOptionValue,
                         hasControl, controlValue,
@@ -219,7 +219,7 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
         }
     }
 
-    private CustomMappingsRegistryKey[] keyModifierWildcardLogicParser(int key,
+    private List<CustomMappingsRegistryKey> keyModifierWildcardLogicParser(int key,
             boolean hasShift, boolean shiftValue,
             boolean hasAltOption, boolean altOptionValue,
             boolean hasControl, boolean controlValue,
@@ -236,6 +236,6 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
                 for (boolean c : controlVals)
                     for (boolean sup : superCommandVals)
                         results.add(new CustomMappingsRegistryKey(key, s, a, c, sup));
-        return results.toArray(new CustomMappingsRegistryKey[0]);
+        return results;
     }
 }
