@@ -21,17 +21,17 @@ public class NavMappingsManager {
         return currentMappingsState.mappings();
     }
 
-    private static void LogMappings() {
+    private static void logMappings() {
         CmdDeleteClient.LOGGER.info("Mappings \"{}\" loaded with supported systems: ", activeMappingsManager.resolveNamespacedId(currentMappingsState));
         CmdDeleteClient.LOGGER.info("The loaded mappings have {}% coverage with supported actions: {}", NavActionManager.getCoverage(getCurrentMappings()) * 100, getCurrentMappings().getPossibleActions());
     }
 
-    public static void LoadMappings() {
+    public static void loadMappings() {
         currentMappingsState = activeMappingsManager.tryGetMappings();
         activeMappingsManager.trySaveMappings(
                 activeMappingsManager.resolveNamespacedId(currentMappingsState)
         );
-        LogMappings();
+        logMappings();
     }
 
     public static void updateMappingsToCustom(String id) {
@@ -41,7 +41,7 @@ public class NavMappingsManager {
         activeMappingsManager.trySaveMappings(
                 activeMappingsManager.resolveNamespacedId(currentMappingsState)
         );
-        LoadMappings();
+        loadMappings();
     }
 
     public static void updateMappingsToBuiltIn(Os os) {
@@ -51,7 +51,7 @@ public class NavMappingsManager {
         activeMappingsManager.trySaveMappings(
                 activeMappingsManager.resolveNamespacedId(currentMappingsState)
         );
-        LogMappings();
+        logMappings();
     }
 
     public static void updateMappingsToDefault() {
@@ -61,7 +61,7 @@ public class NavMappingsManager {
         activeMappingsManager.trySaveMappings(
                 activeMappingsManager.resolveNamespacedId(currentMappingsState)
         );
-        LoadMappings();
+        loadMappings();
     }
 
     public static Os getOs() {

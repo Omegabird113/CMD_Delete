@@ -46,11 +46,11 @@ public class CustomMappingsRegistry {
         this.systems.addAll(systems);
     }
 
-    public void AddSystem(Os system) {
+    public void addSystem(Os system) {
         systems.add(system);
     }
 
-    public void RemoveSystem(Os system) {
+    public void removeSystem(Os system) {
         systems.remove(system);
     }
 

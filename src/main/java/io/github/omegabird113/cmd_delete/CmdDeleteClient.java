@@ -11,6 +11,6 @@ public class CmdDeleteClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        NavMappingsManager.LoadMappings();
+        NavMappingsManager.loadMappings();
     }
 }
