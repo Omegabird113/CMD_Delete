@@ -32,10 +32,6 @@ out/**
 
 # Minecraft client/server files
 run/*
-!run/config/
-run/config/*
-!run/config/cmd_delete/
-!run/config/cmd_delete/*
 
 # ---- MacOS system files ----
 .DS_STORE
