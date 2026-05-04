@@ -46,14 +46,6 @@ public class CustomMappingsRegistry {
         this.systems.addAll(systems);
     }
 
-    public void addSystem(Os system) {
-        systems.add(system);
-    }
-
-    public void removeSystem(Os system) {
-        systems.remove(system);
-    }
-
     public String getName() {
         return name;
     }
