@@ -54,6 +54,7 @@ public class ActiveMappingsManager {
     }
 
     INavMappings resolveOsMappings(String os) {
+        os = os.toLowerCase();
         if (os.equals("mac"))
             return resolveOsMappings(Os.MAC);
         else if (os.equals("windows"))
@@ -76,7 +77,7 @@ public class ActiveMappingsManager {
             case builtin -> "builtin:";
             case defaultMappings -> "";
         };
-        return prefixText + os.toString();
+        return prefixText + os.toString().toLowerCase();
     }
 
     public String resolveNamespacedId(MappingsState mappingState) {
@@ -111,6 +112,7 @@ public class ActiveMappingsManager {
     }
 
     void writeActiveMappings(String namespacedId) throws IOException {
+        Files.createDirectories(activeFilePath.getParent());
         Files.writeString(activeFilePath, namespacedId);
     }
 
