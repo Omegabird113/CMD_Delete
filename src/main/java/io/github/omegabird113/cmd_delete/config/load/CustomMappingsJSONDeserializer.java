@@ -186,7 +186,7 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
         if (meta.has("description")) {
             registry.setDescription(meta.get("description").getAsString().trim());
         } else {
-            registry.setAuthor("No description provided");
+            registry.setDescription("No description provided");
         }
 
         if (meta.has("version")) {
@@ -198,7 +198,7 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
                 registry.setVersion("unknown");
             }
         } else {
-            registry.setAuthor("unknown");
+            registry.setVersion("unknown");
         }
 
         if (meta.has("systems")) {
