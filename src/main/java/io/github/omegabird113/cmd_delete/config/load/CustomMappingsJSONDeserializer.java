@@ -8,11 +8,7 @@ import io.github.omegabird113.cmd_delete.mappings.Os;
 import org.lwjgl.glfw.GLFW;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -66,19 +62,29 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
                     throw new JsonParseException("Unknown key name \"" + keyName + "\" in action \"" + actionName + "\"");
                 }
 
-                boolean shift = binding.has("shift") && binding.get("shift").getAsBoolean();
-                boolean altOption = binding.has("altOption") && binding.get("altOption").getAsBoolean();
-                boolean control = binding.has("control") && binding.get("control").getAsBoolean();
-                boolean superCommand = binding.has("superCommand") && binding.get("superCommand").getAsBoolean();
+                boolean hasShift = binding.has("shift");
+                boolean shiftValue = hasShift && binding.get("shift").getAsBoolean();
+                boolean hasAltOption = binding.has("altOption");
+                boolean altOptionValue = hasAltOption && binding.get("altOption").getAsBoolean();
+                boolean hasControl = binding.has("control");
+                boolean controlValue = hasControl && binding.get("control").getAsBoolean();
+                boolean hasSuperCommand = binding.has("superCommand");
+                boolean superCommandValue = hasSuperCommand && binding.get("superCommand").getAsBoolean();
 
-                CustomMappingsRegistryKey key = new CustomMappingsRegistryKey(keyCode, shift, altOption, control, superCommand);
+                CustomMappingsRegistryKey[] keys = keyModifierWildcardLogicParser(keyCode,
+                        hasShift, shiftValue,
+                        hasAltOption, altOptionValue,
+                        hasControl, controlValue,
+                        hasSuperCommand, superCommandValue
+                );
 
-                if (registeredKeys.contains(key)) {
-                    throw new JsonParseException("Duplicate key binding in action \"" + actionName + "\": " + keyName);
+                for (CustomMappingsRegistryKey key : keys) {
+                    if (registeredKeys.contains(key)) {
+                        throw new JsonParseException("Duplicate key binding in action \"" + actionName + "\": " + keyName);
+                    }
+                    registeredKeys.add(key);
+                    registry.register(key, action);
                 }
-
-                registeredKeys.add(key);
-                registry.register(key, action);
             }
         }
 
@@ -209,5 +215,25 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
 
             registry.setSystems(systems);
         }
+    }
+
+    private CustomMappingsRegistryKey[] keyModifierWildcardLogicParser(int key,
+            boolean hasShift, boolean shiftValue,
+            boolean hasAltOption, boolean altOptionValue,
+            boolean hasControl, boolean controlValue,
+            boolean hasSuperCommand, boolean superCommandValue) {
+
+        List<Boolean> shiftVals = hasShift ? List.of(shiftValue) : List.of(false, true);
+        List<Boolean> altOptionals = hasAltOption ? List.of(altOptionValue) : List.of(false, true);
+        List<Boolean> controlVals = hasControl ? List.of(controlValue) : List.of(false, true);
+        List<Boolean> superCommandVals = hasSuperCommand ? List.of(superCommandValue) : List.of(false, true);
+
+        List<CustomMappingsRegistryKey> results = new ArrayList<>();
+        for (boolean s : shiftVals)
+            for (boolean a : altOptionals)
+                for (boolean c : controlVals)
+                    for (boolean sup : superCommandVals)
+                        results.add(new CustomMappingsRegistryKey(key, s, a, c, sup));
+        return results.toArray(new CustomMappingsRegistryKey[0]);
     }
 }
