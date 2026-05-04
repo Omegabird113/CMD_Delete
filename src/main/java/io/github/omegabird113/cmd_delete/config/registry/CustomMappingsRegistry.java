@@ -14,6 +14,8 @@ public class CustomMappingsRegistry {
     private final ArrayList<Os> systems = new ArrayList<>(3);
     private String name;
     private String author;
+    private String description;
+    private String version;
 
     public static CustomMappingsRegistry getCurrent() {
         return current;
@@ -66,5 +68,21 @@ public class CustomMappingsRegistry {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 }

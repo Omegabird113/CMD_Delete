@@ -13,8 +13,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMappingsRegistry> {
+    private static final Pattern semVerPattern = Pattern.compile("^(?:0|[1-9]\\\\d*)(?:\\\\.(?:0|[1-9]\\\\d*|\\\\d*[A-Za-z][0-9A-Za-z-]*))+(?:-(?:0|[1-9]\\\\d*|\\\\d*[A-Za-z][0-9A-Za-z-]*)(?:\\\\.(?:0|[1-9]\\\\d*|\\\\d*[A-Za-z][0-9A-Za-z-]*))*)?(?:\\\\+[0-9A-Za-z-]+(?:\\\\.[0-9A-Za-z-]+)*)?$");
+
     @Override
     public CustomMappingsRegistry deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject jsonObject = json.getAsJsonObject();
@@ -167,6 +171,24 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
 
         if (meta.has("author")) {
             registry.setAuthor(meta.get("author").getAsString().trim());
+        } else {
+            registry.setAuthor("unknown");
+        }
+
+        if (meta.has("description")) {
+            registry.setDescription(meta.get("description").getAsString().trim());
+        } else {
+            registry.setAuthor("No description provided");
+        }
+
+        if (meta.has("version")) {
+            String version = (meta.get("version").getAsString().trim());
+            Matcher semVerMatcher = semVerPattern.matcher(version);
+            if (semVerMatcher.matches()) {
+                registry.setVersion(version);
+            } else {
+                registry.setVersion("unknown");
+            }
         } else {
             registry.setAuthor("unknown");
         }
