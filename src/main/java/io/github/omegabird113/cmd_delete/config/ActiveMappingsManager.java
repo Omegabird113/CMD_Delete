@@ -25,8 +25,6 @@ public class ActiveMappingsManager {
         custom, builtin, defaultMappings
     }
 
-    public record MappingWithState(INavMappings mappings, Type type, String id) {}
-
     public ActiveMappingsManager(INavMappings windows, INavMappings mac, INavMappings linux, INavMappings custom, Os system) {
         WINDOWS = windows;
         MAC = mac;
@@ -81,9 +79,9 @@ public class ActiveMappingsManager {
         return prefixText + os.toString();
     }
 
-    public String resolveNamespacedId(MappingWithState mappingsWithState) {
-        Type type = mappingsWithState.type;
-        String id = mappingsWithState.id;
+    public String resolveNamespacedId(MappingState mappingState) {
+        Type type = mappingState.type();
+        String id = mappingState.id();
         return resolveNamespacedId(type, id);
     }
 
@@ -101,7 +99,7 @@ public class ActiveMappingsManager {
         return namespacedId.replaceFirst("custom:|builtin:", "");
     }
 
-    public MappingWithState resolveMappings(String namespacedId) {
+    public MappingState resolveMappings(String namespacedId) {
         String id = removeNamespaceFromId(namespacedId);
         Type type = resolveType(namespacedId);
         INavMappings mappings = switch (type) {
@@ -109,7 +107,7 @@ public class ActiveMappingsManager {
             case Type.builtin -> resolveOsMappings(id);
             default -> resolveDefaultMappings();
         };
-        return new MappingWithState(mappings, type, id);
+        return new MappingState(mappings, type, id);
     }
 
     void writeActiveMappings(String namespacedId) throws IOException {
@@ -120,7 +118,7 @@ public class ActiveMappingsManager {
         return Files.readString(activeFilePath);
     }
 
-    public MappingWithState tryGetMappings() {
+    public MappingState tryGetMappings() {
         String namespacedId = "";
         try {
             namespacedId = readActiveMappings();

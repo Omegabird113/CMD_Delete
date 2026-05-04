@@ -3,6 +3,7 @@ package io.github.omegabird113.cmd_delete.mappings;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavActionManager;
 import io.github.omegabird113.cmd_delete.config.ActiveMappingsManager;
+import io.github.omegabird113.cmd_delete.config.MappingState;
 
 public class NavMappingsManager {
     private static final INavMappings WINDOWS_MAPPINGS = new WindowsLinuxNavMappings();
@@ -14,7 +15,7 @@ public class NavMappingsManager {
             WINDOWS_MAPPINGS, MAC_MAPPINGS, LINUX_MAPPINGS, CUSTOM_MAPPINGS, getOs()
     );
 
-    private static ActiveMappingsManager.MappingWithState currentMappingsState;
+    private static MappingState currentMappingsState;
 
     public static INavMappings getCurrentMappings() {
         return currentMappingsState.mappings();
