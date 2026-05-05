@@ -25,6 +25,7 @@ public class KeyCodeRegistry {
         map.put("escape", GLFW_KEY_ESCAPE);
         map.put("tab", GLFW_KEY_TAB);
         map.put("insert", GLFW_KEY_INSERT);
+        map.put("print_screen", GLFW_KEY_PRINT_SCREEN);
 
         map.put("pause",  GLFW_KEY_PAUSE);
         map.put("menu", GLFW_KEY_MENU);
@@ -124,6 +125,10 @@ public class KeyCodeRegistry {
         map.put("numpad_equals", GLFW_KEY_KP_EQUAL);
 
         map.put("space", GLFW_KEY_SPACE);
+
+        map.put("caps_lock", GLFW_KEY_CAPS_LOCK);
+        map.put("num_lock", GLFW_KEY_NUM_LOCK);
+        map.put("scroll_lock", GLFW_KEY_SCROLL_LOCK);
 
         return map;
     }
