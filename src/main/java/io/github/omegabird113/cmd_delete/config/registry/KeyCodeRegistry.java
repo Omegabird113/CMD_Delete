@@ -121,6 +121,9 @@ public class KeyCodeRegistry {
         map.put("numpad_plus", GLFW_KEY_KP_ADD);
         map.put("numpad_enter", GLFW_KEY_KP_ENTER);
         map.put("numpad_dot", GLFW_KEY_KP_DECIMAL);
+        map.put("numpad_equals", GLFW_KEY_KP_EQUAL);
+
+        map.put("space", GLFW_KEY_SPACE);
 
         return map;
     }
