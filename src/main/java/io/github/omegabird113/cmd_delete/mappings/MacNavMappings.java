@@ -59,8 +59,7 @@ class MacNavMappings implements INavMappings {
                 DEL_WORD_LEFT, DEL_WORD_RIGHT,
                 NAV_TEXT_START, NAV_TEXT_END,
                 SEL_TEXT_START, SEL_TEXT_END,
-                SEL_TEXT_UP, SEL_TEXT_DOWN,
-                NONE
+                SEL_TEXT_UP, SEL_TEXT_DOWN
         };
     }
 

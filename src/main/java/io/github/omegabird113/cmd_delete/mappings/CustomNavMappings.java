@@ -27,7 +27,7 @@ public class CustomNavMappings implements INavMappings {
         CustomMappingsRegistry registry = CustomMappingsRegistry.getCurrent();
         ArrayList<NavAction> supported = new ArrayList<>();
         for (NavAction action : registry.getValues()) {
-            if (!supported.contains(action)){
+            if (!supported.contains(action) && action != NONE) {
                 supported.add(action);
             }
         }
