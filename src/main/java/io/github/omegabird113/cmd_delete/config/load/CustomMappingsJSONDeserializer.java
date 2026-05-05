@@ -41,7 +41,7 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
         JsonObject actions = jsonObject.get("actions").getAsJsonObject();
 
         Map<String, NavAction> actionMap = getNavActionNameMap();
-        Map<String, Integer> keyMap = KeyCodeRegistry.get();
+        Map<String, Integer> keyMap = KeyCodeRegistry.getKeyMap();
         Set<CustomMappingsRegistryKey> registeredKeys = new HashSet<>();
 
         for (String actionName : actions.keySet()) {

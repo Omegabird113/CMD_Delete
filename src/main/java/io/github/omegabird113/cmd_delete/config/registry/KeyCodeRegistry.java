@@ -6,7 +6,13 @@ import java.util.Map;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class KeyCodeRegistry {
-    public static Map<String, Integer> get() {
+    private static final Map<String, Integer> keyMap = create();
+
+    public static Map<String, Integer> getKeyMap() {
+        return keyMap;
+    }
+
+    private static Map<String, Integer> create() {
         Map<String, Integer> map = new HashMap<>();
 
         map.put("left", GLFW_KEY_LEFT);
