@@ -32,6 +32,6 @@ public class NavActionManager {
         NavAction[] supported = mapping.getPossibleActions();
         int supportCount = supported.length;
 
-        return ((float) supportCount) / total - 1; // -1 to remove NavAction.NONE
+        return ((float) supportCount) / (total - 1); // -1 to remove NavAction.NONE
     }
 }
