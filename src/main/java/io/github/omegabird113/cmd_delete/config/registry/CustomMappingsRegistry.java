@@ -8,22 +8,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CustomMappingsRegistry {
-    private static CustomMappingsRegistry current;
-
     private final Map<CustomMappingsRegistryKey, NavAction> registry = new HashMap<>();
     private final ArrayList<Os> systems = new ArrayList<>(3);
     private String name;
     private String author;
     private String description;
     private String version;
-
-    public static CustomMappingsRegistry getCurrent() {
-        return current;
-    }
-
-    public static void setCurrent(CustomMappingsRegistry current) {
-        CustomMappingsRegistry.current = current;
-    }
 
     public void register(CustomMappingsRegistryKey key, NavAction action) {
         registry.put(key, action);

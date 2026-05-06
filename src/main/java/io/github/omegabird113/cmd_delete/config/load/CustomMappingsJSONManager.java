@@ -2,7 +2,9 @@ package io.github.omegabird113.cmd_delete.config.load;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.config.registry.CustomMappingsRegistry;
+import io.github.omegabird113.cmd_delete.mappings.CustomNavMappings;
 import io.github.omegabird113.cmd_delete.mappings.INavMappings;
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -33,9 +35,10 @@ public class CustomMappingsJSONManager {
     public static INavMappings tryLoadCustomMappingsElse(String id, INavMappings customMappings, INavMappings fallback) {
         try {
             CustomMappingsRegistry registry = loadFromCustomMappingsDir(id);
-            CustomMappingsRegistry.setCurrent(registry);
+            CustomNavMappings.setRegistry(registry);
             return customMappings;
         } catch (IOException e) {
+            CmdDeleteClient.LOGGER.error("Could not load custom mapping file: {}", id, e);
             return fallback;
         }
     }

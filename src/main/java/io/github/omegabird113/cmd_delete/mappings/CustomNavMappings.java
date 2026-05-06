@@ -9,10 +9,15 @@ import java.util.ArrayList;
 import static io.github.omegabird113.cmd_delete.actions.NavAction.*;
 
 public class CustomNavMappings implements INavMappings {
+    private static CustomMappingsRegistry registry = new CustomMappingsRegistry();
+
+    public static void setRegistry(CustomMappingsRegistry registry) {
+        CustomNavMappings.registry = registry;
+    }
+
     @Override
     public NavAction getAction(int key, boolean shift, boolean altOption, boolean control, boolean superCommand) {
         CustomMappingsRegistryKey registryKey = new CustomMappingsRegistryKey(key, shift, altOption, control, superCommand);
-        CustomMappingsRegistry registry = CustomMappingsRegistry.getCurrent();
 
         NavAction action = registry.get(registryKey);
         if (action != null) {
@@ -24,7 +29,6 @@ public class CustomNavMappings implements INavMappings {
 
     @Override
     public NavAction[] getPossibleActions() {
-        CustomMappingsRegistry registry = CustomMappingsRegistry.getCurrent();
         ArrayList<NavAction> supported = new ArrayList<>();
         for (NavAction action : registry.getValues()) {
             if (!supported.contains(action) && action != NONE) {
@@ -36,7 +40,6 @@ public class CustomNavMappings implements INavMappings {
 
     @Override
     public Os[] getMappingsSupportedSystems() {
-        CustomMappingsRegistry registry = CustomMappingsRegistry.getCurrent();
         return registry.getSystems().toArray(new Os[0]);
     }
 }
