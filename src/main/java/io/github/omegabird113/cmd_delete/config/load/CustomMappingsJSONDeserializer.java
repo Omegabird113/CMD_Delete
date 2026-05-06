@@ -142,7 +142,7 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
 
         if (meta.has("systems")) {
             Map<String, Os> osMap = getOsNameMap();
-            ArrayList<Os> systems = new ArrayList<>();
+            Set<Os> systems = new HashSet<>();
 
             JsonArray systemsArray = meta.get("systems").getAsJsonArray();
             for (JsonElement systemElement : systemsArray) {
@@ -154,7 +154,11 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
                 systems.add(os);
             }
 
-            registry.setSystems(systems);
+            if (!systems.isEmpty()) {
+                registry.setSystems(new ArrayList<>(systems));
+            } else {
+                throw new JsonParseException("No systems found");
+            }
         }
     }
 
