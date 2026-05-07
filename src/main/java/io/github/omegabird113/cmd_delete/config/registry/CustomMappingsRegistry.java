@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class CustomMappingsRegistry {
     private final Map<CustomMappingsRegistryKey, NavAction> registry = new HashMap<>();
-    private final ArrayList<Os> systems = new ArrayList<>(3);
+    private final ArrayList<Os> systems = new ArrayList<>();
     private String name;
     private String author;
     private String description;
