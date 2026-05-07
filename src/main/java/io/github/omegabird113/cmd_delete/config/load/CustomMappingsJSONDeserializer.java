@@ -166,20 +166,7 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
             JsonElement systemsElement = meta.get("systems");
             if (!systemsElement.isJsonArray())
                 throw new JsonParseException("Expected \"systems\" in meta to be an array");
-            Map<String, Os> osMap = getOsNameMap();
-            Set<Os> systems = new HashSet<>();
-
-            JsonArray systemsArray = systemsElement.getAsJsonArray();
-            for (JsonElement systemElement : systemsArray) {
-                if (!systemElement.isJsonPrimitive() || !systemElement.getAsJsonPrimitive().isString())
-                    throw new JsonParseException("Expected each entry in \"systems\" to be a string");
-                String systemName = systemElement.getAsString().trim().toLowerCase();
-                Os os = osMap.get(systemName);
-                if (os == null)
-                    throw new JsonParseException("Unknown system: " + systemName);
-                systems.add(os);
-            }
-
+            Set<Os> systems = parseSystems(systemsElement);
             if (!systems.isEmpty())
                 registry.setSystems(new ArrayList<>(systems));
             else
@@ -205,5 +192,23 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
                     for (boolean sup : superCommandVals)
                         results.add(new CustomMappingsRegistryKey(key, s, a, c, sup));
         return results;
+    }
+
+    private Set<Os> parseSystems(JsonElement systemsElement) {
+        Map<String, Os> osMap = getOsNameMap();
+        Set<Os> systems = new HashSet<>();
+
+        JsonArray systemsArray = systemsElement.getAsJsonArray();
+        for (JsonElement systemElement : systemsArray) {
+            if (!systemElement.isJsonPrimitive() || !systemElement.getAsJsonPrimitive().isString())
+                throw new JsonParseException("Expected each entry in \"systems\" to be a string");
+            String systemName = systemElement.getAsString().trim().toLowerCase();
+            Os os = osMap.get(systemName);
+            if (os == null)
+                throw new JsonParseException("Unknown system: " + systemName);
+            systems.add(os);
+        }
+
+        return systems;
     }
 }
