@@ -18,12 +18,9 @@ public class CustomNavMappings implements INavMappings {
     @Override
     public NavAction getAction(int key, boolean shift, boolean altOption, boolean control, boolean superCommand) {
         CustomMappingsRegistryKey registryKey = new CustomMappingsRegistryKey(key, shift, altOption, control, superCommand);
-
         NavAction action = registry.get(registryKey);
-        if (action != null) {
+        if (action != null)
             return action;
-        }
-
         return NONE;
     }
 
