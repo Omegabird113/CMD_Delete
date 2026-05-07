@@ -31,7 +31,7 @@ build/
 out/**
 
 # Minecraft client/server files
-run/*
+run/
 
 # ---- MacOS system files ----
 .DS_STORE
