@@ -9,7 +9,7 @@ public class NavMappingsManager {
     private static final INavMappings WINDOWS_MAPPINGS = new WindowsLinuxNavMappings();
     private static final INavMappings MAC_MAPPINGS = new MacNavMappings();
     private static final INavMappings LINUX_MAPPINGS = new WindowsLinuxNavMappings();
-    private static final INavMappings CUSTOM_MAPPINGS = new CustomNavMappings();
+    private static final CustomNavMappings CUSTOM_MAPPINGS = new CustomNavMappings();
 
     private static final ActiveMappingsManager activeMappingsManager = new ActiveMappingsManager(
             WINDOWS_MAPPINGS, MAC_MAPPINGS, LINUX_MAPPINGS, CUSTOM_MAPPINGS, getOs()

@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import static io.github.omegabird113.cmd_delete.actions.NavAction.*;
 
 public class CustomNavMappings implements INavMappings {
-    private static CustomMappingsRegistry registry = new CustomMappingsRegistry();
+    private CustomMappingsRegistry registry = new CustomMappingsRegistry();
 
-    public static void setRegistry(CustomMappingsRegistry registry) {
-        CustomNavMappings.registry = registry;
+    public void setRegistry(CustomMappingsRegistry registry) {
+        this.registry = registry;
     }
 
     @Override

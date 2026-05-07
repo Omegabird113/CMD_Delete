@@ -32,10 +32,10 @@ public class CustomMappingsJSONManager {
         }
     }
 
-    public static INavMappings tryLoadCustomMappingsElse(String id, INavMappings customMappings, INavMappings fallback) {
+    public static INavMappings tryLoadCustomMappingsElse(String id, CustomNavMappings customMappings, INavMappings fallback) {
         try {
             CustomMappingsRegistry registry = loadFromCustomMappingsDir(id);
-            CustomNavMappings.setRegistry(registry);
+            customMappings.setRegistry(registry);
             return customMappings;
         } catch (IOException e) {
             CmdDeleteClient.LOGGER.error("Could not load custom mapping file: {}", id, e);

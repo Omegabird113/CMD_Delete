@@ -2,6 +2,7 @@ package io.github.omegabird113.cmd_delete.config;
 
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.config.load.CustomMappingsJSONManager;
+import io.github.omegabird113.cmd_delete.mappings.CustomNavMappings;
 import io.github.omegabird113.cmd_delete.mappings.INavMappings;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 import net.fabricmc.loader.api.FabricLoader;
@@ -17,7 +18,7 @@ public class ActiveMappingsManager {
     private final INavMappings WINDOWS;
     private final INavMappings MAC;
     private final INavMappings LINUX;
-    private final INavMappings CUSTOM;
+    private final CustomNavMappings CUSTOM;
 
     private final Os system;
 
@@ -25,7 +26,7 @@ public class ActiveMappingsManager {
         custom, builtin, defaultMappings
     }
 
-    public ActiveMappingsManager(INavMappings windows, INavMappings mac, INavMappings linux, INavMappings custom, Os system) {
+    public ActiveMappingsManager(INavMappings windows, INavMappings mac, INavMappings linux, CustomNavMappings custom, Os system) {
         WINDOWS = windows;
         MAC = mac;
         LINUX = linux;
