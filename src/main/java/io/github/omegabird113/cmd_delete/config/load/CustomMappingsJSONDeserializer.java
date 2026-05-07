@@ -14,23 +14,34 @@ import java.util.*;
 public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMappingsRegistry> {
     @Override
     public CustomMappingsRegistry deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        if (!json.isJsonObject())
+            throw new JsonParseException("Expected a JSON object at root");
         JsonObject jsonObject = json.getAsJsonObject();
         CustomMappingsRegistry registry = new CustomMappingsRegistry();
 
         if (!jsonObject.has("fv"))
             throw new JsonParseException("Missing format version number");
-        int version = jsonObject.get("fv").getAsInt();
+        JsonElement fvElement = jsonObject.get("fv");
+        if (!fvElement.isJsonPrimitive() || !fvElement.getAsJsonPrimitive().isNumber())
+            throw new JsonParseException("Expected \"fv\" to be a number");
+        int version = fvElement.getAsInt();
         if (version != 1)
             throw new JsonParseException("Invalid format version number: " + version);
 
         if (!jsonObject.has("meta"))
             throw new JsonParseException("Missing required field: meta");
-        JsonObject meta = jsonObject.get("meta").getAsJsonObject();
+        JsonElement metaElement = jsonObject.get("meta");
+        if (!metaElement.isJsonObject())
+            throw new JsonParseException("Expected \"meta\" to be an object");
+        JsonObject meta = metaElement.getAsJsonObject();
         parseMeta(meta, registry);
 
         if (!jsonObject.has("actions"))
             throw new JsonParseException("Missing required field: actions");
-        JsonObject actions = jsonObject.get("actions").getAsJsonObject();
+        JsonElement actionsElement = jsonObject.get("actions");
+        if (!actionsElement.isJsonObject())
+            throw new JsonParseException("Expected \"actions\" to be an object");
+        JsonObject actions = actionsElement.getAsJsonObject();
 
         Map<String, NavAction> actionMap = getNavActionNameMap();
         Map<String, Integer> keyMap = KeyCodeRegistry.getKeyMap();
@@ -41,24 +52,43 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
             if (action == null || action == NavAction.NONE)
                 continue;
 
-            JsonArray bindings = actions.get(actionName).getAsJsonArray();
+            JsonElement bindingsElement = actions.get(actionName);
+            if (!bindingsElement.isJsonArray())
+                throw new JsonParseException("Expected bindings for action \"" + actionName + "\" to be an array");
+            JsonArray bindings = bindingsElement.getAsJsonArray();
             for (JsonElement bindingElement : bindings) {
+                if (!bindingElement.isJsonObject())
+                    throw new JsonParseException("Expected each binding for action \"" + actionName + "\" to be an object");
                 JsonObject binding = bindingElement.getAsJsonObject();
 
                 if (!binding.has("key"))
                     throw new JsonParseException("Binding for action \"" + actionName + "\" is missing required field: key");
-                String keyName = binding.get("key").getAsString().trim().toLowerCase();
+                JsonElement keyElement = binding.get("key");
+                if (!keyElement.isJsonPrimitive() || !keyElement.getAsJsonPrimitive().isString())
+                    throw new JsonParseException("Expected \"key\" in action \"" + actionName + "\" to be a string");
+                String keyName = keyElement.getAsString().trim().toLowerCase();
                 Integer keyCode = keyMap.get(keyName);
                 if (keyCode == null)
                     throw new JsonParseException("Unknown key name \"" + keyName + "\" in action \"" + actionName + "\"");
 
                 boolean hasShift = binding.has("shift");
+                if (hasShift && (!binding.get("shift").isJsonPrimitive() || !binding.get("shift").getAsJsonPrimitive().isBoolean()))
+                    throw new JsonParseException("Expected \"shift\" in action \"" + actionName + "\" to be a boolean");
                 boolean shiftValue = hasShift && binding.get("shift").getAsBoolean();
+
                 boolean hasAltOption = binding.has("altOption");
+                if (hasAltOption && (!binding.get("altOption").isJsonPrimitive() || !binding.get("altOption").getAsJsonPrimitive().isBoolean()))
+                    throw new JsonParseException("Expected \"altOption\" in action \"" + actionName + "\" to be a boolean");
                 boolean altOptionValue = hasAltOption && binding.get("altOption").getAsBoolean();
+
                 boolean hasControl = binding.has("control");
+                if (hasControl && (!binding.get("control").isJsonPrimitive() || !binding.get("control").getAsJsonPrimitive().isBoolean()))
+                    throw new JsonParseException("Expected \"control\" in action \"" + actionName + "\" to be a boolean");
                 boolean controlValue = hasControl && binding.get("control").getAsBoolean();
+
                 boolean hasSuperCommand = binding.has("superCommand");
+                if (hasSuperCommand && (!binding.get("superCommand").isJsonPrimitive() || !binding.get("superCommand").getAsJsonPrimitive().isBoolean()))
+                    throw new JsonParseException("Expected \"superCommand\" in action \"" + actionName + "\" to be a boolean");
                 boolean superCommandValue = hasSuperCommand && binding.get("superCommand").getAsBoolean();
 
                 List<CustomMappingsRegistryKey> keys = keyModifierWildcardLogicParser(keyCode,
@@ -98,34 +128,51 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
     }
 
     private void parseMeta(JsonObject meta, CustomMappingsRegistry registry) {
-        if (meta.has("name"))
-            registry.setName(meta.get("name").getAsString().trim());
-        else
+        if (meta.has("name")) {
+            JsonElement nameElement = meta.get("name");
+            if (!nameElement.isJsonPrimitive() || !nameElement.getAsJsonPrimitive().isString())
+                throw new JsonParseException("Expected \"name\" in meta to be a string");
+            registry.setName(nameElement.getAsString().trim());
+        } else
             registry.setName("Unnamed Custom Mappings");
 
-        if (meta.has("author"))
-            registry.setAuthor(meta.get("author").getAsString().trim());
-        else
+        if (meta.has("author")) {
+            JsonElement authorElement = meta.get("author");
+            if (!authorElement.isJsonPrimitive() || !authorElement.getAsJsonPrimitive().isString())
+                throw new JsonParseException("Expected \"author\" in meta to be a string");
+            registry.setAuthor(authorElement.getAsString().trim());
+        } else
             registry.setAuthor("unknown");
 
-        if (meta.has("description"))
-            registry.setDescription(meta.get("description").getAsString().trim());
-        else
+        if (meta.has("description")) {
+            JsonElement descriptionElement = meta.get("description");
+            if (!descriptionElement.isJsonPrimitive() || !descriptionElement.getAsJsonPrimitive().isString())
+                throw new JsonParseException("Expected \"description\" in meta to be a string");
+            registry.setDescription(descriptionElement.getAsString().trim());
+        } else
             registry.setDescription("No description provided");
 
         if (meta.has("version")) {
-            String version = (meta.get("version").getAsString().trim());
+            JsonElement versionElement = meta.get("version");
+            if (!versionElement.isJsonPrimitive() || !versionElement.getAsJsonPrimitive().isString())
+                throw new JsonParseException("Expected \"version\" in meta to be a string");
+            String version = versionElement.getAsString().trim();
             registry.setVersion(version);
         } else
             registry.setVersion("unknown");
 
 
         if (meta.has("systems")) {
+            JsonElement systemsElement = meta.get("systems");
+            if (!systemsElement.isJsonArray())
+                throw new JsonParseException("Expected \"systems\" in meta to be an array");
             Map<String, Os> osMap = getOsNameMap();
             Set<Os> systems = new HashSet<>();
 
-            JsonArray systemsArray = meta.get("systems").getAsJsonArray();
+            JsonArray systemsArray = systemsElement.getAsJsonArray();
             for (JsonElement systemElement : systemsArray) {
+                if (!systemElement.isJsonPrimitive() || !systemElement.getAsJsonPrimitive().isString())
+                    throw new JsonParseException("Expected each entry in \"systems\" to be a string");
                 String systemName = systemElement.getAsString().trim().toLowerCase();
                 Os os = osMap.get(systemName);
                 if (os == null)
