@@ -10,12 +10,8 @@ import io.github.omegabird113.cmd_delete.mappings.Os;
 
 import java.lang.reflect.Type;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMappingsRegistry> {
-    private static final Pattern semVerPattern = Pattern.compile("^(?:0|[1-9]\\\\d*)(?:\\\\.(?:0|[1-9]\\\\d*|\\\\d*[A-Za-z][0-9A-Za-z-]*))+(?:-(?:0|[1-9]\\\\d*|\\\\d*[A-Za-z][0-9A-Za-z-]*)(?:\\\\.(?:0|[1-9]\\\\d*|\\\\d*[A-Za-z][0-9A-Za-z-]*))*)?(?:\\\\+[0-9A-Za-z-]+(?:\\\\.[0-9A-Za-z-]+)*)?$");
-
     @Override
     public CustomMappingsRegistry deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject jsonObject = json.getAsJsonObject();
@@ -130,12 +126,7 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
 
         if (meta.has("version")) {
             String version = (meta.get("version").getAsString().trim());
-            Matcher semVerMatcher = semVerPattern.matcher(version);
-            if (semVerMatcher.matches()) {
-                registry.setVersion(version);
-            } else {
-                registry.setVersion("unknown");
-            }
+            registry.setVersion(version);
         } else {
             registry.setVersion("unknown");
         }
