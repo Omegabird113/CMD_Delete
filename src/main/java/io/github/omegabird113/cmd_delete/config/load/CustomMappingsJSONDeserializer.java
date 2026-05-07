@@ -17,23 +17,19 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
         JsonObject jsonObject = json.getAsJsonObject();
         CustomMappingsRegistry registry = new CustomMappingsRegistry();
 
-        if (!jsonObject.has("fv")) {
+        if (!jsonObject.has("fv"))
             throw new JsonParseException("Missing format version number");
-        }
         int version = jsonObject.get("fv").getAsInt();
-        if (version != 1) {
+        if (version != 1)
             throw new JsonParseException("Invalid format version number: " + version);
-        }
 
-        if (!jsonObject.has("meta")) {
+        if (!jsonObject.has("meta"))
             throw new JsonParseException("Missing required field: meta");
-        }
         JsonObject meta = jsonObject.get("meta").getAsJsonObject();
         parseMeta(meta, registry);
 
-        if (!jsonObject.has("actions")) {
+        if (!jsonObject.has("actions"))
             throw new JsonParseException("Missing required field: actions");
-        }
         JsonObject actions = jsonObject.get("actions").getAsJsonObject();
 
         Map<String, NavAction> actionMap = getNavActionNameMap();
@@ -42,22 +38,19 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
 
         for (String actionName : actions.keySet()) {
             NavAction action = actionMap.get(actionName.trim().toUpperCase());
-            if (action == null || action == NavAction.NONE) {
+            if (action == null || action == NavAction.NONE)
                 continue;
-            }
 
             JsonArray bindings = actions.get(actionName).getAsJsonArray();
             for (JsonElement bindingElement : bindings) {
                 JsonObject binding = bindingElement.getAsJsonObject();
 
-                if (!binding.has("key")) {
+                if (!binding.has("key"))
                     throw new JsonParseException("Binding for action \"" + actionName + "\" is missing required field: key");
-                }
                 String keyName = binding.get("key").getAsString().trim().toLowerCase();
                 Integer keyCode = keyMap.get(keyName);
-                if (keyCode == null) {
+                if (keyCode == null)
                     throw new JsonParseException("Unknown key name \"" + keyName + "\" in action \"" + actionName + "\"");
-                }
 
                 boolean hasShift = binding.has("shift");
                 boolean shiftValue = hasShift && binding.get("shift").getAsBoolean();
@@ -91,9 +84,8 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
 
     private Map<String, NavAction> getNavActionNameMap() {
         Map<String, NavAction> map = new HashMap<>();
-        for (NavAction action : NavAction.values()) {
+        for (NavAction action : NavAction.values())
             map.put(action.toString(), action);
-        }
         return map;
     }
 
@@ -106,30 +98,27 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
     }
 
     private void parseMeta(JsonObject meta, CustomMappingsRegistry registry) {
-        if (meta.has("name")) {
+        if (meta.has("name"))
             registry.setName(meta.get("name").getAsString().trim());
-        } else {
+        else
             registry.setName("Unnamed Custom Mappings");
-        }
 
-        if (meta.has("author")) {
+        if (meta.has("author"))
             registry.setAuthor(meta.get("author").getAsString().trim());
-        } else {
+        else
             registry.setAuthor("unknown");
-        }
 
-        if (meta.has("description")) {
+        if (meta.has("description"))
             registry.setDescription(meta.get("description").getAsString().trim());
-        } else {
+        else
             registry.setDescription("No description provided");
-        }
 
         if (meta.has("version")) {
             String version = (meta.get("version").getAsString().trim());
             registry.setVersion(version);
-        } else {
+        } else
             registry.setVersion("unknown");
-        }
+
 
         if (meta.has("systems")) {
             Map<String, Os> osMap = getOsNameMap();
@@ -139,25 +128,23 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
             for (JsonElement systemElement : systemsArray) {
                 String systemName = systemElement.getAsString().trim().toLowerCase();
                 Os os = osMap.get(systemName);
-                if (os == null) {
+                if (os == null)
                     throw new JsonParseException("Unknown system: " + systemName);
-                }
                 systems.add(os);
             }
 
-            if (!systems.isEmpty()) {
+            if (!systems.isEmpty())
                 registry.setSystems(new ArrayList<>(systems));
-            } else {
+            else
                 throw new JsonParseException("No systems found");
-            }
         }
     }
 
     private List<CustomMappingsRegistryKey> keyModifierWildcardLogicParser(int key,
-            boolean hasShift, boolean shiftValue,
-            boolean hasAltOption, boolean altOptionValue,
-            boolean hasControl, boolean controlValue,
-            boolean hasSuperCommand, boolean superCommandValue) {
+                                                                           boolean hasShift, boolean shiftValue,
+                                                                           boolean hasAltOption, boolean altOptionValue,
+                                                                           boolean hasControl, boolean controlValue,
+                                                                           boolean hasSuperCommand, boolean superCommandValue) {
 
         List<Boolean> shiftVals = hasShift ? List.of(shiftValue) : List.of(false, true);
         List<Boolean> altOptionals = hasAltOption ? List.of(altOptionValue) : List.of(false, true);

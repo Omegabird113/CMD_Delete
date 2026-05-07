@@ -21,10 +21,6 @@ public class ActiveMappingsManager {
 
     private final Os system;
 
-    public enum Type {
-        custom, builtin, defaultMappings
-    }
-
     public ActiveMappingsManager(INavMappings windowsLinux, INavMappings mac, CustomNavMappings custom, Os system) {
         WINDOWS_LINUX = windowsLinux;
         MAC = mac;
@@ -50,7 +46,7 @@ public class ActiveMappingsManager {
     }
 
     public String resolveNamespacedId(Type type, String id) {
-        String prefixText = switch(type) {
+        String prefixText = switch (type) {
             case custom -> "custom:";
             case builtin -> "builtin:";
             case defaultMappings -> "";
@@ -127,6 +123,10 @@ public class ActiveMappingsManager {
         } catch (IOException e) {
             CmdDeleteClient.LOGGER.error("Error while saving active mappings to file: {}", e.getMessage());
         }
+    }
+
+    public enum Type {
+        custom, builtin, defaultMappings
     }
 
 }

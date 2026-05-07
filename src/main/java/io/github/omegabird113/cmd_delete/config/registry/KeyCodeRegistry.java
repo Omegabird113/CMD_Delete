@@ -33,7 +33,7 @@ public class KeyCodeRegistry {
         map.put("insert", GLFW_KEY_INSERT);
         map.put("print_screen", GLFW_KEY_PRINT_SCREEN);
 
-        map.put("pause",  GLFW_KEY_PAUSE);
+        map.put("pause", GLFW_KEY_PAUSE);
         map.put("menu", GLFW_KEY_MENU);
 
         map.put("0", GLFW_KEY_0);

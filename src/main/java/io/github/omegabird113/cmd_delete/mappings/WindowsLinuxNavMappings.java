@@ -45,7 +45,7 @@ class WindowsLinuxNavMappings implements INavMappings {
 
     @Override
     public NavAction[] getPossibleActions() {
-        return new NavAction[] {
+        return new NavAction[]{
                 NAV_LINE_LEFT, NAV_LINE_RIGHT,
                 SEL_LINE_LEFT, SEL_LINE_RIGHT,
                 DEL_WORD_LEFT, DEL_WORD_RIGHT,
@@ -59,8 +59,8 @@ class WindowsLinuxNavMappings implements INavMappings {
 
     @Override
     public Os[] getMappingsSupportedSystems() {
-        return new Os[] {
-            Os.WINDOWS, Os.LINUX
+        return new Os[]{
+                Os.WINDOWS, Os.LINUX
         };
     }
 }

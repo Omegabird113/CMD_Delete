@@ -8,6 +8,7 @@ import org.lwjgl.glfw.GLFW;
 
 public interface INavMappings {
     NavAction getAction(int key, boolean shift, boolean altOption, boolean control, boolean superCommand);
+
     default NavAction getAction(KeyEvent event, Window window) {
         int key = event.key();
         boolean shift = event.hasShiftDown();
@@ -17,6 +18,8 @@ public interface INavMappings {
 
         return getAction(key, shift, alt, control, windows);
     }
+
     NavAction[] getPossibleActions();
+
     Os[] getMappingsSupportedSystems();
 }
