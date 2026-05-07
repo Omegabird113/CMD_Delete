@@ -4,10 +4,7 @@ import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.registry.CustomMappingsRegistry;
 import io.github.omegabird113.cmd_delete.config.registry.CustomMappingsRegistryKey;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.stream.Collectors;
 
 import static io.github.omegabird113.cmd_delete.actions.NavAction.*;
 
