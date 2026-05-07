@@ -6,13 +6,12 @@ import io.github.omegabird113.cmd_delete.config.ActiveMappingsManager;
 import io.github.omegabird113.cmd_delete.config.MappingsState;
 
 public class NavMappingsManager {
-    private static final INavMappings WINDOWS_MAPPINGS = new WindowsLinuxNavMappings();
+    private static final INavMappings WINDOWS_LINUX_MAPPINGS = new WindowsLinuxNavMappings();
     private static final INavMappings MAC_MAPPINGS = new MacNavMappings();
-    private static final INavMappings LINUX_MAPPINGS = new WindowsLinuxNavMappings();
     private static final CustomNavMappings CUSTOM_MAPPINGS = new CustomNavMappings();
 
     private static final ActiveMappingsManager activeMappingsManager = new ActiveMappingsManager(
-            WINDOWS_MAPPINGS, MAC_MAPPINGS, LINUX_MAPPINGS, CUSTOM_MAPPINGS, getOs()
+            WINDOWS_LINUX_MAPPINGS, MAC_MAPPINGS, CUSTOM_MAPPINGS, getOs()
     );
 
     private static MappingsState currentMappingsState;

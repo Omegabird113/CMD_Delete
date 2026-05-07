@@ -15,9 +15,8 @@ public class ActiveMappingsManager {
     private static final Path gamePath = FabricLoader.getInstance().getGameDir();
     private static final Path activeFilePath = gamePath.resolve("config/cmd_delete/.active_mappings");
 
-    private final INavMappings WINDOWS;
+    private final INavMappings WINDOWS_LINUX;
     private final INavMappings MAC;
-    private final INavMappings LINUX;
     private final CustomNavMappings CUSTOM;
 
     private final Os system;
@@ -26,10 +25,9 @@ public class ActiveMappingsManager {
         custom, builtin, defaultMappings
     }
 
-    public ActiveMappingsManager(INavMappings windows, INavMappings mac, INavMappings linux, CustomNavMappings custom, Os system) {
-        WINDOWS = windows;
+    public ActiveMappingsManager(INavMappings windowsLinux, INavMappings mac, CustomNavMappings custom, Os system) {
+        WINDOWS_LINUX = windowsLinux;
         MAC = mac;
-        LINUX = linux;
         CUSTOM = custom;
         this.system = system;
     }
@@ -37,9 +35,7 @@ public class ActiveMappingsManager {
     INavMappings resolveDefaultMappings() {
         if (system == Os.MAC)
             return MAC;
-        else if (system == Os.WINDOWS)
-            return WINDOWS;
-        return LINUX;
+        return WINDOWS_LINUX;
     }
 
     INavMappings tryResolveCustomMappingsElseDefault(String id) {
@@ -49,9 +45,7 @@ public class ActiveMappingsManager {
     INavMappings resolveOsMappings(Os os) {
         if (os == Os.MAC)
             return MAC;
-        else if (os == Os.WINDOWS)
-            return WINDOWS;
-        return LINUX;
+        return WINDOWS_LINUX;
     }
 
     INavMappings resolveOsMappings(String os) {
