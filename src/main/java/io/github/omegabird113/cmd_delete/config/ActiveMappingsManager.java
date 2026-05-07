@@ -42,19 +42,11 @@ public class ActiveMappingsManager {
         return CustomMappingsJSONManager.tryLoadCustomMappingsElse(id, CUSTOM, resolveDefaultMappings());
     }
 
-    INavMappings resolveOsMappings(Os os) {
-        if (os == Os.MAC)
-            return MAC;
-        return WINDOWS_LINUX;
-    }
-
     INavMappings resolveOsMappings(String os) {
         os = os.toLowerCase();
         if (os.equals("mac"))
-            return resolveOsMappings(Os.MAC);
-        else if (os.equals("windows"))
-            return resolveOsMappings(Os.WINDOWS);
-        return resolveOsMappings(Os.LINUX);
+            return MAC;
+        return WINDOWS_LINUX;
     }
 
     public String resolveNamespacedId(Type type, String id) {
@@ -67,12 +59,16 @@ public class ActiveMappingsManager {
     }
 
     public String resolveNamespacedId(Type type, Os os) {
-        String prefixText = switch(type) {
+        String prefixText = switch (type) {
             case custom -> "custom:";
             case builtin -> "builtin:";
             case defaultMappings -> "";
         };
-        return prefixText + os.toString().toLowerCase();
+        String osText = switch (os) {
+            case WINDOWS, LINUX -> "windows_linux";
+            case MAC -> "mac";
+        };
+        return prefixText + osText;
     }
 
     public String resolveNamespacedId(MappingsState mappingState) {
