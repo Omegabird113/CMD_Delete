@@ -33,14 +33,17 @@ public class NavMappingsManager {
         logMappings();
     }
 
-    public static void updateMappingsToCustom(String id) {
-        currentMappingsState = activeMappingsManager.resolveMappings(
-                activeMappingsManager.resolveNamespacedId(ActiveMappingsManager.Type.custom, id)
-        );
+    public static boolean updateMappingsToCustom(String id) {
+        MappingsState mappingsState = activeMappingsManager.tryResolveCustomMappings(id);
+        if (mappingsState == null) {
+            return false;
+        }
+        currentMappingsState = mappingsState;
         activeMappingsManager.trySaveMappings(
                 activeMappingsManager.resolveNamespacedId(currentMappingsState)
         );
-        loadMappings();
+        logMappings();
+        return true;
     }
 
     public static void updateMappingsToBuiltIn(Os os) {

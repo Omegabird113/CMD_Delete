@@ -38,6 +38,13 @@ public class ActiveMappingsManager {
         return CustomMappingsJSONManager.tryLoadCustomMappingsElse(id, CUSTOM, resolveDefaultMappings());
     }
 
+    public MappingsState tryResolveCustomMappings(String id) {
+        if (!CustomMappingsJSONManager.tryLoadCustomMappings(id, CUSTOM)) {
+            return null;
+        }
+        return new MappingsState(CUSTOM, Type.custom, id);
+    }
+
     INavMappings resolveOsMappings(String os) {
         os = os.toLowerCase();
         if (os.equals("mac"))
