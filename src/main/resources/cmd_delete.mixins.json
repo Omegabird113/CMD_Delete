@@ -6,7 +6,9 @@
   "mixins": [],
   "client": [
     "SignEditScreenMixin",
-    "EditBoxMixin"
+    "EditBoxMixin",
+    "MultilineTextFieldMixin",
+    "MultilineTextFieldStringViewAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

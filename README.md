@@ -10,9 +10,8 @@ In Minecraft on macOS, pressing `option` and `backspace` deletes a single charac
 
 ## Important Context
 
-1. As of right now, **this only works in some places**. This includes chat, the Creative Menu Search, and in signs. It does not include Books.
-2. If you use this mod on Windows or Linux, nothing should change from the Vanilla behavior
-3. If you have any problems with this mod, **please report them as Issues on GitHub**. Pull Requests are also welcome! :)
+1. If you use this mod on Windows or Linux, nothing should change from the Vanilla behavior
+2. If you have any problems with this mod, **please report them as Issues on GitHub**. Pull Requests are also welcome! :)
 
 ## All the New Key Combinations
 
