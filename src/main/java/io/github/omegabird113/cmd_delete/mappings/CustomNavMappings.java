@@ -28,7 +28,8 @@ public class CustomNavMappings implements INavMappings {
     public NavAction[] getPossibleActions() {
         return Arrays.stream(registry.getValues())
                 .filter(action -> action != NONE)
-                .distinct().toArray(NavAction[]::new);
+                .distinct()
+                .toArray(NavAction[]::new);
     }
 
     @Override
