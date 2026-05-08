@@ -125,4 +125,4 @@ jobs:
             26.1.2
           loaders: fabric
           dependencies: |
-            fabric-loader@>=${{ steps.props.outputs.loader_version }}(required)
+            fabric-loader(required)
