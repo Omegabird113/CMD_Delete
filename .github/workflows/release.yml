@@ -120,9 +120,7 @@ jobs:
           version-type: ${{ inputs.release_type }}
           changelog-file: changelog_body.md
           game-versions: |
-            26.1
-            26.1.1
-            26.1.2
+            >=26.1 <=26.1.2
           loaders: fabric
           dependencies: |
             fabric-loader(required)
