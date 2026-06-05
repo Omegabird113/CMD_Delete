@@ -25,16 +25,16 @@ public final class MappingsInfoCollectionUtils {
         String namespacedId = switch (type) {
             case defaultMappings -> "default";
             case builtin ->
-                    "builtin:" + Arrays.toString(navMappings.getMappingsSupportedSystems()).replace("[", "").replace("]", "").replace(", ", "_");
-            case custom -> "custom:" + ((CustomNavMappings) navMappings).getRegistry().getName();
+                    "builtin:" + Arrays.toString(navMappings.getMappingsSupportedSystems()).replace("[", "").replace("]", "").replace(", ", "_").toLowerCase();
+            case custom -> "custom:" + ((CustomNavMappings) navMappings).getRegistry().getName().toLowerCase().replace(" ", "_");
         };
 
         String displayName = switch (type) {
-            case defaultMappings -> "Default";
+            case defaultMappings -> "Default mappings";
             case builtin ->
-                    Arrays.toString(navMappings.getMappingsSupportedSystems()).replace("[", "").replace("]", "").replace(", ", " and ");
-            case custom -> ((CustomNavMappings) navMappings).getRegistry().getName();
-        } + " mappings";
+                    Arrays.toString(navMappings.getMappingsSupportedSystems()).replace("[", "").replace("]", "").replace(", ", " and ") + " mappings";
+            case custom -> "\"" + ((CustomNavMappings) navMappings).getRegistry().getName() + "\"";
+        };
 
         String description = switch (type) {
             case defaultMappings ->
