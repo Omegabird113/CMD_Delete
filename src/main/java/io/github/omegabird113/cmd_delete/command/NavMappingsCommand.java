@@ -1,4 +1,4 @@
-package io.github.omegabird113.cmd_delete.commands;
+package io.github.omegabird113.cmd_delete.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
