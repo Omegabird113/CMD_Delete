@@ -1,5 +1,6 @@
 package io.github.omegabird113.cmd_delete.commands;
 
+import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavActionManager;
 import io.github.omegabird113.cmd_delete.config.ActiveMappingsManager;
 import io.github.omegabird113.cmd_delete.config.load.CustomMappingsJSONManager;
@@ -42,7 +43,12 @@ public final class MappingsInfoCollectionUtils {
             case custom -> ((CustomNavMappings) navMappings).getRegistry().getDescription();
         };
 
-        String baseString = displayName + " (" + namespacedId + ")";
+        String version = switch (type) {
+            case defaultMappings, builtin -> CmdDeleteClient.VERSION;
+            case custom -> ((CustomNavMappings) navMappings).getRegistry().getVersion();
+        };
+
+        String baseString = displayName + " (" + namespacedId + ") v" + version;
         String descriptionString = "\nDescription:\n" + description;
         String coverageString = "\nThese mappings have " + (coverage * 100) + "% coverage.";
 
