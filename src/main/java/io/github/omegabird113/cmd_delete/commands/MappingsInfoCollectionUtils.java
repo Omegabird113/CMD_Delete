@@ -9,7 +9,8 @@ import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import java.util.Arrays;
 
 public final class MappingsInfoCollectionUtils {
-    private MappingsInfoCollectionUtils() {}
+    private MappingsInfoCollectionUtils() {
+    }
 
     public static String getInfoFrom(INavMappings navMappings, boolean includeDescription) {
         float coverage = NavActionManager.getCoverage(navMappings);
@@ -20,19 +21,22 @@ public final class MappingsInfoCollectionUtils {
         }
 
         String namespacedId = switch (type) {
-            case defaultMappings ->  "default";
-            case builtin -> "builtin:" + Arrays.toString(navMappings.getMappingsSupportedSystems()).replace("[", "").replace("]", "").replace(", ", "_");
+            case defaultMappings -> "default";
+            case builtin ->
+                    "builtin:" + Arrays.toString(navMappings.getMappingsSupportedSystems()).replace("[", "").replace("]", "").replace(", ", "_");
             case custom -> "custom:" + ((CustomNavMappings) navMappings).getRegistry().getName();
         };
 
         String displayName = switch (type) {
-            case defaultMappings ->  "Default";
-            case builtin -> Arrays.toString(navMappings.getMappingsSupportedSystems()).replace("[", "").replace("]", "").replace(", ", " and ");
+            case defaultMappings -> "Default";
+            case builtin ->
+                    Arrays.toString(navMappings.getMappingsSupportedSystems()).replace("[", "").replace("]", "").replace(", ", " and ");
             case custom -> ((CustomNavMappings) navMappings).getRegistry().getName();
         } + " mappings";
 
         String description = switch (type) {
-            case defaultMappings ->  "The default behaviour to auto-detect your OS and select the hard-coded mappings for your OS.";
+            case defaultMappings ->
+                    "The default behaviour to auto-detect your OS and select the hard-coded mappings for your OS.";
             case builtin -> "Hard-coded mappings for the specified operating system(s).";
             case custom -> ((CustomNavMappings) navMappings).getRegistry().getDescription();
         };

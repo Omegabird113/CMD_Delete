@@ -11,12 +11,12 @@ import static io.github.omegabird113.cmd_delete.actions.NavAction.NONE;
 public class CustomNavMappings implements INavMappings {
     private CustomMappingsRegistry registry = new CustomMappingsRegistry();
 
-    public void setRegistry(CustomMappingsRegistry registry) {
-        this.registry = registry;
-    }
-
     public CustomMappingsRegistry getRegistry() {
         return registry;
+    }
+
+    public void setRegistry(CustomMappingsRegistry registry) {
+        this.registry = registry;
     }
 
     @Override

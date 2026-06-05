@@ -5,10 +5,10 @@
   "compatibilityLevel": "JAVA_25",
   "mixins": [],
   "client": [
-    "SignEditScreenMixin",
     "EditBoxMixin",
     "MultilineTextFieldMixin",
-    "MultilineTextFieldStringViewAccessor"
+    "MultilineTextFieldStringViewAccessor",
+    "SignEditScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
