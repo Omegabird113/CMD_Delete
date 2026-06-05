@@ -8,6 +8,7 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
+import io.github.omegabird113.cmd_delete.mappings.INavMappings;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
@@ -44,7 +45,8 @@ public class NavMappingsCommand {
                                 .then(argument("id", StringArgumentType.word())
                                         .executes(NavMappingsCommand::setCustom)))
                         .then(literal("default")
-                                .executes(NavMappingsCommand::setDefault))));
+                                .executes(NavMappingsCommand::setDefault)))
+                .then(literal("info").executes(NavMappingsCommand::printMappingsInfo)));
     }
 
     private static int setBuiltIn(CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
@@ -67,6 +69,13 @@ public class NavMappingsCommand {
     private static int setDefault(CommandContext<FabricClientCommandSource> context) {
         NavMappingsManager.updateMappingsToDefault();
         context.getSource().sendFeedback(Component.literal("Set nav mappings to default"));
+        return 1;
+    }
+
+    private static int printMappingsInfo(CommandContext<FabricClientCommandSource> context) {
+        INavMappings currentMappings = NavMappingsManager.getCurrentMappings();
+        String info = MappingsInfoCollectionUtils.getInfoFrom(currentMappings, true);
+        context.getSource().sendFeedback(Component.literal("The currently active mappings are:\n" + info));
         return 1;
     }
 

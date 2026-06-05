@@ -75,4 +75,8 @@ public class NavMappingsManager {
             return Os.LINUX;
         }
     }
+
+    public static ActiveMappingsManager.Type getActiveMappingsType() {
+        return currentMappingsState.type();
+    }
 }
