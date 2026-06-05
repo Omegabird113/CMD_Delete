@@ -17,7 +17,6 @@ public final class MappingsInfoCollectionUtils {
     public static String getInfoFrom(INavMappings navMappings, boolean includeDescription) {
         float coverage = NavActionManager.getCoverage(navMappings);
         ActiveMappingsManager.Type type = NavMappingsManager.getActiveMappingsType();
-        String typeString = type.toString();
         if (type == ActiveMappingsManager.Type.custom && !(navMappings instanceof CustomNavMappings)) {
             throw new RuntimeException("Custom mappings type declared, but an invalid class was provided.");
         }
@@ -43,10 +42,11 @@ public final class MappingsInfoCollectionUtils {
             case custom -> ((CustomNavMappings) navMappings).getRegistry().getDescription();
         };
 
-        String baseString = displayName + " (id: " + namespacedId + ")";
+        String baseString = displayName + " (" + namespacedId + ")";
         String descriptionString = "\nDescription:\n" + description;
+        String coverageString = "\nThese mappings have " + (coverage * 100) + "% coverage.";
 
-        return includeDescription ? baseString + descriptionString : baseString;
+        return includeDescription ? baseString + coverageString + descriptionString : baseString + coverageString;
     }
 
     public static String[] getMappingsList() {
