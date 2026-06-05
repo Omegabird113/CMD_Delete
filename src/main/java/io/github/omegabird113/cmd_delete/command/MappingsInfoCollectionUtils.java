@@ -22,7 +22,7 @@ public final class MappingsInfoCollectionUtils {
             case INavMappings n when n instanceof MacNavMappings || n instanceof WindowsLinuxNavMappings ->
                     "builtin:" + Arrays.toString(navMappings.getMappingsSupportedSystems()).replace("[", "").replace("]", "").replace(", ", "_").toLowerCase();
             case INavMappings n when n instanceof CustomNavMappings ->
-                    "custom";
+                    "custom:" + ((CustomNavMappings) navMappings).getRegistry().getFilename();
             default -> "unknown";
         };
 
