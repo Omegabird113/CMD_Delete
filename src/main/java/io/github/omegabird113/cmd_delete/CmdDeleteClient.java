@@ -18,6 +18,7 @@ public class CmdDeleteClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        LOGGER.info("Initializing client mod \"{}\"...", MODID);
         NavMappingsManager.loadMappings();
         NavMappingsCommand.register();
     }
