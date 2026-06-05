@@ -46,7 +46,8 @@ public class NavMappingsCommand {
                                         .executes(NavMappingsCommand::setCustom)))
                         .then(literal("default")
                                 .executes(NavMappingsCommand::setDefault)))
-                .then(literal("info").executes(NavMappingsCommand::printMappingsInfo)));
+                .then(literal("info").executes(NavMappingsCommand::printMappingsInfo))
+                .then(literal("list").executes(NavMappingsCommand::printMappingsList)));
     }
 
     private static int setBuiltIn(CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
@@ -76,6 +77,12 @@ public class NavMappingsCommand {
         INavMappings currentMappings = NavMappingsManager.getCurrentMappings();
         String info = MappingsInfoCollectionUtils.getInfoFrom(currentMappings, true);
         context.getSource().sendFeedback(Component.literal("The currently active mappings are:\n" + info));
+        return 1;
+    }
+
+    private static int printMappingsList(CommandContext<FabricClientCommandSource> context) {
+        String[] options = MappingsInfoCollectionUtils.getMappingsList();
+        context.getSource().sendFeedback(Component.literal("The currently available mappings options are:\n" + String.join("\n", options)));
         return 1;
     }
 

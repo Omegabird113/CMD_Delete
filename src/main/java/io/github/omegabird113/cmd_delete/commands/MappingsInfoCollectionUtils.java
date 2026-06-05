@@ -2,10 +2,12 @@ package io.github.omegabird113.cmd_delete.commands;
 
 import io.github.omegabird113.cmd_delete.actions.NavActionManager;
 import io.github.omegabird113.cmd_delete.config.ActiveMappingsManager;
+import io.github.omegabird113.cmd_delete.config.load.CustomMappingsJSONManager;
 import io.github.omegabird113.cmd_delete.mappings.CustomNavMappings;
 import io.github.omegabird113.cmd_delete.mappings.INavMappings;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public final class MappingsInfoCollectionUtils {
@@ -45,5 +47,14 @@ public final class MappingsInfoCollectionUtils {
         String descriptionString = "\nDescription:\n" + description;
 
         return includeDescription ? baseString + descriptionString : baseString;
+    }
+
+    public static String[] getMappingsList() {
+        ArrayList<String> internal = new ArrayList<>();
+        internal.add("default");
+        internal.add("builtin:windows_linux");
+        internal.add("builtin:mac");
+        internal.addAll(CustomMappingsJSONManager.getAvailableOptions());
+        return internal.toArray(new String[0]);
     }
 }

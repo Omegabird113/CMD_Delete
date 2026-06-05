@@ -7,11 +7,15 @@ import io.github.omegabird113.cmd_delete.config.registry.CustomMappingsRegistry;
 import io.github.omegabird113.cmd_delete.mappings.CustomNavMappings;
 import io.github.omegabird113.cmd_delete.mappings.INavMappings;
 import net.fabricmc.loader.api.FabricLoader;
+import org.apache.commons.io.FilenameUtils;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Objects;
 
 public class CustomMappingsJSONManager {
     private static final Path gamePath = FabricLoader.getInstance().getGameDir();
@@ -48,5 +52,13 @@ public class CustomMappingsJSONManager {
             CmdDeleteClient.LOGGER.error("Could not load custom mapping file: {}", id, e);
             return false;
         }
+    }
+
+    public static ArrayList<String> getAvailableOptions() {
+        ArrayList<String> options = new ArrayList<>();
+        for (File file : Objects.requireNonNull(configPath.toFile().listFiles())) {
+            options.add("custom:" + FilenameUtils.removeExtension(file.getName()));
+        }
+        return options;
     }
 }
