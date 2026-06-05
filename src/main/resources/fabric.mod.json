@@ -3,7 +3,7 @@
   "id": "cmd_delete",
   "version": "${version}",
   "name": "CMD + Delete",
-  "description": "Fixes Minecraft's chat so it respects the Command/Option keys proper functionality when it comes to deleting, moving through, and selecting text.",
+  "description": "Fixes Minecraft’s text editing behavior on macOS so it has the proper modifier keybinds for cmd/option line/word navigation and deletion.",
   "authors": [
     "Omegabird113"
   ],
