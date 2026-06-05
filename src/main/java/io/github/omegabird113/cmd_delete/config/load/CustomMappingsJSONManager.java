@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class CustomMappingsJSONManager {
     private static final Path gamePath = FabricLoader.getInstance().getGameDir();
@@ -56,9 +55,18 @@ public class CustomMappingsJSONManager {
 
     public static ArrayList<String> getAvailableOptions() {
         ArrayList<String> options = new ArrayList<>();
-        for (File file : Objects.requireNonNull(configPath.toFile().listFiles())) {
+
+        File configDirectory = configPath.toFile();
+        if (!configDirectory.exists() || !configDirectory.isDirectory())
+            return options;
+
+        File[] files = configDirectory.listFiles();
+        if (files == null)
+            return options;
+
+        for (File file : files)
             options.add("custom:" + FilenameUtils.removeExtension(file.getName()));
-        }
+
         return options;
     }
 }
