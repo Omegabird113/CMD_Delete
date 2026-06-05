@@ -26,7 +26,7 @@ public final class MappingsInfoCollectionUtils {
             case defaultMappings -> "default";
             case builtin ->
                     "builtin:" + Arrays.toString(navMappings.getMappingsSupportedSystems()).replace("[", "").replace("]", "").replace(", ", "_").toLowerCase();
-            case custom -> "custom:" + ((CustomNavMappings) navMappings).getRegistry().getName().toLowerCase().replace(" ", "_");
+            case custom -> "custom";
         };
 
         String displayName = switch (type) {
