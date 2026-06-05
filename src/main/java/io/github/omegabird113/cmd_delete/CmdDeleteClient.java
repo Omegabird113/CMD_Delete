@@ -12,8 +12,8 @@ import java.util.Optional;
 
 public class CmdDeleteClient implements ClientModInitializer {
     public static final String MODID = "cmd_delete";
-    public static final Optional<ModContainer> CONTAINER = FabricLoader.getInstance().getModContainer(MODID);
-    public static final String VERSION =  CONTAINER.isEmpty() ? "" : CONTAINER.get().getMetadata().getVersion().getFriendlyString();
+    private static final Optional<ModContainer> CONTAINER = FabricLoader.getInstance().getModContainer(MODID);
+    public static final String VERSION =  CONTAINER.isEmpty() ? "<unknown>" : CONTAINER.get().getMetadata().getVersion().getFriendlyString();
     public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
 
     @Override
