@@ -3,10 +3,7 @@ package io.github.omegabird113.cmd_delete.command;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavActionManager;
 import io.github.omegabird113.cmd_delete.config.load.CustomMappingsJSONManager;
-import io.github.omegabird113.cmd_delete.mappings.CustomNavMappings;
-import io.github.omegabird113.cmd_delete.mappings.INavMappings;
-import io.github.omegabird113.cmd_delete.mappings.MacNavMappings;
-import io.github.omegabird113.cmd_delete.mappings.WindowsLinuxNavMappings;
+import io.github.omegabird113.cmd_delete.mappings.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,8 +26,11 @@ public final class MappingsInfoCollectionUtils {
             description = custom.getRegistry().getDescription();
             version = custom.getRegistry().getVersion();
         } else if (navMappings instanceof MacNavMappings || navMappings instanceof WindowsLinuxNavMappings) {
-            namespacedId = "builtin:" + Arrays.toString(navMappings.getMappingsSupportedSystems()).replace("[", "").replace("]", "").replace(", ", "_").toLowerCase();
-            displayName = Arrays.toString(navMappings.getMappingsSupportedSystems()).replace("[", "").replace("]", "").replace(", ", " and ") + " mappings";
+            String[] systemStrings = Arrays.stream(navMappings.getMappingsSupportedSystems())
+                    .map(Os::toString)
+                    .toArray(String[]::new);
+            namespacedId = "builtin:" + String.join("_", systemStrings).toLowerCase();
+            displayName = String.join(" and ", systemStrings) + " mappings";
             description = "Hard-coded mappings for the specified operating system(s).";
             version = CmdDeleteClient.VERSION;
         } else {
