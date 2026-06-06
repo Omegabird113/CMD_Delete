@@ -5,6 +5,8 @@ import io.github.omegabird113.cmd_delete.actions.NavActionManager;
 import io.github.omegabird113.cmd_delete.config.ActiveMappingsManager;
 import io.github.omegabird113.cmd_delete.config.MappingsState;
 
+import java.util.Locale;
+
 public class NavMappingsManager {
     private static final INavMappings WINDOWS_LINUX_MAPPINGS = new WindowsLinuxNavMappings();
     private static final INavMappings MAC_MAPPINGS = new MacNavMappings();
@@ -67,9 +69,9 @@ public class NavMappingsManager {
     }
 
     public static Os getOs() {
-        if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+        if (System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("mac")) {
             return Os.MAC;
-        } else if (System.getProperty("os.name").toLowerCase().contains("win")) {
+        } else if (System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("win")) {
             return Os.WINDOWS;
         } else {
             return Os.LINUX;

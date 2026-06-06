@@ -31,7 +31,9 @@ public class CustomMappingsJSONManager {
                 .create();
 
         try (java.io.BufferedReader reader = Files.newBufferedReader(path)) {
-            return gson.fromJson(reader, CustomMappingsRegistry.class);
+            CustomMappingsRegistry registry = gson.fromJson(reader, CustomMappingsRegistry.class);
+            registry.setFilename(id);
+            return registry;
         }
     }
 

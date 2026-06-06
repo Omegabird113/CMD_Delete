@@ -14,6 +14,7 @@ public class CustomMappingsRegistry {
     private String author;
     private String description;
     private String version;
+    private String filename;
 
     public void register(CustomMappingsRegistryKey key, NavAction action) {
         registry.put(key, action);
@@ -66,5 +67,13 @@ public class CustomMappingsRegistry {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 }

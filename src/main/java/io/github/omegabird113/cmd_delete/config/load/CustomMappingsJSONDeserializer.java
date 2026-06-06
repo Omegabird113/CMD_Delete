@@ -48,7 +48,7 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
         Set<CustomMappingsRegistryKey> registeredKeys = new HashSet<>();
 
         for (String actionName : actions.keySet()) {
-            NavAction action = actionMap.get(actionName.trim().toUpperCase());
+            NavAction action = actionMap.get(actionName.trim().toUpperCase(Locale.ROOT));
             if (action == null || action == NavAction.NONE)
                 continue;
 
@@ -66,7 +66,7 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
                 JsonElement keyElement = binding.get("key");
                 if (!keyElement.isJsonPrimitive() || !keyElement.getAsJsonPrimitive().isString())
                     throw new JsonParseException("Expected \"key\" in action \"" + actionName + "\" to be a string");
-                String keyName = keyElement.getAsString().trim().toLowerCase();
+                String keyName = keyElement.getAsString().trim().toLowerCase(Locale.ROOT);
                 Integer keyCode = keyMap.get(keyName);
                 if (keyCode == null)
                     throw new JsonParseException("Unknown key name \"" + keyName + "\" in action \"" + actionName + "\"");
@@ -202,7 +202,7 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
         for (JsonElement systemElement : systemsArray) {
             if (!systemElement.isJsonPrimitive() || !systemElement.getAsJsonPrimitive().isString())
                 throw new JsonParseException("Expected each entry in \"systems\" to be a string");
-            String systemName = systemElement.getAsString().trim().toLowerCase();
+            String systemName = systemElement.getAsString().trim().toLowerCase(Locale.ROOT);
             Os os = osMap.get(systemName);
             if (os == null)
                 throw new JsonParseException("Unknown system: " + systemName);

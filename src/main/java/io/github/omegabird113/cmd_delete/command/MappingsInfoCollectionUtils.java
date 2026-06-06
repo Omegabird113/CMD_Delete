@@ -2,14 +2,12 @@ package io.github.omegabird113.cmd_delete.command;
 
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavActionManager;
-import io.github.omegabird113.cmd_delete.config.ActiveMappingsManager;
 import io.github.omegabird113.cmd_delete.config.load.CustomMappingsJSONManager;
-import io.github.omegabird113.cmd_delete.mappings.CustomNavMappings;
-import io.github.omegabird113.cmd_delete.mappings.INavMappings;
-import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
+import io.github.omegabird113.cmd_delete.mappings.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 
 public final class MappingsInfoCollectionUtils {
     private MappingsInfoCollectionUtils() {
@@ -17,40 +15,35 @@ public final class MappingsInfoCollectionUtils {
 
     public static String getInfoFrom(INavMappings navMappings, boolean includeDescription) {
         float coverage = NavActionManager.getCoverage(navMappings);
-        ActiveMappingsManager.Type type = NavMappingsManager.getActiveMappingsType();
-        if (type == ActiveMappingsManager.Type.custom && !(navMappings instanceof CustomNavMappings)) {
-            throw new RuntimeException("Custom mappings type declared, but an invalid class was provided.");
+
+        String namespacedId;
+        String displayName;
+        String description;
+        String version;
+
+        if (navMappings instanceof CustomNavMappings custom) {
+            namespacedId = "custom:" + custom.getRegistry().getFilename();
+            displayName = "\"" + custom.getRegistry().getName() + "\"";
+            description = custom.getRegistry().getDescription();
+            version = custom.getRegistry().getVersion();
+        } else if (navMappings instanceof MacNavMappings || navMappings instanceof WindowsLinuxNavMappings) {
+            String[] systemStrings = Arrays.stream(navMappings.getMappingsSupportedSystems())
+                    .map(Os::toString)
+                    .toArray(String[]::new);
+            namespacedId = "builtin:" + String.join("_", systemStrings).toLowerCase(Locale.ROOT);
+            displayName = String.join(" and ", systemStrings) + " mappings";
+            description = "Hard-coded mappings for the specified operating system(s).";
+            version = CmdDeleteClient.VERSION;
+        } else {
+            namespacedId = "unknown";
+            displayName = "unknown";
+            description = "unknown";
+            version = CmdDeleteClient.VERSION;
         }
 
-        String namespacedId = switch (type) {
-            case defaultMappings -> "default";
-            case builtin ->
-                    "builtin:" + Arrays.toString(navMappings.getMappingsSupportedSystems()).replace("[", "").replace("]", "").replace(", ", "_").toLowerCase();
-            case custom -> "custom";
-        };
-
-        String displayName = switch (type) {
-            case defaultMappings -> "Default mappings";
-            case builtin ->
-                    Arrays.toString(navMappings.getMappingsSupportedSystems()).replace("[", "").replace("]", "").replace(", ", " and ") + " mappings";
-            case custom -> "\"" + ((CustomNavMappings) navMappings).getRegistry().getName() + "\"";
-        };
-
-        String description = switch (type) {
-            case defaultMappings ->
-                    "The default behaviour to auto-detect your OS and select the hard-coded mappings for your OS.";
-            case builtin -> "Hard-coded mappings for the specified operating system(s).";
-            case custom -> ((CustomNavMappings) navMappings).getRegistry().getDescription();
-        };
-
-        String version = switch (type) {
-            case defaultMappings, builtin -> CmdDeleteClient.VERSION;
-            case custom -> ((CustomNavMappings) navMappings).getRegistry().getVersion();
-        };
-
-        String baseString = displayName + " (" + namespacedId + ") v" + version;
+        String baseString = displayName + " (id: " + namespacedId + ") v" + version;
         String descriptionString = "\nDescription:\n" + description;
-        String coverageString = "\nThese mappings have " + (coverage * 100) + "% coverage.";
+        String coverageString = "\nThese mappings have " + String.format("%.2f", coverage * 100) + "% coverage.";
 
         return includeDescription ? baseString + coverageString + descriptionString : baseString + coverageString;
     }
