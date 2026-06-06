@@ -16,6 +16,8 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallba
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.network.chat.Component;
 
+import java.util.Locale;
+
 public class NavMappingsCommand {
     private static final DynamicCommandExceptionType INVALID_OS = new DynamicCommandExceptionType(
             os -> Component.literal("Unknown builtin nav mappings OS: " + os)
@@ -89,7 +91,7 @@ public class NavMappingsCommand {
     }
 
     private static Os resolveOs(String osName) throws CommandSyntaxException {
-        osName = osName.toLowerCase();
+        osName = osName.toLowerCase(Locale.ROOT);
         return switch (osName) {
             case "mac" -> Os.MAC;
             case "windows", "windows_linux" -> Os.WINDOWS;

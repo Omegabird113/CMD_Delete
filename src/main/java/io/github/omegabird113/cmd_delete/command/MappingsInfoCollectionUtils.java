@@ -7,6 +7,7 @@ import io.github.omegabird113.cmd_delete.mappings.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 
 public final class MappingsInfoCollectionUtils {
     private MappingsInfoCollectionUtils() {
@@ -29,7 +30,7 @@ public final class MappingsInfoCollectionUtils {
             String[] systemStrings = Arrays.stream(navMappings.getMappingsSupportedSystems())
                     .map(Os::toString)
                     .toArray(String[]::new);
-            namespacedId = "builtin:" + String.join("_", systemStrings).toLowerCase();
+            namespacedId = "builtin:" + String.join("_", systemStrings).toLowerCase(Locale.ROOT);
             displayName = String.join(" and ", systemStrings) + " mappings";
             description = "Hard-coded mappings for the specified operating system(s).";
             version = CmdDeleteClient.VERSION;

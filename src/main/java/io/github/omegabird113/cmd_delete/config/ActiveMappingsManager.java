@@ -10,6 +10,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Locale;
 
 public class ActiveMappingsManager {
     private static final Path gamePath = FabricLoader.getInstance().getGameDir();
@@ -46,7 +47,7 @@ public class ActiveMappingsManager {
     }
 
     INavMappings resolveOsMappings(String os) {
-        os = os.toLowerCase();
+        os = os.toLowerCase(Locale.ROOT);
         if (os.equals("mac"))
             return MAC;
         return WINDOWS_LINUX;
