@@ -122,5 +122,3 @@ jobs:
           game-versions: |
             >=26.1 <=26.1.2
           loaders: fabric
-          dependencies: |
-            fabric-loader(required)
