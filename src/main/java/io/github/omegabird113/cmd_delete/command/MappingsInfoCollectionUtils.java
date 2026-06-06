@@ -18,35 +18,27 @@ public final class MappingsInfoCollectionUtils {
     public static String getInfoFrom(INavMappings navMappings, boolean includeDescription) {
         float coverage = NavActionManager.getCoverage(navMappings);
 
-        String namespacedId = switch (navMappings) {
-            case INavMappings n when n instanceof MacNavMappings || n instanceof WindowsLinuxNavMappings ->
-                    "builtin:" + Arrays.toString(navMappings.getMappingsSupportedSystems()).replace("[", "").replace("]", "").replace(", ", "_").toLowerCase();
-            case INavMappings n when n instanceof CustomNavMappings ->
-                    "custom:" + ((CustomNavMappings) navMappings).getRegistry().getFilename();
-            default -> "unknown";
-        };
+        String namespacedId;
+        String displayName;
+        String description;
+        String version;
 
-        String displayName = switch (navMappings) {
-            case INavMappings n when n instanceof MacNavMappings || n instanceof WindowsLinuxNavMappings ->
-                    Arrays.toString(navMappings.getMappingsSupportedSystems()).replace("[", "").replace("]", "").replace(", ", " and ") + " mappings";
-            case INavMappings n when n instanceof CustomNavMappings ->
-                    "\"" + ((CustomNavMappings) navMappings).getRegistry().getName() + "\"";
-            default -> "unknown";
-        };
-
-        String description = switch (navMappings) {
-            case INavMappings n when n instanceof MacNavMappings || n instanceof WindowsLinuxNavMappings ->
-                    "Hard-coded mappings for the specified operating system(s).";
-            case INavMappings n when n instanceof CustomNavMappings ->
-                    ((CustomNavMappings) navMappings).getRegistry().getDescription();
-            default -> "unknown";
-        };
-
-        String version = switch (navMappings) {
-            case INavMappings n when n instanceof CustomNavMappings ->
-                    ((CustomNavMappings) navMappings).getRegistry().getVersion();
-            default -> CmdDeleteClient.VERSION;
-        };
+        if (navMappings instanceof CustomNavMappings custom) {
+            namespacedId = "custom:" + custom.getRegistry().getFilename();
+            displayName = "\"" + custom.getRegistry().getName() + "\"";
+            description = custom.getRegistry().getDescription();
+            version = custom.getRegistry().getVersion();
+        } else if (navMappings instanceof MacNavMappings || navMappings instanceof WindowsLinuxNavMappings) {
+            namespacedId = "builtin:" + Arrays.toString(navMappings.getMappingsSupportedSystems()).replace("[", "").replace("]", "").replace(", ", "_").toLowerCase();
+            displayName = Arrays.toString(navMappings.getMappingsSupportedSystems()).replace("[", "").replace("]", "").replace(", ", " and ") + " mappings";
+            description = "Hard-coded mappings for the specified operating system(s).";
+            version = CmdDeleteClient.VERSION;
+        } else {
+            namespacedId = "unknown";
+            displayName = "unknown";
+            description = "unknown";
+            version = CmdDeleteClient.VERSION;
+        }
 
         String baseString = displayName + " (id: " + namespacedId + ") v" + version;
         String descriptionString = "\nDescription:\n" + description;
