@@ -94,7 +94,7 @@ public class NavMappingsCommand {
         osName = osName.toLowerCase(Locale.ROOT);
         return switch (osName) {
             case "mac" -> Os.MAC;
-            case "windows", "windows_linux" -> Os.WINDOWS;
+            case "windows_linux" -> Os.WINDOWS;
             default -> throw INVALID_OS.create(osName);
         };
     }
