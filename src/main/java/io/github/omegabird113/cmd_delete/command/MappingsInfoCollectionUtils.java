@@ -7,6 +7,7 @@ import io.github.omegabird113.cmd_delete.mappings.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 public final class MappingsInfoCollectionUtils {
@@ -49,10 +50,13 @@ public final class MappingsInfoCollectionUtils {
     }
 
     public static String[] getMappingsList() {
-        ArrayList<String> internal = new ArrayList<>();
-        internal.add("default");
-        internal.add("builtin:windows_linux");
-        internal.add("builtin:mac");
+        List<String> internal = new ArrayList<>(
+                List.of(
+                        "default",
+                        "builtin:windows_linux",
+                        "builtin:mac"
+                )
+        );
         internal.addAll(CustomMappingsJSONManager.getAvailableOptions());
         return internal.toArray(String[]::new);
     }
