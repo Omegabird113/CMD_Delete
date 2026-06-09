@@ -54,6 +54,6 @@ public final class MappingsInfoCollectionUtils {
         internal.add("builtin:windows_linux");
         internal.add("builtin:mac");
         internal.addAll(CustomMappingsJSONManager.getAvailableOptions());
-        return internal.toArray(new String[0]);
+        return internal.toArray(String[]::new);
     }
 }
