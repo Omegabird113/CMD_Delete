@@ -43,7 +43,7 @@ public final class MappingsInfoCollectionUtils {
 
         String baseString = displayName + " (id: " + namespacedId + ") v" + version;
         String descriptionString = "\nDescription:\n" + description;
-        String coverageString = "\nThese mappings have " + String.format("%.2f", coverage * 100) + "% coverage.";
+        String coverageString = "\nThese mappings have " + String.format(Locale.ROOT, "%.2f", coverage * 100) + "% coverage.";
 
         return includeDescription ? baseString + coverageString + descriptionString : baseString + coverageString;
     }
