@@ -45,11 +45,11 @@ public final class MappingsInfoCollectionUtils {
             namespacedId = "unknown";
             displayName = "unknown";
             description = "unknown";
-            version = CmdDeleteClient.VERSION;
+            version = "<unknown>";
             author = "unknown";
         }
 
-        String baseString = displayName + " (id: " + namespacedId + ") v" + version + "by " + author;
+        String baseString = displayName + " (id: " + namespacedId + ") v" + version + " by " + author;
         String descriptionString = "\nDescription:\n" + description;
         String coverageString = "\nThese mappings have " + String.format(Locale.ROOT, "%.2f", coverage * 100) + "% coverage.";
 
