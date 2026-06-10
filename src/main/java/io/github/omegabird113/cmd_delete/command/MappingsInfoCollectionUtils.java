@@ -21,28 +21,35 @@ public final class MappingsInfoCollectionUtils {
         String displayName;
         String description;
         String version;
+        String author;
 
         if (navMappings instanceof CustomNavMappings custom) {
             namespacedId = "custom:" + custom.getRegistry().getFilename();
             displayName = "\"" + custom.getRegistry().getName() + "\"";
             description = custom.getRegistry().getDescription();
             version = custom.getRegistry().getVersion();
+            author = custom.getRegistry().getAuthor();
         } else if (navMappings instanceof MacNavMappings || navMappings instanceof WindowsLinuxNavMappings) {
             String[] systemStrings = Arrays.stream(navMappings.getMappingsSupportedSystems())
                     .map(Os::toString)
                     .toArray(String[]::new);
+
             namespacedId = "builtin:" + String.join("_", systemStrings).toLowerCase(Locale.ROOT);
             displayName = String.join(" and ", systemStrings) + " mappings";
             description = "Hard-coded mappings for the specified operating system(s).";
             version = CmdDeleteClient.VERSION;
+            author = "Omegabird113";
         } else {
+            CmdDeleteClient.LOGGER.error("Unknown mappings object type provided to MappingsInfoCollectionUtils.getInfoFrom(): {}", navMappings);
+
             namespacedId = "unknown";
             displayName = "unknown";
             description = "unknown";
             version = CmdDeleteClient.VERSION;
+            author = "unknown";
         }
 
-        String baseString = displayName + " (id: " + namespacedId + ") v" + version;
+        String baseString = displayName + " (id: " + namespacedId + ") v" + version + "by " + author;
         String descriptionString = "\nDescription:\n" + description;
         String coverageString = "\nThese mappings have " + String.format(Locale.ROOT, "%.2f", coverage * 100) + "% coverage.";
 
