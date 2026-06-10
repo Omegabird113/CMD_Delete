@@ -16,7 +16,7 @@ public class CustomMappingsRegistry {
     private String version;
     private String filename;
 
-    public void register(CustomMappingsRegistryKey key, NavAction action) {
+    public void put(CustomMappingsRegistryKey key, NavAction action) {
         registry.put(key, action);
     }
 

@@ -104,7 +104,7 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
                         continue;
                     }
                     registeredKeys.add(key);
-                    registry.register(key, action);
+                    registry.put(key, action);
                 }
             }
         }
