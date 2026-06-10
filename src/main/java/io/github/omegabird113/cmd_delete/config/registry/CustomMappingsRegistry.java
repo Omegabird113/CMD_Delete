@@ -76,4 +76,8 @@ public class CustomMappingsRegistry {
     public void setFilename(String filename) {
         this.filename = filename;
     }
+
+    public int getSize() {
+        return registry.size();
+    }
 }

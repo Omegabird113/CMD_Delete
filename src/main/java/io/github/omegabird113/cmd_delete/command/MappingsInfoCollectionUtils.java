@@ -23,12 +23,16 @@ public final class MappingsInfoCollectionUtils {
         String version;
         String author;
 
+        String keyCombinationsString = "";
+
         if (navMappings instanceof CustomNavMappings custom) {
             namespacedId = "custom:" + custom.getRegistry().getFilename();
             displayName = "\"" + custom.getRegistry().getName() + "\"";
             description = custom.getRegistry().getDescription();
             version = custom.getRegistry().getVersion();
             author = custom.getRegistry().getAuthor();
+
+            keyCombinationsString = " with " + custom.getRegistry().getSize() + " key combinations registered";
         } else if (navMappings instanceof MacNavMappings || navMappings instanceof WindowsLinuxNavMappings) {
             String[] systemStrings = Arrays.stream(navMappings.getMappingsSupportedSystems())
                     .map(Os::toString)
@@ -51,7 +55,7 @@ public final class MappingsInfoCollectionUtils {
 
         String baseString = displayName + " (id: " + namespacedId + ") v" + version + " by " + author;
         String descriptionString = "\nDescription:\n" + description;
-        String coverageString = "\nThese mappings have " + String.format(Locale.ROOT, "%.2f", coverage * 100) + "% coverage.";
+        String coverageString = "\nThese mappings have " + String.format(Locale.ROOT, "%.2f", coverage * 100) + "% action coverage" + keyCombinationsString + ".";
 
         return includeDescription ? baseString + coverageString + descriptionString : baseString + coverageString;
     }
