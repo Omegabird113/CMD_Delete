@@ -30,7 +30,7 @@ public class NavMappingsCommand {
     }
 
     public static void register() {
-        ClientCommandRegistrationCallback.EVENT.register((dispatcher, _) -> register(dispatcher));
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, context) -> register(dispatcher));
         CmdDeleteClient.LOGGER.info("Registered client \"/navmappings\" command");
     }
 
@@ -39,7 +39,7 @@ public class NavMappingsCommand {
                 .then(literal("set")
                         .then(literal("builtin")
                                 .then(argument("os", StringArgumentType.word())
-                                        .suggests((_, builder) -> {
+                                        .suggests((source, builder) -> {
                                             builder.suggest("mac");
                                             builder.suggest("windows_linux");
                                             return builder.buildFuture();
