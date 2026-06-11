@@ -67,7 +67,8 @@ public class CustomMappingsJSONManager {
             return options;
 
         for (File file : files)
-            options.add("custom:" + FilenameUtils.removeExtension(file.getName()));
+            if (file.getName().endsWith(".json"))
+                options.add("custom:" + FilenameUtils.removeExtension(file.getName()));
 
         return options;
     }
