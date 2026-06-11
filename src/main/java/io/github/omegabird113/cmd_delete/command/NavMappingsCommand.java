@@ -9,6 +9,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
+import io.github.omegabird113.cmd_delete.config.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.INavMappings;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import io.github.omegabird113.cmd_delete.mappings.Os;
@@ -78,8 +79,8 @@ public class NavMappingsCommand {
     }
 
     private static int printMappingsInfo(CommandContext<FabricClientCommandSource> context) {
-        INavMappings currentMappings = NavMappingsManager.getCurrentMappings();
-        String info = MappingsInfoCollectionUtils.getInfoFrom(currentMappings, true);
+        MappingsState currentMappingState = NavMappingsManager.getMappingsState();
+        String info = MappingsInfoCollectionUtils.getInfoFrom(currentMappingState, true);
         context.getSource().sendFeedback(Component.literal("The currently active mappings are:\n" + info));
         return 1;
     }

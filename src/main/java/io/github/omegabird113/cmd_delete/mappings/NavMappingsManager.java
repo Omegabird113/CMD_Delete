@@ -78,7 +78,7 @@ public class NavMappingsManager {
         }
     }
 
-    public static MappingsState.Type getActiveMappingsType() {
-        return currentMappingsState.type();
+    public static MappingsState getMappingsState() {
+        return currentMappingsState;
     }
 }

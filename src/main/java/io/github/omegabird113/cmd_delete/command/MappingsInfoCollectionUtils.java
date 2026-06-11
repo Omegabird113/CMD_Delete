@@ -2,8 +2,10 @@ package io.github.omegabird113.cmd_delete.command;
 
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavActionManager;
+import io.github.omegabird113.cmd_delete.config.MappingsState;
 import io.github.omegabird113.cmd_delete.config.load.CustomMappingsJSONManager;
-import io.github.omegabird113.cmd_delete.mappings.*;
+import io.github.omegabird113.cmd_delete.mappings.CustomNavMappings;
+import io.github.omegabird113.cmd_delete.mappings.Os;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,8 +16,8 @@ public final class MappingsInfoCollectionUtils {
     private MappingsInfoCollectionUtils() {
     }
 
-    public static String getInfoFrom(INavMappings navMappings, boolean includeDescription) {
-        float coverage = NavActionManager.getCoverage(navMappings);
+    public static String getInfoFrom(MappingsState mappingsState, boolean includeDescription) {
+        float coverage = NavActionManager.getCoverage(mappingsState.mappings());
 
         String namespacedId;
         String displayName;
@@ -25,7 +27,9 @@ public final class MappingsInfoCollectionUtils {
 
         String keyCombinationsString = "";
 
-        if (navMappings instanceof CustomNavMappings custom) {
+        if (mappingsState.type() == MappingsState.Type.CUSTOM) {
+            CustomNavMappings custom = (CustomNavMappings) mappingsState.mappings();
+
             namespacedId = "custom:" + custom.getRegistry().getFilename();
             displayName = "\"" + custom.getRegistry().getName() + "\"";
             description = custom.getRegistry().getDescription();
@@ -33,8 +37,8 @@ public final class MappingsInfoCollectionUtils {
             author = custom.getRegistry().getAuthor();
 
             keyCombinationsString = " with " + custom.getRegistry().getSize() + " key combinations registered";
-        } else if (navMappings instanceof MacNavMappings || navMappings instanceof WindowsLinuxNavMappings) {
-            String[] systemStrings = Arrays.stream(navMappings.getMappingsSupportedSystems())
+        } else if (mappingsState.type() == MappingsState.Type.BUILTIN) {
+            String[] systemStrings = Arrays.stream(mappingsState.mappings().getMappingsSupportedSystems())
                     .map(Os::name)
                     .toArray(String[]::new);
 
@@ -43,8 +47,18 @@ public final class MappingsInfoCollectionUtils {
             description = "Hard-coded mappings for the specified operating system(s).";
             version = CmdDeleteClient.VERSION;
             author = "Omegabird113";
+        } else if (mappingsState.type() == MappingsState.Type.DEFAULT) {
+            String[] systemStrings = Arrays.stream(mappingsState.mappings().getMappingsSupportedSystems())
+                    .map(Os::name)
+                    .toArray(String[]::new);
+
+            namespacedId = "\"\"";
+            displayName = "Default Mappings (resolved to " + String.join(" and ", systemStrings) + ")";
+            description = "The default behaviour to set the mappings to the hard-coded mappings for the OS you're currently using.";
+            version = CmdDeleteClient.VERSION;
+            author = "Omegabird113";
         } else {
-            CmdDeleteClient.LOGGER.error("Unknown mappings object type provided to MappingsInfoCollectionUtils.getInfoFrom(): {}", navMappings);
+            CmdDeleteClient.LOGGER.error("Unknown mappings object type provided to MappingsInfoCollectionUtils.getInfoFrom(): {}", mappingsState);
 
             namespacedId = "unknown";
             displayName = "unknown";
