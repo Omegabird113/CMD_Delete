@@ -2,9 +2,9 @@ package io.github.omegabird113.cmd_delete.command;
 
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavActionManager;
-import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.config.load.CustomMappingsJSONManager;
 import io.github.omegabird113.cmd_delete.mappings.CustomNavMappings;
+import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 
 import java.util.ArrayList;
