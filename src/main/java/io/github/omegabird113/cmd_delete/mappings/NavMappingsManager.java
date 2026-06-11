@@ -50,7 +50,7 @@ public class NavMappingsManager {
 
     public static void updateMappingsToBuiltIn(Os os) {
         currentMappingsState = activeMappingsManager.resolveMappings(
-                activeMappingsManager.resolveNamespacedId(ActiveMappingsManager.Type.builtin, os)
+                activeMappingsManager.resolveNamespacedId(ActiveMappingsManager.Type.BUILTIN, os)
         );
         activeMappingsManager.trySaveMappings(
                 activeMappingsManager.resolveNamespacedId(currentMappingsState)
@@ -60,7 +60,7 @@ public class NavMappingsManager {
 
     public static void updateMappingsToDefault() {
         currentMappingsState = activeMappingsManager.resolveMappings(
-                activeMappingsManager.resolveNamespacedId(ActiveMappingsManager.Type.defaultMappings, "")
+                activeMappingsManager.resolveNamespacedId(ActiveMappingsManager.Type.DEFAULT, "")
         );
         activeMappingsManager.trySaveMappings(
                 activeMappingsManager.resolveNamespacedId(currentMappingsState)
