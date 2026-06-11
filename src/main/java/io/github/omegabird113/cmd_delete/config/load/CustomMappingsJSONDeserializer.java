@@ -115,7 +115,7 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
     private Map<String, NavAction> getNavActionNameMap() {
         Map<String, NavAction> map = new HashMap<>();
         for (NavAction action : NavAction.values())
-            map.put(action.toString(), action);
+            map.put(action.name(), action);
         return map;
     }
 

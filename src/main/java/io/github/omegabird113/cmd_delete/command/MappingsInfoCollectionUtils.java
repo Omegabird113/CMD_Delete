@@ -35,7 +35,7 @@ public final class MappingsInfoCollectionUtils {
             keyCombinationsString = " with " + custom.getRegistry().getSize() + " key combinations registered";
         } else if (navMappings instanceof MacNavMappings || navMappings instanceof WindowsLinuxNavMappings) {
             String[] systemStrings = Arrays.stream(navMappings.getMappingsSupportedSystems())
-                    .map(Os::toString)
+                    .map(Os::name)
                     .toArray(String[]::new);
 
             namespacedId = "builtin:" + String.join("_", systemStrings).toLowerCase(Locale.ROOT);
