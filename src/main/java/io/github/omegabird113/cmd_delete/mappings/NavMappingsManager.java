@@ -3,7 +3,6 @@ package io.github.omegabird113.cmd_delete.mappings;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavActionManager;
 import io.github.omegabird113.cmd_delete.config.ActiveMappingsManager;
-import io.github.omegabird113.cmd_delete.config.MappingsState;
 
 import java.util.Locale;
 

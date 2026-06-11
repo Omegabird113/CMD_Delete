@@ -4,6 +4,7 @@ import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.config.load.CustomMappingsJSONManager;
 import io.github.omegabird113.cmd_delete.mappings.CustomNavMappings;
 import io.github.omegabird113.cmd_delete.mappings.INavMappings;
+import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 import net.fabricmc.loader.api.FabricLoader;
 
