@@ -65,7 +65,7 @@ public class NavMappingsManager {
         activeMappingsManager.trySaveMappings(
                 activeMappingsManager.resolveNamespacedId(currentMappingsState)
         );
-        loadMappings();
+        logMappings();
     }
 
     public static Os getOs() {
