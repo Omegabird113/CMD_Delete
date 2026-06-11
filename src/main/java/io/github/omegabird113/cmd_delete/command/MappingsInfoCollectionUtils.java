@@ -19,52 +19,48 @@ public final class MappingsInfoCollectionUtils {
     public static String getInfoFrom(MappingsState mappingsState, boolean includeDescription) {
         float coverage = NavActionManager.getCoverage(mappingsState.mappings());
 
-        String namespacedId;
-        String displayName;
-        String description;
-        String version;
-        String author;
+        String namespacedId = "";
+        String displayName = "";
+        String description = "";
+        String version = "";
+        String author = "";
 
         String keyCombinationsString = "";
 
-        if (mappingsState.type() == MappingsState.Type.CUSTOM) {
-            CustomNavMappings custom = (CustomNavMappings) mappingsState.mappings();
+        switch (mappingsState.type()) {
+            case CUSTOM -> {
+                CustomNavMappings custom = (CustomNavMappings) mappingsState.mappings();
 
-            namespacedId = "custom:" + custom.getRegistry().getFilename();
-            displayName = "\"" + custom.getRegistry().getName() + "\"";
-            description = custom.getRegistry().getDescription();
-            version = custom.getRegistry().getVersion();
-            author = custom.getRegistry().getAuthor();
+                namespacedId = "custom:" + custom.getRegistry().getFilename();
+                displayName = "\"" + custom.getRegistry().getName() + "\"";
+                description = custom.getRegistry().getDescription();
+                version = custom.getRegistry().getVersion();
+                author = custom.getRegistry().getAuthor();
 
-            keyCombinationsString = " with " + custom.getRegistry().getSize() + " key combinations registered";
-        } else if (mappingsState.type() == MappingsState.Type.BUILTIN) {
-            String[] systemStrings = Arrays.stream(mappingsState.mappings().getMappingsSupportedSystems())
-                    .map(Os::name)
-                    .toArray(String[]::new);
+                keyCombinationsString = " with " + custom.getRegistry().getSize() + " key combinations registered";
+            }
+            case BUILTIN -> {
+                String[] systemStrings = Arrays.stream(mappingsState.mappings().getMappingsSupportedSystems())
+                        .map(Os::name)
+                        .toArray(String[]::new);
 
-            namespacedId = "builtin:" + String.join("_", systemStrings).toLowerCase(Locale.ROOT);
-            displayName = String.join(" and ", systemStrings) + " mappings";
-            description = "Hard-coded mappings for the specified operating system(s).";
-            version = CmdDeleteClient.VERSION;
-            author = "Omegabird113";
-        } else if (mappingsState.type() == MappingsState.Type.DEFAULT) {
-            String[] systemStrings = Arrays.stream(mappingsState.mappings().getMappingsSupportedSystems())
-                    .map(Os::name)
-                    .toArray(String[]::new);
+                namespacedId = "builtin:" + String.join("_", systemStrings).toLowerCase(Locale.ROOT);
+                displayName = String.join(" and ", systemStrings) + " mappings";
+                description = "Hard-coded mappings for the specified operating system(s).";
+                version = CmdDeleteClient.VERSION;
+                author = "Omegabird113";
+            }
+            case DEFAULT -> {
+                String[] systemStrings = Arrays.stream(mappingsState.mappings().getMappingsSupportedSystems())
+                        .map(Os::name)
+                        .toArray(String[]::new);
 
-            namespacedId = "\"\"";
-            displayName = "Default Mappings (resolved to " + String.join(" and ", systemStrings) + ")";
-            description = "The default behaviour to set the mappings to the hard-coded mappings for the OS you're currently using.";
-            version = CmdDeleteClient.VERSION;
-            author = "Omegabird113";
-        } else {
-            CmdDeleteClient.LOGGER.error("Unknown mappings object type provided to MappingsInfoCollectionUtils.getInfoFrom(): {}", mappingsState);
-
-            namespacedId = "unknown";
-            displayName = "unknown";
-            description = "unknown";
-            version = "<unknown>";
-            author = "unknown";
+                namespacedId = "\"\"";
+                displayName = "Default Mappings (Resolved to " + String.join(" and ", systemStrings) + ")";
+                description = "The default behaviour to set the mappings to the hard-coded mappings for the OS you're currently using.";
+                version = CmdDeleteClient.VERSION;
+                author = "Omegabird113";
+            }
         }
 
         String baseString = displayName + " (id: " + namespacedId + ") v" + version + " by " + author;
