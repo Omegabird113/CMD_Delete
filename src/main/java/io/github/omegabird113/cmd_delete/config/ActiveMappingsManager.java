@@ -4,6 +4,7 @@ import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.config.load.CustomMappingsJSONManager;
 import io.github.omegabird113.cmd_delete.mappings.CustomNavMappings;
 import io.github.omegabird113.cmd_delete.mappings.INavMappings;
+import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -43,7 +44,7 @@ public class ActiveMappingsManager {
         if (!CustomMappingsJSONManager.tryLoadCustomMappings(id, CUSTOM)) {
             return null;
         }
-        return new MappingsState(CUSTOM, Type.custom, id);
+        return new MappingsState(CUSTOM, MappingsState.Type.CUSTOM, id);
     }
 
     INavMappings resolveOsMappings(String os) {
@@ -53,20 +54,20 @@ public class ActiveMappingsManager {
         return WINDOWS_LINUX;
     }
 
-    public String resolveNamespacedId(Type type, String id) {
+    public String resolveNamespacedId(MappingsState.Type type, String id) {
         String prefixText = switch (type) {
-            case custom -> "custom:";
-            case builtin -> "builtin:";
-            case defaultMappings -> "";
+            case CUSTOM -> "custom:";
+            case BUILTIN -> "builtin:";
+            case DEFAULT -> "";
         };
         return prefixText + id;
     }
 
-    public String resolveNamespacedId(Type type, Os os) {
+    public String resolveNamespacedId(MappingsState.Type type, Os os) {
         String prefixText = switch (type) {
-            case custom -> "custom:";
-            case builtin -> "builtin:";
-            case defaultMappings -> "";
+            case CUSTOM -> "custom:";
+            case BUILTIN -> "builtin:";
+            case DEFAULT -> "";
         };
         String osText = switch (os) {
             case WINDOWS, LINUX -> "windows_linux";
@@ -76,18 +77,18 @@ public class ActiveMappingsManager {
     }
 
     public String resolveNamespacedId(MappingsState mappingState) {
-        Type type = mappingState.type();
+        MappingsState.Type type = mappingState.type();
         String id = mappingState.id();
         return resolveNamespacedId(type, id);
     }
 
-    public Type resolveType(String namespacedId) {
+    public MappingsState.Type resolveType(String namespacedId) {
         if (namespacedId.startsWith("custom:")) {
-            return Type.custom;
+            return MappingsState.Type.CUSTOM;
         } else if (namespacedId.startsWith("builtin:")) {
-            return Type.builtin;
+            return MappingsState.Type.BUILTIN;
         } else {
-            return Type.defaultMappings;
+            return MappingsState.Type.DEFAULT;
         }
     }
 
@@ -97,10 +98,10 @@ public class ActiveMappingsManager {
 
     public MappingsState resolveMappings(String namespacedId) {
         String id = removeNamespaceFromId(namespacedId);
-        Type type = resolveType(namespacedId);
+        MappingsState.Type type = resolveType(namespacedId);
         INavMappings mappings = switch (type) {
-            case Type.custom -> tryResolveCustomMappingsElseDefault(id);
-            case Type.builtin -> resolveOsMappings(id);
+            case MappingsState.Type.CUSTOM -> tryResolveCustomMappingsElseDefault(id);
+            case MappingsState.Type.BUILTIN -> resolveOsMappings(id);
             default -> resolveDefaultMappings();
         };
         return new MappingsState(mappings, type, id);
@@ -132,9 +133,4 @@ public class ActiveMappingsManager {
             CmdDeleteClient.LOGGER.error("Error while saving active mappings to file: {}", e.getMessage());
         }
     }
-
-    public enum Type {
-        custom, builtin, defaultMappings
-    }
-
 }

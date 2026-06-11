@@ -3,7 +3,6 @@ package io.github.omegabird113.cmd_delete.mappings;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavActionManager;
 import io.github.omegabird113.cmd_delete.config.ActiveMappingsManager;
-import io.github.omegabird113.cmd_delete.config.MappingsState;
 
 import java.util.Locale;
 
@@ -50,7 +49,7 @@ public class NavMappingsManager {
 
     public static void updateMappingsToBuiltIn(Os os) {
         currentMappingsState = activeMappingsManager.resolveMappings(
-                activeMappingsManager.resolveNamespacedId(ActiveMappingsManager.Type.builtin, os)
+                activeMappingsManager.resolveNamespacedId(MappingsState.Type.BUILTIN, os)
         );
         activeMappingsManager.trySaveMappings(
                 activeMappingsManager.resolveNamespacedId(currentMappingsState)
@@ -60,7 +59,7 @@ public class NavMappingsManager {
 
     public static void updateMappingsToDefault() {
         currentMappingsState = activeMappingsManager.resolveMappings(
-                activeMappingsManager.resolveNamespacedId(ActiveMappingsManager.Type.defaultMappings, "")
+                activeMappingsManager.resolveNamespacedId(MappingsState.Type.DEFAULT, "")
         );
         activeMappingsManager.trySaveMappings(
                 activeMappingsManager.resolveNamespacedId(currentMappingsState)
@@ -78,7 +77,7 @@ public class NavMappingsManager {
         }
     }
 
-    public static ActiveMappingsManager.Type getActiveMappingsType() {
-        return currentMappingsState.type();
+    public static MappingsState getMappingsState() {
+        return currentMappingsState;
     }
 }
