@@ -3,7 +3,6 @@ package io.github.omegabird113.cmd_delete.mappings;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavActionManager;
 import io.github.omegabird113.cmd_delete.config.ActiveMappingsManager;
-import io.github.omegabird113.cmd_delete.config.MappingsState;
 
 import java.util.Locale;
 
@@ -23,7 +22,7 @@ public class NavMappingsManager {
     }
 
     private static void logMappings() {
-        CmdDeleteClient.LOGGER.info("Mappings \"{}\" loaded with supported systems: ", activeMappingsManager.resolveNamespacedId(currentMappingsState));
+        CmdDeleteClient.LOGGER.info("Mappings \"{}\" loaded with supported systems: {}", activeMappingsManager.resolveNamespacedId(currentMappingsState), currentMappingsState.mappings().getMappingsSupportedSystems());
         CmdDeleteClient.LOGGER.info("The loaded mappings have {}% coverage with supported actions: {}", NavActionManager.getCoverage(getCurrentMappings()) * 100, getCurrentMappings().getPossibleActions());
     }
 
@@ -50,7 +49,7 @@ public class NavMappingsManager {
 
     public static void updateMappingsToBuiltIn(Os os) {
         currentMappingsState = activeMappingsManager.resolveMappings(
-                activeMappingsManager.resolveNamespacedId(ActiveMappingsManager.Type.builtin, os)
+                activeMappingsManager.resolveNamespacedId(MappingsState.Type.BUILTIN, os)
         );
         activeMappingsManager.trySaveMappings(
                 activeMappingsManager.resolveNamespacedId(currentMappingsState)
@@ -60,25 +59,26 @@ public class NavMappingsManager {
 
     public static void updateMappingsToDefault() {
         currentMappingsState = activeMappingsManager.resolveMappings(
-                activeMappingsManager.resolveNamespacedId(ActiveMappingsManager.Type.defaultMappings, "")
+                activeMappingsManager.resolveNamespacedId(MappingsState.Type.DEFAULT, "")
         );
         activeMappingsManager.trySaveMappings(
                 activeMappingsManager.resolveNamespacedId(currentMappingsState)
         );
-        loadMappings();
+        logMappings();
     }
 
     public static Os getOs() {
-        if (System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("mac")) {
+        String os = System.getProperty("os.name").toLowerCase(Locale.ROOT);
+        if (os.contains("mac")) {
             return Os.MAC;
-        } else if (System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("win")) {
+        } else if (os.contains("win")) {
             return Os.WINDOWS;
         } else {
             return Os.LINUX;
         }
     }
 
-    public static ActiveMappingsManager.Type getActiveMappingsType() {
-        return currentMappingsState.type();
+    public static MappingsState getMappingsState() {
+        return currentMappingsState;
     }
 }
