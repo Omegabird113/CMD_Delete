@@ -91,7 +91,7 @@ jobs:
             exit 1
           fi
 
-      - name: Publish to Modrinth & CurseForge
+      - name: Publish to Modrinth, CurseForge, & GitHub
         uses: Kir-Antipov/mc-publish@v3
         with:
           modrinth-id: xrOWVab9
@@ -109,5 +109,5 @@ jobs:
           changelog-file: changelog_body.md
           java: 25
           game-versions: |
-            >=26.1 <=26.1.2
+            >1.21.11 <=26.2
           loaders: fabric
