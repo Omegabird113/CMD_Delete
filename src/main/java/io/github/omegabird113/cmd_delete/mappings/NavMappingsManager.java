@@ -68,9 +68,10 @@ public class NavMappingsManager {
     }
 
     public static Os getOs() {
-        if (System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("mac")) {
+        String os = System.getProperty("os.name").toLowerCase(Locale.ROOT);
+        if (os.contains("mac")) {
             return Os.MAC;
-        } else if (System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("win")) {
+        } else if (os.contains("win")) {
             return Os.WINDOWS;
         } else {
             return Os.LINUX;
