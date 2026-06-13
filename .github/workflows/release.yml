@@ -107,7 +107,7 @@ jobs:
           version: ${{ steps.props.outputs.version }}
           version-type: ${{ inputs.release_type }}
           changelog-file: changelog_body.md
-          java: 25
+          java: 21
           game-versions: |
-            >1.21.11 <=26.2
+            >=1.21.11 <26.1
           loaders: fabric
