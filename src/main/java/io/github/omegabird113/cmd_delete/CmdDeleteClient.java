@@ -7,7 +7,6 @@ import net.fabricmc.loader.api.FabricLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 public class CmdDeleteClient implements ClientModInitializer {
     public static final String MODID = "cmd_delete";
     public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
