@@ -8,6 +8,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.font.TextFieldHelper;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractSignEditScreen;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Final;
@@ -135,7 +136,7 @@ public abstract class SignEditScreenMixin {
             int x2 = this.cmd_delete$getTextAtX(message, end);
             int y = workingLine * textLineHeight - yOffset;
 
-            guiGraphics.textHighlight(Math.min(x1, x2), y, Math.max(x1, x2), y + textLineHeight);
+            guiGraphics.fill(RenderPipelines.GUI_TEXT_HIGHLIGHT, Math.min(x1, x2), y, Math.max(x1, x2), y + textLineHeight, -16776961);
         }
     }
 
