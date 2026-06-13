@@ -4,13 +4,12 @@ import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.actions.NavActionManager;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.font.TextFieldHelper;
 import net.minecraft.client.gui.screens.inventory.AbstractSignEditScreen;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
-import org.joml.Vector2f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -110,8 +109,8 @@ public abstract class SignEditScreenMixin {
     }
 
     // Draw selected lines other than the cursor's line
-    @Inject(method = "extractSignText", at = @At("TAIL"))
-    private void cmd_delete$extractMultilineSelection(GuiGraphicsExtractor graphics, Vector2f cursorPosOutput, CallbackInfo ci) {
+    @Inject(method = "renderSignText", at = @At("TAIL"))
+    private void cmd_delete$renderMultilineSelection(GuiGraphics guiGraphics, CallbackInfo ci) {
         if (this.cmd_delete$hasNoMultilineSelection()) {
             return;
         }
@@ -131,7 +130,7 @@ public abstract class SignEditScreenMixin {
             int x2 = this.cmd_delete$getTextAtX(message, end);
             int y = workingLine * textLineHeight - yOffset;
 
-            graphics.textHighlight(Math.min(x1, x2), y, Math.max(x1, x2), y + textLineHeight, true);
+            guiGraphics.textHighlight(Math.min(x1, x2), y, Math.max(x1, x2), y + textLineHeight, true);
         }
     }
 
