@@ -130,7 +130,7 @@ public abstract class SignEditScreenMixin {
             int x2 = this.cmd_delete$getTextAtX(message, end);
             int y = workingLine * textLineHeight - yOffset;
 
-            guiGraphics.textHighlight(Math.min(x1, x2), y, Math.max(x1, x2), y + textLineHeight, true);
+            guiGraphics.textHighlight(Math.min(x1, x2), y, Math.max(x1, x2), y + textLineHeight);
         }
     }
 
