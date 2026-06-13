@@ -102,7 +102,7 @@ public class ActiveMappingsManager {
         INavMappings mappings = switch (type) {
             case MappingsState.Type.CUSTOM -> tryResolveCustomMappingsElseDefault(id);
             case MappingsState.Type.BUILTIN -> resolveOsMappings(id);
-            default -> resolveDefaultMappings();
+            case MappingsState.Type.DEFAULT -> resolveDefaultMappings();
         };
         return new MappingsState(mappings, type, id);
     }
