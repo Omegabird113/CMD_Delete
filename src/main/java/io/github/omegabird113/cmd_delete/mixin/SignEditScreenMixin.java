@@ -6,10 +6,10 @@ import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.font.TextFieldHelper;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractSignEditScreen;
-import net.minecraft.client.input.CharacterEvent;
-import net.minecraft.client.input.KeyEvent;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
+import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -48,18 +48,23 @@ public abstract class SignEditScreenMixin {
     private int cmd_delete$selectionEndPos;
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
-    private void cmd_delete$overrideSignEditNavigation(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
-        NavAction action = NavMappingsManager.getCurrentMappings().getAction(event, Minecraft.getInstance().getWindow());
-        boolean shift = event.hasShiftDown();
+    private void cmd_delete$overrideSignEditNavigation(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+        NavAction action = NavMappingsManager.getCurrentMappings().getAction(keyCode, Minecraft.getInstance().getWindow());
+
+        boolean shift = Screen.hasShiftDown();
+
+        boolean left = keyCode == GLFW.GLFW_KEY_LEFT;
+        boolean right = keyCode == GLFW.GLFW_KEY_RIGHT;
+        boolean up = keyCode == GLFW.GLFW_KEY_UP;
+        boolean down = keyCode == GLFW.GLFW_KEY_DOWN;
 
         // Reset selection if player moves w/o shift
-        if (!shift && (event.isUp() || event.isDown() || event.isLeft() || event.isRight() || NavActionManager.isMoveAction(action))) {
+        if (!shift && (up || down || left || right || NavActionManager.isMoveAction(action))) {
             this.cmd_delete$clearMultilineSelection();
         }
 
-        if (action == NavAction.NONE && !shift && (event.isLeft() || event.isRight())) {
-            // If line changed, we handled it, else continue
-            int sideDirection = event.isLeft() ? NavActionManager.DIRECTION_LEFT : NavActionManager.DIRECTION_RIGHT;
+        if (action == NavAction.NONE && !shift && (left || right)) {
+            int sideDirection = left ? NavActionManager.DIRECTION_LEFT : NavActionManager.DIRECTION_RIGHT;
             if (this.cmd_delete$tryMoveToNextLineByCharacter(sideDirection)) {
                 cir.setReturnValue(true);
                 return;
@@ -103,7 +108,7 @@ public abstract class SignEditScreenMixin {
 
     // Resets local selection after typing because typing changes it
     @Inject(method = "charTyped", at = @At("HEAD"))
-    private void cmd_delete$onCharTyped(CharacterEvent event, CallbackInfoReturnable<Boolean> cir) {
+    private void cmd_delete$onCharTyped(char c, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         this.cmd_delete$selectionStartLine = -1;
         this.cmd_delete$selectionEndLine = -1;
     }

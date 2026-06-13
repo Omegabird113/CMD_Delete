@@ -6,7 +6,6 @@ import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.MultilineTextField;
 import net.minecraft.client.gui.components.Whence;
-import net.minecraft.client.input.KeyEvent;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -45,8 +44,8 @@ public abstract class MultilineTextFieldMixin {
     public abstract void seekCursorLine(int lineOffset);
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
-    private void cmd_delete$overrideMultilineNavigation(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
-        NavAction action = NavMappingsManager.getCurrentMappings().getAction(event, Minecraft.getInstance().getWindow());
+    private void cmd_delete$overrideMultilineNavigation(int keyCode, CallbackInfoReturnable<Boolean> cir) {
+        NavAction action = NavMappingsManager.getCurrentMappings().getAction(keyCode, Minecraft.getInstance().getWindow());
         int direction = NavActionManager.getDirection(action);
 
         switch (action) {
