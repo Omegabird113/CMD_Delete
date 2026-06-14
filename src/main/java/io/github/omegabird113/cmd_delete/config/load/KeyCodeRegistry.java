@@ -1,11 +1,11 @@
-package io.github.omegabird113.cmd_delete.config.registry;
+package io.github.omegabird113.cmd_delete.config.load;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-public class KeyCodeRegistry {
+class KeyCodeRegistry {
     private static final Map<String, Integer> keyMap = create();
 
     public static Map<String, Integer> getKeyMap() {
