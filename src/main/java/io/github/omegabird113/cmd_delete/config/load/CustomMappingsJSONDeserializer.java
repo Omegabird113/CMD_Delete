@@ -12,6 +12,9 @@ import java.lang.reflect.Type;
 import java.util.*;
 
 public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMappingsRegistry> {
+    private static final Map<String, Os> osMap = createOsNameMap();
+    private static final Map<String, NavAction> navActionMap = createNavActionNameMap();
+
     @Override
     public CustomMappingsRegistry deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         if (!json.isJsonObject())
@@ -27,12 +30,11 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
 
         JsonObject actions = requireObject(jsonObject, "actions");
 
-        Map<String, NavAction> actionMap = getNavActionNameMap();
         Map<String, Integer> keyMap = KeyCodeRegistry.getKeyMap();
         Set<CustomMappingsRegistryKey> registeredKeys = new HashSet<>();
 
         for (String actionName : actions.keySet()) {
-            NavAction action = actionMap.get(actionName.trim().toUpperCase(Locale.ROOT));
+            NavAction action = navActionMap.get(actionName.trim().toUpperCase(Locale.ROOT));
             if (action == null || action == NavAction.NONE)
                 continue;
 
@@ -85,14 +87,14 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
         return registry;
     }
 
-    private Map<String, NavAction> getNavActionNameMap() {
+    private static Map<String, NavAction> createNavActionNameMap() {
         Map<String, NavAction> map = new HashMap<>();
         for (NavAction action : NavAction.values())
             map.put(action.name(), action);
         return map;
     }
 
-    private Map<String, Os> getOsNameMap() {
+    private static Map<String, Os> createOsNameMap() {
         Map<String, Os> osMap = new HashMap<>();
         osMap.put("windows", Os.WINDOWS);
         osMap.put("mac", Os.MAC);
@@ -145,7 +147,6 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
     }
 
     private Set<Os> parseSystems(JsonArray systemsArray) {
-        Map<String, Os> osMap = getOsNameMap();
         Set<Os> systems = new HashSet<>();
 
         for (JsonElement systemElement : systemsArray) {
