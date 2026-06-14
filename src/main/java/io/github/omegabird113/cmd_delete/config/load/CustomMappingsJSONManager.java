@@ -55,12 +55,41 @@ public class CustomMappingsJSONManager {
         }
     }
 
+    public static void tryMakeConfigFiles() {
+        File configDirectory = configPath.toFile();
+        if (!configDirectory.exists() || !configDirectory.isDirectory()) {
+            boolean s = configDirectory.mkdirs();
+            if (!s) {
+                CmdDeleteClient.LOGGER.error("Could not create mappings config directory at: {}", configDirectory);
+            }
+            else
+                CmdDeleteClient.LOGGER.info("Created mappings config directory at: {}", configDirectory.getAbsolutePath());
+        }
+
+        File activeMappingsFile = gamePath.resolve("config/cmd_delete/.active_mappings").toFile();
+        if (!activeMappingsFile.exists() || !activeMappingsFile.isFile()) {
+            try {
+                Files.createDirectories(activeMappingsFile.toPath().getParent());
+                boolean s = activeMappingsFile.createNewFile();
+                if (!s) {
+                    CmdDeleteClient.LOGGER.error("Could not create active mappings file at: {}", activeMappingsFile.getAbsolutePath());
+                }
+                else
+                    CmdDeleteClient.LOGGER.info("Created active mappings file at: {}", activeMappingsFile.getAbsolutePath());
+            } catch (IOException e) {
+                CmdDeleteClient.LOGGER.error("Could not create active mappings file at: {}", activeMappingsFile.getAbsolutePath(), e);
+            }
+        }
+    }
+
     public static ArrayList<String> getAvailableOptions() {
         ArrayList<String> options = new ArrayList<>();
 
         File configDirectory = configPath.toFile();
-        if (!configDirectory.exists() || !configDirectory.isDirectory())
+        if (!configDirectory.exists() || !configDirectory.isDirectory()) {
+            tryMakeConfigFiles();
             return options;
+        }
 
         File[] files = configDirectory.listFiles();
         if (files == null)
