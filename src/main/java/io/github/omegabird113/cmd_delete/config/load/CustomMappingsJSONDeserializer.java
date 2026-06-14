@@ -212,7 +212,13 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
         JsonElement element = parent.get(fieldName);
         if (!element.isJsonPrimitive() || !element.getAsJsonPrimitive().isNumber())
             throw new JsonParseException("Expected \"" + fieldName + "\" to be a number");
-
-        return element.getAsInt();
+        else {
+            double d = element.getAsDouble();
+            int i = element.getAsInt();
+            if (d != (double) i)
+                throw new JsonParseException("Expected \"" + fieldName + "\" to be a an integer.");
+            else
+                return i;
+        }
     }
 }
