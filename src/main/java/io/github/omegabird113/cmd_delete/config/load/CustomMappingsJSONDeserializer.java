@@ -5,7 +5,6 @@ import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.registry.CustomMappingsRegistry;
 import io.github.omegabird113.cmd_delete.config.registry.CustomMappingsRegistryKey;
-import io.github.omegabird113.cmd_delete.config.registry.KeyCodeRegistry;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 
 import java.lang.reflect.Type;
