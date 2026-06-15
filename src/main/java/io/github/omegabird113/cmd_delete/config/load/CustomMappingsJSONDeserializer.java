@@ -35,6 +35,7 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
         for (String actionName : actions.keySet()) {
             NavAction action = navActionMap.get(actionName.trim().toUpperCase(Locale.ROOT));
             if (action == null || action == NavAction.NONE)
+                CmdDeleteClient.LOGGER.warn("Unkown action specified by custom mappings: \"{}\". All key combinations registered under this action will be skipped...", action);
                 continue;
 
             JsonArray bindings = requireArray(actions, actionName);
