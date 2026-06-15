@@ -73,11 +73,10 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
                 );
 
                 for (CustomMappingsRegistryKey key : keys) {
-                    if (registeredKeys.contains(key)) {
-                        CmdDeleteClient.LOGGER.warn("Duplicate key binding in custom action \"{}\": {}", actionName, keyName);
+                    if (!registeredKeys.add(key)) {
+                        CmdDeleteClient.LOGGER.warn("Duplicate key binding in custom binding with action of \"{}\" and key of \"{}\" (exactly \"{}\"). 2nd registration skipped...", actionName, keyName, key);
                         continue;
                     }
-                    registeredKeys.add(key);
                     registry.put(key, action);
                 }
             }
