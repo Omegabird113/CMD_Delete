@@ -57,8 +57,10 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
                 String keyName = requireString(binding, "key").trim().toLowerCase(Locale.ROOT);
 
                 Integer keyCode = keyMap.get(keyName);
-                if (keyCode == null)
-                    throw new JsonParseException("Unknown key name \"" + keyName + "\" in action \"" + actionName + "\"");
+                if (keyCode == null) {
+                    CmdDeleteClient.LOGGER.warn("Unknown key name \"{}\" in action \"{}\". This kep skipped...", keyName, actionName);
+                    continue;
+                }
 
                 boolean hasShift = binding.has("shift");
                 boolean shiftValue = getOptionalBoolean(binding, "shift");
