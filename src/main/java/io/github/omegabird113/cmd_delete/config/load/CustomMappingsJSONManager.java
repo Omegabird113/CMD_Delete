@@ -6,7 +6,6 @@ import com.google.gson.JsonParseException;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.config.registry.CustomMappingsRegistry;
 import io.github.omegabird113.cmd_delete.mappings.CustomNavMappings;
-import io.github.omegabird113.cmd_delete.mappings.INavMappings;
 import net.fabricmc.loader.api.FabricLoader;
 import org.apache.commons.io.FilenameUtils;
 
@@ -16,6 +15,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CustomMappingsJSONManager {
     private static final Path gamePath = FabricLoader.getInstance().getGameDir();
@@ -72,8 +72,8 @@ public class CustomMappingsJSONManager {
         }
     }
 
-    public static ArrayList<String> getAvailableOptions() {
-        ArrayList<String> options = new ArrayList<>();
+    public static List<String> getAvailableOptions() {
+        List<String> options = new ArrayList<>();
 
         File configDirectory = configPath.toFile();
         if (!configDirectory.exists() || !configDirectory.isDirectory()) {

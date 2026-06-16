@@ -9,10 +9,17 @@ import io.github.omegabird113.cmd_delete.mappings.Os;
 
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMappingsRegistry> {
-    private static final Map<String, Os> osMap = createOsNameMap();
-    private static final Map<String, NavAction> navActionMap = createNavActionNameMap();
+    private static final Map<String, Os> osMap = Map.of(
+            "windows", Os.WINDOWS,
+            "mac", Os.MAC,
+            "linux", Os.LINUX
+    );
+    private static final Map<String, NavAction> navActionMap = Arrays.stream(NavAction.values())
+            .collect(Collectors.toUnmodifiableMap(NavAction::name, Function.identity()));
 
     @Override
     public CustomMappingsRegistry deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
@@ -43,8 +50,7 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
 
             for (JsonElement bindingElement : bindings) {
                 if (!bindingElement.isJsonObject())
-                    throw new JsonParseException(
-                            "Expected each binding for action \"" + actionName + "\" to be an object");
+                    throw new JsonParseException("Expected each binding for action \"" + actionName + "\" to be an object");
 
                 JsonObject binding = bindingElement.getAsJsonObject();
 
@@ -85,21 +91,6 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
         }
 
         return registry;
-    }
-
-    private static Map<String, NavAction> createNavActionNameMap() {
-        Map<String, NavAction> map = new HashMap<>();
-        for (NavAction action : NavAction.values())
-            map.put(action.name(), action);
-        return map;
-    }
-
-    private static Map<String, Os> createOsNameMap() {
-        Map<String, Os> osMap = new HashMap<>();
-        osMap.put("windows", Os.WINDOWS);
-        osMap.put("mac", Os.MAC);
-        osMap.put("linux", Os.LINUX);
-        return osMap;
     }
 
     private void parseMeta(JsonObject meta, CustomMappingsRegistry registry) {
