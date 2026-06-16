@@ -36,10 +36,6 @@ public class ActiveMappingsManager {
         return WINDOWS_LINUX;
     }
 
-    INavMappings tryResolveCustomMappingsElseDefault(String id) {
-        return CustomMappingsJSONManager.tryLoadCustomMappingsElse(id, CUSTOM, resolveDefaultMappings());
-    }
-
     public MappingsState tryResolveCustomMappings(String id) {
         if (!CustomMappingsJSONManager.tryLoadCustomMappings(id, CUSTOM)) {
             return null;
@@ -99,12 +95,14 @@ public class ActiveMappingsManager {
     public MappingsState resolveMappings(String namespacedId) {
         String id = removeNamespaceFromId(namespacedId);
         MappingsState.Type type = resolveType(namespacedId);
-        INavMappings mappings = switch (type) {
-            case MappingsState.Type.CUSTOM -> tryResolveCustomMappingsElseDefault(id);
-            case MappingsState.Type.BUILTIN -> resolveOsMappings(id);
-            case MappingsState.Type.DEFAULT -> resolveDefaultMappings();
+        MappingsState mappingsState = switch (type) {
+            case MappingsState.Type.CUSTOM -> tryResolveCustomMappings(id);
+            case MappingsState.Type.BUILTIN -> new MappingsState(resolveOsMappings(id), type, id);
+            case MappingsState.Type.DEFAULT -> new MappingsState(resolveDefaultMappings(), type, id);
         };
-        return new MappingsState(mappings, type, id);
+        if (mappingsState == null)
+            return new MappingsState(resolveDefaultMappings(), MappingsState.Type.DEFAULT, "");
+        return mappingsState;
     }
 
     void writeActiveMappings(String namespacedId) throws IOException {

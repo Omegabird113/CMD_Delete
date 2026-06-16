@@ -22,7 +22,7 @@ public class NavMappingsManager {
     }
 
     private static void logMappings() {
-        CmdDeleteClient.LOGGER.info("Mappings \"{}\" loaded with supported systems: {}", activeMappingsManager.resolveNamespacedId(currentMappingsState), currentMappingsState.mappings().getMappingsSupportedSystems());
+        CmdDeleteClient.LOGGER.info("Mappings id \"{}\" ({}) loaded with supported systems: {}", activeMappingsManager.resolveNamespacedId(currentMappingsState), currentMappingsState.mappings().getClass(), currentMappingsState.mappings().getMappingsSupportedSystems());
         CmdDeleteClient.LOGGER.info("The loaded mappings have {}% coverage with supported actions: {}", NavActionManager.getCoverage(getCurrentMappings()) * 100, getCurrentMappings().getPossibleActions());
     }
 

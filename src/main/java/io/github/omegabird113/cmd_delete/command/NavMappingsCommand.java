@@ -31,7 +31,7 @@ public class NavMappingsCommand {
 
     public static void register() {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, context) -> register(dispatcher));
-        CmdDeleteClient.LOGGER.info("Registered client \"/navmappings\" command");
+        CmdDeleteClient.LOGGER.info("Registered client \"/navmappings\" command through Fabric API");
     }
 
     private static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
