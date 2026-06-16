@@ -206,12 +206,12 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
         if (!element.isJsonPrimitive() || !element.getAsJsonPrimitive().isNumber())
             throw new JsonParseException("Expected \"" + fieldName + "\" to be a number");
         else {
-            double d = element.getAsDouble();
-            int i = element.getAsInt();
-            if (d != (double) i)
-                throw new JsonParseException("Expected \"" + fieldName + "\" to be a an integer.");
-            else
-                return i;
+            String s = element.getAsString();
+            try {
+                return Integer.parseInt(s);
+            } catch (NumberFormatException e) {
+                throw new JsonParseException("Expected \"" + fieldName + "\" to be an integer");
+            }
         }
     }
 }
