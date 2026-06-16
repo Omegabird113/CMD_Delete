@@ -58,7 +58,7 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
 
                 Integer keyCode = keyMap.get(keyName);
                 if (keyCode == null) {
-                    CmdDeleteClient.LOGGER.warn("Unknown key name \"{}\" in action \"{}\". This kep skipped...", keyName, actionName);
+                    CmdDeleteClient.LOGGER.warn("Unknown key name \"{}\" in action \"{}\". This key skipped...", keyName, actionName);
                     continue;
                 }
 
@@ -207,13 +207,12 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
         JsonElement element = parent.get(fieldName);
         if (!element.isJsonPrimitive() || !element.getAsJsonPrimitive().isNumber())
             throw new JsonParseException("Expected \"" + fieldName + "\" to be a number");
-        else {
-            String s = element.getAsString();
-            try {
-                return Integer.parseInt(s);
-            } catch (NumberFormatException e) {
-                throw new JsonParseException("Expected \"" + fieldName + "\" to be an integer");
-            }
+
+        String s = element.getAsString();
+        try {
+            return Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            throw new JsonParseException("Expected \"" + fieldName + "\" to be an integer");
         }
     }
 }
