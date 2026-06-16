@@ -9,10 +9,19 @@ import io.github.omegabird113.cmd_delete.mappings.Os;
 
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import static io.github.omegabird113.cmd_delete.config.load.JsonParsingUtils.*;
 
 public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMappingsRegistry> {
-    private static final Map<String, Os> osMap = createOsNameMap();
-    private static final Map<String, NavAction> navActionMap = createNavActionNameMap();
+    private static final Map<String, Os> osMap = Map.of(
+            "windows", Os.WINDOWS,
+            "mac", Os.MAC,
+            "linux", Os.LINUX
+    );
+    private static final Map<String, NavAction> navActionMap = Arrays.stream(NavAction.values())
+            .collect(Collectors.toUnmodifiableMap(NavAction::name, Function.identity()));
 
     @Override
     public CustomMappingsRegistry deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
@@ -34,23 +43,26 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
 
         for (String actionName : actions.keySet()) {
             NavAction action = navActionMap.get(actionName.trim().toUpperCase(Locale.ROOT));
-            if (action == null || action == NavAction.NONE)
+            if (action == null || action == NavAction.NONE) {
+                CmdDeleteClient.LOGGER.warn("Invalid action specified by custom mappings: \"{}\". All key-combos registered in this action skipped...", actionName);
                 continue;
+            }
 
             JsonArray bindings = requireArray(actions, actionName);
 
             for (JsonElement bindingElement : bindings) {
                 if (!bindingElement.isJsonObject())
-                    throw new JsonParseException(
-                            "Expected each binding for action \"" + actionName + "\" to be an object");
+                    throw new JsonParseException("Expected each binding for action \"" + actionName + "\" to be an object");
 
                 JsonObject binding = bindingElement.getAsJsonObject();
 
                 String keyName = requireString(binding, "key").trim().toLowerCase(Locale.ROOT);
 
                 Integer keyCode = keyMap.get(keyName);
-                if (keyCode == null)
-                    throw new JsonParseException("Unknown key name \"" + keyName + "\" in action \"" + actionName + "\"");
+                if (keyCode == null) {
+                    CmdDeleteClient.LOGGER.warn("Unknown key name \"{}\" in action \"{}\". This key skipped...", keyName, actionName);
+                    continue;
+                }
 
                 boolean hasShift = binding.has("shift");
                 boolean shiftValue = getOptionalBoolean(binding, "shift");
@@ -73,32 +85,16 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
                 );
 
                 for (CustomMappingsRegistryKey key : keys) {
-                    if (registeredKeys.contains(key)) {
-                        CmdDeleteClient.LOGGER.warn("Duplicate key binding in custom action \"{}\": {}", actionName, keyName);
+                    if (!registeredKeys.add(key)) {
+                        CmdDeleteClient.LOGGER.warn("Duplicate key binding in custom binding with action of \"{}\" and key of \"{}\" (exactly \"{}\"). 2nd registration skipped...", actionName, keyName, key);
                         continue;
                     }
-                    registeredKeys.add(key);
                     registry.put(key, action);
                 }
             }
         }
 
         return registry;
-    }
-
-    private static Map<String, NavAction> createNavActionNameMap() {
-        Map<String, NavAction> map = new HashMap<>();
-        for (NavAction action : NavAction.values())
-            map.put(action.name(), action);
-        return map;
-    }
-
-    private static Map<String, Os> createOsNameMap() {
-        Map<String, Os> osMap = new HashMap<>();
-        osMap.put("windows", Os.WINDOWS);
-        osMap.put("mac", Os.MAC);
-        osMap.put("linux", Os.LINUX);
-        return osMap;
     }
 
     private void parseMeta(JsonObject meta, CustomMappingsRegistry registry) {
@@ -117,12 +113,6 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
 
             registry.setSystems(new ArrayList<>(parsedSystems));
         }
-    }
-
-    private String getStringElse(JsonObject parent, String fieldName, String defaultValue) {
-        if (!parent.has(fieldName))
-            return defaultValue;
-        return requireString(parent, fieldName).trim();
     }
 
     private List<CustomMappingsRegistryKey> expandKeyWildcards(int key,
@@ -159,60 +149,5 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
         }
 
         return systems;
-    }
-
-    private JsonObject requireObject(JsonObject parent, String fieldName) {
-        if (!parent.has(fieldName))
-            throw new JsonParseException("Missing required field: " + fieldName);
-
-        JsonElement element = parent.get(fieldName);
-        if (!element.isJsonObject())
-            throw new JsonParseException("Expected \"" + fieldName + "\" to be an object");
-
-        return element.getAsJsonObject();
-    }
-
-    private JsonArray requireArray(JsonObject parent, String fieldName) {
-        if (!parent.has(fieldName))
-            throw new JsonParseException("Missing required field: " + fieldName);
-
-        JsonElement element = parent.get(fieldName);
-        if (!element.isJsonArray())
-            throw new JsonParseException("Expected \"" + fieldName + "\" to be an array");
-
-        return element.getAsJsonArray();
-    }
-
-    private String requireString(JsonObject parent, String fieldName) {
-        if (!parent.has(fieldName))
-            throw new JsonParseException("Missing required field: " + fieldName);
-
-        JsonElement element = parent.get(fieldName);
-        if (!element.isJsonPrimitive() || !element.getAsJsonPrimitive().isString())
-            throw new JsonParseException("Expected \"" + fieldName + "\" to be a string");
-
-        return element.getAsString();
-    }
-
-    private boolean getOptionalBoolean(JsonObject parent, String fieldName) {
-        if (!parent.has(fieldName))
-            return false;
-
-        JsonElement element = parent.get(fieldName);
-        if (!element.isJsonPrimitive() || !element.getAsJsonPrimitive().isBoolean())
-            throw new JsonParseException("Expected \"" + fieldName + "\" to be a boolean");
-
-        return element.getAsBoolean();
-    }
-
-    private int requireInt(JsonObject parent, String fieldName) {
-        if (!parent.has(fieldName))
-            throw new JsonParseException("Missing required field: " + fieldName);
-
-        JsonElement element = parent.get(fieldName);
-        if (!element.isJsonPrimitive() || !element.getAsJsonPrimitive().isNumber())
-            throw new JsonParseException("Expected \"" + fieldName + "\" to be a number");
-
-        return element.getAsInt();
     }
 }
