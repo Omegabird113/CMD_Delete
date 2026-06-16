@@ -1,12 +1,14 @@
 package io.github.omegabird113.cmd_delete.config.load;
 
+import com.google.common.collect.ImmutableMap;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.lwjgl.glfw.GLFW.*;
 
 class KeyCodeRegistry {
-    private static final Map<String, Integer> keyMap = create();
+    private static final Map<String, Integer> keyMap = ImmutableMap.copyOf(create());
 
     public static Map<String, Integer> getKeyMap() {
         return keyMap;
