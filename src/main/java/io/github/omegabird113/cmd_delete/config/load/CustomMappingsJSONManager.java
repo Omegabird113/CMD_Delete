@@ -2,10 +2,10 @@ package io.github.omegabird113.cmd_delete.config.load;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParseException;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.config.registry.CustomMappingsRegistry;
 import io.github.omegabird113.cmd_delete.mappings.CustomNavMappings;
-import io.github.omegabird113.cmd_delete.mappings.INavMappings;
 import net.fabricmc.loader.api.FabricLoader;
 import org.apache.commons.io.FilenameUtils;
 
@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CustomMappingsJSONManager {
     private static final Path gamePath = FabricLoader.getInstance().getGameDir();
@@ -37,19 +38,12 @@ public class CustomMappingsJSONManager {
         }
     }
 
-    public static INavMappings tryLoadCustomMappingsElse(String id, CustomNavMappings customMappings, INavMappings fallback) {
-        if (tryLoadCustomMappings(id, customMappings)) {
-            return customMappings;
-        }
-        return fallback;
-    }
-
     public static boolean tryLoadCustomMappings(String id, CustomNavMappings customMappings) {
         try {
             CustomMappingsRegistry registry = loadFromCustomMappingsDir(id);
             customMappings.setRegistry(registry);
             return true;
-        } catch (IOException e) {
+        } catch (IOException | JsonParseException e) {
             CmdDeleteClient.LOGGER.error("Could not load custom mapping file: {}", id, e);
             return false;
         }
@@ -59,21 +53,17 @@ public class CustomMappingsJSONManager {
         File configDirectory = configPath.toFile();
         if (!configDirectory.exists() || !configDirectory.isDirectory()) {
             boolean s = configDirectory.mkdirs();
-            if (!s) {
+            if (!s)
                 CmdDeleteClient.LOGGER.error("Could not create mappings config directory at: {}", configDirectory);
-            }
             else
                 CmdDeleteClient.LOGGER.info("Created mappings config directory at: {}", configDirectory.getAbsolutePath());
         }
-
         File activeMappingsFile = gamePath.resolve("config/cmd_delete/.active_mappings").toFile();
         if (!activeMappingsFile.exists() || !activeMappingsFile.isFile()) {
             try {
-                Files.createDirectories(activeMappingsFile.toPath().getParent());
                 boolean s = activeMappingsFile.createNewFile();
-                if (!s) {
+                if (!s)
                     CmdDeleteClient.LOGGER.error("Could not create active mappings file at: {}", activeMappingsFile.getAbsolutePath());
-                }
                 else
                     CmdDeleteClient.LOGGER.info("Created active mappings file at: {}", activeMappingsFile.getAbsolutePath());
             } catch (IOException e) {
@@ -82,8 +72,8 @@ public class CustomMappingsJSONManager {
         }
     }
 
-    public static ArrayList<String> getAvailableOptions() {
-        ArrayList<String> options = new ArrayList<>();
+    public static List<String> getAvailableOptions() {
+        List<String> options = new ArrayList<>();
 
         File configDirectory = configPath.toFile();
         if (!configDirectory.exists() || !configDirectory.isDirectory()) {
