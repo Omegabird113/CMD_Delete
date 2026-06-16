@@ -114,7 +114,8 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
     private String getStringElse(JsonObject parent, String fieldName, String defaultValue) {
         if (!parent.has(fieldName))
             return defaultValue;
-        return requireString(parent, fieldName).trim();
+        String value = requireString(parent, fieldName).trim();
+        return value.isEmpty() ? defaultValue : value;
     }
 
     private List<CustomMappingsRegistryKey> expandKeyWildcards(int key,
