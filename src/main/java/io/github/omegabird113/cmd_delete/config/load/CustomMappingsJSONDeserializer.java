@@ -12,6 +12,8 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static io.github.omegabird113.cmd_delete.config.load.JsonParsingUtils.*;
+
 public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMappingsRegistry> {
     private static final Map<String, Os> osMap = Map.of(
             "windows", Os.WINDOWS,
@@ -113,13 +115,6 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
         }
     }
 
-    private String getStringElse(JsonObject parent, String fieldName, String defaultValue) {
-        if (!parent.has(fieldName))
-            return defaultValue;
-        String value = requireString(parent, fieldName).trim();
-        return value.isEmpty() ? defaultValue : value;
-    }
-
     private List<CustomMappingsRegistryKey> expandKeyWildcards(int key,
                                                                boolean hasShift, boolean shiftValue,
                                                                boolean hasAltOption, boolean altOptionValue,
@@ -154,65 +149,5 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
         }
 
         return systems;
-    }
-
-    private JsonObject requireObject(JsonObject parent, String fieldName) {
-        if (!parent.has(fieldName))
-            throw new JsonParseException("Missing required field: " + fieldName);
-
-        JsonElement element = parent.get(fieldName);
-        if (!element.isJsonObject())
-            throw new JsonParseException("Expected \"" + fieldName + "\" to be an object");
-
-        return element.getAsJsonObject();
-    }
-
-    private JsonArray requireArray(JsonObject parent, String fieldName) {
-        if (!parent.has(fieldName))
-            throw new JsonParseException("Missing required field: " + fieldName);
-
-        JsonElement element = parent.get(fieldName);
-        if (!element.isJsonArray())
-            throw new JsonParseException("Expected \"" + fieldName + "\" to be an array");
-
-        return element.getAsJsonArray();
-    }
-
-    private String requireString(JsonObject parent, String fieldName) {
-        if (!parent.has(fieldName))
-            throw new JsonParseException("Missing required field: " + fieldName);
-
-        JsonElement element = parent.get(fieldName);
-        if (!element.isJsonPrimitive() || !element.getAsJsonPrimitive().isString())
-            throw new JsonParseException("Expected \"" + fieldName + "\" to be a string");
-
-        return element.getAsString();
-    }
-
-    private boolean getOptionalBoolean(JsonObject parent, String fieldName) {
-        if (!parent.has(fieldName))
-            return false;
-
-        JsonElement element = parent.get(fieldName);
-        if (!element.isJsonPrimitive() || !element.getAsJsonPrimitive().isBoolean())
-            throw new JsonParseException("Expected \"" + fieldName + "\" to be a boolean");
-
-        return element.getAsBoolean();
-    }
-
-    private int requireInt(JsonObject parent, String fieldName) {
-        if (!parent.has(fieldName))
-            throw new JsonParseException("Missing required field: " + fieldName);
-
-        JsonElement element = parent.get(fieldName);
-        if (!element.isJsonPrimitive() || !element.getAsJsonPrimitive().isNumber())
-            throw new JsonParseException("Expected \"" + fieldName + "\" to be a number");
-
-        String s = element.getAsString();
-        try {
-            return Integer.parseInt(s);
-        } catch (NumberFormatException e) {
-            throw new JsonParseException("Expected \"" + fieldName + "\" to be an integer");
-        }
     }
 }
