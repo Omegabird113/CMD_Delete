@@ -22,7 +22,7 @@ public final class CustomMappingsJSONManager {
 
     private static CustomMappingsRegistry loadFromResourceMappingsDir(String id) throws IOException {
         Optional<ModContainer> mod = FabricLoader.getInstance()
-                .getModContainer("your_mod_id");
+                .getModContainer(CmdDeleteClient.MODID);
 
         Path path = mod.orElseThrow()
                 .findPath("mappings/" + id + ".json")
