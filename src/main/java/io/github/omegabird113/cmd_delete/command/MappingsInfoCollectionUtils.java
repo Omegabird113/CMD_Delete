@@ -1,7 +1,7 @@
 package io.github.omegabird113.cmd_delete.command;
 
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
-import io.github.omegabird113.cmd_delete.actions.NavActionManager;
+import io.github.omegabird113.cmd_delete.actions.NavActionUtils;
 import io.github.omegabird113.cmd_delete.config.load.CustomMappingsJSONManager;
 import io.github.omegabird113.cmd_delete.mappings.CustomNavMappings;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
@@ -17,7 +17,7 @@ public final class MappingsInfoCollectionUtils {
     }
 
     public static String getInfoFrom(MappingsState mappingsState, boolean includeDescription) {
-        float coverage = NavActionManager.getCoverage(mappingsState.mappings());
+        float coverage = NavActionUtils.getCoverage(mappingsState.mappings());
 
         String namespacedId = "";
         String displayName = "";

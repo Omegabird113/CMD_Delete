@@ -1,7 +1,7 @@
 package io.github.omegabird113.cmd_delete.mappings;
 
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
-import io.github.omegabird113.cmd_delete.actions.NavActionManager;
+import io.github.omegabird113.cmd_delete.actions.NavActionUtils;
 import io.github.omegabird113.cmd_delete.config.ActiveMappingsManager;
 
 import java.util.Locale;
@@ -24,7 +24,7 @@ public final class NavMappingsManager {
 
     private static void logMappings() {
         CmdDeleteClient.LOGGER.info("Mappings id \"{}\" ({}) loaded with supported systems: {}", activeMappingsManager.resolveNamespacedId(currentMappingsState), currentMappingsState.mappings().getClass(), currentMappingsState.mappings().getMappingsSupportedSystems());
-        CmdDeleteClient.LOGGER.info("The loaded mappings have {}% coverage with supported actions: {}", NavActionManager.getCoverage(getCurrentMappings()) * 100, getCurrentMappings().getPossibleActions());
+        CmdDeleteClient.LOGGER.info("The loaded mappings have {}% coverage with supported actions: {}", NavActionUtils.getCoverage(getCurrentMappings()) * 100, getCurrentMappings().getPossibleActions());
     }
 
     public static void loadMappings() {
