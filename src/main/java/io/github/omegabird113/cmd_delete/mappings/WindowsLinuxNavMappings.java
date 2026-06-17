@@ -12,6 +12,8 @@ final class WindowsLinuxNavMappings implements INavMappings {
     private static final int END = GLFW.GLFW_KEY_END;
     private static final int BACKSPACE = GLFW.GLFW_KEY_BACKSPACE;
     private static final int DELETE = GLFW.GLFW_KEY_DELETE;
+    private static final int UP = GLFW.GLFW_KEY_UP;
+    private static final int DOWN = GLFW.GLFW_KEY_DOWN;
 
     @Override
     public NavAction getAction(int key, boolean shift, boolean altOption, boolean control, boolean superCommand) {
@@ -35,9 +37,9 @@ final class WindowsLinuxNavMappings implements INavMappings {
         if (control && key == DELETE)
             return DEL_WORD_RIGHT;
 
-        if (shift && key == GLFW.GLFW_KEY_UP)
+        if (shift && key == UP)
             return SEL_TEXT_UP;
-        if (shift && key == GLFW.GLFW_KEY_DOWN)
+        if (shift && key == DOWN)
             return SEL_TEXT_DOWN;
 
         return NONE;
