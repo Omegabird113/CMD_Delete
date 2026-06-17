@@ -3,7 +3,6 @@ package io.github.omegabird113.cmd_delete.command;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavActionUtils;
 import io.github.omegabird113.cmd_delete.config.CustomMappingsJSONManager;
-import io.github.omegabird113.cmd_delete.mappings.CustomNavMappings;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 
@@ -29,15 +28,13 @@ public final class MappingsInfoCollectionUtils {
 
         switch (mappingsState.type()) {
             case CUSTOM -> {
-                CustomNavMappings custom = (CustomNavMappings) mappingsState.mappings();
+                namespacedId = "custom:" + mappingsState.mappings().getRegistry().getId();
+                displayName = "\"" + mappingsState.mappings().getRegistry().getName() + "\"";
+                description = mappingsState.mappings().getRegistry().getDescription();
+                version = mappingsState.mappings().getRegistry().getVersion();
+                author = mappingsState.mappings().getRegistry().getAuthor();
 
-                namespacedId = "custom:" + custom.getRegistry().getId();
-                displayName = "\"" + custom.getRegistry().getName() + "\"";
-                description = custom.getRegistry().getDescription();
-                version = custom.getRegistry().getVersion();
-                author = custom.getRegistry().getAuthor();
-
-                keyCombinationsString = " with " + custom.getRegistry().getSize() + " key combinations registered";
+                keyCombinationsString = " with " + mappingsState.mappings().getRegistry().getSize() + " key combinations registered";
             }
             case BUILTIN -> {
                 String[] systemStrings = Arrays.stream(mappingsState.mappings().getMappingsSupportedSystems())

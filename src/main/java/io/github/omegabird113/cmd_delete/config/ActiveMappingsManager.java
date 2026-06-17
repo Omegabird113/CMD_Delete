@@ -1,46 +1,35 @@
 package io.github.omegabird113.cmd_delete.config;
 
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
-import io.github.omegabird113.cmd_delete.mappings.CustomNavMappings;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
+import io.github.omegabird113.cmd_delete.mappings.NavMappings;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Locale;
 
 public class ActiveMappingsManager {
-    private final INavMappings windowsLinux;
-    private final INavMappings mac;
-    private final CustomNavMappings custom;
+    private final NavMappings navMappings;
 
     private final Os system;
 
-    public ActiveMappingsManager(INavMappings windowsLinux, INavMappings mac, CustomNavMappings custom, Os system) {
-        this.windowsLinux = windowsLinux;
-        this.mac = mac;
-        this.custom = custom;
+    public ActiveMappingsManager(NavMappings navMappings, Os system) {
+        this.navMappings = navMappings;
         this.system = system;
     }
 
-    INavMappings resolveDefaultMappings() {
-        if (system == Os.MAC)
-            return mac;
-        return windowsLinux;
-    }
-
     public MappingsState tryResolveCustomMappings(String id) {
-        if (!CustomMappingsJSONManager.tryLoadCustomMappings(id, custom)) {
+        if (!CustomMappingsJSONManager.tryLoadCustomMappings(id, navMappings)) {
             return null;
         }
-        return new MappingsState(custom, MappingsState.Type.CUSTOM, id);
+        return new MappingsState(navMappings, MappingsState.Type.CUSTOM, id);
     }
 
-    INavMappings resolveOsMappings(String os) {
-        os = os.toLowerCase(Locale.ROOT);
-        if (os.equals("mac"))
-            return mac;
-        return windowsLinux;
+    public MappingsState tryResolveBuiltinMappings(String id, MappingsState.Type type) {
+        if (!CustomMappingsJSONManager.tryLoadBuiltinMappings(id, navMappings)) {
+            return null;
+        }
+        return new MappingsState(navMappings, type, id);
     }
 
     public String resolveNamespacedId(MappingsState.Type type, String id) {
@@ -85,16 +74,23 @@ public class ActiveMappingsManager {
         return namespacedId.replaceFirst("custom:|builtin:", "");
     }
 
+    String resolveDefaultMappingsNonNamespacedId() {
+        if (system == Os.MAC)
+            return "mac";
+        else
+            return "windows_linux";
+    }
+
     public MappingsState resolveMappings(String namespacedId) {
         String id = removeNamespaceFromId(namespacedId);
         MappingsState.Type type = resolveType(namespacedId);
         MappingsState mappingsState = switch (type) {
             case MappingsState.Type.CUSTOM -> tryResolveCustomMappings(id);
-            case MappingsState.Type.BUILTIN -> new MappingsState(resolveOsMappings(id), type, id);
-            case MappingsState.Type.DEFAULT -> new MappingsState(resolveDefaultMappings(), type, id);
+            case MappingsState.Type.BUILTIN -> tryResolveBuiltinMappings(removeNamespaceFromId(id), MappingsState.Type.BUILTIN);
+            case MappingsState.Type.DEFAULT -> tryResolveBuiltinMappings(resolveDefaultMappingsNonNamespacedId(), MappingsState.Type.DEFAULT);
         };
         if (mappingsState == null)
-            return new MappingsState(resolveDefaultMappings(), MappingsState.Type.DEFAULT, "");
+            return tryResolveBuiltinMappings(resolveDefaultMappingsNonNamespacedId(), MappingsState.Type.DEFAULT);
         return mappingsState;
     }
 
