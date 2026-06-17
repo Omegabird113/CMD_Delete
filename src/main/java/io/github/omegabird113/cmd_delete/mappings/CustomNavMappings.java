@@ -9,7 +9,7 @@ import java.util.Arrays;
 import static io.github.omegabird113.cmd_delete.actions.NavAction.NONE;
 
 public final class CustomNavMappings implements INavMappings {
-    private CustomMappingsRegistry registry = new CustomMappingsRegistry();
+    private CustomMappingsRegistry registry;
 
     public CustomMappingsRegistry getRegistry() {
         return registry;
@@ -21,6 +21,8 @@ public final class CustomNavMappings implements INavMappings {
 
     @Override
     public NavAction getAction(int key, boolean shift, boolean altOption, boolean control, boolean superCommand) {
+        if (registry == null)
+            return NONE;
         CustomMappingsRegistryKey registryKey = new CustomMappingsRegistryKey(key, shift, altOption, control, superCommand);
         NavAction action = registry.get(registryKey);
         if (action != null)
