@@ -42,10 +42,12 @@ public final class MappingsInfoCollectionUtils {
                         .toArray(String[]::new);
 
                 namespacedId = "builtin:" + String.join("_", systemStrings).toLowerCase(Locale.ROOT);
-                displayName = String.join(" and ", systemStrings) + " mappings";
-                description = "Hard-coded mappings for the specified operating system(s).";
+                displayName = mappingsState.mappings().getRegistry().getName();
+                description = mappingsState.mappings().getRegistry().getDescription();
                 version = CmdDeleteClient.VERSION;
                 author = "Omegabird113";
+
+                keyCombinationsString = " with " + mappingsState.mappings().getRegistry().getSize() + " key combinations registered";
             }
             case DEFAULT -> {
                 String[] systemStrings = Arrays.stream(mappingsState.mappings().getMappingsSupportedSystems())
@@ -57,6 +59,8 @@ public final class MappingsInfoCollectionUtils {
                 description = "The default behaviour to set the mappings to the hard-coded mappings for the OS you're currently using.";
                 version = CmdDeleteClient.VERSION;
                 author = "Omegabird113";
+
+                keyCombinationsString = " with " + mappingsState.mappings().getRegistry().getSize() + " key combinations registered";
             }
         }
 
