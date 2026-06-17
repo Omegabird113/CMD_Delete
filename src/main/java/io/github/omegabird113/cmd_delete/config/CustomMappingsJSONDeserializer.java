@@ -28,7 +28,7 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
         JsonObject jsonObject = json.getAsJsonObject();
 
         int fv = requireInt(jsonObject, "fv");
-        if (fv != 1)
+        if (fv != 2)
             throw new JsonParseException("Invalid format version number: " + fv);
 
         JsonObject actions = requireObject(jsonObject, "actions");
