@@ -3,7 +3,9 @@ package io.github.omegabird113.cmd_delete.config;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 public class CustomMappingsRegistry {
     private final Map<KeyCombo, NavAction> registry;

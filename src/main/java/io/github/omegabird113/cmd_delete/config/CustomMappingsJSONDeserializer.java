@@ -148,6 +148,7 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
         return systems;
     }
 
-    private record MetadataContainer(String name, String author, String version, String description, String id, Set<Os> systems) {
+    private record MetadataContainer(String name, String author, String version, String description, String id,
+                                     Set<Os> systems) {
     }
 }
