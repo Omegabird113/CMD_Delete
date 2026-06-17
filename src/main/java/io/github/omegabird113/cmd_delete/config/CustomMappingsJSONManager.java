@@ -30,7 +30,10 @@ public final class CustomMappingsJSONManager {
                 .create();
 
         try (java.io.BufferedReader reader = Files.newBufferedReader(path)) {
-            return gson.fromJson(reader, CustomMappingsRegistry.class);
+            CustomMappingsRegistry registry = gson.fromJson(reader, CustomMappingsRegistry.class);
+            if (!registry.getId().equals(id))
+                throw new JsonParseException("Mismatching id \"" + registry.getId() + "\" declared by custom mappings with filename \"" + id + "\"");
+            return registry;
         }
     }
 
