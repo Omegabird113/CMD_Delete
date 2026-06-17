@@ -1,10 +1,10 @@
 {
   "fv": 2,
   "meta": {
-    "name": "Mac mapping",
-    "author": "Omegabird113",
+    "name": "Mac mappings",
+    "author": "",
     "description": "Hard-coded mappings for macOS.",
-    "version": "1.0.0",
+    "version": "",
     "id": "mac",
     "systems": [
       "mac"

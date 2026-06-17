@@ -1,10 +1,10 @@
 {
   "fv": 2,
   "meta": {
-    "name": "Windows/Linux mapping",
-    "author": "Omegabird113",
+    "name": "Windows/Linux mappings",
+    "author": "",
     "description": "Hard-coded mappings for Windows and Linux.",
-    "version": "1.0.0",
+    "version": "",
     "id": "windows_linux",
     "systems": [
       "windows", "linux"
