@@ -1,8 +1,8 @@
 package io.github.omegabird113.cmd_delete.mappings;
 
 import io.github.omegabird113.cmd_delete.actions.NavAction;
-import io.github.omegabird113.cmd_delete.config.registry.CustomMappingsRegistry;
-import io.github.omegabird113.cmd_delete.config.registry.KeyCombo;
+import io.github.omegabird113.cmd_delete.config.CustomMappingsRegistry;
+import io.github.omegabird113.cmd_delete.config.KeyCombo;
 
 import java.util.Arrays;
 

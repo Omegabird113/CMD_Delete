@@ -2,7 +2,7 @@ package io.github.omegabird113.cmd_delete.command;
 
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavActionUtils;
-import io.github.omegabird113.cmd_delete.config.load.CustomMappingsJSONManager;
+import io.github.omegabird113.cmd_delete.config.CustomMappingsJSONManager;
 import io.github.omegabird113.cmd_delete.mappings.CustomNavMappings;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.Os;
@@ -31,7 +31,7 @@ public final class MappingsInfoCollectionUtils {
             case CUSTOM -> {
                 CustomNavMappings custom = (CustomNavMappings) mappingsState.mappings();
 
-                namespacedId = "custom:" + custom.getRegistry().getFilename();
+                namespacedId = "custom:" + custom.getRegistry().getId();
                 displayName = "\"" + custom.getRegistry().getName() + "\"";
                 description = custom.getRegistry().getDescription();
                 version = custom.getRegistry().getVersion();

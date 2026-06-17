@@ -1,10 +1,9 @@
-package io.github.omegabird113.cmd_delete.config.load;
+package io.github.omegabird113.cmd_delete.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
-import io.github.omegabird113.cmd_delete.config.registry.CustomMappingsRegistry;
 import io.github.omegabird113.cmd_delete.mappings.CustomNavMappings;
 import org.apache.commons.io.FilenameUtils;
 
@@ -20,7 +19,7 @@ public final class CustomMappingsJSONManager {
     private CustomMappingsJSONManager() {
     }
 
-    private static CustomMappingsRegistry loadFromCustomMappingsDir(String id) throws IOException, FileNotFoundException {
+    private static CustomMappingsRegistry loadFromCustomMappingsDir(String id) throws IOException {
         Path path = CmdDeleteClient.MAPPINGS_JSONS_PATH.resolve(id + ".json");
         if (!Files.exists(path)) {
             throw new FileNotFoundException("Custom mapping file not found at: " + path);
@@ -32,7 +31,8 @@ public final class CustomMappingsJSONManager {
 
         try (java.io.BufferedReader reader = Files.newBufferedReader(path)) {
             CustomMappingsRegistry registry = gson.fromJson(reader, CustomMappingsRegistry.class);
-            registry.setFilename(id);
+            if (!registry.getId().equals(id))
+                throw new JsonParseException("Custom mappings id \"" + registry.getId() + "\" does not match filename \"" + id + "\"");
             return registry;
         }
     }
