@@ -2,7 +2,7 @@ package io.github.omegabird113.cmd_delete.command;
 
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavActionUtils;
-import io.github.omegabird113.cmd_delete.config.CustomMappingsJSONManager;
+import io.github.omegabird113.cmd_delete.config.MappingsJSONManager;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 
@@ -79,7 +79,7 @@ public final class MappingsInfoCollectionUtils {
                         "builtin:mac"
                 )
         );
-        internal.addAll(CustomMappingsJSONManager.getAvailableOptions());
+        internal.addAll(MappingsJSONManager.getAvailableOptions());
         return internal.toArray(String[]::new);
     }
 }

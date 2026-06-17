@@ -19,14 +19,14 @@ public class ActiveMappingsManager {
     }
 
     public MappingsState tryResolveCustomMappings(String id) {
-        if (!CustomMappingsJSONManager.tryLoadCustomMappings(id, navMappings)) {
+        if (!MappingsJSONManager.tryLoadCustomMappings(id, navMappings)) {
             return null;
         }
         return new MappingsState(navMappings, MappingsState.Type.CUSTOM, id);
     }
 
     public MappingsState tryResolveBuiltinMappings(String id, MappingsState.Type type) {
-        if (!CustomMappingsJSONManager.tryLoadBuiltinMappings(id, navMappings))
+        if (!MappingsJSONManager.tryLoadBuiltinMappings(id, navMappings))
             return null;
         if (type == MappingsState.Type.DEFAULT)
             id = "";

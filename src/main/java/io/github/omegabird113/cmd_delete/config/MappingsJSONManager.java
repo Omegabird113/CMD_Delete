@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public final class CustomMappingsJSONManager {
-    private CustomMappingsJSONManager() {
+public final class MappingsJSONManager {
+    private MappingsJSONManager() {
     }
 
     private static MappingsRegistry loadFromResourceMappingsDir(String id) throws IOException {
