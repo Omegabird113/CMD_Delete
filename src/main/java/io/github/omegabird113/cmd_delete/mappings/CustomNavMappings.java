@@ -2,7 +2,7 @@ package io.github.omegabird113.cmd_delete.mappings;
 
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.registry.CustomMappingsRegistry;
-import io.github.omegabird113.cmd_delete.config.registry.CustomMappingsRegistryKey;
+import io.github.omegabird113.cmd_delete.config.registry.KeyCombo;
 
 import java.util.Arrays;
 
@@ -23,7 +23,7 @@ public final class CustomNavMappings implements INavMappings {
     public NavAction getAction(int key, boolean shift, boolean altOption, boolean control, boolean superCommand) {
         if (registry == null)
             return NONE;
-        CustomMappingsRegistryKey registryKey = new CustomMappingsRegistryKey(key, shift, altOption, control, superCommand);
+        KeyCombo registryKey = new KeyCombo(key, shift, altOption, control, superCommand);
         NavAction action = registry.get(registryKey);
         if (action != null)
             return action;

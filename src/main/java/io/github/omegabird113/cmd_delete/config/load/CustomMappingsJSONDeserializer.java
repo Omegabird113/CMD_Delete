@@ -4,7 +4,7 @@ import com.google.gson.*;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.registry.CustomMappingsRegistry;
-import io.github.omegabird113.cmd_delete.config.registry.CustomMappingsRegistryKey;
+import io.github.omegabird113.cmd_delete.config.registry.KeyCombo;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 
 import java.lang.reflect.Type;
@@ -39,7 +39,7 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
         JsonObject actions = requireObject(jsonObject, "actions");
 
         Map<String, Integer> keyMap = KeyCodeRegistry.getKeyMap();
-        Set<CustomMappingsRegistryKey> registeredKeys = new HashSet<>();
+        Set<KeyCombo> registeredKeys = new HashSet<>();
 
         for (String actionName : actions.keySet()) {
             NavAction action = NAV_ACTION_MAP.get(actionName.trim().toUpperCase(Locale.ROOT));
@@ -76,7 +76,7 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
                 boolean hasSuperCommand = binding.has("superCommand");
                 boolean superCommandValue = getOptionalBoolean(binding, "superCommand");
 
-                List<CustomMappingsRegistryKey> keys = expandKeyWildcards(
+                List<KeyCombo> keys = expandKeyWildcards(
                         keyCode,
                         hasShift, shiftValue,
                         hasAltOption, altOptionValue,
@@ -84,7 +84,7 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
                         hasSuperCommand, superCommandValue
                 );
 
-                for (CustomMappingsRegistryKey key : keys) {
+                for (KeyCombo key : keys) {
                     if (!registeredKeys.add(key)) {
                         CmdDeleteClient.LOGGER.warn("Duplicate key binding in custom binding with action of \"{}\" and key of \"{}\" (exactly \"{}\"). 2nd registration skipped...", actionName, keyName, key);
                         continue;
@@ -115,23 +115,23 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
         }
     }
 
-    private List<CustomMappingsRegistryKey> expandKeyWildcards(int key,
-                                                               boolean hasShift, boolean shiftValue,
-                                                               boolean hasAltOption, boolean altOptionValue,
-                                                               boolean hasControl, boolean controlValue,
-                                                               boolean hasSuperCommand, boolean superCommandValue) {
+    private List<KeyCombo> expandKeyWildcards(int key,
+                                              boolean hasShift, boolean shiftValue,
+                                              boolean hasAltOption, boolean altOptionValue,
+                                              boolean hasControl, boolean controlValue,
+                                              boolean hasSuperCommand, boolean superCommandValue) {
 
         List<Boolean> shiftVals = hasShift ? List.of(shiftValue) : List.of(false, true);
         List<Boolean> altOptionals = hasAltOption ? List.of(altOptionValue) : List.of(false, true);
         List<Boolean> controlVals = hasControl ? List.of(controlValue) : List.of(false, true);
         List<Boolean> superCommandVals = hasSuperCommand ? List.of(superCommandValue) : List.of(false, true);
 
-        List<CustomMappingsRegistryKey> results = new ArrayList<>();
+        List<KeyCombo> results = new ArrayList<>();
         for (boolean s : shiftVals)
             for (boolean a : altOptionals)
                 for (boolean c : controlVals)
                     for (boolean sup : superCommandVals)
-                        results.add(new CustomMappingsRegistryKey(key, s, a, c, sup));
+                        results.add(new KeyCombo(key, s, a, c, sup));
         return results;
     }
 

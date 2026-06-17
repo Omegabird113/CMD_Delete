@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CustomMappingsRegistry {
-    private final Map<CustomMappingsRegistryKey, NavAction> registry = new HashMap<>();
+    private final Map<KeyCombo, NavAction> registry = new HashMap<>();
     private final List<Os> systems = new ArrayList<>();
     private String name;
     private String author;
@@ -17,11 +17,11 @@ public class CustomMappingsRegistry {
     private String version;
     private String filename;
 
-    public void put(CustomMappingsRegistryKey key, NavAction action) {
+    public void put(KeyCombo key, NavAction action) {
         registry.put(key, action);
     }
 
-    public NavAction get(CustomMappingsRegistryKey key) {
+    public NavAction get(KeyCombo key) {
         return registry.get(key);
     }
 
