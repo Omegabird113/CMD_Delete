@@ -7,8 +7,11 @@ import java.util.Map;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-class KeyCodeRegistry {
+final class KeyCodeRegistry {
     private static final Map<String, Integer> keyMap = ImmutableMap.copyOf(create());
+
+    private KeyCodeRegistry() {
+    }
 
     public static Map<String, Integer> getKeyMap() {
         return keyMap;

@@ -5,7 +5,7 @@ import org.lwjgl.glfw.GLFW;
 
 import static io.github.omegabird113.cmd_delete.actions.NavAction.*;
 
-class MacNavMappings implements INavMappings {
+final class MacNavMappings implements INavMappings {
     private static final int UP = GLFW.GLFW_KEY_UP;
     private static final int DOWN = GLFW.GLFW_KEY_DOWN;
     private static final int LEFT = GLFW.GLFW_KEY_LEFT;

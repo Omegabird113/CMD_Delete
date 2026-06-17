@@ -1,9 +1,13 @@
 package io.github.omegabird113.cmd_delete.config.load;
 
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 
-public final class JsonParsingUtils {
-    private JsonParsingUtils() {}
+final class JsonParsingUtils {
+    private JsonParsingUtils() {
+    }
 
     public static String getStringElse(JsonObject parent, String fieldName, String defaultValue) {
         if (!parent.has(fieldName))

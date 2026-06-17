@@ -17,9 +17,11 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomMappingsJSONManager {
+public final class CustomMappingsJSONManager {
     private static final Path gamePath = FabricLoader.getInstance().getGameDir();
     private static final Path configPath = gamePath.resolve("config/cmd_delete/mappings/");
+    private CustomMappingsJSONManager() {
+    }
 
     private static CustomMappingsRegistry loadFromCustomMappingsDir(String id) throws IOException {
         Path path = configPath.resolve(id + ".json");

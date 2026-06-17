@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 import static io.github.omegabird113.cmd_delete.actions.NavAction.NONE;
 
-public class CustomNavMappings implements INavMappings {
+public final class CustomNavMappings implements INavMappings {
     private CustomMappingsRegistry registry = new CustomMappingsRegistry();
 
     public CustomMappingsRegistry getRegistry() {

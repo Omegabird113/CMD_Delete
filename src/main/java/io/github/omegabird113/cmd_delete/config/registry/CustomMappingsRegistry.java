@@ -5,11 +5,12 @@ import io.github.omegabird113.cmd_delete.mappings.Os;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CustomMappingsRegistry {
     private final Map<CustomMappingsRegistryKey, NavAction> registry = new HashMap<>();
-    private final ArrayList<Os> systems = new ArrayList<>();
+    private final List<Os> systems = new ArrayList<>();
     private String name;
     private String author;
     private String description;
@@ -28,7 +29,7 @@ public class CustomMappingsRegistry {
         return registry.values().toArray(NavAction[]::new);
     }
 
-    public ArrayList<Os> getSystems() {
+    public List<Os> getSystems() {
         return systems;
     }
 

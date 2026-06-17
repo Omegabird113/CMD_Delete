@@ -4,11 +4,13 @@ import io.github.omegabird113.cmd_delete.mappings.INavMappings;
 
 import java.util.Arrays;
 
-public class NavActionManager {
+public final class NavActionManager {
     public static final int DIRECTION_LEFT = -1;
     public static final int DIRECTION_RIGHT = 1;
     public static final int DIRECTION_DOWN = 1;
     public static final int DIRECTION_UP = -1;
+    private NavActionManager() {
+    }
 
     public static int getDirection(NavAction action) {
         return switch (action) {

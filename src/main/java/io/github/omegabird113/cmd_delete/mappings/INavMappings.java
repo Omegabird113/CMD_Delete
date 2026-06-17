@@ -6,7 +6,7 @@ import io.github.omegabird113.cmd_delete.actions.NavAction;
 import net.minecraft.client.input.KeyEvent;
 import org.lwjgl.glfw.GLFW;
 
-public interface INavMappings {
+public sealed interface INavMappings permits MacNavMappings, WindowsLinuxNavMappings, CustomNavMappings{
     NavAction getAction(int key, boolean shift, boolean altOption, boolean control, boolean superCommand);
 
     default NavAction getAction(KeyEvent event, Window window) {

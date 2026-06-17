@@ -6,16 +6,17 @@ import io.github.omegabird113.cmd_delete.config.ActiveMappingsManager;
 
 import java.util.Locale;
 
-public class NavMappingsManager {
+public final class NavMappingsManager {
     private static final INavMappings WINDOWS_LINUX_MAPPINGS = new WindowsLinuxNavMappings();
     private static final INavMappings MAC_MAPPINGS = new MacNavMappings();
     private static final CustomNavMappings CUSTOM_MAPPINGS = new CustomNavMappings();
-
     private static final ActiveMappingsManager activeMappingsManager = new ActiveMappingsManager(
             WINDOWS_LINUX_MAPPINGS, MAC_MAPPINGS, CUSTOM_MAPPINGS, getOs()
     );
-
     private static MappingsState currentMappingsState;
+
+    private NavMappingsManager() {
+    }
 
     public static INavMappings getCurrentMappings() {
         return currentMappingsState.mappings();

@@ -18,7 +18,7 @@ import net.minecraft.network.chat.Component;
 
 import java.util.Locale;
 
-public class NavMappingsCommand {
+public final class NavMappingsCommand {
     private static final DynamicCommandExceptionType INVALID_OS = new DynamicCommandExceptionType(
             os -> Component.literal("Unknown builtin nav mappings OS: " + os)
     );
