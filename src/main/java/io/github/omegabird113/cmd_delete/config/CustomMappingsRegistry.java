@@ -17,14 +17,10 @@ public class CustomMappingsRegistry {
     private String version;
     private String filename;
 
-    public void put(KeyCombo key, NavAction action) {
-        registry.put(key, action);
-    }
-
     public boolean tryPut(KeyCombo key, NavAction action) {
         if (registry.containsKey(key))
             return false;
-        put(key, action);
+        registry.put(key, action);
         return true;
     }
 
