@@ -18,13 +18,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class CustomMappingsJSONManager {
-    private static final Path gamePath = FabricLoader.getInstance().getGameDir();
-    private static final Path configPath = gamePath.resolve("config/cmd_delete/mappings/");
+    private static final Path GAME_PATH = FabricLoader.getInstance().getGameDir();
+    private static final Path CONFIG_PATH = GAME_PATH.resolve("config/cmd_delete/mappings/");
     private CustomMappingsJSONManager() {
     }
 
     private static CustomMappingsRegistry loadFromCustomMappingsDir(String id) throws IOException {
-        Path path = configPath.resolve(id + ".json");
+        Path path = CONFIG_PATH.resolve(id + ".json");
         if (!Files.exists(path)) {
             throw new FileNotFoundException("Custom mapping file not found at: " + path);
         }
@@ -52,7 +52,7 @@ public final class CustomMappingsJSONManager {
     }
 
     public static void tryMakeConfigFiles() {
-        File configDirectory = configPath.toFile();
+        File configDirectory = CONFIG_PATH.toFile();
         if (!configDirectory.exists() || !configDirectory.isDirectory()) {
             boolean s = configDirectory.mkdirs();
             if (!s)
@@ -60,7 +60,7 @@ public final class CustomMappingsJSONManager {
             else
                 CmdDeleteClient.LOGGER.info("Created mappings config directory at: {}", configDirectory.getAbsolutePath());
         }
-        File activeMappingsFile = gamePath.resolve("config/cmd_delete/.active_mappings").toFile();
+        File activeMappingsFile = GAME_PATH.resolve("config/cmd_delete/.active_mappings").toFile();
         if (!activeMappingsFile.exists() || !activeMappingsFile.isFile()) {
             try {
                 boolean s = activeMappingsFile.createNewFile();
@@ -77,7 +77,7 @@ public final class CustomMappingsJSONManager {
     public static List<String> getAvailableOptions() {
         List<String> options = new ArrayList<>();
 
-        File configDirectory = configPath.toFile();
+        File configDirectory = CONFIG_PATH.toFile();
         if (!configDirectory.exists() || !configDirectory.isDirectory()) {
             tryMakeConfigFiles();
             return options;

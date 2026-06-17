@@ -15,12 +15,12 @@ import java.util.stream.Collectors;
 import static io.github.omegabird113.cmd_delete.config.load.JsonParsingUtils.*;
 
 public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMappingsRegistry> {
-    private static final Map<String, Os> osMap = Map.of(
+    private static final Map<String, Os> OS_MAP = Map.of(
             "windows", Os.WINDOWS,
             "mac", Os.MAC,
             "linux", Os.LINUX
     );
-    private static final Map<String, NavAction> navActionMap = Arrays.stream(NavAction.values())
+    private static final Map<String, NavAction> NAV_ACTION_MAP = Arrays.stream(NavAction.values())
             .collect(Collectors.toUnmodifiableMap(NavAction::name, Function.identity()));
 
     @Override
@@ -42,7 +42,7 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
         Set<CustomMappingsRegistryKey> registeredKeys = new HashSet<>();
 
         for (String actionName : actions.keySet()) {
-            NavAction action = navActionMap.get(actionName.trim().toUpperCase(Locale.ROOT));
+            NavAction action = NAV_ACTION_MAP.get(actionName.trim().toUpperCase(Locale.ROOT));
             if (action == null || action == NavAction.NONE) {
                 CmdDeleteClient.LOGGER.warn("Invalid action specified by custom mappings: \"{}\". All key-combos registered in this action skipped...", actionName);
                 continue;
@@ -142,7 +142,7 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
             if (!systemElement.isJsonPrimitive() || !systemElement.getAsJsonPrimitive().isString())
                 throw new JsonParseException("Expected each entry in \"systems\" to be a string");
             String systemName = systemElement.getAsString().trim().toLowerCase(Locale.ROOT);
-            Os os = osMap.get(systemName);
+            Os os = OS_MAP.get(systemName);
             if (os == null)
                 throw new JsonParseException("Unknown system: " + systemName);
             systems.add(os);

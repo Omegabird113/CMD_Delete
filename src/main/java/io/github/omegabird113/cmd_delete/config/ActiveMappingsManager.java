@@ -14,40 +14,40 @@ import java.nio.file.Path;
 import java.util.Locale;
 
 public class ActiveMappingsManager {
-    private static final Path gamePath = FabricLoader.getInstance().getGameDir();
-    private static final Path activeFilePath = gamePath.resolve("config/cmd_delete/.active_mappings");
+    private static final Path GAME_PATH = FabricLoader.getInstance().getGameDir();
+    private static final Path ACTIVE_FILE_PATH = GAME_PATH.resolve("config/cmd_delete/.active_mappings");
 
-    private final INavMappings WINDOWS_LINUX;
-    private final INavMappings MAC;
-    private final CustomNavMappings CUSTOM;
+    private final INavMappings windowsLinux;
+    private final INavMappings mac;
+    private final CustomNavMappings custom;
 
     private final Os system;
 
     public ActiveMappingsManager(INavMappings windowsLinux, INavMappings mac, CustomNavMappings custom, Os system) {
-        WINDOWS_LINUX = windowsLinux;
-        MAC = mac;
-        CUSTOM = custom;
+        this.windowsLinux = windowsLinux;
+        this.mac = mac;
+        this.custom = custom;
         this.system = system;
     }
 
     INavMappings resolveDefaultMappings() {
         if (system == Os.MAC)
-            return MAC;
-        return WINDOWS_LINUX;
+            return mac;
+        return windowsLinux;
     }
 
     public MappingsState tryResolveCustomMappings(String id) {
-        if (!CustomMappingsJSONManager.tryLoadCustomMappings(id, CUSTOM)) {
+        if (!CustomMappingsJSONManager.tryLoadCustomMappings(id, custom)) {
             return null;
         }
-        return new MappingsState(CUSTOM, MappingsState.Type.CUSTOM, id);
+        return new MappingsState(custom, MappingsState.Type.CUSTOM, id);
     }
 
     INavMappings resolveOsMappings(String os) {
         os = os.toLowerCase(Locale.ROOT);
         if (os.equals("mac"))
-            return MAC;
-        return WINDOWS_LINUX;
+            return mac;
+        return windowsLinux;
     }
 
     public String resolveNamespacedId(MappingsState.Type type, String id) {
@@ -106,12 +106,12 @@ public class ActiveMappingsManager {
     }
 
     void writeActiveMappings(String namespacedId) throws IOException {
-        Files.createDirectories(activeFilePath.getParent());
-        Files.writeString(activeFilePath, namespacedId);
+        Files.createDirectories(ACTIVE_FILE_PATH.getParent());
+        Files.writeString(ACTIVE_FILE_PATH, namespacedId);
     }
 
     String readActiveMappings() throws IOException {
-        return Files.readString(activeFilePath);
+        return Files.readString(ACTIVE_FILE_PATH);
     }
 
     public MappingsState tryGetMappings() {
