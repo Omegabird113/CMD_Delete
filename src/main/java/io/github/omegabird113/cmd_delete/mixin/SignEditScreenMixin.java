@@ -4,6 +4,7 @@ import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.actions.NavActionUtils;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.font.TextFieldHelper;
 import net.minecraft.client.gui.screens.inventory.AbstractSignEditScreen;
@@ -355,7 +356,7 @@ public abstract class SignEditScreenMixin {
 
     @Unique
     private int cmd_delete$getTextAtX(String message, int position) {
-        var font = Minecraft.getInstance().font;
+        Font font = Minecraft.getInstance().font;
         String shapedMessage = font.isBidirectional() ? font.bidirectionalShaping(message) : message;
         int clampedPosition = Math.min(position, shapedMessage.length());
         return font.width(shapedMessage.substring(0, clampedPosition)) - font.width(shapedMessage) / 2;
