@@ -37,7 +37,7 @@ public final class MappingsJSONManager {
         try (java.io.BufferedReader reader = Files.newBufferedReader(path)) {
             MappingsRegistry registry = gson.fromJson(reader, MappingsRegistry.class);
             if (!registry.getId().equals(id))
-                throw new JsonParseException("Custom mappings id \"" + registry.getId() + "\" does not match filename \"" + id + "\"");
+                throw new JsonParseException("Builtin mappings id \"" + registry.getId() + "\" does not match filename \"" + id + "\"");
             return registry;
         }
     }
