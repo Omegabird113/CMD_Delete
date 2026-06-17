@@ -26,6 +26,10 @@ public class MappingsRegistry {
         this.id = id;
     }
 
+    public Map<KeyCombo, NavAction> getInternalRegistry() {
+        return registry;
+    }
+
     public NavAction get(KeyCombo key) {
         return registry.get(key);
     }
