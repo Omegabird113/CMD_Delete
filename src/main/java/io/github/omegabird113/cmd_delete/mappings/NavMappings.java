@@ -44,6 +44,8 @@ public final class NavMappings {
     }
 
     public NavAction[] getPossibleActions() {
+        if (registry == null)
+            return new NavAction[0];
         return Arrays.stream(registry.getValues())
                 .filter(action -> action != NONE)
                 .distinct()
@@ -51,6 +53,8 @@ public final class NavMappings {
     }
 
     public Os[] getMappingsSupportedSystems() {
+        if (registry == null)
+            return new Os[0];
         return registry.getSystems().stream()
                 .distinct()
                 .toArray(Os[]::new);
