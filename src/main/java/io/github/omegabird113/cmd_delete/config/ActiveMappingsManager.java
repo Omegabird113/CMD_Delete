@@ -6,17 +6,12 @@ import io.github.omegabird113.cmd_delete.mappings.CustomNavMappings;
 import io.github.omegabird113.cmd_delete.mappings.INavMappings;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.Os;
-import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Locale;
 
 public class ActiveMappingsManager {
-    private static final Path GAME_PATH = FabricLoader.getInstance().getGameDir();
-    private static final Path ACTIVE_FILE_PATH = GAME_PATH.resolve("config/cmd_delete/.active_mappings");
-
     private final INavMappings windowsLinux;
     private final INavMappings mac;
     private final CustomNavMappings custom;
@@ -106,12 +101,12 @@ public class ActiveMappingsManager {
     }
 
     void writeActiveMappings(String namespacedId) throws IOException {
-        Files.createDirectories(ACTIVE_FILE_PATH.getParent());
-        Files.writeString(ACTIVE_FILE_PATH, namespacedId);
+        Files.createDirectories(CmdDeleteClient.ACTIVE_MAPPINGS_FILE_PATH.getParent());
+        Files.writeString(CmdDeleteClient.ACTIVE_MAPPINGS_FILE_PATH, namespacedId);
     }
 
     String readActiveMappings() throws IOException {
-        return Files.readString(ACTIVE_FILE_PATH);
+        return Files.readString(CmdDeleteClient.ACTIVE_MAPPINGS_FILE_PATH);
     }
 
     public MappingsState tryGetMappings() {

@@ -8,12 +8,17 @@ import net.fabricmc.loader.api.FabricLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.file.Path;
+
 public class CmdDeleteClient implements ClientModInitializer {
     public static final String MODID = "cmd_delete";
     public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
     public static final String VERSION = FabricLoader.getInstance().getModContainer(MODID)
             .map(container -> container.getMetadata().getVersion().getFriendlyString())
             .orElse("<unknown>");
+    private static final Path GAME_PATH = FabricLoader.getInstance().getGameDir();
+    public static final Path MAPPINGS_JSONS_PATH = GAME_PATH.resolve("config/cmd_delete/mappings/");
+    public static final Path ACTIVE_MAPPINGS_FILE_PATH = GAME_PATH.resolve("config/cmd_delete/.active_mappings");
 
     @Override
     public void onInitializeClient() {
