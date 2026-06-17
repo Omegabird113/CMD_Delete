@@ -39,7 +39,6 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
         JsonObject actions = requireObject(jsonObject, "actions");
 
         Map<String, Integer> keyMap = KeyCodeRegistry.getKeyMap();
-        Set<KeyCombo> registeredKeys = new HashSet<>();
 
         for (String actionName : actions.keySet()) {
             NavAction action = NAV_ACTION_MAP.get(actionName.trim().toUpperCase(Locale.ROOT));
@@ -84,13 +83,9 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
                         hasSuperCommand, superCommandValue
                 );
 
-                for (KeyCombo key : keys) {
-                    if (!registeredKeys.add(key)) {
+                for (KeyCombo key : keys)
+                    if (!registry.tryPut(key, action))
                         CmdDeleteClient.LOGGER.warn("Duplicate key binding in custom binding with action of \"{}\" and key of \"{}\" (exactly \"{}\"). 2nd registration skipped...", actionName, keyName, key);
-                        continue;
-                    }
-                    registry.put(key, action);
-                }
             }
         }
 

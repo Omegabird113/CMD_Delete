@@ -21,6 +21,13 @@ public class CustomMappingsRegistry {
         registry.put(key, action);
     }
 
+    public boolean tryPut(KeyCombo key, NavAction action) {
+        if (registry.containsKey(key))
+            return false;
+        put(key, action);
+        return true;
+    }
+
     public NavAction get(KeyCombo key) {
         return registry.get(key);
     }
