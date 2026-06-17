@@ -26,9 +26,10 @@ public class ActiveMappingsManager {
     }
 
     public MappingsState tryResolveBuiltinMappings(String id, MappingsState.Type type) {
-        if (!CustomMappingsJSONManager.tryLoadBuiltinMappings(id, navMappings)) {
+        if (!CustomMappingsJSONManager.tryLoadBuiltinMappings(id, navMappings))
             return null;
-        }
+        if (type == MappingsState.Type.DEFAULT)
+            id = "";
         return new MappingsState(navMappings, type, id);
     }
 
