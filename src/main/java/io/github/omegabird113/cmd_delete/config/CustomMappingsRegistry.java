@@ -14,14 +14,14 @@ public class CustomMappingsRegistry {
     private final String version;
     private final String id;
 
-    CustomMappingsRegistry(Map<KeyCombo, NavAction> registry, Collection<Os> systems, String name, String author, String description, String version, String filename) {
+    CustomMappingsRegistry(Map<KeyCombo, NavAction> registry, Collection<Os> systems, String name, String author, String description, String version, String id) {
         this.registry = Map.copyOf(registry);
         this.systems = List.copyOf(systems);
         this.name = name;
         this.author = author;
         this.description = description;
         this.version = version;
-        this.id = filename;
+        this.id = id;
     }
 
     public NavAction get(KeyCombo key) {
