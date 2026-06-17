@@ -19,7 +19,7 @@ public final class CustomMappingsJSONManager {
     private CustomMappingsJSONManager() {
     }
 
-    private static CustomMappingsRegistry loadFromCustomMappingsDir(String id) throws IOException, FileNotFoundException {
+    private static CustomMappingsRegistry loadFromCustomMappingsDir(String id) throws IOException {
         Path path = CmdDeleteClient.MAPPINGS_JSONS_PATH.resolve(id + ".json");
         if (!Files.exists(path)) {
             throw new FileNotFoundException("Custom mapping file not found at: " + path);
@@ -32,7 +32,7 @@ public final class CustomMappingsJSONManager {
         try (java.io.BufferedReader reader = Files.newBufferedReader(path)) {
             CustomMappingsRegistry registry = gson.fromJson(reader, CustomMappingsRegistry.class);
             if (!registry.getId().equals(id))
-                throw new JsonParseException("Mismatching id \"" + registry.getId() + "\" declared by custom mappings with filename \"" + id + "\"");
+                throw new JsonParseException("Custom mappings id \"" + registry.getId() + "\" does not match filename \"" + id + "\"");
             return registry;
         }
     }

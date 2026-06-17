@@ -88,11 +88,11 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
             }
         }
 
-        metadataContainer container = parseMeta(requireObject(jsonObject, "meta"));
+        MetadataContainer container = parseMeta(requireObject(jsonObject, "meta"));
         return new CustomMappingsRegistry(localKeys, container.systems(), container.name(), container.author(), container.description(), container.version(), container.id());
     }
 
-    private metadataContainer parseMeta(JsonObject meta) {
+    private MetadataContainer parseMeta(JsonObject meta) {
         String name = getStringElse(meta, "name", "Unnamed Custom Mappings");
         String author = getStringElse(meta, "author", "unknown");
         String description = getStringElse(meta, "description", "No description provided");
@@ -107,7 +107,7 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
             if (parsedSystems.isEmpty())
                 throw new JsonParseException("No systems found");
 
-            return new metadataContainer(name, author, version, description, id, parsedSystems);
+            return new MetadataContainer(name, author, version, description, id, parsedSystems);
         } else
             throw new JsonParseException("No systems found");
     }
@@ -148,6 +148,6 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
         return systems;
     }
 
-    private record metadataContainer(String name, String author, String version, String description, String id, Set<Os> systems) {
+    private record MetadataContainer(String name, String author, String version, String description, String id, Set<Os> systems) {
     }
 }
