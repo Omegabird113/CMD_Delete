@@ -31,7 +31,7 @@ public final class MappingsInfoCollectionUtils {
             case CUSTOM -> {
                 CustomNavMappings custom = (CustomNavMappings) mappingsState.mappings();
 
-                namespacedId = "custom:" + custom.getRegistry().getFilename();
+                namespacedId = "custom:" + custom.getRegistry().getId();
                 displayName = "\"" + custom.getRegistry().getName() + "\"";
                 description = custom.getRegistry().getDescription();
                 version = custom.getRegistry().getVersion();

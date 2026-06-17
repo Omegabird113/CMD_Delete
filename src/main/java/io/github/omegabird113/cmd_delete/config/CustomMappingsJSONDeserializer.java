@@ -26,17 +26,16 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
         if (!json.isJsonObject())
             throw new JsonParseException("Expected a JSON object at root");
         JsonObject jsonObject = json.getAsJsonObject();
-        CustomMappingsRegistry registry = new CustomMappingsRegistry();
 
         int fv = requireInt(jsonObject, "fv");
         if (fv != 1)
             throw new JsonParseException("Invalid format version number: " + fv);
 
-        parseMeta(requireObject(jsonObject, "meta"), registry);
-
         JsonObject actions = requireObject(jsonObject, "actions");
 
         Map<String, Integer> keyMap = KeyCodeRegistry.getKeyMap();
+
+        Map<KeyCombo, NavAction> localKeys = new HashMap<>();
 
         for (String actionName : actions.keySet()) {
             NavAction action = NAV_ACTION_MAP.get(actionName.trim().toUpperCase(Locale.ROOT));
@@ -82,19 +81,23 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
                 );
 
                 for (KeyCombo key : keys)
-                    if (!registry.tryPut(key, action))
+                    if (localKeys.containsKey(key))
                         CmdDeleteClient.LOGGER.warn("Duplicate key binding in custom binding with action of \"{}\" and key of \"{}\" (exactly \"{}\"). 2nd registration skipped...", actionName, keyName, key);
+                    else
+                        localKeys.put(key, action);
             }
         }
 
-        return registry;
+        metadataContainer container = parseMeta(requireObject(jsonObject, "meta"));
+        return new CustomMappingsRegistry(localKeys, container.systems(), container.name(), container.author(), container.description(), container.version(), container.id());
     }
 
-    private void parseMeta(JsonObject meta, CustomMappingsRegistry registry) {
-        registry.setName(getStringElse(meta, "name", "Unnamed Custom Mappings"));
-        registry.setAuthor(getStringElse(meta, "author", "unknown"));
-        registry.setDescription(getStringElse(meta, "description", "No description provided"));
-        registry.setVersion(getStringElse(meta, "version", "unknown"));
+    private metadataContainer parseMeta(JsonObject meta) {
+        String name = getStringElse(meta, "name", "Unnamed Custom Mappings");
+        String author = getStringElse(meta, "author", "unknown");
+        String description = getStringElse(meta, "description", "No description provided");
+        String version = getStringElse(meta, "version", "unknown");
+        String id = requireString(meta, "id");
 
         if (meta.has("systems")) {
             JsonArray systems = requireArray(meta, "systems");
@@ -104,8 +107,9 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
             if (parsedSystems.isEmpty())
                 throw new JsonParseException("No systems found");
 
-            registry.setSystems(new ArrayList<>(parsedSystems));
-        }
+            return new metadataContainer(name, author, version, description, id, parsedSystems);
+        } else
+            throw new JsonParseException("No systems found");
     }
 
     private List<KeyCombo> expandKeyWildcards(int key,
@@ -129,7 +133,7 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
     }
 
     private Set<Os> parseSystems(JsonArray systemsArray) {
-        Set<Os> systems = new HashSet<>();
+        Set<Os> systems = new LinkedHashSet<>();
 
         for (JsonElement systemElement : systemsArray) {
             if (!systemElement.isJsonPrimitive() || !systemElement.getAsJsonPrimitive().isString())
@@ -142,5 +146,8 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
         }
 
         return systems;
+    }
+
+    private record metadataContainer(String name, String author, String version, String description, String id, Set<Os> systems) {
     }
 }

@@ -3,25 +3,25 @@ package io.github.omegabird113.cmd_delete.config;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CustomMappingsRegistry {
-    private final Map<KeyCombo, NavAction> registry = new HashMap<>();
-    private final List<Os> systems = new ArrayList<>();
-    private String name;
-    private String author;
-    private String description;
-    private String version;
-    private String filename;
+    private final Map<KeyCombo, NavAction> registry;
+    private final List<Os> systems;
+    private final String name;
+    private final String author;
+    private final String description;
+    private final String version;
+    private final String id;
 
-    public boolean tryPut(KeyCombo key, NavAction action) {
-        if (registry.containsKey(key))
-            return false;
-        registry.put(key, action);
-        return true;
+    CustomMappingsRegistry(Map<KeyCombo, NavAction> registry, Collection<Os> systems, String name, String author, String description, String version, String filename) {
+        this.registry = Map.copyOf(registry);
+        this.systems = List.copyOf(systems);
+        this.name = name;
+        this.author = author;
+        this.description = description;
+        this.version = version;
+        this.id = filename;
     }
 
     public NavAction get(KeyCombo key) {
@@ -36,49 +36,24 @@ public class CustomMappingsRegistry {
         return systems;
     }
 
-    public void setSystems(ArrayList<Os> systems) {
-        this.systems.clear();
-        this.systems.addAll(systems);
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getVersion() {
         return version;
     }
 
-    public void setVersion(String version) {
-        this.version = version;
-    }
-
-    public String getFilename() {
-        return filename;
-    }
-
-    public void setFilename(String filename) {
-        this.filename = filename;
+    public String getId() {
+        return id;
     }
 
     public int getSize() {
