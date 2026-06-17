@@ -87,8 +87,10 @@ public class ActiveMappingsManager {
         MappingsState.Type type = resolveType(namespacedId);
         MappingsState mappingsState = switch (type) {
             case MappingsState.Type.CUSTOM -> tryResolveCustomMappings(id);
-            case MappingsState.Type.BUILTIN -> tryResolveBuiltinMappings(removeNamespaceFromId(id), MappingsState.Type.BUILTIN);
-            case MappingsState.Type.DEFAULT -> tryResolveBuiltinMappings(resolveDefaultMappingsNonNamespacedId(), MappingsState.Type.DEFAULT);
+            case MappingsState.Type.BUILTIN ->
+                    tryResolveBuiltinMappings(removeNamespaceFromId(id), MappingsState.Type.BUILTIN);
+            case MappingsState.Type.DEFAULT ->
+                    tryResolveBuiltinMappings(resolveDefaultMappingsNonNamespacedId(), MappingsState.Type.DEFAULT);
         };
         if (mappingsState == null)
             return tryResolveBuiltinMappings(resolveDefaultMappingsNonNamespacedId(), MappingsState.Type.DEFAULT);

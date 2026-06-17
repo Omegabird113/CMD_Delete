@@ -9,6 +9,7 @@ public final class NavActionUtils {
     public static final int OFFSET_RIGHT = 1;
     public static final int OFFSET_DOWN = 1;
     public static final int OFFSET_UP = -1;
+
     private NavActionUtils() {
     }
 
