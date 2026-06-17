@@ -1,10 +1,9 @@
-package io.github.omegabird113.cmd_delete.config.load;
+package io.github.omegabird113.cmd_delete.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
-import io.github.omegabird113.cmd_delete.config.registry.CustomMappingsRegistry;
 import io.github.omegabird113.cmd_delete.mappings.CustomNavMappings;
 import org.apache.commons.io.FilenameUtils;
 

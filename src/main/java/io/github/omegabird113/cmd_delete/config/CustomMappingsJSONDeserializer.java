@@ -1,10 +1,8 @@
-package io.github.omegabird113.cmd_delete.config.load;
+package io.github.omegabird113.cmd_delete.config;
 
 import com.google.gson.*;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
-import io.github.omegabird113.cmd_delete.config.registry.CustomMappingsRegistry;
-import io.github.omegabird113.cmd_delete.config.registry.KeyCombo;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 
 import java.lang.reflect.Type;
@@ -12,7 +10,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static io.github.omegabird113.cmd_delete.config.load.JsonParsingUtils.*;
+import static io.github.omegabird113.cmd_delete.config.JsonParsingUtils.*;
 
 public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMappingsRegistry> {
     private static final Map<String, Os> OS_MAP = Map.of(

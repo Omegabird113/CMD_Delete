@@ -1,4 +1,4 @@
-package io.github.omegabird113.cmd_delete.config.registry;
+package io.github.omegabird113.cmd_delete.config;
 
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.mappings.Os;

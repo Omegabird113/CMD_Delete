@@ -1,7 +1,7 @@
 package io.github.omegabird113.cmd_delete;
 
 import io.github.omegabird113.cmd_delete.command.NavMappingsCommand;
-import io.github.omegabird113.cmd_delete.config.load.CustomMappingsJSONManager;
+import io.github.omegabird113.cmd_delete.config.CustomMappingsJSONManager;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
