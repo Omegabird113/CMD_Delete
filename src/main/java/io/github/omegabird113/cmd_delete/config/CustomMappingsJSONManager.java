@@ -20,7 +20,7 @@ public final class CustomMappingsJSONManager {
     private CustomMappingsJSONManager() {
     }
 
-    private static CustomMappingsRegistry loadFromResourceMappingsDir(String id) throws IOException {
+    private static MappingsRegistry loadFromResourceMappingsDir(String id) throws IOException {
         Optional<ModContainer> mod = FabricLoader.getInstance()
                 .getModContainer(CmdDeleteClient.MODID);
 
@@ -29,29 +29,29 @@ public final class CustomMappingsJSONManager {
                 .orElseThrow(() -> new FileNotFoundException(id));
 
         Gson gson = new GsonBuilder()
-                .registerTypeAdapter(CustomMappingsRegistry.class, new CustomMappingsJSONDeserializer())
+                .registerTypeAdapter(MappingsRegistry.class, new MappingsJSONDeserializer())
                 .create();
 
         try (java.io.BufferedReader reader = Files.newBufferedReader(path)) {
-            CustomMappingsRegistry registry = gson.fromJson(reader, CustomMappingsRegistry.class);
+            MappingsRegistry registry = gson.fromJson(reader, MappingsRegistry.class);
             if (!registry.getId().equals(id))
                 throw new JsonParseException("Custom mappings id \"" + registry.getId() + "\" does not match filename \"" + id + "\"");
             return registry;
         }
     }
 
-    private static CustomMappingsRegistry loadFromCustomMappingsDir(String id) throws IOException {
+    private static MappingsRegistry loadFromCustomMappingsDir(String id) throws IOException {
         Path path = CmdDeleteClient.MAPPINGS_JSONS_PATH.resolve(id + ".json");
         if (!Files.exists(path)) {
             throw new FileNotFoundException("Custom mapping file not found at: " + path);
         }
 
         Gson gson = new GsonBuilder()
-                .registerTypeAdapter(CustomMappingsRegistry.class, new CustomMappingsJSONDeserializer())
+                .registerTypeAdapter(MappingsRegistry.class, new MappingsJSONDeserializer())
                 .create();
 
         try (java.io.BufferedReader reader = Files.newBufferedReader(path)) {
-            CustomMappingsRegistry registry = gson.fromJson(reader, CustomMappingsRegistry.class);
+            MappingsRegistry registry = gson.fromJson(reader, MappingsRegistry.class);
             if (!registry.getId().equals(id))
                 throw new JsonParseException("Custom mappings id \"" + registry.getId() + "\" does not match filename \"" + id + "\"");
             return registry;
@@ -60,7 +60,7 @@ public final class CustomMappingsJSONManager {
 
     public static boolean tryLoadCustomMappings(String id, NavMappings mappings) {
         try {
-            CustomMappingsRegistry registry = loadFromCustomMappingsDir(id);
+            MappingsRegistry registry = loadFromCustomMappingsDir(id);
             mappings.setRegistry(registry);
             return true;
         } catch (FileNotFoundException _) {
@@ -74,7 +74,7 @@ public final class CustomMappingsJSONManager {
 
     public static boolean tryLoadBuiltinMappings(String id, NavMappings mappings) {
         try {
-            CustomMappingsRegistry registry = loadFromResourceMappingsDir(id);
+            MappingsRegistry registry = loadFromResourceMappingsDir(id);
             mappings.setRegistry(registry);
             return true;
         } catch (FileNotFoundException _) {

@@ -3,7 +3,7 @@ package io.github.omegabird113.cmd_delete.mappings;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Window;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
-import io.github.omegabird113.cmd_delete.config.CustomMappingsRegistry;
+import io.github.omegabird113.cmd_delete.config.MappingsRegistry;
 import io.github.omegabird113.cmd_delete.config.KeyCombo;
 import net.minecraft.client.input.KeyEvent;
 import org.lwjgl.glfw.GLFW;
@@ -13,13 +13,13 @@ import java.util.Arrays;
 import static io.github.omegabird113.cmd_delete.actions.NavAction.NONE;
 
 public final class NavMappings {
-    private CustomMappingsRegistry registry;
+    private MappingsRegistry registry;
 
-    public CustomMappingsRegistry getRegistry() {
+    public MappingsRegistry getRegistry() {
         return registry;
     }
 
-    public void setRegistry(CustomMappingsRegistry registry) {
+    public void setRegistry(MappingsRegistry registry) {
         this.registry = registry;
     }
 
