@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 import static io.github.omegabird113.cmd_delete.actions.NavAction.NONE;
 
-public final class CustomNavMappings implements INavMappings {
+public final class NavMappings {
     private CustomMappingsRegistry registry;
 
     public CustomMappingsRegistry getRegistry() {
@@ -19,7 +19,6 @@ public final class CustomNavMappings implements INavMappings {
         this.registry = registry;
     }
 
-    @Override
     public NavAction getAction(int key, boolean shift, boolean altOption, boolean control, boolean superCommand) {
         if (registry == null)
             return NONE;
@@ -30,7 +29,6 @@ public final class CustomNavMappings implements INavMappings {
         return NONE;
     }
 
-    @Override
     public NavAction[] getPossibleActions() {
         return Arrays.stream(registry.getValues())
                 .filter(action -> action != NONE)
@@ -38,7 +36,6 @@ public final class CustomNavMappings implements INavMappings {
                 .toArray(NavAction[]::new);
     }
 
-    @Override
     public Os[] getMappingsSupportedSystems() {
         return registry.getSystems().stream()
                 .distinct()

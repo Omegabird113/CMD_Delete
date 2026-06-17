@@ -1,7 +1,5 @@
 package io.github.omegabird113.cmd_delete.actions;
 
-import io.github.omegabird113.cmd_delete.mappings.INavMappings;
-
 import java.util.Arrays;
 
 public final class NavActionUtils {

@@ -2,7 +2,6 @@ package io.github.omegabird113.cmd_delete.config;
 
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.mappings.CustomNavMappings;
-import io.github.omegabird113.cmd_delete.mappings.INavMappings;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 
