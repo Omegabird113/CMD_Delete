@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 import static io.github.omegabird113.cmd_delete.config.JsonParsingUtils.*;
 
-public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMappingsRegistry> {
+public class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistry> {
     private static final Map<String, Os> OS_MAP = Map.of(
             "windows", Os.WINDOWS,
             "mac", Os.MAC,
@@ -22,7 +22,7 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
             .collect(Collectors.toUnmodifiableMap(NavAction::name, Function.identity()));
 
     @Override
-    public CustomMappingsRegistry deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public MappingsRegistry deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         if (!json.isJsonObject())
             throw new JsonParseException("Expected a JSON object at root");
         JsonObject jsonObject = json.getAsJsonObject();
@@ -89,7 +89,7 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
         }
 
         MetadataContainer container = parseMeta(requireObject(jsonObject, "meta"));
-        return new CustomMappingsRegistry(localKeys, container.systems(), container.name(), container.author(), container.description(), container.version(), container.id());
+        return new MappingsRegistry(localKeys, container.systems(), container.name(), container.author(), container.description(), container.version(), container.id());
     }
 
     private MetadataContainer parseMeta(JsonObject meta) {

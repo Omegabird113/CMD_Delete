@@ -1,0 +1,69 @@
+{
+  "fv": 2,
+  "meta": {
+    "name": "Mac mappings",
+    "author": "",
+    "description": "Hard-coded mappings for macOS.",
+    "version": "",
+    "id": "mac",
+    "systems": [
+      "mac"
+    ]
+  },
+  "actions": {
+    "NAV_TEXT_START": [
+      {"key": "up", "superCommand": true, "altOption": false, "shift": false}
+    ],
+    "SEL_TEXT_START": [
+      {"key": "up", "superCommand": true, "altOption": false, "shift": true}
+    ],
+    "NAV_TEXT_END": [
+      {"key": "down", "superCommand": true, "altOption": false, "shift": false}
+    ],
+    "SEL_TEXT_END": [
+      {"key": "down", "superCommand": true, "altOption": false, "shift": true}
+    ],
+    "NAV_LINE_LEFT": [
+      {"key": "left", "superCommand": true, "altOption": false, "shift": false}
+    ],
+    "SEL_LINE_LEFT": [
+      {"key": "left", "superCommand": true, "altOption": false, "shift": true}
+    ],
+    "NAV_LINE_RIGHT": [
+      {"key": "right", "superCommand": true, "altOption": false, "shift": false}
+    ],
+    "SEL_LINE_RIGHT": [
+      {"key": "right", "superCommand": true, "altOption": false, "shift": true}
+    ],
+    "NAV_WORD_LEFT": [
+      {"key": "left", "superCommand": false, "altOption": true, "shift": false}
+    ],
+    "SEL_WORD_LEFT": [
+      {"key": "left", "superCommand": false, "altOption": true, "shift": true}
+    ],
+    "NAV_WORD_RIGHT": [
+      {"key": "right", "superCommand": false, "altOption": true, "shift": false}
+    ],
+    "SEL_WORD_RIGHT": [
+      {"key": "right", "superCommand": false, "altOption": true, "shift": true}
+    ],
+    "DEL_LINE_LEFT": [
+      {"key": "backspace", "superCommand": true, "altOption": false}
+    ],
+    "DEL_LINE_RIGHT": [
+      {"key": "delete", "superCommand": true, "altOption": false}
+    ],
+    "DEL_WORD_LEFT": [
+      {"key": "backspace", "superCommand": false, "altOption": true}
+    ],
+    "DEL_WORD_RIGHT": [
+      {"key": "delete", "superCommand": false, "altOption": true}
+    ],
+    "SEL_TEXT_UP": [
+      {"key": "up", "superCommand": false, "altOption": false, "shift": true}
+    ],
+    "SEL_TEXT_DOWN": [
+      {"key": "down", "superCommand": false, "altOption": false, "shift": true}
+    ]
+  }
+}

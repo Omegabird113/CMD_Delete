@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
-import io.github.omegabird113.cmd_delete.mappings.CustomNavMappings;
+import io.github.omegabird113.cmd_delete.mappings.NavMappings;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
@@ -14,39 +16,74 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public final class CustomMappingsJSONManager {
-    private CustomMappingsJSONManager() {
+public final class MappingsJSONManager {
+    private MappingsJSONManager() {
     }
 
-    private static CustomMappingsRegistry loadFromCustomMappingsDir(String id) throws IOException {
+    private static MappingsRegistry loadFromResourceMappingsDir(String id) throws IOException {
+        Optional<ModContainer> mod = FabricLoader.getInstance()
+                .getModContainer(CmdDeleteClient.MODID);
+
+        Path path = mod.orElseThrow()
+                .findPath("mappings/" + id + ".json")
+                .orElseThrow(() -> new FileNotFoundException(id));
+
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(MappingsRegistry.class, new MappingsJSONDeserializer())
+                .create();
+
+        try (java.io.BufferedReader reader = Files.newBufferedReader(path)) {
+            MappingsRegistry registry = gson.fromJson(reader, MappingsRegistry.class);
+            if (!registry.getId().equals(id))
+                throw new JsonParseException("Builtin mappings id \"" + registry.getId() + "\" does not match filename \"" + id + "\"");
+            return registry;
+        }
+    }
+
+    private static MappingsRegistry loadFromCustomMappingsDir(String id) throws IOException {
         Path path = CmdDeleteClient.MAPPINGS_JSONS_PATH.resolve(id + ".json");
         if (!Files.exists(path)) {
             throw new FileNotFoundException("Custom mapping file not found at: " + path);
         }
 
         Gson gson = new GsonBuilder()
-                .registerTypeAdapter(CustomMappingsRegistry.class, new CustomMappingsJSONDeserializer())
+                .registerTypeAdapter(MappingsRegistry.class, new MappingsJSONDeserializer())
                 .create();
 
         try (java.io.BufferedReader reader = Files.newBufferedReader(path)) {
-            CustomMappingsRegistry registry = gson.fromJson(reader, CustomMappingsRegistry.class);
+            MappingsRegistry registry = gson.fromJson(reader, MappingsRegistry.class);
             if (!registry.getId().equals(id))
                 throw new JsonParseException("Custom mappings id \"" + registry.getId() + "\" does not match filename \"" + id + "\"");
             return registry;
         }
     }
 
-    public static boolean tryLoadCustomMappings(String id, CustomNavMappings customMappings) {
+    public static boolean tryLoadCustomMappings(String id, NavMappings mappings) {
         try {
-            CustomMappingsRegistry registry = loadFromCustomMappingsDir(id);
-            customMappings.setRegistry(registry);
+            MappingsRegistry registry = loadFromCustomMappingsDir(id);
+            mappings.setRegistry(registry);
             return true;
         } catch (FileNotFoundException _) {
             CmdDeleteClient.LOGGER.error("Could not load custom mapping file \"{}\" because it does not exist.", id);
             return false;
         } catch (IOException | JsonParseException e) {
             CmdDeleteClient.LOGGER.error("Could not load custom mapping file due to exception: {}", id, e);
+            return false;
+        }
+    }
+
+    public static boolean tryLoadBuiltinMappings(String id, NavMappings mappings) {
+        try {
+            MappingsRegistry registry = loadFromResourceMappingsDir(id);
+            mappings.setRegistry(registry);
+            return true;
+        } catch (FileNotFoundException _) {
+            CmdDeleteClient.LOGGER.error("Could not load builtin mapping file \"{}\" because it does not exist.", id);
+            return false;
+        } catch (IOException | JsonParseException e) {
+            CmdDeleteClient.LOGGER.error("Could not load builtin mapping file due to exception: {}", id, e);
             return false;
         }
     }

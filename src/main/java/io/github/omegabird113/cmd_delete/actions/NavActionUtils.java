@@ -1,6 +1,6 @@
 package io.github.omegabird113.cmd_delete.actions;
 
-import io.github.omegabird113.cmd_delete.mappings.INavMappings;
+import io.github.omegabird113.cmd_delete.mappings.NavMappings;
 
 import java.util.Arrays;
 
@@ -9,6 +9,7 @@ public final class NavActionUtils {
     public static final int OFFSET_RIGHT = 1;
     public static final int OFFSET_DOWN = 1;
     public static final int OFFSET_UP = -1;
+
     private NavActionUtils() {
     }
 
@@ -32,7 +33,7 @@ public final class NavActionUtils {
         };
     }
 
-    public static float getCoverage(INavMappings mapping) {
+    public static float getCoverage(NavMappings mapping) {
         int total = Arrays.stream(NavAction.values())
                 .filter(action -> action != NavAction.NONE)
                 .toArray(NavAction[]::new)

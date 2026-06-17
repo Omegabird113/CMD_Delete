@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-public class CustomMappingsRegistry {
+public class MappingsRegistry {
     private final Map<KeyCombo, NavAction> registry;
     private final List<Os> systems;
     private final String name;
@@ -16,7 +16,7 @@ public class CustomMappingsRegistry {
     private final String version;
     private final String id;
 
-    CustomMappingsRegistry(Map<KeyCombo, NavAction> registry, Collection<Os> systems, String name, String author, String description, String version, String id) {
+    MappingsRegistry(Map<KeyCombo, NavAction> registry, Collection<Os> systems, String name, String author, String description, String version, String id) {
         this.registry = Map.copyOf(registry);
         this.systems = List.copyOf(systems);
         this.name = name;
@@ -24,6 +24,10 @@ public class CustomMappingsRegistry {
         this.description = description;
         this.version = version;
         this.id = id;
+    }
+
+    public Map<KeyCombo, NavAction> getInternalRegistry() {
+        return registry;
     }
 
     public NavAction get(KeyCombo key) {

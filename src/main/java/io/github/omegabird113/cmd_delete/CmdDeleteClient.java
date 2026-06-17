@@ -1,7 +1,7 @@
 package io.github.omegabird113.cmd_delete;
 
 import io.github.omegabird113.cmd_delete.command.NavMappingsCommand;
-import io.github.omegabird113.cmd_delete.config.CustomMappingsJSONManager;
+import io.github.omegabird113.cmd_delete.config.MappingsJSONManager;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
@@ -23,8 +23,8 @@ public class CmdDeleteClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         LOGGER.info("Initializing client mod \"{}\" (version {})...", MODID, VERSION);
-        LOGGER.debug("Resolved MAPPINGS_JSONS_PATH=\"{}\" and ACTIVE_MAPPINGS_FILE_PATH=\"{}\"",  MAPPINGS_JSONS_PATH, ACTIVE_MAPPINGS_FILE_PATH);
-        CustomMappingsJSONManager.tryMakeConfigFiles();
+        LOGGER.debug("Resolved MAPPINGS_JSONS_PATH=\"{}\" and ACTIVE_MAPPINGS_FILE_PATH=\"{}\"", MAPPINGS_JSONS_PATH, ACTIVE_MAPPINGS_FILE_PATH);
+        MappingsJSONManager.tryMakeConfigFiles();
         NavMappingsManager.loadMappings();
         NavMappingsCommand.register();
     }
