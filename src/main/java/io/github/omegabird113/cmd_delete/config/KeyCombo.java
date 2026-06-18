@@ -10,8 +10,8 @@ public record KeyCombo(int key, boolean shift, boolean altOption, boolean contro
     public @NonNull String toString() {
         boolean isMac = Os.getCurrent() == Os.MAC;
         return (control ? "ctrl+" : "")
-                + (superCommand ? (isMac ? "cmd+": "sup+") : "")
-                + (altOption ?  (isMac ? "opt+": "alt+") : "")
+                + (superCommand ? (isMac ? "cmd+" : "sup+") : "")
+                + (altOption ? (isMac ? "opt+" : "alt+") : "")
                 + (shift ? "shift+" : "") +
                 key;
     }
