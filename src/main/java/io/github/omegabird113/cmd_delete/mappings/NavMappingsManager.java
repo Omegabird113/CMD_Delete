@@ -6,7 +6,6 @@ import io.github.omegabird113.cmd_delete.command.MappingsInfoCollectionUtils;
 import io.github.omegabird113.cmd_delete.config.ActiveMappingsManager;
 
 import java.util.List;
-import java.util.Locale;
 
 public final class NavMappingsManager {
     private static final NavMappings NAV_MAPPINGS = new NavMappings();
