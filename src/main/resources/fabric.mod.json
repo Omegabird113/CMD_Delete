@@ -7,8 +7,12 @@
   "authors": [
     "Omegabird113"
   ],
-  "contact": {},
-  "license": "Apache License 2.0",
+  "contact": {
+    "homepage": "https://modrinth.com/mod/cmd-delete",
+    "sources": "https://github.com/Omegabird113/CMD_Delete",
+    "issues": "https://github.com/Omegabird113/CMD_Delete/issues,"
+  },
+  "license": "Apache-2.0",
   "icon": "assets/cmd_delete/icon.png",
   "environment": "client",
   "entrypoints": {
