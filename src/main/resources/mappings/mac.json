@@ -2,9 +2,9 @@
   "fv": 2,
   "meta": {
     "name": "Mac mappings",
-    "author": "",
+    "author": "$$cmd_delete$$",
     "description": "Hard-coded mappings for macOS.",
-    "version": "",
+    "version": "$$cmd_delete$$",
     "id": "mac",
     "systems": [
       "mac"

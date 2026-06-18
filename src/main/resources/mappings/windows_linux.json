@@ -2,9 +2,9 @@
   "fv": 2,
   "meta": {
     "name": "Windows/Linux mappings",
-    "author": "",
+    "author": "$$cmd_delete$$",
     "description": "Hard-coded mappings for Windows and Linux.",
-    "version": "",
+    "version": "$$cmd_delete$$",
     "id": "windows_linux",
     "systems": [
       "windows", "linux"

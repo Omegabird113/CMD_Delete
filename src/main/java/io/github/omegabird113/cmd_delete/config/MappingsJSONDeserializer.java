@@ -107,14 +107,16 @@ public class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegist
         String version = getStringElse(meta, "version", "unknown");
         String id = requireString(meta, "id");
 
+        if (version.equals("$$cmd_delete$$"))
+            version = CmdDeleteClient.VERSION;
+        if (author.equals("$$cmd_delete$$"))
+            author = "Omegabird113";
+
         if (meta.has("systems")) {
             JsonArray systems = requireArray(meta, "systems");
-
             Set<Os> parsedSystems = parseSystems(systems);
-
             if (parsedSystems.isEmpty())
                 throw new JsonParseException("No systems found");
-
             return new MetadataContainer(name, author, version, description, id, parsedSystems);
         } else
             throw new JsonParseException("No systems found");
