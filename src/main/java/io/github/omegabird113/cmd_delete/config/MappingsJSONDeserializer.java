@@ -35,8 +35,6 @@ public class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegist
 
         JsonObject actions = requireObject(jsonObject, "actions");
 
-        Map<String, Integer> keyMap = KeyCodeRegistry.getKeyMap();
-
         Map<KeyCombo, NavAction> localKeys = new HashMap<>();
         Map<KeyCombo, NavAction> disabledKeys = new HashMap<>();
 
@@ -55,11 +53,11 @@ public class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegist
 
                 JsonObject binding = bindingElement.getAsJsonObject();
 
-                String keyName = requireString(binding, "key").trim().toLowerCase(Locale.ROOT);
-
-                Integer keyCode = keyMap.get(keyName);
-                if (keyCode == null) {
-                    CmdDeleteClient.LOGGER.warn("Unknown key name \"{}\" in action \"{}\". This key skipped...", keyName, actionName);
+                int keyCode;
+                try {
+                    keyCode = requireKeyCode(binding, "key");
+                } catch (JsonParseException e) {
+                    CmdDeleteClient.LOGGER.warn("Invalid key binding due to error: {}", e.getMessage());
                     continue;
                 }
 
@@ -89,7 +87,7 @@ public class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegist
 
                 for (KeyCombo key : keys) {
                     if (toAdd.containsKey(key))
-                        CmdDeleteClient.LOGGER.warn("Duplicate key binding in custom binding with action of \"{}\" and key of \"{}\" (exactly \"{}\"). 2nd registration skipped...", actionName, keyName, key);
+                        CmdDeleteClient.LOGGER.warn("Duplicate key binding in custom binding with action of \"{}\" and key \"{}\". 2nd registration skipped...", actionName, key);
                     else
                         toAdd.put(key, action);
                 }

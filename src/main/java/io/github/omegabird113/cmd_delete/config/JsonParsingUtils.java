@@ -5,6 +5,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
+import java.util.Locale;
+import java.util.Map;
+
 final class JsonParsingUtils {
     private JsonParsingUtils() {
     }
@@ -73,6 +76,33 @@ final class JsonParsingUtils {
             return Integer.parseInt(s);
         } catch (NumberFormatException e) {
             throw new JsonParseException("Expected \"" + fieldName + "\" to be an integer");
+        }
+    }
+
+    public static int requireKeyCode(JsonObject parent, String fieldName) throws JsonParseException {
+        final Map<String, Integer> keyMap = KeyCodeRegistry.getKeyMap();
+
+        if (!parent.has(fieldName))
+            throw new JsonParseException("Missing required field: " + fieldName);
+
+        JsonElement element = parent.get(fieldName);
+        if (!element.isJsonPrimitive() || (!element.getAsJsonPrimitive().isString() && !element.getAsJsonPrimitive().isNumber()))
+            throw new JsonParseException("Expected \"" + fieldName + "\" to be a string or a number");
+
+        String keyString = element.getAsString().toLowerCase(Locale.ROOT).trim();
+
+        if (element.getAsJsonPrimitive().isString()) {
+            Integer keyCode = keyMap.get(keyString);
+            if (keyCode == null)
+                throw new JsonParseException("Unknown key \"" + keyString + "\".");
+            else
+                return keyCode;
+        } else {
+            try {
+                return Integer.parseInt(keyString);
+            } catch (NumberFormatException e) {
+                throw new JsonParseException("Expected \"" + fieldName + "\" to be a string or an integer");
+            }
         }
     }
 }
