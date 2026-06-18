@@ -1,9 +1,11 @@
 package io.github.omegabird113.cmd_delete.mappings;
 
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
+import io.github.omegabird113.cmd_delete.actions.NavActionUtils;
 import io.github.omegabird113.cmd_delete.command.MappingsInfoCollectionUtils;
 import io.github.omegabird113.cmd_delete.config.ActiveMappingsManager;
 
+import java.util.List;
 import java.util.Locale;
 
 public final class NavMappingsManager {
@@ -21,8 +23,8 @@ public final class NavMappingsManager {
     }
 
     private static void logMappings() {
-        CmdDeleteClient.LOGGER.info("Mappings id \"{}\" loaded with info: \"{}\"", activeMappingsManager.resolveNamespacedId(currentMappingsState), MappingsInfoCollectionUtils.getInfoFrom(currentMappingsState, false));
-        CmdDeleteClient.LOGGER.debug("Mappings registry contents: {}", currentMappingsState.mappings().getRegistry().getInternalRegistry());
+        CmdDeleteClient.LOGGER.info("Mappings id \"{}\" loaded with supported systems \"{}\" and Coverage of {}%. Its info shows as: \"{}\"", activeMappingsManager.resolveNamespacedId(currentMappingsState), List.of(currentMappingsState.mappings().getMappingsSupportedSystems()), NavActionUtils.getCoverage(getCurrentMappings()) * 100, MappingsInfoCollectionUtils.getInfoFrom(currentMappingsState, false).replace("\n", " "));
+        CmdDeleteClient.LOGGER.debug("Mappings registry: {}", currentMappingsState.mappings().getRegistry());
     }
 
     public static void loadMappings() {
