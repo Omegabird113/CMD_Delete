@@ -118,7 +118,7 @@ public final class MappingsJSONManager {
                 current = newRegistry.get();
             }
         }
-        CmdDeleteClient.LOGGER.debug("Resolved inheritance chain of {} from starting registry {}", registries, startRegistry);
+        CmdDeleteClient.LOGGER.debug("Resolved inheritance chain of {} from starting registry {}", ids, startRegistry);
         return MappingsInheritanceManager.merge(registries.reversed());
     }
 
