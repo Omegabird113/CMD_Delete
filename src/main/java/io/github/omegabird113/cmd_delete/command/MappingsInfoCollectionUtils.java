@@ -20,46 +20,29 @@ public final class MappingsInfoCollectionUtils {
         String namespacedId = "";
         String displayName = "";
         String description = "";
-        String version = "";
-        String author = "";
+        String version = mappingsState.mappings().getRegistry().getVersion();
+        String author = mappingsState.mappings().getRegistry().getAuthor();
 
-        String keyCombinationsString = "";
+        String keyCombinationsString = " with " + mappingsState.mappings().getRegistry().getSize() + " key combinations registered";
+        String[] systemStrings = Arrays.stream(mappingsState.mappings().getMappingsSupportedSystems())
+                .map(Os::name)
+                .toArray(String[]::new);
 
         switch (mappingsState.type()) {
             case CUSTOM -> {
                 namespacedId = "custom:" + mappingsState.mappings().getRegistry().getId();
                 displayName = "\"" + mappingsState.mappings().getRegistry().getName() + "\"";
                 description = mappingsState.mappings().getRegistry().getDescription();
-                version = mappingsState.mappings().getRegistry().getVersion();
-                author = mappingsState.mappings().getRegistry().getAuthor();
-
-                keyCombinationsString = " with " + mappingsState.mappings().getRegistry().getSize() + " key combinations registered";
             }
             case BUILTIN -> {
-                String[] systemStrings = Arrays.stream(mappingsState.mappings().getMappingsSupportedSystems())
-                        .map(Os::name)
-                        .toArray(String[]::new);
-
                 namespacedId = "builtin:" + String.join("_", systemStrings).toLowerCase(Locale.ROOT);
                 displayName = mappingsState.mappings().getRegistry().getName();
                 description = mappingsState.mappings().getRegistry().getDescription();
-                version = mappingsState.mappings().getRegistry().getVersion();
-                author = mappingsState.mappings().getRegistry().getAuthor();
-
-                keyCombinationsString = " with " + mappingsState.mappings().getRegistry().getSize() + " key combinations registered";
             }
             case DEFAULT -> {
-                String[] systemStrings = Arrays.stream(mappingsState.mappings().getMappingsSupportedSystems())
-                        .map(Os::name)
-                        .toArray(String[]::new);
-
                 namespacedId = "\"\"";
                 displayName = "Default Mappings (Resolved to " + String.join(" and ", systemStrings) + ")";
-                description = "The default behaviour to set the mappings to the hard-coded mappings for the OS you're currently using.";
-                version = mappingsState.mappings().getRegistry().getVersion();
-                author = mappingsState.mappings().getRegistry().getAuthor();
-
-                keyCombinationsString = " with " + mappingsState.mappings().getRegistry().getSize() + " key combinations registered";
+                description = "The hard-coded default behaviour to set the mappings to the pre-bundled mappings for the OS of the system when the client is loaded.";
             }
         }
 

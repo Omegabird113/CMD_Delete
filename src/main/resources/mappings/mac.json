@@ -3,7 +3,7 @@
   "meta": {
     "name": "Mac mappings",
     "author": "$$cmd_delete$$",
-    "description": "Hard-coded mappings for macOS.",
+    "description": "Pre-bundled mappings for macOS.",
     "version": "$$cmd_delete$$",
     "id": "mac",
     "systems": [

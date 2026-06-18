@@ -3,7 +3,7 @@
   "meta": {
     "name": "Windows/Linux mappings",
     "author": "$$cmd_delete$$",
-    "description": "Hard-coded mappings for Windows and Linux.",
+    "description": "Pre-bundled mappings for Windows and Linux.",
     "version": "$$cmd_delete$$",
     "id": "windows_linux",
     "systems": [
