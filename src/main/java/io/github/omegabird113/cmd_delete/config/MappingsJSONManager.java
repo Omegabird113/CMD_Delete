@@ -91,7 +91,7 @@ public final class MappingsJSONManager {
             CmdDeleteClient.LOGGER.error("Could not access {} mapping file \"{}\" because it does not exist.", custom ? "custom" : "builtin", id);
             return Optional.empty();
         } catch (IOException | JsonParseException e) {
-            CmdDeleteClient.LOGGER.error("Could not access {} mapping file due to exception: {}",  custom ? "custom" : "builtin", id, e);
+            CmdDeleteClient.LOGGER.error("Could not access {} mapping file due to exception: {}", custom ? "custom" : "builtin", id, e);
             return Optional.empty();
         }
     }
@@ -113,7 +113,7 @@ public final class MappingsJSONManager {
                     throw new IOException("Failed to resolve inheritance of " + (custom ? "custom" : "builtin") + " mappings \"" + idToGet + "\" by mappings \"" + current.getId() + "\"");
                 }
                 if (ids.contains(newRegistry.get().getId())) {
-                    throw new IOException("Duplicate inheritance of " + (custom ? "custom" : "builtin") + " mappings \"" + idToGet + "\" by mappings \"" + current.getId()+ "\" in chain of: " + registries);
+                    throw new IOException("Duplicate inheritance of " + (custom ? "custom" : "builtin") + " mappings \"" + idToGet + "\" by mappings \"" + current.getId() + "\" in chain of: " + registries);
                 }
                 current = newRegistry.get();
             }

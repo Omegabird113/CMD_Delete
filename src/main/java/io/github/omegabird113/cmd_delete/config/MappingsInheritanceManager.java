@@ -2,10 +2,14 @@ package io.github.omegabird113.cmd_delete.config;
 
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public final class MappingsInheritanceManager {
-    private MappingsInheritanceManager() {}
+    private MappingsInheritanceManager() {
+    }
 
     public static MappingsRegistry merge(List<MappingsRegistry> toMerge) {
         MappingsRegistry first = toMerge.getFirst();
