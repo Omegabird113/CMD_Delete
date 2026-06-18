@@ -116,6 +116,7 @@ public final class MappingsJSONManager {
                 current = newRegistry.get();
             }
         }
+        registries = registries.reversed();
         return MappingsInheritanceManager.merge(MappingsInheritanceManager.constructChain(registries));
     }
 

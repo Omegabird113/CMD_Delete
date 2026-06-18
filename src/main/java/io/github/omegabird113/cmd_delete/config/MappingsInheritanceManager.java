@@ -24,7 +24,9 @@ public final class MappingsInheritanceManager {
             localRegistry.putAll(enabledMap);
         }
 
-        return new MappingsRegistry(localRegistry, first.getSystems(), "", first.getName(), first.getAuthor(), first.getDescription(), first.getVersion(), first.getId());
+        MappingsRegistry last = toMerge.getLast();
+
+        return new MappingsRegistry(localRegistry, last.getSystems(), "", last.getName(), last.getAuthor(), last.getDescription(), last.getVersion(), last.getId());
     }
 
     public static Chain constructChain(Collection<MappingsRegistry> toMerge) {
