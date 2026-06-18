@@ -98,9 +98,11 @@ public final class MappingsJSONManager {
 
     private static MappingsRegistry resolveInheritance(MappingsRegistry startRegistry) throws IOException {
         List<MappingsRegistry> registries = new ArrayList<>();
+        List<String> ids = new ArrayList<>();
         MappingsRegistry current = startRegistry;
         while (true) {
             registries.add(current);
+            ids.add(current.getId());
             if (current.getInherits().isEmpty())
                 break;
             else {
@@ -110,7 +112,7 @@ public final class MappingsJSONManager {
                 if (newRegistry.isEmpty()) {
                     throw new IOException("Failed to resolve inheritance of " + (custom ? "custom" : "builtin") + " mappings \"" + idToGet + "\" by mappings \"" + current.getId() + "\"");
                 }
-                if (registries.contains(newRegistry.get())) {
+                if (ids.contains(newRegistry.get().getId())) {
                     throw new IOException("Duplicate inheritance of " + (custom ? "custom" : "builtin") + " mappings \"" + idToGet + "\" by mappings \"" + current.getId()+ "\" in chain of: " + registries);
                 }
                 current = newRegistry.get();
