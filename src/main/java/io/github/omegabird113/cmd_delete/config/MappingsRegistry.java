@@ -105,7 +105,24 @@ public final class MappingsRegistry {
                     && mr.version.equals(this.version)
                     && mr.author.equals(this.author)
                     && mr.description.equals(this.description)
-                    && mr.registry.equals(this.registry);
+                    && mr.registry.equals(this.registry)
+                    && mr.name.equals(this.name)
+                    && ((disabledRegistry == null || mr.disabledRegistry == null) ? disabledRegistry == mr.disabledRegistry : disabledRegistry.equals(mr.disabledRegistry))
+                    && mr.systems.equals(this.systems)
+                    && mr.inherits.equals(this.inherits);
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return registry.hashCode()
+                + (disabledRegistry == null ? 0 : disabledRegistry.hashCode())
+                + systems.hashCode()
+                + inherits.hashCode()
+                + name.hashCode()
+                + author.hashCode()
+                + description.hashCode()
+                + version.hashCode()
+                + id.hashCode();
     }
 }
