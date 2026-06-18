@@ -20,9 +20,9 @@ public final class MappingsInfoCollectionUtils {
         String namespacedId = "";
         String displayName = "";
         String description = "";
+
         String version = mappingsState.mappings().getRegistry().getVersion();
         String author = mappingsState.mappings().getRegistry().getAuthor();
-
         String keyCombinationsString = " with " + mappingsState.mappings().getRegistry().getSize() + " key combinations registered";
         String[] systemStrings = Arrays.stream(mappingsState.mappings().getMappingsSupportedSystems())
                 .map(Os::name)
