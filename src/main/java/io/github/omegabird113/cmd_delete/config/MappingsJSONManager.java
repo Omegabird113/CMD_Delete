@@ -109,12 +109,10 @@ public final class MappingsJSONManager {
                 boolean custom = current.getInherits().startsWith("custom:");
                 String idToGet = current.getInherits().replaceFirst("custom:|builtin:", "");
                 Optional<MappingsRegistry> newRegistry = getRegistryFrom(custom, idToGet);
-                if (newRegistry.isEmpty()) {
+                if (newRegistry.isEmpty())
                     throw new IOException("Failed to resolve inheritance of " + (custom ? "custom" : "builtin") + " mappings \"" + idToGet + "\" by mappings \"" + current.getId() + "\"");
-                }
-                if (ids.contains(newRegistry.get().getId())) {
+                if (ids.contains(newRegistry.get().getId()))
                     throw new IOException("Duplicate inheritance of " + (custom ? "custom" : "builtin") + " mappings \"" + idToGet + "\" by mappings \"" + current.getId() + "\" in chain of: " + registries);
-                }
                 current = newRegistry.get();
             }
         }

@@ -19,9 +19,8 @@ public class ActiveMappingsManager {
     }
 
     public MappingsState tryResolveCustomMappings(String id) {
-        if (!MappingsJSONManager.tryLoadCustomMappings(id, navMappings)) {
+        if (!MappingsJSONManager.tryLoadCustomMappings(id, navMappings))
             return null;
-        }
         return new MappingsState(navMappings, MappingsState.Type.CUSTOM, id);
     }
 
@@ -62,13 +61,12 @@ public class ActiveMappingsManager {
     }
 
     public MappingsState.Type resolveType(String namespacedId) {
-        if (namespacedId.startsWith("custom:")) {
+        if (namespacedId.startsWith("custom:"))
             return MappingsState.Type.CUSTOM;
-        } else if (namespacedId.startsWith("builtin:")) {
+        else if (namespacedId.startsWith("builtin:"))
             return MappingsState.Type.BUILTIN;
-        } else {
+        else
             return MappingsState.Type.DEFAULT;
-        }
     }
 
     String removeNamespaceFromId(String namespacedId) {

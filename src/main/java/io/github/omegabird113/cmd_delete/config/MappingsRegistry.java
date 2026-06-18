@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class MappingsRegistry {
+public final class MappingsRegistry {
     private final Map<KeyCombo, NavAction> registry;
     private final Map<KeyCombo, NavAction> disabledRegistry;
     private final List<Os> systems;
@@ -93,7 +93,7 @@ public class MappingsRegistry {
 
     @Override
     public String toString() {
-        return String.format("MappingsRegistry of (name=\"%s\", author=\"%s\", description=\"%s\", version=\"%s\", id=\"%s\") with enabled registry {%s} and disabled registry {%s} inheriting %s", name, author, description, version, id, registry.toString(), disabledRegistry.toString(), inherits);
+        return String.format("MappingsRegistry of (name=\"%s\", author=\"%s\", description=\"%s\", version=\"%s\", id=\"%s\") with enabled registry {%s} and disabled registry {%s} inheriting %s", name, author, description, version, id, registry.toString(), disabledRegistry == null ? "null" : disabledRegistry.toString(), inherits);
     }
 
     @Override

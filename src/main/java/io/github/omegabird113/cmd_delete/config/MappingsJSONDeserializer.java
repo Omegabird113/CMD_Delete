@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 import static io.github.omegabird113.cmd_delete.config.JsonParsingUtils.*;
 
-public class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistry> {
+public final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistry> {
     private static final Map<String, Os> OS_MAP = Map.of(
             "windows", Os.WINDOWS,
             "mac", Os.MAC,
@@ -28,14 +28,12 @@ public class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegist
         JsonObject jsonObject = json.getAsJsonObject();
 
         int fv = requireInt(jsonObject, "fv");
-        if (fv != 2)
-            throw new JsonParseException("Invalid format version number: " + fv);
+        if (fv != CmdDeleteClient.MAPPINGS_FORMAT_VERSION)
+            throw new JsonParseException("Invalid format version number: " + fv + ". The current format version is: " + CmdDeleteClient.MAPPINGS_FORMAT_VERSION);
 
         String inherits = getStringElse(jsonObject, "inherits", "");
 
         JsonObject actions = requireObject(jsonObject, "actions");
-
-        Map<String, Integer> keyMap = KeyCodeRegistry.getKeyMap();
 
         Map<KeyCombo, NavAction> localKeys = new HashMap<>();
         Map<KeyCombo, NavAction> disabledKeys = new HashMap<>();
@@ -55,11 +53,11 @@ public class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegist
 
                 JsonObject binding = bindingElement.getAsJsonObject();
 
-                String keyName = requireString(binding, "key").trim().toLowerCase(Locale.ROOT);
-
-                Integer keyCode = keyMap.get(keyName);
-                if (keyCode == null) {
-                    CmdDeleteClient.LOGGER.warn("Unknown key name \"{}\" in action \"{}\". This key skipped...", keyName, actionName);
+                int keyCode;
+                try {
+                    keyCode = requireKeyCode(binding, "key");
+                } catch (JsonParseException e) {
+                    CmdDeleteClient.LOGGER.warn("Invalid key binding due to error: {}", e.getMessage());
                     continue;
                 }
 
@@ -89,7 +87,7 @@ public class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegist
 
                 for (KeyCombo key : keys) {
                     if (toAdd.containsKey(key))
-                        CmdDeleteClient.LOGGER.warn("Duplicate key binding in custom binding with action of \"{}\" and key of \"{}\" (exactly \"{}\"). 2nd registration skipped...", actionName, keyName, key);
+                        CmdDeleteClient.LOGGER.warn("Duplicate key binding in custom binding with action of \"{}\" and key \"{}\". 2nd registration skipped...", actionName, key);
                     else
                         toAdd.put(key, action);
                 }
@@ -109,14 +107,16 @@ public class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegist
         String version = getStringElse(meta, "version", "unknown");
         String id = requireString(meta, "id");
 
+        if (version.equals("$$cmd_delete$$"))
+            version = CmdDeleteClient.VERSION;
+        if (author.equals("$$cmd_delete$$"))
+            author = "Omegabird113";
+
         if (meta.has("systems")) {
             JsonArray systems = requireArray(meta, "systems");
-
             Set<Os> parsedSystems = parseSystems(systems);
-
             if (parsedSystems.isEmpty())
                 throw new JsonParseException("No systems found");
-
             return new MetadataContainer(name, author, version, description, id, parsedSystems);
         } else
             throw new JsonParseException("No systems found");
