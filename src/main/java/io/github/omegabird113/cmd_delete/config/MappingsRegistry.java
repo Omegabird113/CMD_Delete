@@ -90,4 +90,22 @@ public class MappingsRegistry {
     public int getSize() {
         return registry.size();
     }
+
+    @Override
+    public String toString() {
+        return String.format("MappingsRegistry of (name=\"%s\", author=\"%s\", description=\"%s\", version=\"%s\", id=\"%s\") with enabled registry {%s} and disabled registry {%s} inheriting %s", name, author, description, version, id, registry.toString(), disabledRegistry.toString(), inherits);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof MappingsRegistry mr))
+            return false;
+        else {
+            return mr.id.equals(this.id)
+                    && mr.version.equals(this.version)
+                    && mr.author.equals(this.author)
+                    && mr.description.equals(this.description)
+                    && mr.registry.equals(this.registry);
+        }
+    }
 }
