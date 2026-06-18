@@ -31,11 +31,14 @@ public class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegist
         if (fv != 2)
             throw new JsonParseException("Invalid format version number: " + fv);
 
+        String inherits = getStringElse(jsonObject, "inherits", "");
+
         JsonObject actions = requireObject(jsonObject, "actions");
 
         Map<String, Integer> keyMap = KeyCodeRegistry.getKeyMap();
 
         Map<KeyCombo, NavAction> localKeys = new HashMap<>();
+        Map<KeyCombo, NavAction> disabledKeys = new HashMap<>();
 
         for (String actionName : actions.keySet()) {
             NavAction action = NAV_ACTION_MAP.get(actionName.trim().toUpperCase(Locale.ROOT));
@@ -80,16 +83,23 @@ public class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegist
                         hasSuperCommand, superCommandValue
                 );
 
-                for (KeyCombo key : keys)
-                    if (localKeys.containsKey(key))
+                boolean enabled = !binding.has("enabled") || binding.get("enabled").getAsBoolean();
+
+                Map<KeyCombo, NavAction> toAdd = enabled ? localKeys : disabledKeys;
+
+                for (KeyCombo key : keys) {
+                    if (toAdd.containsKey(key))
                         CmdDeleteClient.LOGGER.warn("Duplicate key binding in custom binding with action of \"{}\" and key of \"{}\" (exactly \"{}\"). 2nd registration skipped...", actionName, keyName, key);
                     else
-                        localKeys.put(key, action);
+                        toAdd.put(key, action);
+                }
             }
         }
 
         MetadataContainer container = parseMeta(requireObject(jsonObject, "meta"));
-        return new MappingsRegistry(localKeys, container.systems(), container.name(), container.author(), container.description(), container.version(), container.id());
+
+        return disabledKeys.isEmpty() ? new MappingsRegistry(localKeys, container.systems(), inherits, container.name(), container.author(), container.description(), container.version(), container.id())
+                : new MappingsRegistry(localKeys, disabledKeys, container.systems(), inherits, container.name(), container.author(), container.description(), container.version(), container.id());
     }
 
     private MetadataContainer parseMeta(JsonObject meta) {
