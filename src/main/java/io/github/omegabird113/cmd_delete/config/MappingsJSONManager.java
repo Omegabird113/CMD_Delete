@@ -100,22 +100,25 @@ public final class MappingsJSONManager {
         List<MappingsRegistry> registries = new ArrayList<>();
         List<String> ids = new ArrayList<>();
         MappingsRegistry current = startRegistry;
+        String namespacePrefix = "custom:";
         while (true) {
             registries.add(current);
-            ids.add(current.getId());
+            ids.add(namespacePrefix + current.getId());
             if (current.getInherits().isEmpty())
                 break;
             else {
-                boolean custom = current.getInherits().startsWith("custom:");
+                boolean inheritsCustom = current.getInherits().startsWith("custom:");
                 String idToGet = current.getInherits().replaceFirst("custom:|builtin:", "");
-                Optional<MappingsRegistry> newRegistry = getRegistryFrom(custom, idToGet);
+                Optional<MappingsRegistry> newRegistry = getRegistryFrom(inheritsCustom, idToGet);
+                namespacePrefix = inheritsCustom ? "custom:" : "builtin:";
                 if (newRegistry.isEmpty())
-                    throw new IOException("Failed to resolve inheritance of " + (custom ? "custom" : "builtin") + " mappings \"" + idToGet + "\" by mappings \"" + current.getId() + "\"");
-                if (ids.contains(newRegistry.get().getId()))
-                    throw new IOException("Duplicate inheritance of " + (custom ? "custom" : "builtin") + " mappings \"" + idToGet + "\" by mappings \"" + current.getId() + "\" in chain of: " + registries);
+                    throw new IOException("Failed to resolve inheritance of " + (inheritsCustom ? "custom" : "builtin") + " mappings \"" + idToGet + "\" by mappings \"" + current.getId() + "\"");
+                if (ids.contains(namespacePrefix + newRegistry.get().getId()))
+                    throw new IOException("Duplicate inheritance of " + (inheritsCustom ? "custom" : "builtin") + " mappings \"" + idToGet + "\" by mappings \"" + current.getId() + "\" in chain of: " + registries);
                 current = newRegistry.get();
             }
         }
+        CmdDeleteClient.LOGGER.debug("Resolved inheritance chain of {} from starting registry {}", registries, startRegistry);
         return MappingsInheritanceManager.merge(registries.reversed());
     }
 
