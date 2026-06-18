@@ -4,12 +4,10 @@ import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.command.MappingsInfoCollectionUtils;
 import io.github.omegabird113.cmd_delete.config.ActiveMappingsManager;
 
-import java.util.Locale;
-
 public final class NavMappingsManager {
     private static final NavMappings NAV_MAPPINGS = new NavMappings();
     private static final ActiveMappingsManager activeMappingsManager = new ActiveMappingsManager(
-            NAV_MAPPINGS, getOs()
+            NAV_MAPPINGS, Os.getCurrent()
     );
     private static MappingsState currentMappingsState;
 
@@ -64,17 +62,6 @@ public final class NavMappingsManager {
                 activeMappingsManager.resolveNamespacedId(currentMappingsState)
         );
         logMappings();
-    }
-
-    public static Os getOs() {
-        String os = System.getProperty("os.name").toLowerCase(Locale.ROOT);
-        if (os.contains("mac")) {
-            return Os.MAC;
-        } else if (os.contains("win")) {
-            return Os.WINDOWS;
-        } else {
-            return Os.LINUX;
-        }
     }
 
     public static MappingsState getMappingsState() {
