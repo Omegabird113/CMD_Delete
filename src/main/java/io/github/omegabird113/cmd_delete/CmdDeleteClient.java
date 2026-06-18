@@ -17,6 +17,8 @@ public final class CmdDeleteClient implements ClientModInitializer {
             .map(container -> container.getMetadata().getVersion().getFriendlyString())
             .orElse("<unknown>");
     public static final int MAPPINGS_FORMAT_VERSION = 2;
+    public static final Path MAPPINGS_RESOURCE_PATH = FabricLoader.getInstance().getModContainer(CmdDeleteClient.MODID)
+            .orElseThrow().findPath("mappings/").orElseThrow();
     private static final Path GAME_PATH = FabricLoader.getInstance().getGameDir();
     public static final Path MAPPINGS_JSONS_PATH = GAME_PATH.resolve("config/cmd_delete/mappings/");
     public static final Path ACTIVE_MAPPINGS_FILE_PATH = GAME_PATH.resolve("config/cmd_delete/.active_mappings");
@@ -24,7 +26,7 @@ public final class CmdDeleteClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         LOGGER.info("Initializing client mod \"{}\" (version: {}, mappings format version: {})...", MODID, VERSION, MAPPINGS_FORMAT_VERSION);
-        LOGGER.debug("Resolved MAPPINGS_JSONS_PATH=\"{}\" and ACTIVE_MAPPINGS_FILE_PATH=\"{}\"", MAPPINGS_JSONS_PATH, ACTIVE_MAPPINGS_FILE_PATH);
+        LOGGER.debug("Resolved  MAPPINGS_RESOURCE_PATH=\"{}\", MAPPINGS_JSONS_PATH=\"{}\", and ACTIVE_MAPPINGS_FILE_PATH=\"{}\"", MAPPINGS_RESOURCE_PATH, MAPPINGS_JSONS_PATH, ACTIVE_MAPPINGS_FILE_PATH);
         MappingsJSONManager.tryMakeConfigFiles();
         NavMappingsManager.loadMappings();
         NavMappingsCommand.register();

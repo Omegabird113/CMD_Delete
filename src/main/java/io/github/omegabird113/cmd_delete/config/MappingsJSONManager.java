@@ -5,8 +5,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.mappings.NavMappings;
-import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.ModContainer;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
@@ -23,12 +21,7 @@ public final class MappingsJSONManager {
     }
 
     private static MappingsRegistry loadFromResourceMappingsDir(String id) throws IOException {
-        Optional<ModContainer> mod = FabricLoader.getInstance()
-                .getModContainer(CmdDeleteClient.MODID);
-
-        Path path = mod.orElseThrow()
-                .findPath("mappings/" + id + ".json")
-                .orElseThrow(() -> new FileNotFoundException(id));
+        Path path = CmdDeleteClient.MAPPINGS_RESOURCE_PATH.resolve(id + ".json");
 
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(MappingsRegistry.class, new MappingsJSONDeserializer())
