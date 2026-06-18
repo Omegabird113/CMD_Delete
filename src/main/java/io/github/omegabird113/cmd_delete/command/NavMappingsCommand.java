@@ -64,9 +64,8 @@ public final class NavMappingsCommand {
 
     private static int setCustom(CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
         String id = StringArgumentType.getString(context, "id");
-        if (!NavMappingsManager.updateMappingsToCustom(id)) {
+        if (!NavMappingsManager.updateMappingsToCustom(id))
             throw UNKNOWN_CUSTOM_MAPPINGS.create(id);
-        }
         context.getSource().sendFeedback(Component.literal("Set nav mappings to custom:" + id));
         return 1;
     }

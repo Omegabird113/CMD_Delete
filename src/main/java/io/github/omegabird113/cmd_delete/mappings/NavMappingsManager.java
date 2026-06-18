@@ -36,9 +36,8 @@ public final class NavMappingsManager {
 
     public static boolean updateMappingsToCustom(String id) {
         MappingsState mappingsState = activeMappingsManager.tryResolveCustomMappings(id);
-        if (mappingsState == null) {
+        if (mappingsState == null)
             return false;
-        }
         currentMappingsState = mappingsState;
         activeMappingsManager.trySaveMappings(
                 activeMappingsManager.resolveNamespacedId(currentMappingsState)
