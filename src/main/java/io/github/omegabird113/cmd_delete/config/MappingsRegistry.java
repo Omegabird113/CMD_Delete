@@ -107,7 +107,7 @@ public final class MappingsRegistry {
                     && mr.description.equals(this.description)
                     && mr.registry.equals(this.registry)
                     && mr.name.equals(this.name)
-                    && ((disabledRegistry == null || mr.disabledRegistry == null) ? disabledRegistry == mr.disabledRegistry : disabledRegistry.equals(mr.disabledRegistry))
+                    && ((mr.disabledRegistry == null || this.disabledRegistry == null) ? disabledRegistry == mr.disabledRegistry : disabledRegistry.equals(mr.disabledRegistry))
                     && mr.systems.equals(this.systems)
                     && mr.inherits.equals(this.inherits);
         }
