@@ -6,19 +6,36 @@ import io.github.omegabird113.cmd_delete.mappings.Os;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class MappingsRegistry {
     private final Map<KeyCombo, NavAction> registry;
+    private final Map<KeyCombo, NavAction> disabledRegistry;
     private final List<Os> systems;
+    private final String inherits;
     private final String name;
     private final String author;
     private final String description;
     private final String version;
     private final String id;
 
-    MappingsRegistry(Map<KeyCombo, NavAction> registry, Collection<Os> systems, String name, String author, String description, String version, String id) {
+    MappingsRegistry(Map<KeyCombo, NavAction> registry, Collection<Os> systems, String inherits, String name, String author, String description, String version, String id) {
         this.registry = Map.copyOf(registry);
+        this.disabledRegistry = null;
         this.systems = List.copyOf(systems);
+        this.inherits = inherits;
+        this.name = name;
+        this.author = author;
+        this.description = description;
+        this.version = version;
+        this.id = id;
+    }
+
+    MappingsRegistry(Map<KeyCombo, NavAction> registry, Map<KeyCombo, NavAction> disabledRegistry, Collection<Os> systems, String inherits, String name, String author, String description, String version, String id) {
+        this.registry = Map.copyOf(registry);
+        this.disabledRegistry = Map.copyOf(disabledRegistry);
+        this.systems = List.copyOf(systems);
+        this.inherits = inherits;
         this.name = name;
         this.author = author;
         this.description = description;
@@ -28,6 +45,10 @@ public class MappingsRegistry {
 
     public Map<KeyCombo, NavAction> getInternalRegistry() {
         return registry;
+    }
+
+    public Optional<Map<KeyCombo, NavAction>> getInternalDisabledRegistry() {
+        return Optional.ofNullable(disabledRegistry);
     }
 
     public NavAction get(KeyCombo key) {
@@ -40,6 +61,10 @@ public class MappingsRegistry {
 
     public List<Os> getSystems() {
         return systems;
+    }
+
+    public String getInherits() {
+        return inherits;
     }
 
     public String getName() {
@@ -64,5 +89,23 @@ public class MappingsRegistry {
 
     public int getSize() {
         return registry.size();
+    }
+
+    @Override
+    public String toString() {
+        return String.format("MappingsRegistry of (name=\"%s\", author=\"%s\", description=\"%s\", version=\"%s\", id=\"%s\") with enabled registry {%s} and disabled registry {%s} inheriting %s", name, author, description, version, id, registry.toString(), disabledRegistry.toString(), inherits);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof MappingsRegistry mr))
+            return false;
+        else {
+            return mr.id.equals(this.id)
+                    && mr.version.equals(this.version)
+                    && mr.author.equals(this.author)
+                    && mr.description.equals(this.description)
+                    && mr.registry.equals(this.registry);
+        }
     }
 }
