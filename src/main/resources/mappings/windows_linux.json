@@ -1,0 +1,124 @@
+{
+  "fv": 2,
+  "meta": {
+    "name": "Windows/Linux mappings",
+    "author": "$$cmd_delete$$",
+    "description": "Hard-coded mappings for Windows and Linux.",
+    "version": "$$cmd_delete$$",
+    "id": "windows_linux",
+    "systems": [
+      "windows",
+      "linux"
+    ]
+  },
+  "actions": {
+    "NAV_TEXT_START": [
+      {
+        "key": "home",
+        "control": true,
+        "shift": false
+      }
+    ],
+    "SEL_TEXT_START": [
+      {
+        "key": "home",
+        "control": true,
+        "shift": true
+      }
+    ],
+    "NAV_TEXT_END": [
+      {
+        "key": "end",
+        "control": true,
+        "shift": false
+      }
+    ],
+    "SEL_TEXT_END": [
+      {
+        "key": "end",
+        "control": true,
+        "shift": true
+      }
+    ],
+    "NAV_LINE_LEFT": [
+      {
+        "key": "home",
+        "control": false,
+        "shift": false
+      }
+    ],
+    "SEL_LINE_LEFT": [
+      {
+        "key": "home",
+        "control": false,
+        "shift": true
+      }
+    ],
+    "NAV_LINE_RIGHT": [
+      {
+        "key": "end",
+        "control": false,
+        "shift": false
+      }
+    ],
+    "SEL_LINE_RIGHT": [
+      {
+        "key": "end",
+        "control": false,
+        "shift": true
+      }
+    ],
+    "NAV_WORD_LEFT": [
+      {
+        "key": "left",
+        "control": true,
+        "shift": false
+      }
+    ],
+    "SEL_WORD_LEFT": [
+      {
+        "key": "left",
+        "control": true,
+        "shift": true
+      }
+    ],
+    "NAV_WORD_RIGHT": [
+      {
+        "key": "right",
+        "control": true,
+        "shift": false
+      }
+    ],
+    "SEL_WORD_RIGHT": [
+      {
+        "key": "right",
+        "control": true,
+        "shift": true
+      }
+    ],
+    "DEL_WORD_LEFT": [
+      {
+        "key": "backspace",
+        "control": true
+      }
+    ],
+    "DEL_WORD_RIGHT": [
+      {
+        "key": "delete",
+        "control": true
+      }
+    ],
+    "SEL_TEXT_UP": [
+      {
+        "key": "up",
+        "shift": true
+      }
+    ],
+    "SEL_TEXT_DOWN": [
+      {
+        "key": "down",
+        "shift": true
+      }
+    ]
+  }
+}

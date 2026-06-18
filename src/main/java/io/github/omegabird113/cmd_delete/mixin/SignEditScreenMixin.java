@@ -55,9 +55,8 @@ public abstract class SignEditScreenMixin {
         boolean shift = event.hasShiftDown();
 
         // Reset selection if player moves w/o shift
-        if (!shift && (event.isUp() || event.isDown() || event.isLeft() || event.isRight() || NavActionUtils.isMoveAction(action))) {
+        if (!shift && (event.isUp() || event.isDown() || event.isLeft() || event.isRight() || NavActionUtils.isMoveAction(action)))
             this.cmd_delete$clearMultilineSelection();
-        }
 
         if (action == NavAction.NONE && !shift && (event.isLeft() || event.isRight())) {
             // If line changed, we handled it, else continue
@@ -113,17 +112,15 @@ public abstract class SignEditScreenMixin {
     // Draw selected lines other than the cursor's line
     @Inject(method = "extractSignText", at = @At("TAIL"))
     private void cmd_delete$extractMultilineSelection(GuiGraphicsExtractor graphics, Vector2f cursorPosOutput, CallbackInfo ci) {
-        if (this.cmd_delete$hasNoMultilineSelection()) {
+        if (this.cmd_delete$hasNoMultilineSelection())
             return;
-        }
 
         int textLineHeight = this.sign.getTextLineHeight();
         int yOffset = this.messages.length * textLineHeight / 2;
 
         for (int workingLine = 0; workingLine < this.messages.length; workingLine++) {
-            if (workingLine == this.line || !this.cmd_delete$lineHasSelection(workingLine)) {
+            if (workingLine == this.line || !this.cmd_delete$lineHasSelection(workingLine))
                 continue;
-            }
 
             String message = this.messages[workingLine];
             int start = this.cmd_delete$getSelectionStart(workingLine);
@@ -186,11 +183,10 @@ public abstract class SignEditScreenMixin {
 
     @Unique
     private void cmd_delete$moveToLineEdge(int direction, boolean extendSelection) {
-        if (direction == NavActionUtils.OFFSET_LEFT) {
+        if (direction == NavActionUtils.OFFSET_LEFT)
             this.signField.setCursorToStart(extendSelection);
-        } else {
+        else
             this.signField.setCursorToEnd(extendSelection);
-        }
     }
 
     @Unique
@@ -239,12 +235,9 @@ public abstract class SignEditScreenMixin {
 
     @Unique
     private int cmd_delete$getNextWordLine(int direction) {
-        for (int nextLine = this.line + direction; nextLine >= 0 && nextLine < this.messages.length; nextLine += direction) {
-            if (!this.messages[nextLine].isEmpty()) {
+        for (int nextLine = this.line + direction; nextLine >= 0 && nextLine < this.messages.length; nextLine += direction)
+            if (!this.messages[nextLine].isEmpty())
                 return nextLine;
-            }
-        }
-
         return this.line;
     }
 
@@ -286,21 +279,16 @@ public abstract class SignEditScreenMixin {
 
     @Unique
     private void cmd_delete$syncCurrentLineSelection() {
-        if (this.cmd_delete$hasNoMultilineSelection()) {
+        if (this.cmd_delete$hasNoMultilineSelection())
             return;
-        }
-
-        if (this.cmd_delete$lineHasSelection(this.line)) {
+        if (this.cmd_delete$lineHasSelection(this.line))
             this.signField.setSelectionRange(this.cmd_delete$selectionEndPos, this.cmd_delete$getCurrentLineSelectionOppositeEnd());
-        }
     }
 
     @Unique
     private int cmd_delete$getCurrentLineSelectionOppositeEnd() {
-        if (this.line == this.cmd_delete$selectionStartLine) {
+        if (this.line == this.cmd_delete$selectionStartLine)
             return this.cmd_delete$selectionStartPos;
-        }
-
         return this.cmd_delete$selectionStartLine < this.cmd_delete$selectionEndLine ? 0 : this.cmd_delete$currentLineMessage().length();
     }
 
@@ -311,46 +299,36 @@ public abstract class SignEditScreenMixin {
 
     @Unique
     private int cmd_delete$getSelectionStart(int workingLine) {
-        if (this.cmd_delete$compareSelectionPoints() <= 0) {
+        if (this.cmd_delete$compareSelectionPoints() <= 0)
             return this.cmd_delete$getSelectionStart(workingLine, this.cmd_delete$selectionStartLine, this.cmd_delete$selectionStartPos, this.cmd_delete$selectionEndLine);
-        }
-
         return this.cmd_delete$getSelectionStart(workingLine, this.cmd_delete$selectionEndLine, this.cmd_delete$selectionEndPos, this.cmd_delete$selectionStartLine);
     }
 
     @Unique
     private int cmd_delete$getSelectionStart(int workingLine, int startLine, int startPos, int endLine) {
-        if (workingLine < startLine || workingLine > endLine) {
+        if (workingLine < startLine || workingLine > endLine)
             return 0;
-        }
-
         return workingLine == startLine ? startPos : 0;
     }
 
     @Unique
     private int cmd_delete$getSelectionEnd(int workingLine) {
-        if (this.cmd_delete$compareSelectionPoints() <= 0) {
+        if (this.cmd_delete$compareSelectionPoints() <= 0)
             return this.cmd_delete$getSelectionEnd(workingLine, this.cmd_delete$selectionStartLine, this.cmd_delete$selectionEndLine, this.cmd_delete$selectionEndPos);
-        }
-
         return this.cmd_delete$getSelectionEnd(workingLine, this.cmd_delete$selectionEndLine, this.cmd_delete$selectionStartLine, this.cmd_delete$selectionStartPos);
     }
 
     @Unique
     private int cmd_delete$getSelectionEnd(int workingLine, int startLine, int endLine, int endPos) {
-        if (workingLine < startLine || workingLine > endLine) {
+        if (workingLine < startLine || workingLine > endLine)
             return 0;
-        }
-
         return workingLine == endLine ? endPos : this.messages[workingLine].length();
     }
 
     @Unique
     private int cmd_delete$compareSelectionPoints() {
-        if (this.cmd_delete$selectionStartLine != this.cmd_delete$selectionEndLine) {
+        if (this.cmd_delete$selectionStartLine != this.cmd_delete$selectionEndLine)
             return Integer.compare(this.cmd_delete$selectionStartLine, this.cmd_delete$selectionEndLine);
-        }
-
         return Integer.compare(this.cmd_delete$selectionStartPos, this.cmd_delete$selectionEndPos);
     }
 

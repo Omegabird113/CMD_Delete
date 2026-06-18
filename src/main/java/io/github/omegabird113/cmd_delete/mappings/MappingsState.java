@@ -1,6 +1,6 @@
 package io.github.omegabird113.cmd_delete.mappings;
 
-public record MappingsState(INavMappings mappings, Type type, String id) {
+public record MappingsState(NavMappings mappings, Type type, String id) {
     public enum Type {
         CUSTOM, BUILTIN, DEFAULT
     }

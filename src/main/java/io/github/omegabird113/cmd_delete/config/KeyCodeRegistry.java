@@ -1,4 +1,4 @@
-package io.github.omegabird113.cmd_delete.config.load;
+package io.github.omegabird113.cmd_delete.config;
 
 import java.util.Map;
 

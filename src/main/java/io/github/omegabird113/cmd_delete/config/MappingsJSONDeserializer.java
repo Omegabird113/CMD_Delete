@@ -1,10 +1,8 @@
-package io.github.omegabird113.cmd_delete.config.load;
+package io.github.omegabird113.cmd_delete.config;
 
 import com.google.gson.*;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
-import io.github.omegabird113.cmd_delete.config.registry.CustomMappingsRegistry;
-import io.github.omegabird113.cmd_delete.config.registry.KeyCombo;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 
 import java.lang.reflect.Type;
@@ -12,9 +10,9 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static io.github.omegabird113.cmd_delete.config.load.JsonParsingUtils.*;
+import static io.github.omegabird113.cmd_delete.config.JsonParsingUtils.*;
 
-public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMappingsRegistry> {
+public final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistry> {
     private static final Map<String, Os> OS_MAP = Map.of(
             "windows", Os.WINDOWS,
             "mac", Os.MAC,
@@ -24,21 +22,21 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
             .collect(Collectors.toUnmodifiableMap(NavAction::name, Function.identity()));
 
     @Override
-    public CustomMappingsRegistry deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public MappingsRegistry deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         if (!json.isJsonObject())
             throw new JsonParseException("Expected a JSON object at root");
         JsonObject jsonObject = json.getAsJsonObject();
-        CustomMappingsRegistry registry = new CustomMappingsRegistry();
 
         int fv = requireInt(jsonObject, "fv");
-        if (fv != 1)
-            throw new JsonParseException("Invalid format version number: " + fv);
+        if (fv != CmdDeleteClient.MAPPINGS_FORMAT_VERSION)
+            throw new JsonParseException("Invalid format version number: " + fv + ". The current format version is: " + CmdDeleteClient.MAPPINGS_FORMAT_VERSION);
 
-        parseMeta(requireObject(jsonObject, "meta"), registry);
+        String inherits = getStringElse(jsonObject, "inherits", "");
 
         JsonObject actions = requireObject(jsonObject, "actions");
 
-        Map<String, Integer> keyMap = KeyCodeRegistry.getKeyMap();
+        Map<KeyCombo, NavAction> localKeys = new HashMap<>();
+        Map<KeyCombo, NavAction> disabledKeys = new HashMap<>();
 
         for (String actionName : actions.keySet()) {
             NavAction action = NAV_ACTION_MAP.get(actionName.trim().toUpperCase(Locale.ROOT));
@@ -55,11 +53,11 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
 
                 JsonObject binding = bindingElement.getAsJsonObject();
 
-                String keyName = requireString(binding, "key").trim().toLowerCase(Locale.ROOT);
-
-                Integer keyCode = keyMap.get(keyName);
-                if (keyCode == null) {
-                    CmdDeleteClient.LOGGER.warn("Unknown key name \"{}\" in action \"{}\". This key skipped...", keyName, actionName);
+                int keyCode;
+                try {
+                    keyCode = requireKeyCode(binding, "key");
+                } catch (JsonParseException e) {
+                    CmdDeleteClient.LOGGER.warn("Invalid key binding due to error: {}", e.getMessage());
                     continue;
                 }
 
@@ -83,31 +81,45 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
                         hasSuperCommand, superCommandValue
                 );
 
-                for (KeyCombo key : keys)
-                    if (!registry.tryPut(key, action))
-                        CmdDeleteClient.LOGGER.warn("Duplicate key binding in custom binding with action of \"{}\" and key of \"{}\" (exactly \"{}\"). 2nd registration skipped...", actionName, keyName, key);
+                boolean enabled = !binding.has("enabled") || binding.get("enabled").getAsBoolean();
+
+                Map<KeyCombo, NavAction> toAdd = enabled ? localKeys : disabledKeys;
+
+                for (KeyCombo key : keys) {
+                    if (toAdd.containsKey(key))
+                        CmdDeleteClient.LOGGER.warn("Duplicate key binding in custom binding with action of \"{}\" and key \"{}\". 2nd registration skipped...", actionName, key);
+                    else
+                        toAdd.put(key, action);
+                }
             }
         }
 
-        return registry;
+        MetadataContainer container = parseMeta(requireObject(jsonObject, "meta"));
+
+        return disabledKeys.isEmpty() ? new MappingsRegistry(localKeys, container.systems(), inherits, container.name(), container.author(), container.description(), container.version(), container.id())
+                : new MappingsRegistry(localKeys, disabledKeys, container.systems(), inherits, container.name(), container.author(), container.description(), container.version(), container.id());
     }
 
-    private void parseMeta(JsonObject meta, CustomMappingsRegistry registry) {
-        registry.setName(getStringElse(meta, "name", "Unnamed Custom Mappings"));
-        registry.setAuthor(getStringElse(meta, "author", "unknown"));
-        registry.setDescription(getStringElse(meta, "description", "No description provided"));
-        registry.setVersion(getStringElse(meta, "version", "unknown"));
+    private MetadataContainer parseMeta(JsonObject meta) {
+        String name = getStringElse(meta, "name", "Unnamed Custom Mappings");
+        String author = getStringElse(meta, "author", "unknown");
+        String description = getStringElse(meta, "description", "No description provided");
+        String version = getStringElse(meta, "version", "unknown");
+        String id = requireString(meta, "id");
+
+        if (version.equals("$$cmd_delete$$"))
+            version = CmdDeleteClient.VERSION;
+        if (author.equals("$$cmd_delete$$"))
+            author = "Omegabird113";
 
         if (meta.has("systems")) {
             JsonArray systems = requireArray(meta, "systems");
-
             Set<Os> parsedSystems = parseSystems(systems);
-
             if (parsedSystems.isEmpty())
                 throw new JsonParseException("No systems found");
-
-            registry.setSystems(new ArrayList<>(parsedSystems));
-        }
+            return new MetadataContainer(name, author, version, description, id, parsedSystems);
+        } else
+            throw new JsonParseException("No systems found");
     }
 
     private List<KeyCombo> expandKeyWildcards(int key,
@@ -131,7 +143,7 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
     }
 
     private Set<Os> parseSystems(JsonArray systemsArray) {
-        Set<Os> systems = new HashSet<>();
+        Set<Os> systems = new LinkedHashSet<>();
 
         for (JsonElement systemElement : systemsArray) {
             if (!systemElement.isJsonPrimitive() || !systemElement.getAsJsonPrimitive().isString())
@@ -144,5 +156,9 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
         }
 
         return systems;
+    }
+
+    private record MetadataContainer(String name, String author, String version, String description, String id,
+                                     Set<Os> systems) {
     }
 }

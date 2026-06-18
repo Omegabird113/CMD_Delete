@@ -1,25 +1,28 @@
 package io.github.omegabird113.cmd_delete.mappings;
 
+import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.platform.Window;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
-import io.github.omegabird113.cmd_delete.config.registry.CustomMappingsRegistry;
-import io.github.omegabird113.cmd_delete.config.registry.KeyCombo;
+import io.github.omegabird113.cmd_delete.config.KeyCombo;
+import io.github.omegabird113.cmd_delete.config.MappingsRegistry;
+import net.minecraft.client.input.KeyEvent;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.Arrays;
 
 import static io.github.omegabird113.cmd_delete.actions.NavAction.NONE;
 
-public final class CustomNavMappings implements INavMappings {
-    private CustomMappingsRegistry registry;
+public final class NavMappings {
+    private MappingsRegistry registry;
 
-    public CustomMappingsRegistry getRegistry() {
+    public MappingsRegistry getRegistry() {
         return registry;
     }
 
-    public void setRegistry(CustomMappingsRegistry registry) {
+    public void setRegistry(MappingsRegistry registry) {
         this.registry = registry;
     }
 
-    @Override
     public NavAction getAction(int key, boolean shift, boolean altOption, boolean control, boolean superCommand) {
         if (registry == null)
             return NONE;
@@ -30,16 +33,28 @@ public final class CustomNavMappings implements INavMappings {
         return NONE;
     }
 
-    @Override
+    public NavAction getAction(KeyEvent event, Window window) {
+        int key = event.key();
+        boolean shift = event.hasShiftDown();
+        boolean alt = event.hasAltDown();
+        boolean control = event.hasControlDown();
+        boolean windows = InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_SUPER) || InputConstants.isKeyDown(window, GLFW.GLFW_KEY_RIGHT_SUPER);
+
+        return getAction(key, shift, alt, control, windows);
+    }
+
     public NavAction[] getPossibleActions() {
+        if (registry == null)
+            return new NavAction[0];
         return Arrays.stream(registry.getValues())
                 .filter(action -> action != NONE)
                 .distinct()
                 .toArray(NavAction[]::new);
     }
 
-    @Override
     public Os[] getMappingsSupportedSystems() {
+        if (registry == null)
+            return new Os[0];
         return registry.getSystems().stream()
                 .distinct()
                 .toArray(Os[]::new);

@@ -1,9 +1,7 @@
 package io.github.omegabird113.cmd_delete.command;
 
-import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavActionUtils;
-import io.github.omegabird113.cmd_delete.config.load.CustomMappingsJSONManager;
-import io.github.omegabird113.cmd_delete.mappings.CustomNavMappings;
+import io.github.omegabird113.cmd_delete.config.MappingsJSONManager;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 
@@ -29,15 +27,13 @@ public final class MappingsInfoCollectionUtils {
 
         switch (mappingsState.type()) {
             case CUSTOM -> {
-                CustomNavMappings custom = (CustomNavMappings) mappingsState.mappings();
+                namespacedId = "custom:" + mappingsState.mappings().getRegistry().getId();
+                displayName = "\"" + mappingsState.mappings().getRegistry().getName() + "\"";
+                description = mappingsState.mappings().getRegistry().getDescription();
+                version = mappingsState.mappings().getRegistry().getVersion();
+                author = mappingsState.mappings().getRegistry().getAuthor();
 
-                namespacedId = "custom:" + custom.getRegistry().getFilename();
-                displayName = "\"" + custom.getRegistry().getName() + "\"";
-                description = custom.getRegistry().getDescription();
-                version = custom.getRegistry().getVersion();
-                author = custom.getRegistry().getAuthor();
-
-                keyCombinationsString = " with " + custom.getRegistry().getSize() + " key combinations registered";
+                keyCombinationsString = " with " + mappingsState.mappings().getRegistry().getSize() + " key combinations registered";
             }
             case BUILTIN -> {
                 String[] systemStrings = Arrays.stream(mappingsState.mappings().getMappingsSupportedSystems())
@@ -45,10 +41,12 @@ public final class MappingsInfoCollectionUtils {
                         .toArray(String[]::new);
 
                 namespacedId = "builtin:" + String.join("_", systemStrings).toLowerCase(Locale.ROOT);
-                displayName = String.join(" and ", systemStrings) + " mappings";
-                description = "Hard-coded mappings for the specified operating system(s).";
-                version = CmdDeleteClient.VERSION;
-                author = "Omegabird113";
+                displayName = mappingsState.mappings().getRegistry().getName();
+                description = mappingsState.mappings().getRegistry().getDescription();
+                version = mappingsState.mappings().getRegistry().getVersion();
+                author = mappingsState.mappings().getRegistry().getAuthor();
+
+                keyCombinationsString = " with " + mappingsState.mappings().getRegistry().getSize() + " key combinations registered";
             }
             case DEFAULT -> {
                 String[] systemStrings = Arrays.stream(mappingsState.mappings().getMappingsSupportedSystems())
@@ -58,8 +56,10 @@ public final class MappingsInfoCollectionUtils {
                 namespacedId = "\"\"";
                 displayName = "Default Mappings (Resolved to " + String.join(" and ", systemStrings) + ")";
                 description = "The default behaviour to set the mappings to the hard-coded mappings for the OS you're currently using.";
-                version = CmdDeleteClient.VERSION;
-                author = "Omegabird113";
+                version = mappingsState.mappings().getRegistry().getVersion();
+                author = mappingsState.mappings().getRegistry().getAuthor();
+
+                keyCombinationsString = " with " + mappingsState.mappings().getRegistry().getSize() + " key combinations registered";
             }
         }
 
@@ -78,7 +78,7 @@ public final class MappingsInfoCollectionUtils {
                         "builtin:mac"
                 )
         );
-        internal.addAll(CustomMappingsJSONManager.getAvailableOptions());
+        internal.addAll(MappingsJSONManager.getAvailableOptions());
         return internal.toArray(String[]::new);
     }
 }
