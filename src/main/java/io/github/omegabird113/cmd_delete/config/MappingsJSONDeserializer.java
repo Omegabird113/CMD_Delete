@@ -28,8 +28,8 @@ public class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegist
         JsonObject jsonObject = json.getAsJsonObject();
 
         int fv = requireInt(jsonObject, "fv");
-        if (fv != 2)
-            throw new JsonParseException("Invalid format version number: " + fv);
+        if (fv != CmdDeleteClient.MAPPINGS_FORMAT_VERSION)
+            throw new JsonParseException("Invalid format version number: " + fv + ". The current format version is: " + CmdDeleteClient.MAPPINGS_FORMAT_VERSION);
 
         String inherits = getStringElse(jsonObject, "inherits", "");
 
