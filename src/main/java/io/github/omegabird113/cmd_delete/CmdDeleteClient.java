@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
 
-public class CmdDeleteClient implements ClientModInitializer {
+public final class CmdDeleteClient implements ClientModInitializer {
     public static final String MODID = "cmd_delete";
     public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
     public static final String VERSION = FabricLoader.getInstance().getModContainer(MODID)

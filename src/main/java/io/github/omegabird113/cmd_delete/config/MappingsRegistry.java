@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class MappingsRegistry {
+public final class MappingsRegistry {
     private final Map<KeyCombo, NavAction> registry;
     private final Map<KeyCombo, NavAction> disabledRegistry;
     private final List<Os> systems;

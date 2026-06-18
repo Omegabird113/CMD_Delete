@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 import static io.github.omegabird113.cmd_delete.config.JsonParsingUtils.*;
 
-public class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistry> {
+public final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistry> {
     private static final Map<String, Os> OS_MAP = Map.of(
             "windows", Os.WINDOWS,
             "mac", Os.MAC,
