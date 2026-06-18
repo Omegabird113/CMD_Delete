@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class MappingsRegistry {
     private final Map<KeyCombo, NavAction> registry;
-    private final Optional<Map<KeyCombo, NavAction>> disabledRegistry;
+    private final Map<KeyCombo, NavAction> disabledRegistry;
     private final List<Os> systems;
     private final String inherits;
     private final String name;
@@ -21,7 +21,7 @@ public class MappingsRegistry {
 
     MappingsRegistry(Map<KeyCombo, NavAction> registry, Collection<Os> systems, String inherits, String name, String author, String description, String version, String id) {
         this.registry = Map.copyOf(registry);
-        this.disabledRegistry = Optional.empty();
+        this.disabledRegistry = null;
         this.systems = List.copyOf(systems);
         this.inherits = inherits;
         this.name = name;
@@ -33,7 +33,7 @@ public class MappingsRegistry {
 
     MappingsRegistry(Map<KeyCombo, NavAction> registry, Map<KeyCombo, NavAction> disabledRegistry, Collection<Os> systems, String inherits, String name, String author, String description, String version, String id) {
         this.registry = Map.copyOf(registry);
-        this.disabledRegistry = Optional.of(Map.copyOf(disabledRegistry));
+        this.disabledRegistry = Map.copyOf(disabledRegistry);
         this.systems = List.copyOf(systems);
         this.inherits = inherits;
         this.name = name;
@@ -48,7 +48,7 @@ public class MappingsRegistry {
     }
 
     public Optional<Map<KeyCombo, NavAction>> getInternalDisabledRegistry() {
-        return disabledRegistry;
+        return Optional.ofNullable(disabledRegistry);
     }
 
     public NavAction get(KeyCombo key) {
