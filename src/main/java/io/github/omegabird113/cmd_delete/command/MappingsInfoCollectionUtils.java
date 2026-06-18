@@ -1,6 +1,5 @@
 package io.github.omegabird113.cmd_delete.command;
 
-import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavActionUtils;
 import io.github.omegabird113.cmd_delete.config.MappingsJSONManager;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
@@ -44,8 +43,8 @@ public final class MappingsInfoCollectionUtils {
                 namespacedId = "builtin:" + String.join("_", systemStrings).toLowerCase(Locale.ROOT);
                 displayName = mappingsState.mappings().getRegistry().getName();
                 description = mappingsState.mappings().getRegistry().getDescription();
-                version = CmdDeleteClient.VERSION;
-                author = "Omegabird113";
+                version = mappingsState.mappings().getRegistry().getVersion();
+                author = mappingsState.mappings().getRegistry().getAuthor();
 
                 keyCombinationsString = " with " + mappingsState.mappings().getRegistry().getSize() + " key combinations registered";
             }
@@ -57,8 +56,8 @@ public final class MappingsInfoCollectionUtils {
                 namespacedId = "\"\"";
                 displayName = "Default Mappings (Resolved to " + String.join(" and ", systemStrings) + ")";
                 description = "The default behaviour to set the mappings to the hard-coded mappings for the OS you're currently using.";
-                version = CmdDeleteClient.VERSION;
-                author = "Omegabird113";
+                version = mappingsState.mappings().getRegistry().getVersion();
+                author = mappingsState.mappings().getRegistry().getAuthor();
 
                 keyCombinationsString = " with " + mappingsState.mappings().getRegistry().getSize() + " key combinations registered";
             }
