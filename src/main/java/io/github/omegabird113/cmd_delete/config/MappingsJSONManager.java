@@ -97,8 +97,13 @@ public final class MappingsJSONManager {
         while (true) {
             registries.add(current);
             ids.add(namespacePrefix + current.getId());
-            if (current.getInherits().isEmpty())
+            if (current.getInherits().isEmpty()) {
+                if (registries.size() == 1)
+                    CmdDeleteClient.LOGGER.info("Resolved no inheritance from mappings: \"{}\"", namespacePrefix + current.getId());
+                else
+                    CmdDeleteClient.LOGGER.info("Resolved inheritance of mappings \"{}\" with a chain of: {}", namespacePrefix + current.getId(), String.join(" -> ", ids));
                 break;
+            }
             else {
                 boolean inheritsCustom = current.getInherits().startsWith("custom:");
                 String idToGet = current.getInherits().replaceFirst("custom:|builtin:", "");
