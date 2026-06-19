@@ -16,10 +16,12 @@ public record KeyCombo(int key, boolean shift, boolean altOption, boolean contro
 
     @Override
     public @NonNull String toString() {
-        return (control ? "ctrl+" : "")
+        return "<" +
+                (control ? "ctrl+" : "")
                 + (superCommand ? (isMac ? "cmd+" : "sup+") : "")
                 + (altOption ? (isMac ? "opt+" : "alt+") : "")
                 + (shift ? "shift+" : "")
-                + (reversedKeyMap.get(key) != null ? reversedKeyMap.get(key) : key);
+                + (reversedKeyMap.get(key) != null ? reversedKeyMap.get(key) : key)
+                + ">";
     }
 }
