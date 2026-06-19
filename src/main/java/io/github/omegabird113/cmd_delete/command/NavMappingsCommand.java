@@ -15,6 +15,7 @@ import io.github.omegabird113.cmd_delete.mappings.Os;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.network.chat.Component;
+import org.slf4j.Logger;
 
 import java.util.Locale;
 
@@ -25,13 +26,14 @@ public final class NavMappingsCommand {
     private static final DynamicCommandExceptionType UNKNOWN_CUSTOM_MAPPINGS = new DynamicCommandExceptionType(
             id -> Component.literal("Could not load custom nav mappings: " + id)
     );
+    private static final Logger LOGGER = CmdDeleteClient.getLogger(NavMappingsCommand.class);
 
     private NavMappingsCommand() {
     }
 
     public static void register() {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, _) -> register(dispatcher));
-        CmdDeleteClient.LOGGER.info("Registered client command \"/navmappings\" through Fabric API");
+        LOGGER.info("Registered client command \"/navmappings\" through Fabric API");
     }
 
     private static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {

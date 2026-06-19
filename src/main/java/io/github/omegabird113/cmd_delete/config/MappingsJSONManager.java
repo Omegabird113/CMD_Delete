@@ -6,6 +6,7 @@ import com.google.gson.JsonParseException;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.mappings.NavMappings;
 import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 public final class MappingsJSONManager {
+    private static final Logger LOGGER = CmdDeleteClient.getLogger(MappingsJSONManager.class);
     private MappingsJSONManager() {
     }
 
@@ -60,7 +62,7 @@ public final class MappingsJSONManager {
                 mappings.setRegistry(resolved);
                 return true;
             } catch (IOException e) {
-                CmdDeleteClient.LOGGER.error("Failed to resolve custom mappings inheritance for \"{}\"", id, e);
+                LOGGER.error("Failed to resolve custom mappings inheritance for \"{}\"", id, e);
                 return false;
             }
         } else
@@ -81,10 +83,10 @@ public final class MappingsJSONManager {
             MappingsRegistry registry = custom ? loadFromCustomMappingsDir(id) : loadFromResourceMappingsDir(id);
             return Optional.of(registry);
         } catch (FileNotFoundException _) {
-            CmdDeleteClient.LOGGER.error("Could not access {} mapping file \"{}\" because it does not exist.", custom ? "custom" : "builtin", id);
+            LOGGER.error("Could not access {} mapping file \"{}\" because it does not exist.", custom ? "custom" : "builtin", id);
             return Optional.empty();
         } catch (IOException | JsonParseException e) {
-            CmdDeleteClient.LOGGER.error("Could not access {} mapping file due to exception: {}", custom ? "custom" : "builtin", id, e);
+            LOGGER.error("Could not access {} mapping file due to exception: {}", custom ? "custom" : "builtin", id, e);
             return Optional.empty();
         }
     }
@@ -99,9 +101,9 @@ public final class MappingsJSONManager {
             ids.add(namespacePrefix + current.getId());
             if (current.getInherits().isEmpty()) {
                 if (registries.size() == 1)
-                    CmdDeleteClient.LOGGER.info("Resolved no inheritance from mappings: \"{}\"", namespacePrefix + current.getId());
+                    LOGGER.info("Resolved no inheritance from mappings: \"{}\"", namespacePrefix + current.getId());
                 else
-                    CmdDeleteClient.LOGGER.info("Resolved inheritance of mappings \"{}\" with a chain of: {}", namespacePrefix + current.getId(), String.join(" -> ", ids));
+                    LOGGER.info("Resolved inheritance of mappings \"{}\" with a chain of: {}", namespacePrefix + current.getId(), String.join(" -> ", ids));
                 break;
             } else {
                 boolean inheritsCustom = current.getInherits().startsWith("custom:");
@@ -115,7 +117,7 @@ public final class MappingsJSONManager {
                 current = newRegistry.get();
             }
         }
-        CmdDeleteClient.LOGGER.debug("Resolved inheritance chain of {} ({}) from registries: {\n{}\n}", ids, registries.stream().map(MappingsRegistry::hashCode).toArray(), String.join("\n--------------------\n", registries.stream().map(MappingsRegistry::toString).toList()));
+        LOGGER.debug("Resolved inheritance chain of {} ({}) from registries: {\n{}\n}", ids, registries.stream().map(MappingsRegistry::hashCode).toArray(), String.join("\n--------------------\n", registries.stream().map(MappingsRegistry::toString).toList()));
         return MappingsInheritanceManager.merge(registries.reversed());
     }
 
@@ -124,20 +126,20 @@ public final class MappingsJSONManager {
         if (!configDirectory.exists() || !configDirectory.isDirectory()) {
             boolean s = configDirectory.mkdirs();
             if (!s)
-                CmdDeleteClient.LOGGER.error("Could not create mappings config directory at: {}", configDirectory);
+                LOGGER.error("Could not create mappings config directory at: {}", configDirectory);
             else
-                CmdDeleteClient.LOGGER.info("Created mappings config directory at: {}", configDirectory.getAbsolutePath());
+                LOGGER.info("Created mappings config directory at: {}", configDirectory.getAbsolutePath());
         }
         File activeMappingsFile = CmdDeleteClient.ACTIVE_MAPPINGS_FILE_PATH.toFile();
         if (!activeMappingsFile.exists() || !activeMappingsFile.isFile()) {
             try {
                 boolean s = activeMappingsFile.createNewFile();
                 if (!s)
-                    CmdDeleteClient.LOGGER.error("Could not create active mappings file at: {}", activeMappingsFile.getAbsolutePath());
+                    LOGGER.error("Could not create active mappings file at: {}", activeMappingsFile.getAbsolutePath());
                 else
-                    CmdDeleteClient.LOGGER.info("Created active mappings file at: {}", activeMappingsFile.getAbsolutePath());
+                    LOGGER.info("Created active mappings file at: {}", activeMappingsFile.getAbsolutePath());
             } catch (IOException e) {
-                CmdDeleteClient.LOGGER.error("Could not create active mappings file at: {}", activeMappingsFile.getAbsolutePath(), e);
+                LOGGER.error("Could not create active mappings file at: {}", activeMappingsFile.getAbsolutePath(), e);
             }
         }
     }

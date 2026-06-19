@@ -13,7 +13,7 @@ import java.nio.file.Path;
 
 public final class CmdDeleteClient implements ClientModInitializer {
     public static final String MODID = "cmd_delete";
-    public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
+    private static final Logger LOGGER = getLogger();
     public static final String VERSION = FabricLoader.getInstance().getModContainer(MODID)
             .map(container -> container.getMetadata().getVersion().getFriendlyString())
             .orElse("<unknown>");
@@ -32,5 +32,13 @@ public final class CmdDeleteClient implements ClientModInitializer {
         MappingsJSONManager.tryMakeConfigFiles();
         NavMappingsManager.loadMappings();
         NavMappingsCommand.register();
+    }
+
+    public static Logger getLogger(Class<?> clazz) {
+        return LoggerFactory.getLogger(MODID + " " + clazz.getSimpleName());
+    }
+
+    private static Logger getLogger() {
+        return LoggerFactory.getLogger(MODID);
     }
 }

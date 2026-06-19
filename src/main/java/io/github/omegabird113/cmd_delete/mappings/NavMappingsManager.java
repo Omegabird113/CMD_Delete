@@ -4,10 +4,12 @@ import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavActionUtils;
 import io.github.omegabird113.cmd_delete.command.MappingsInfoCollectionUtils;
 import io.github.omegabird113.cmd_delete.config.ActiveMappingsManager;
+import org.slf4j.Logger;
 
 import java.util.List;
 
 public final class NavMappingsManager {
+    private static final Logger LOGGER = CmdDeleteClient.getLogger(ActiveMappingsManager.class);
     private static final NavMappings NAV_MAPPINGS = new NavMappings();
     private static final ActiveMappingsManager activeMappingsManager = new ActiveMappingsManager(
             NAV_MAPPINGS, Os.getCurrent()
@@ -22,9 +24,9 @@ public final class NavMappingsManager {
     }
 
     private static void logMappings() {
-        CmdDeleteClient.LOGGER.info("Mappings id \"{}\" loaded with supported systems \"{}\" and Coverage of {}% with a registry size of {}", activeMappingsManager.resolveNamespacedId(currentMappingsState), List.of(currentMappingsState.mappings().getMappingsSupportedSystems()), NavActionUtils.getCoverage(getCurrentMappings()) * 100, currentMappingsState.mappings().getRegistry().getSize());
-        CmdDeleteClient.LOGGER.info("The active mappings' info in \"/navmappings info\" will show as: \"{}\"", MappingsInfoCollectionUtils.getInfoFrom(currentMappingsState, false).replace("\n", " "));
-        CmdDeleteClient.LOGGER.debug("Mappings registry loaded: \"{}\"", currentMappingsState.mappings().getRegistry());
+        LOGGER.info("Mappings id \"{}\" loaded with supported systems \"{}\" and Coverage of {}% with a registry size of {}", activeMappingsManager.resolveNamespacedId(currentMappingsState), List.of(currentMappingsState.mappings().getMappingsSupportedSystems()), NavActionUtils.getCoverage(getCurrentMappings()) * 100, currentMappingsState.mappings().getRegistry().getSize());
+        LOGGER.info("The active mappings' info in \"/navmappings info\" will show as: \"{}\"", MappingsInfoCollectionUtils.getInfoFrom(currentMappingsState, false).replace("\n", " "));
+        LOGGER.debug("Mappings registry loaded: \"{}\"", currentMappingsState.mappings().getRegistry());
     }
 
     public static void loadMappings() {

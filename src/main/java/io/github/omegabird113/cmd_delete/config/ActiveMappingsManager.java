@@ -4,13 +4,14 @@ import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.NavMappings;
 import io.github.omegabird113.cmd_delete.mappings.Os;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Files;
 
 public class ActiveMappingsManager {
+    private static final Logger LOGGER = CmdDeleteClient.getLogger(ActiveMappingsManager.class);
     private final NavMappings navMappings;
-
     private final Os system;
 
     public ActiveMappingsManager(NavMappings navMappings, Os system) {
@@ -109,7 +110,7 @@ public class ActiveMappingsManager {
         try {
             namespacedId = readActiveMappings();
         } catch (IOException e) {
-            CmdDeleteClient.LOGGER.error("Error while loading active mappings from file: {}", e.getMessage());
+            LOGGER.error("Error while loading active mappings from file: {}", e.getMessage());
         }
         return resolveMappings(namespacedId);
     }
@@ -118,7 +119,7 @@ public class ActiveMappingsManager {
         try {
             writeActiveMappings(namespacedId);
         } catch (IOException e) {
-            CmdDeleteClient.LOGGER.error("Error while saving active mappings to file: {}", e.getMessage());
+            LOGGER.error("Error while saving active mappings to file: {}", e.getMessage());
         }
     }
 }

@@ -4,6 +4,7 @@ import com.google.gson.*;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.mappings.Os;
+import org.slf4j.Logger;
 
 import java.lang.reflect.Type;
 import java.util.*;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 import static io.github.omegabird113.cmd_delete.config.JsonParsingUtils.*;
 
 public final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistry> {
+    private static final Logger LOGGER = CmdDeleteClient.getLogger(MappingsJSONManager.class);
     private static final Map<String, Os> OS_MAP = Map.of(
             "windows", Os.WINDOWS,
             "mac", Os.MAC,
@@ -41,7 +43,7 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
         for (String actionName : actions.keySet()) {
             NavAction action = NAV_ACTION_MAP.get(actionName.trim().toUpperCase(Locale.ROOT));
             if (action == null || action == NavAction.NONE) {
-                CmdDeleteClient.LOGGER.warn("Invalid action specified by custom mappings: \"{}\". All key-combos registered in this action skipped...", actionName);
+                LOGGER.warn("Invalid action specified by custom mappings: \"{}\". All key-combos registered in this action skipped...", actionName);
                 continue;
             }
 
@@ -57,7 +59,7 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
                 try {
                     keyCode = requireKeyCode(binding, "key");
                 } catch (JsonParseException e) {
-                    CmdDeleteClient.LOGGER.warn("Invalid key binding due to error: {}", e.getMessage());
+                    LOGGER.warn("Invalid key binding due to error: {}", e.getMessage());
                     continue;
                 }
 
@@ -87,7 +89,7 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
 
                 for (KeyCombo key : keys) {
                     if (toAdd.containsKey(key))
-                        CmdDeleteClient.LOGGER.warn("Duplicate key binding in custom binding with action of \"{}\" and key \"{}\". 2nd registration skipped...", actionName, key);
+                        LOGGER.warn("Duplicate key binding in custom binding with action of \"{}\" and key \"{}\". 2nd registration skipped...", actionName, key);
                     else
                         toAdd.put(key, action);
                 }
