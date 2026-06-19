@@ -93,7 +93,20 @@ public final class MappingsRegistry {
 
     @Override
     public String toString() {
-        return String.format("MappingsRegistry(name=\"%s\", author=\"%s\", description=\"%s\", version=\"%s\", id=\"%s\", registry=\"%s\", disabledRegistry=\"%s\", inherits=\"%s\", hashcode=\"%d\")", name, author, description, version, id, registry.toString(), disabledRegistry == null ? "null" : disabledRegistry.toString(), inherits, hashCode());
+        return String.format("""
+                        MappingsRegistry(
+                        name="%s",
+                        author="%s",
+                        description="%s",
+                        version="%s",
+                        id="%s",
+                        inherits="%s",
+                        hashcode=%d
+                        registry="%s",
+                        disabledRegistry="%s")""",
+                name, author, description, version, id, inherits,
+                hashCode(), registry.toString(),
+                (disabledRegistry == null ? "null" : disabledRegistry.toString()));
     }
 
     @Override
