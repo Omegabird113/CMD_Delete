@@ -19,7 +19,7 @@ public record KeyCombo(int key, boolean shift, boolean altOption, boolean contro
         return (control ? "ctrl+" : "")
                 + (superCommand ? (isMac ? "cmd+" : "sup+") : "")
                 + (altOption ? (isMac ? "opt+" : "alt+") : "")
-                + (shift ? "shift+" : "") +
-                (reversedKeyMap.get(key) != null ? reversedKeyMap.get(key) : key);
+                + (shift ? "shift+" : "")
+                + (reversedKeyMap.get(key) != null ? reversedKeyMap.get(key) : key);
     }
 }

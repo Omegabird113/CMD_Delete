@@ -103,8 +103,7 @@ public final class MappingsJSONManager {
                 else
                     CmdDeleteClient.LOGGER.info("Resolved inheritance of mappings \"{}\" with a chain of: {}", namespacePrefix + current.getId(), String.join(" -> ", ids));
                 break;
-            }
-            else {
+            } else {
                 boolean inheritsCustom = current.getInherits().startsWith("custom:");
                 String idToGet = current.getInherits().replaceFirst("custom:|builtin:", "");
                 Optional<MappingsRegistry> newRegistry = getRegistryFrom(inheritsCustom, idToGet);
