@@ -134,30 +134,34 @@ public final class MappingsRegistry {
 
     @Override
     public boolean equals(Object o) {
+        if (this == o)
+            return true;
         if (!(o instanceof MappingsRegistry mr))
             return false;
 
-        return mr.id.equals(this.id)
-                && mr.version.equals(this.version)
-                && mr.author.equals(this.author)
-                && mr.description.equals(this.description)
-                && mr.registry.equals(this.registry)
-                && mr.name.equals(this.name)
-                && ((mr.disabledRegistry == null || this.disabledRegistry == null) ? disabledRegistry == mr.disabledRegistry : disabledRegistry.equals(mr.disabledRegistry))
-                && mr.systems.equals(this.systems)
-                && mr.inherits.equals(this.inherits);
+        return Objects.equals(id, mr.id)
+                && Objects.equals(version, mr.version)
+                && Objects.equals(author, mr.author)
+                && Objects.equals(description, mr.description)
+                && Objects.equals(registry, mr.registry)
+                && Objects.equals(name, mr.name)
+                && Objects.equals(disabledRegistry, mr.disabledRegistry)
+                && Objects.equals(systems, mr.systems)
+                && Objects.equals(inherits, mr.inherits);
     }
 
     @Override
     public int hashCode() {
-        return registry.hashCode()
-                + (disabledRegistry == null ? 0 : disabledRegistry.hashCode())
-                + systems.hashCode()
-                + inherits.hashCode()
-                + name.hashCode()
-                + author.hashCode()
-                + description.hashCode()
-                + version.hashCode()
-                + id.hashCode();
+        return Objects.hash(
+                registry,
+                disabledRegistry,
+                systems,
+                inherits,
+                name,
+                author,
+                description,
+                version,
+                id
+        );
     }
 }
