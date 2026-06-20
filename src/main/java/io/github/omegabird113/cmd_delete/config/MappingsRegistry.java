@@ -111,7 +111,7 @@ public final class MappingsRegistry {
                     + ")"
             );
         }
-        return "{\n" + String.join(",\n", stringEntries) + "\n}";
+        return "{\n\t" + String.join(",\n\t", stringEntries) + "\n}";
     }
 
     @Override
