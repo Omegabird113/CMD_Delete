@@ -96,10 +96,7 @@ public final class MappingsRegistry {
 
         final Map<NavAction, ArrayList<KeyCombo>> local = new HashMap<>();
         for (Map.Entry<KeyCombo, NavAction> entry : registry.entrySet())
-            if (local.containsKey(entry.getValue()))
-                local.get(entry.getValue()).add(entry.getKey());
-            else
-                local.put(entry.getValue(), new ArrayList<>(List.of(entry.getKey())));
+            local.computeIfAbsent(entry.getValue(), _ -> new ArrayList<>()).add(entry.getKey());
 
         final ArrayList<String> stringEntries = new ArrayList<>();
         for (Map.Entry<NavAction, ArrayList<KeyCombo>> entry : local.entrySet())
@@ -117,15 +114,16 @@ public final class MappingsRegistry {
     public String toString() {
         return String.format("""
                         MappingsRegistry(
-                        name="%s",
-                        author="%s",
-                        description="%s",
-                        version="%s",
-                        id="%s",
-                        inherits="%s",
-                        hashcode=%d
-                        registry=%s,
-                        disabledRegistry=%s)""",
+                            name="%s",
+                            author="%s",
+                            description="%s",
+                            version="%s",
+                            id="%s",
+                            inherits="%s",
+                            hashcode=%d,
+                            registry=%s,
+                            disabledRegistry=%s
+                        )""",
                 name, author, description, version, id, inherits,
                 hashCode(),
                 registryStringUtil(registry),
