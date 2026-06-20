@@ -89,11 +89,10 @@ public final class MappingsRegistry {
     }
 
     private String registryStringUtil(Map<KeyCombo, NavAction> registry) {
-        if (registry == null) {
+        if (registry == null)
             return "null";
-        } else if (registry.isEmpty()) {
-            return "empty";
-        }
+        if (registry.isEmpty())
+            return "{\n\t<empty>\n}";
         final Map<NavAction, ArrayList<KeyCombo>> local = new HashMap<>();
         for (Map.Entry<KeyCombo, NavAction> entry : registry.entrySet()) {
             if (local.containsKey(entry.getValue())) {
