@@ -120,7 +120,7 @@ public final class MappingsRegistry {
                             version="%s",
                             id="%s",
                             inherits="%s",
-                            hashcode=%d,
+                            hashCode=%d,
                             registry=%s,
                             disabledRegistry=%s
                         )""",
