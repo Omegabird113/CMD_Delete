@@ -40,11 +40,11 @@ public final class MappingsRegistry {
         this.id = id;
     }
 
-    public Map<KeyCombo, NavAction> getInternalRegistry() {
+    Map<KeyCombo, NavAction> getInternalRegistry() {
         return registry;
     }
 
-    public Optional<Map<KeyCombo, NavAction>> getInternalDisabledRegistry() {
+    Optional<Map<KeyCombo, NavAction>> getInternalDisabledRegistry() {
         return Optional.ofNullable(disabledRegistry);
     }
 
