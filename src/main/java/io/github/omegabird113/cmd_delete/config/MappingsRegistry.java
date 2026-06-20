@@ -3,10 +3,7 @@ package io.github.omegabird113.cmd_delete.config;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public final class MappingsRegistry {
     private final Map<KeyCombo, NavAction> registry;
@@ -91,6 +88,32 @@ public final class MappingsRegistry {
         return registry.size();
     }
 
+    private String registryStringUtil(Map<KeyCombo, NavAction> registry) {
+        if (registry == null) {
+            return "null";
+        } else if (registry.isEmpty()) {
+            return "empty";
+        }
+        final Map<NavAction, ArrayList<KeyCombo>> local = new HashMap<>();
+        for (Map.Entry<KeyCombo, NavAction> entry : registry.entrySet()) {
+            if (local.containsKey(entry.getValue())) {
+                local.get(entry.getValue()).add(entry.getKey());
+            } else {
+                local.put(entry.getValue(), new ArrayList<>(List.of(entry.getKey())));
+            }
+        }
+        final ArrayList<String> stringEntries = new ArrayList<>();
+        for (Map.Entry<NavAction, ArrayList<KeyCombo>> entry : local.entrySet()) {
+            stringEntries.add("("
+                    + String.join(", ", entry.getValue().stream().map(KeyCombo::toString).toList())
+                    + " -> "
+                    + entry.getKey()
+                    + ")"
+            );
+        }
+        return "{\n" + String.join(",\n", stringEntries) + "\n}";
+    }
+
     @Override
     public String toString() {
         return String.format("""
@@ -102,11 +125,12 @@ public final class MappingsRegistry {
                         id="%s",
                         inherits="%s",
                         hashcode=%d
-                        registry="%s",
-                        disabledRegistry="%s")""",
+                        registry=%s,
+                        disabledRegistry=%s)""",
                 name, author, description, version, id, inherits,
-                hashCode(), registry.toString(),
-                (disabledRegistry == null ? "null" : disabledRegistry.toString()));
+                hashCode(),
+                registryStringUtil(registry),
+                registryStringUtil(disabledRegistry));
     }
 
     @Override
