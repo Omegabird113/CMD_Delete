@@ -107,7 +107,7 @@ public final class MappingsRegistry {
                     + ")"
             );
 
-        return "{\n\t" + String.join(",\n\t", stringEntries) + "\n}";
+        return "{\n\t\t" + String.join(",\n\t\t", stringEntries) + "\n\t}";
     }
 
     @Override
