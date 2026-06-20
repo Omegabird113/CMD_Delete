@@ -93,23 +93,23 @@ public final class MappingsRegistry {
             return "null";
         if (registry.isEmpty())
             return "{\n\t<empty>\n}";
+
         final Map<NavAction, ArrayList<KeyCombo>> local = new HashMap<>();
-        for (Map.Entry<KeyCombo, NavAction> entry : registry.entrySet()) {
-            if (local.containsKey(entry.getValue())) {
+        for (Map.Entry<KeyCombo, NavAction> entry : registry.entrySet())
+            if (local.containsKey(entry.getValue()))
                 local.get(entry.getValue()).add(entry.getKey());
-            } else {
+            else
                 local.put(entry.getValue(), new ArrayList<>(List.of(entry.getKey())));
-            }
-        }
+
         final ArrayList<String> stringEntries = new ArrayList<>();
-        for (Map.Entry<NavAction, ArrayList<KeyCombo>> entry : local.entrySet()) {
+        for (Map.Entry<NavAction, ArrayList<KeyCombo>> entry : local.entrySet())
             stringEntries.add("("
                     + String.join(", ", entry.getValue().stream().map(KeyCombo::toString).toList())
                     + " -> "
                     + entry.getKey()
                     + ")"
             );
-        }
+
         return "{\n\t" + String.join(",\n\t", stringEntries) + "\n}";
     }
 
@@ -136,17 +136,16 @@ public final class MappingsRegistry {
     public boolean equals(Object o) {
         if (!(o instanceof MappingsRegistry mr))
             return false;
-        else {
-            return mr.id.equals(this.id)
-                    && mr.version.equals(this.version)
-                    && mr.author.equals(this.author)
-                    && mr.description.equals(this.description)
-                    && mr.registry.equals(this.registry)
-                    && mr.name.equals(this.name)
-                    && ((mr.disabledRegistry == null || this.disabledRegistry == null) ? disabledRegistry == mr.disabledRegistry : disabledRegistry.equals(mr.disabledRegistry))
-                    && mr.systems.equals(this.systems)
-                    && mr.inherits.equals(this.inherits);
-        }
+
+        return mr.id.equals(this.id)
+                && mr.version.equals(this.version)
+                && mr.author.equals(this.author)
+                && mr.description.equals(this.description)
+                && mr.registry.equals(this.registry)
+                && mr.name.equals(this.name)
+                && ((mr.disabledRegistry == null || this.disabledRegistry == null) ? disabledRegistry == mr.disabledRegistry : disabledRegistry.equals(mr.disabledRegistry))
+                && mr.systems.equals(this.systems)
+                && mr.inherits.equals(this.inherits);
     }
 
     @Override
