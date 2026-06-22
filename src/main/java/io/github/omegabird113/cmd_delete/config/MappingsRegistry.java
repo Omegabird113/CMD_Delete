@@ -2,21 +2,23 @@ package io.github.omegabird113.cmd_delete.config;
 
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.mappings.Os;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.*;
 
 public final class MappingsRegistry {
-    private final Map<KeyCombo, NavAction> registry;
-    private final Map<KeyCombo, NavAction> disabledRegistry;
-    private final List<Os> systems;
-    private final String inherits;
-    private final String name;
-    private final String author;
-    private final String description;
-    private final String version;
-    private final String id;
+    private final @NonNull Map<@NonNull KeyCombo, @NonNull NavAction> registry;
+    private final @Nullable Map<@NonNull KeyCombo, @NonNull NavAction> disabledRegistry;
+    private final @NonNull  List<@NonNull Os> systems;
+    private final @NonNull String inherits;
+    private final @NonNull String name;
+    private final @NonNull String author;
+    private final @NonNull String description;
+    private final @NonNull String version;
+    private final @NonNull String id;
 
-    MappingsRegistry(Map<KeyCombo, NavAction> registry, Collection<Os> systems, String inherits, String name, String author, String description, String version, String id) {
+    MappingsRegistry(Map<@NonNull KeyCombo, @NonNull NavAction> registry, Collection<@NonNull Os> systems, @NonNull String inherits, @NonNull String name, @NonNull String author, @NonNull String description, @NonNull String version, @NonNull String id) {
         this.registry = Map.copyOf(registry);
         this.disabledRegistry = null;
         this.systems = List.copyOf(systems);
@@ -28,7 +30,7 @@ public final class MappingsRegistry {
         this.id = id;
     }
 
-    MappingsRegistry(Map<KeyCombo, NavAction> registry, Map<KeyCombo, NavAction> disabledRegistry, Collection<Os> systems, String inherits, String name, String author, String description, String version, String id) {
+    MappingsRegistry(Map<@NonNull KeyCombo, @NonNull NavAction> registry, Map<@NonNull KeyCombo, @NonNull NavAction> disabledRegistry, Collection<@NonNull Os> systems, @NonNull String inherits, @NonNull String name, @NonNull String author, @NonNull String description, @NonNull String version, @NonNull String id) {
         this.registry = Map.copyOf(registry);
         this.disabledRegistry = Map.copyOf(disabledRegistry);
         this.systems = List.copyOf(systems);
@@ -40,15 +42,15 @@ public final class MappingsRegistry {
         this.id = id;
     }
 
-    Map<KeyCombo, NavAction> getInternalRegistry() {
+    @NonNull Map<@NonNull KeyCombo, @NonNull NavAction> getInternalRegistry() {
         return registry;
     }
 
-    Optional<Map<KeyCombo, NavAction>> getInternalDisabledRegistry() {
+    Optional<Map< @NonNull KeyCombo, @NonNull NavAction>> getInternalDisabledRegistry() {
         return Optional.ofNullable(disabledRegistry);
     }
 
-    public NavAction get(KeyCombo key) {
+    public @Nullable NavAction get(KeyCombo key) {
         return registry.get(key);
     }
 
@@ -56,31 +58,31 @@ public final class MappingsRegistry {
         return registry.values().toArray(NavAction[]::new);
     }
 
-    public List<Os> getSystems() {
+    public @NonNull List<@NonNull Os> getSystems() {
         return systems;
     }
 
-    public String getInherits() {
+    public @NonNull String getInherits() {
         return inherits;
     }
 
-    public String getName() {
+    public @NonNull String getName() {
         return name;
     }
 
-    public String getAuthor() {
+    public @NonNull String getAuthor() {
         return author;
     }
 
-    public String getDescription() {
+    public @NonNull String getDescription() {
         return description;
     }
 
-    public String getVersion() {
+    public @NonNull String getVersion() {
         return version;
     }
 
-    public String getId() {
+    public @NonNull String getId() {
         return id;
     }
 
@@ -88,7 +90,7 @@ public final class MappingsRegistry {
         return registry.size();
     }
 
-    private String registryStringUtil(Map<KeyCombo, NavAction> registry) {
+    private String registryStringUtil(@Nullable Map<@NonNull KeyCombo, @NonNull NavAction> registry) {
         if (registry == null)
             return "null";
         if (registry.isEmpty())
