@@ -50,7 +50,7 @@ public final class MappingsRegistry {
         return Optional.ofNullable(disabledRegistry);
     }
 
-    public @Nullable NavAction get(KeyCombo key) {
+    public @Nullable NavAction get(@NonNull KeyCombo key) {
         return registry.get(key);
     }
 
