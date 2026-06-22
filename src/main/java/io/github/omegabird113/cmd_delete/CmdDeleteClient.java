@@ -32,6 +32,7 @@ public final class CmdDeleteClient implements ClientModInitializer {
         MappingsJSONManager.tryMakeConfigFiles();
         NavMappingsManager.loadMappings();
         NavMappingsCommand.register();
+        LOGGER.debug("Finished initializing!");
     }
 
     public static Logger getLogger(Class<?> clazz) {
