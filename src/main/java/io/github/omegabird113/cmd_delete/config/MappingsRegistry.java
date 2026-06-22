@@ -42,7 +42,6 @@ public final class MappingsRegistry {
         this.id = id;
     }
 
-
     @NonNull Map<@NonNull KeyCombo, @NonNull NavAction> getInternalRegistry() {
         return registry;
     }
