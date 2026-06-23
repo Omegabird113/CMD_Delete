@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = EditBox.class, priority = 2000)
 public abstract class EditBoxMixin {
+
     @Shadow
     public abstract void deleteWords(int i);
 
@@ -20,16 +21,16 @@ public abstract class EditBoxMixin {
     public abstract void deleteChars(int i);
 
     @Shadow
-    public abstract void deleteCharsToPos(int pos);
-
-    @Shadow
-    public abstract void moveCursorTo(int dir, boolean extendSelection);
+    public abstract void moveCursorTo(int pos, boolean extendSelection);
 
     @Shadow
     public abstract String getValue();
 
     @Shadow
     public abstract int getWordPosition(int dir);
+
+    @Shadow
+    public abstract int getCursorPosition();
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideDelete(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
@@ -38,12 +39,20 @@ public abstract class EditBoxMixin {
         int direction = NavActionManager.getDirection(action);
 
         switch (action) {
-            case DEL_LINE_LEFT, DEL_LINE_RIGHT -> this.deleteCharsToPos(direction < 0 ? 0 : this.getValue().length());
+            case DEL_LINE_LEFT -> {
+                int cursor = this.getCursorPosition();
+                this.deleteChars(-cursor);
+            }
+            case DEL_LINE_RIGHT -> {
+                int cursor = this.getCursorPosition();
+                int end = this.getValue().length();
+                this.deleteChars(end - cursor);
+            }
             case DEL_WORD_LEFT, DEL_WORD_RIGHT -> this.deleteWords(direction);
-            case NAV_LINE_LEFT, NAV_LINE_RIGHT, NAV_TEXT_START, NAV_TEXT_END ->
-                    this.moveCursorTo(direction < 0 ? 0 : this.getValue().length(), false);
-            case SEL_LINE_LEFT, SEL_LINE_RIGHT, SEL_TEXT_START, SEL_TEXT_END ->
-                    this.moveCursorTo(direction < 0 ? 0 : this.getValue().length(), true);
+            case NAV_LINE_LEFT, NAV_TEXT_START -> this.moveCursorTo(0, false);
+            case NAV_LINE_RIGHT, NAV_TEXT_END -> this.moveCursorTo(this.getValue().length(), false);
+            case SEL_LINE_LEFT, SEL_TEXT_START -> this.moveCursorTo(0, true);
+            case SEL_LINE_RIGHT, SEL_TEXT_END -> this.moveCursorTo(this.getValue().length(), true);
             case NAV_WORD_LEFT, NAV_WORD_RIGHT -> this.moveCursorTo(this.getWordPosition(direction), false);
             case SEL_WORD_LEFT, SEL_WORD_RIGHT -> this.moveCursorTo(this.getWordPosition(direction), true);
             default -> {
