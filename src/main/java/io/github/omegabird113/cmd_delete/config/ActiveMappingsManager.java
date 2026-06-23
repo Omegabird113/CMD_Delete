@@ -96,9 +96,9 @@ public class ActiveMappingsManager {
         String id = removeNamespaceFromId(namespacedId);
         MappingsState.Type type = resolveType(namespacedId);
         MappingsState mappingsState = switch (type) {
-            case MappingsState.Type.CUSTOM -> tryResolveCustomMappings(id);
-            case MappingsState.Type.BUILTIN -> new MappingsState(resolveOsMappings(id), type, id);
-            case MappingsState.Type.DEFAULT -> new MappingsState(resolveDefaultMappings(), type, id);
+            case CUSTOM -> tryResolveCustomMappings(id);
+            case BUILTIN -> new MappingsState(resolveOsMappings(id), type, id);
+            case DEFAULT -> new MappingsState(resolveDefaultMappings(), type, id);
         };
         if (mappingsState == null)
             return new MappingsState(resolveDefaultMappings(), MappingsState.Type.DEFAULT, "");

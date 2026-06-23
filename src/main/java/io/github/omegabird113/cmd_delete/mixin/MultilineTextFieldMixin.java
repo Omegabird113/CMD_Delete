@@ -145,12 +145,18 @@ public abstract class MultilineTextFieldMixin {
 
         return this.displayLines.isEmpty()
                 ? null
-                : (MultilineTextFieldStringViewAccessor) this.displayLines.getLast();
+                : (MultilineTextFieldStringViewAccessor) this.displayLines.get(this.displayLines.size() - 1);
     }
 
     @Unique
     private int cmd_delete$getPreviousWordStart() {
-        int pos = Math.clamp(this.cursor, 0, this.value.length());
+        int pos = this.cursor;
+        if (pos < 0) {
+            pos = 0;
+        }
+        if (pos > this.value.length()) {
+            pos = this.value.length();
+        }
 
         while (pos > 0 && Character.isWhitespace(this.value.charAt(pos - 1))) {
             pos--;
@@ -165,7 +171,13 @@ public abstract class MultilineTextFieldMixin {
 
     @Unique
     private int cmd_delete$getNextWordStart() {
-        int pos = Math.clamp(this.cursor, 0, this.value.length());
+        int pos = this.cursor;
+        if (pos < 0) {
+            pos = 0;
+        }
+        if (pos > this.value.length()) {
+            pos = this.value.length();
+        }
 
         while (pos < this.value.length() && !Character.isWhitespace(this.value.charAt(pos))) {
             pos++;
