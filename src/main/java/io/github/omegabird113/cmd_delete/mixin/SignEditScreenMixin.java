@@ -1,14 +1,16 @@
 package io.github.omegabird113.cmd_delete.mixin;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.actions.NavActionManager;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.font.TextFieldHelper;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractSignEditScreen;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Final;
@@ -31,7 +33,7 @@ public abstract class SignEditScreenMixin {
 
     @Shadow
     @Final
-    private String[] messages;
+    protected String[] messages;
 
     @Shadow
     private int line;
@@ -116,7 +118,7 @@ public abstract class SignEditScreenMixin {
 
     // Draw selected lines other than the cursor's line
     @Inject(method = "renderSignText", at = @At("TAIL"))
-    private void cmd_delete$renderMultilineSelection(GuiGraphics guiGraphics, CallbackInfo ci) {
+    private void cmd_delete$renderMultilineSelection(PoseStack poseStack, MultiBufferSource.BufferSource bufferSource, CallbackInfo ci) {
         if (this.cmd_delete$hasNoMultilineSelection()) {
             return;
         }
@@ -124,20 +126,28 @@ public abstract class SignEditScreenMixin {
         int textLineHeight = this.sign.getTextLineHeight();
         int yOffset = this.messages.length * textLineHeight / 2;
 
+        RenderSystem.enableColorLogicOp();
+        RenderSystem.logicOp(GlStateManager.LogicOp.OR_REVERSE);
+
         for (int workingLine = 0; workingLine < this.messages.length; workingLine++) {
             if (workingLine == this.line || !this.cmd_delete$lineHasSelection(workingLine)) {
                 continue;
             }
 
             String message = this.messages[workingLine];
+
             int start = this.cmd_delete$getSelectionStart(workingLine);
             int end = this.cmd_delete$getSelectionEnd(workingLine);
+
             int x1 = this.cmd_delete$getTextAtX(message, start);
             int x2 = this.cmd_delete$getTextAtX(message, end);
+
             int y = workingLine * textLineHeight - yOffset;
 
-            guiGraphics.fill(RenderType.guiTextHighlight(), Math.min(x1, x2), y, Math.max(x1, x2), y + textLineHeight, -16776961);
+            Screen.fill(poseStack, Math.min(x1, x2), y, Math.max(x1, x2), y + textLineHeight, -16776961);
         }
+
+        RenderSystem.disableColorLogicOp();
     }
 
     @Unique
