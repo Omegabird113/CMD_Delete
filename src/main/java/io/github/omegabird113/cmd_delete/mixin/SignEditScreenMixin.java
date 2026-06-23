@@ -9,9 +9,7 @@ import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.font.TextFieldHelper;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.inventory.AbstractSignEditScreen;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.world.level.block.entity.SignBlockEntity;
+import net.minecraft.client.gui.screens.inventory.SignEditScreen;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,18 +20,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(value = AbstractSignEditScreen.class, priority = 2000)
+@Mixin(value = SignEditScreen.class, priority = 2000)
 public abstract class SignEditScreenMixin {
-    @Shadow
-    @Final
-    protected SignBlockEntity sign;
-
     @Shadow
     private TextFieldHelper signField;
 
     @Shadow
     @Final
-    protected String[] messages;
+    private String[] messages;
 
     @Shadow
     private int line;
@@ -117,13 +111,13 @@ public abstract class SignEditScreenMixin {
     }
 
     // Draw selected lines other than the cursor's line
-    @Inject(method = "renderSignText", at = @At("TAIL"))
-    private void cmd_delete$renderMultilineSelection(PoseStack poseStack, MultiBufferSource.BufferSource bufferSource, CallbackInfo ci) {
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;disableColorLogicOp()V", remap = false, shift = At.Shift.AFTER))
+    private void cmd_delete$renderMultilineSelection(PoseStack poseStack, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         if (this.cmd_delete$hasNoMultilineSelection()) {
             return;
         }
 
-        int textLineHeight = this.sign.getTextLineHeight();
+        int textLineHeight = 10;
         int yOffset = this.messages.length * textLineHeight / 2;
 
         RenderSystem.enableColorLogicOp();
