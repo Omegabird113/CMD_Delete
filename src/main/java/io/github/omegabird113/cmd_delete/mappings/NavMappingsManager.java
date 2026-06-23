@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import java.util.List;
 
 public final class NavMappingsManager {
-    private static final Logger LOGGER = CmdDeleteClient.getLogger(ActiveMappingsManager.class);
+    private static final Logger LOGGER = CmdDeleteClient.getLogger(NavMappingsManager.class);
     private static final NavMappings NAV_MAPPINGS = new NavMappings();
     private static final ActiveMappingsManager activeMappingsManager = new ActiveMappingsManager(
             NAV_MAPPINGS, Os.getCurrent()
