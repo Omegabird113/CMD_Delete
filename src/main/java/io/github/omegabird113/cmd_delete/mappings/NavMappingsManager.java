@@ -26,7 +26,7 @@ public final class NavMappingsManager {
     private static void logMappings() {
         LOGGER.info("Mappings id \"{}\" loaded with supported systems \"{}\" and Coverage of {}% with a registry size of {}", activeMappingsManager.resolveNamespacedId(currentMappingsState), List.of(currentMappingsState.mappings().getMappingsSupportedSystems()), NavActionUtils.getCoverage(getCurrentMappings()) * 100, currentMappingsState.mappings().getRegistry().getSize());
         LOGGER.info("The active mappings' info in \"/navmappings info\" will show as: \"{}\"", MappingsInfoCollectionUtils.getInfoFrom(currentMappingsState, false).replace("\n", " "));
-        LOGGER.debug("Mappings registry loaded: \"{}\"", currentMappingsState.mappings().getRegistry());
+        LOGGER.debug("Mappings state loaded: \"{}\"", currentMappingsState);
     }
 
     public static void loadMappings() {
