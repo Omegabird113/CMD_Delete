@@ -48,7 +48,7 @@ public final class CmdDeleteClient implements ClientModInitializer {
     }
 
     public static Logger getLogger(Class<?> clazz) {
-        return LoggerFactory.getLogger(MODID + ": " + clazz.getSimpleName());
+        return LoggerFactory.getLogger(MODID + "/" + clazz.getSimpleName());
     }
 
     private static Logger getLogger() {
