@@ -33,6 +33,9 @@ public abstract class BookEditScreenMixin {
     @Shadow
     private int currentPage;
 
+    @Shadow
+    private String title;
+
     @Final
     @Shadow
     private List<String> pages;
@@ -68,11 +71,11 @@ public abstract class BookEditScreenMixin {
                 changedText = true;
             }
             case DEL_WORD_LEFT -> {
-                edit.removeWordsFromCursor(NavActionManager.DIRECTION_LEFT);
+                this.cmd_delete$removeWordsFromCursor(edit, NavActionManager.DIRECTION_LEFT);
                 changedText = true;
             }
             case DEL_WORD_RIGHT -> {
-                edit.removeWordsFromCursor(NavActionManager.DIRECTION_RIGHT);
+                this.cmd_delete$removeWordsFromCursor(edit, NavActionManager.DIRECTION_RIGHT);
                 changedText = true;
             }
             case NAV_LINE_LEFT, NAV_LINE_RIGHT -> this.cmd_delete$moveToLineEdge(edit, direction, false);
@@ -81,8 +84,8 @@ public abstract class BookEditScreenMixin {
             case NAV_WORD_RIGHT -> edit.moveByWords(NavActionManager.DIRECTION_RIGHT);
             case SEL_WORD_LEFT -> edit.moveByWords(NavActionManager.DIRECTION_LEFT, true);
             case SEL_WORD_RIGHT -> edit.moveByWords(NavActionManager.DIRECTION_RIGHT, true);
-            case SEL_TEXT_START, NAV_TEXT_START -> edit.setCursorToStart(action == NavAction.SEL_TEXT_START);
-            case SEL_TEXT_END, NAV_TEXT_END -> edit.setCursorToEnd(action == NavAction.SEL_TEXT_END);
+            case SEL_TEXT_START, NAV_TEXT_START -> edit.setCursorPos(0, action == NavAction.SEL_TEXT_START);
+            case SEL_TEXT_END, NAV_TEXT_END -> edit.setCursorPos(this.cmd_delete$getEditLength(), action == NavAction.SEL_TEXT_END);
             default -> {
                 return;
             }
@@ -93,12 +96,25 @@ public abstract class BookEditScreenMixin {
     }
 
     @Unique
+    private int cmd_delete$getEditLength() {
+        return this.cmd_delete$getCurrentEditText().length();
+    }
+
+    @Unique
+    private String cmd_delete$getCurrentEditText() {
+        if (this.isSigning) {
+            return this.title;
+        }
+        return this.cmd_delete$getCurrentPageText();
+    }
+
+    @Unique
     private void cmd_delete$moveToLineEdge(TextFieldHelper edit, int direction, boolean extendSelection) {
         if (this.isSigning) {
             if (direction == NavActionManager.DIRECTION_LEFT) {
-                edit.setCursorToStart(extendSelection);
+                edit.setCursorPos(0, extendSelection);
             } else {
-                edit.setCursorToEnd(extendSelection);
+                edit.setCursorPos(this.cmd_delete$getEditLength(), extendSelection);
             }
             return;
         }
@@ -130,6 +146,21 @@ public abstract class BookEditScreenMixin {
                 ? lineStarts[line]
                 : lineStarts[line] + lineContents[line].length();
         this.pageEdit.setCursorPos(lineEdge, extendSelection);
+    }
+
+    @Unique
+    private void cmd_delete$removeWordsFromCursor(TextFieldHelper edit, int direction) {
+        int selectionStart = edit.getSelectionPos();
+        int cursor = edit.getCursorPos();
+
+        if (selectionStart != cursor) {
+            edit.insertText("");
+            return;
+        }
+
+        edit.moveByWords(direction, false);
+        edit.setSelectionRange(edit.getCursorPos(), cursor);
+        edit.insertText("");
     }
 
     @Unique

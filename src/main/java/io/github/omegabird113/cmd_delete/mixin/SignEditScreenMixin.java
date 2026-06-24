@@ -1,6 +1,5 @@
 package io.github.omegabird113.cmd_delete.mixin;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
@@ -103,6 +102,7 @@ public abstract class SignEditScreenMixin {
         cir.setReturnValue(true);
     }
 
+
     // Resets local selection after typing because typing changes it
     @Inject(method = "charTyped", at = @At("HEAD"))
     private void cmd_delete$onCharTyped(char c, int modifiers, CallbackInfoReturnable<Boolean> cir) {
@@ -120,8 +120,9 @@ public abstract class SignEditScreenMixin {
         int textLineHeight = 10;
         int yOffset = this.messages.length * textLineHeight / 2;
 
-        RenderSystem.enableColorLogicOp();
-        RenderSystem.logicOp(GlStateManager.LogicOp.OR_REVERSE);
+        RenderSystem.disableTexture();
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
 
         for (int workingLine = 0; workingLine < this.messages.length; workingLine++) {
             if (workingLine == this.line || !this.cmd_delete$lineHasSelection(workingLine)) {
@@ -146,24 +147,38 @@ public abstract class SignEditScreenMixin {
 
     @Unique
     private boolean cmd_delete$tryMoveToNextLineByCharacter(int direction) {
-        // At line edges, plain arrows move to the previous/next line
         if (direction == NavActionManager.DIRECTION_LEFT && this.signField.getCursorPos() == 0 && this.line > 0) {
             this.line--;
-            this.signField.setCursorToEnd(false);
+            this.signField.setCursorPos(this.cmd_delete$currentLineMessage().length(), false);
             return true;
         } else if (direction == NavActionManager.DIRECTION_RIGHT && this.signField.getCursorPos() == this.cmd_delete$currentLineMessage().length() && this.line < this.messages.length - 1) {
             this.line++;
-            this.signField.setCursorToStart(false);
+            this.signField.setCursorPos(0, false);
             return true;
         }
-
         return false;
     }
 
     @Unique
     private void cmd_delete$deleteByWords(int direction) {
         this.cmd_delete$moveToNextWordLineIfNeeded(direction);
-        this.signField.removeWordsFromCursor(direction);
+
+        int start = this.signField.getCursorPos();
+
+        this.signField.moveByWords(direction, false);
+
+        int end = this.signField.getCursorPos();
+
+        String text = this.cmd_delete$currentLineMessage();
+
+        int from = Math.min(start, end);
+        int to = Math.max(start, end);
+
+        String newText =
+                text.substring(0, from) + text.substring(to);
+
+        this.messages[this.line] = newText;
+        this.signField.setCursorPos(from, false);
     }
 
     @Unique
@@ -179,10 +194,10 @@ public abstract class SignEditScreenMixin {
 
         if (direction == NavActionManager.DIRECTION_LEFT && this.signField.getCursorPos() == 0 && nextLine != this.line) {
             this.line = nextLine;
-            this.signField.setCursorToEnd(false);
+            this.signField.setCursorPos(this.cmd_delete$currentLineMessage().length(), false);
         } else if (direction == NavActionManager.DIRECTION_RIGHT && this.signField.getCursorPos() == this.cmd_delete$currentLineMessage().length() && nextLine != this.line) {
             this.line = nextLine;
-            this.signField.setCursorToStart(false);
+            this.signField.setCursorPos(0, false);
         }
     }
 
@@ -195,9 +210,9 @@ public abstract class SignEditScreenMixin {
     @Unique
     private void cmd_delete$moveToLineEdge(int direction, boolean extendSelection) {
         if (direction == NavActionManager.DIRECTION_LEFT) {
-            this.signField.setCursorToStart(extendSelection);
+            this.signField.setCursorPos(0, extendSelection);
         } else {
-            this.signField.setCursorToEnd(extendSelection);
+            this.signField.setCursorPos(this.cmd_delete$currentLineMessage().length(), extendSelection);
         }
     }
 
@@ -221,10 +236,10 @@ public abstract class SignEditScreenMixin {
     private void cmd_delete$moveToTextEdge(int direction, boolean extendSelection) {
         if (direction == NavActionManager.DIRECTION_UP) {
             this.line = 0;
-            this.signField.setCursorToStart(extendSelection);
+            this.signField.setCursorPos(0, extendSelection);
         } else {
             this.line = this.messages.length - 1;
-            this.signField.setCursorToEnd(extendSelection);
+            this.signField.setCursorPos(this.cmd_delete$currentLineMessage().length(), extendSelection);
         }
     }
 

@@ -1,6 +1,5 @@
 package io.github.omegabird113.cmd_delete.command;
 
-import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -12,30 +11,30 @@ import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import io.github.omegabird113.cmd_delete.mappings.Os;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.network.chat.Component;
+import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+import net.minecraft.network.chat.TextComponent;
 
 import java.util.Locale;
 
 public class NavMappingsCommand {
     private static final DynamicCommandExceptionType INVALID_OS = new DynamicCommandExceptionType(
-            os -> Component.literal("Unknown builtin nav mappings OS: " + os)
+            os -> text("Unknown builtin nav mappings OS: " + os)
     );
     private static final DynamicCommandExceptionType UNKNOWN_CUSTOM_MAPPINGS = new DynamicCommandExceptionType(
-            id -> Component.literal("Could not load custom nav mappings: " + id)
+            id -> text("Could not load custom nav mappings: " + id)
     );
 
     private NavMappingsCommand() {
     }
 
     public static void register() {
-        ClientCommandRegistrationCallback.EVENT.register((dispatcher, context) -> register(dispatcher));
+        registerCommand();
         CmdDeleteClient.LOGGER.info("Registered client \"/navmappings\" command through Fabric API");
     }
 
-    private static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
-        dispatcher.register(literal("navmappings")
+    private static void registerCommand() {
+        ClientCommandManager.DISPATCHER.register(literal("navmappings")
                 .then(literal("set")
                         .then(literal("builtin")
                                 .then(argument("os", StringArgumentType.word())
@@ -58,7 +57,7 @@ public class NavMappingsCommand {
         String osName = StringArgumentType.getString(context, "os");
         Os os = resolveOs(osName);
         NavMappingsManager.updateMappingsToBuiltIn(os);
-        context.getSource().sendFeedback(Component.literal("Set nav mappings to builtin:" + resolveOsId(os)));
+        context.getSource().sendFeedback(text("Set nav mappings to builtin:" + resolveOsId(os)));
         return 1;
     }
 
@@ -67,26 +66,26 @@ public class NavMappingsCommand {
         if (!NavMappingsManager.updateMappingsToCustom(id)) {
             throw UNKNOWN_CUSTOM_MAPPINGS.create(id);
         }
-        context.getSource().sendFeedback(Component.literal("Set nav mappings to custom:" + id));
+        context.getSource().sendFeedback(text("Set nav mappings to custom:" + id));
         return 1;
     }
 
     private static int setDefault(CommandContext<FabricClientCommandSource> context) {
         NavMappingsManager.updateMappingsToDefault();
-        context.getSource().sendFeedback(Component.literal("Set nav mappings to default"));
+        context.getSource().sendFeedback(text("Set nav mappings to default"));
         return 1;
     }
 
     private static int printMappingsInfo(CommandContext<FabricClientCommandSource> context) {
         MappingsState currentMappingState = NavMappingsManager.getMappingsState();
         String info = MappingsInfoCollectionUtils.getInfoFrom(currentMappingState, true);
-        context.getSource().sendFeedback(Component.literal("The currently active mappings are:\n" + info));
+        context.getSource().sendFeedback(text("The currently active mappings are:\n" + info));
         return 1;
     }
 
     private static int printMappingsList(CommandContext<FabricClientCommandSource> context) {
         String[] options = MappingsInfoCollectionUtils.getMappingsList();
-        context.getSource().sendFeedback(Component.literal("The currently available mappings options are:\n" + String.join("\n", options)));
+        context.getSource().sendFeedback(text("The currently available mappings options are:\n" + String.join("\n", options)));
         return 1;
     }
 
@@ -112,5 +111,9 @@ public class NavMappingsCommand {
 
     private static <T> RequiredArgumentBuilder<FabricClientCommandSource, T> argument(String name, ArgumentType<T> type) {
         return RequiredArgumentBuilder.argument(name, type);
+    }
+
+    private static TextComponent text(String message) {
+        return new TextComponent(message);
     }
 }
