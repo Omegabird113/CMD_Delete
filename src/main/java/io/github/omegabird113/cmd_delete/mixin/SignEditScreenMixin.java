@@ -1,5 +1,6 @@
 package io.github.omegabird113.cmd_delete.mixin;
 
+import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.actions.NavActionUtils;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
@@ -12,6 +13,7 @@ import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 import org.joml.Vector2f;
+import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -48,6 +50,13 @@ public abstract class SignEditScreenMixin {
 
     @Unique
     private int cmd_delete$selectionEndPos;
+
+    @Unique
+    private static final Logger LOGGER = CmdDeleteClient.getLogger(SignEditScreenMixin.class);
+
+    static {
+        LOGGER.debug("SignEditScreenMixin loaded");
+    }
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideSignEditNavigation(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {

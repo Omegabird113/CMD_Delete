@@ -1,13 +1,16 @@
 package io.github.omegabird113.cmd_delete.mixin;
 
+import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.actions.NavActionUtils;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.input.KeyEvent;
+import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -28,6 +31,13 @@ public abstract class EditBoxMixin {
 
     @Shadow
     public abstract int getWordPosition(int dir);
+
+    @Unique
+    private static final Logger LOGGER = CmdDeleteClient.getLogger(EditBoxMixin.class);
+
+    static {
+        LOGGER.debug("EditBoxMixin loaded");
+    }
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideDelete(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {

@@ -8,6 +8,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.spongepowered.asm.mixin.MixinEnvironment;
 
 import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
@@ -31,6 +32,8 @@ public final class CmdDeleteClient implements ClientModInitializer {
         LOGGER.info("Initializing client mod \"{}\" (version: {}, mappings format version: {})...", MODID, VERSION, MAPPINGS_FORMAT_VERSION);
         LOGGER.info("User appears to be running system: {}", Os.getCurrent());
         LOGGER.debug("Resolved MAPPINGS_RESOURCE_PATH=\"{}\", MAPPINGS_JSONS_PATH=\"{}\", and ACTIVE_MAPPINGS_FILE_PATH=\"{}\"", MAPPINGS_RESOURCE_PATH, MAPPINGS_JSONS_PATH, ACTIVE_MAPPINGS_FILE_PATH);
+        MixinEnvironment mixinEnv = MixinEnvironment.getCurrentEnvironment();
+        LOGGER.info("Mixin version {} with obfuscation \"{}\" and compatability level \"{}\" in phase \"{}\" on side \"{}\"", mixinEnv.getVersion(), mixinEnv.getObfuscationContext(), MixinEnvironment.getCurrentEnvironment(), mixinEnv.getPhase(), mixinEnv.getSide());
         MappingsJSONManager.tryMakeConfigFiles();
         NavMappingsManager.loadMappings();
         NavMappingsCommand.register();
