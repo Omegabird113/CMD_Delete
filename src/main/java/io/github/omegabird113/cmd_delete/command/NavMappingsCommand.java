@@ -53,7 +53,14 @@ public final class NavMappingsCommand {
                         .then(literal("default")
                                 .executes(NavMappingsCommand::setDefault)))
                 .then(literal("info").executes(NavMappingsCommand::printMappingsInfo))
-                .then(literal("list").executes(NavMappingsCommand::printMappingsList)));
+                .then(literal("list").executes(NavMappingsCommand::printMappingsList))
+                .then(literal("reload").executes(NavMappingsCommand::reloadMappings)));
+    }
+
+    private static int reloadMappings(CommandContext<FabricClientCommandSource> context) {
+        NavMappingsManager.loadMappings();
+        context.getSource().sendFeedback(Component.literal("Reloaded mappings"));
+        return 1;
     }
 
     private static int setBuiltIn(CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
