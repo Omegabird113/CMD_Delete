@@ -108,7 +108,7 @@ public final class MappingsJSONManager {
                 break;
             } else {
                 boolean inheritsCustom = current.getInherits().startsWith("custom:");
-                String idToGet = MappingsIdResolutionUtils.removeNamespaceFromId(current.getId());
+                String idToGet = MappingsIdResolutionUtils.removeNamespaceFromId(current.getInherits());
                 Optional<MappingsRegistry> newRegistry = getRegistryFrom(inheritsCustom, idToGet);
                 namespacePrefix = inheritsCustom ? "custom:" : "builtin:";
                 if (newRegistry.isEmpty())
