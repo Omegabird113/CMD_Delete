@@ -4,7 +4,7 @@ import java.util.Map;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-final class KeyCodeRegistry {
+public final class KeyCodeRegistry {
     private static final Map<String, Integer> KEY_MAP = Map.<String, Integer>ofEntries(
             Map.entry("left", GLFW_KEY_LEFT),
             Map.entry("right", GLFW_KEY_RIGHT),

@@ -9,6 +9,8 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
+import io.github.omegabird113.cmd_delete.config.KeyCodeRegistry;
+import io.github.omegabird113.cmd_delete.config.MappingsRegistry;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import io.github.omegabird113.cmd_delete.mappings.Os;
@@ -17,15 +19,24 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.network.chat.Component;
 import org.slf4j.Logger;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Locale;
+import java.util.Map;
 
 public final class NavMappingsCommand {
     private static final DynamicCommandExceptionType INVALID_OS = new DynamicCommandExceptionType(
-            os -> Component.literal("Unknown builtin nav mappings OS: " + os)
+            os -> Component.literal("Unknown builtin navmappings OS: " + os)
     );
     private static final DynamicCommandExceptionType UNKNOWN_CUSTOM_MAPPINGS = new DynamicCommandExceptionType(
-            id -> Component.literal("Could not load custom nav mappings: " + id)
+            id -> Component.literal("Could not load custom navmappings: " + id)
     );
+    private static final DynamicCommandExceptionType UNKNOWN_BUILTIN_MAPPINGS = new DynamicCommandExceptionType(
+            id -> Component.literal("Could not load builtin navmappings: " + id)
+    );
+
     private static final Logger LOGGER = CmdDeleteClient.getLogger(NavMappingsCommand.class);
 
     private NavMappingsCommand() {
@@ -51,10 +62,62 @@ public final class NavMappingsCommand {
                                 .then(argument("id", StringArgumentType.word())
                                         .executes(NavMappingsCommand::setCustom)))
                         .then(literal("default")
-                                .executes(NavMappingsCommand::setDefault)))
+                                .executes(NavMappingsCommand::setDefault))
+                )
                 .then(literal("info").executes(NavMappingsCommand::printMappingsInfo))
                 .then(literal("list").executes(NavMappingsCommand::printMappingsList))
-                .then(literal("reload").executes(NavMappingsCommand::reloadMappings)));
+                .then(literal("reload").executes(NavMappingsCommand::reloadMappings))
+                .then(literal("debug")
+                        .then(literal("dumpRegistry").executes(NavMappingsCommand::dumpRegistry))
+                        .then(literal("dumpKeymap").executes(NavMappingsCommand::dumpKeyMap))
+                        .then(literal("exportBuiltin")
+                                .then(argument("id", StringArgumentType.word())
+                                        .then(argument("location", StringArgumentType.greedyString()).executes(NavMappingsCommand::exportBuiltin)))
+                        )
+                )
+        );
+    }
+
+    private static int dumpRegistry(CommandContext<FabricClientCommandSource> context) {
+        MappingsRegistry mr = NavMappingsManager.getCurrentMappings().getRegistry();
+        context.getSource().sendFeedback(Component.literal("Registry dump:\n" + mr.toString().replace("\t", "    ")));
+        return 1;
+    }
+
+    private static int dumpKeyMap(CommandContext<FabricClientCommandSource> context) {
+        Map<String, Integer> keymap = KeyCodeRegistry.getKeyMap();
+        context.getSource().sendFeedback(Component.literal("KeyMap dump:\n" + keymap));
+        return 1;
+    }
+
+    private static int exportBuiltin(CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+        String idStr = StringArgumentType.getString(context, "id");
+        String locationStr = StringArgumentType.getString(context, "location");
+
+        Path resourcePath = CmdDeleteClient.MAPPINGS_RESOURCE_PATH;
+        Path oldPath = resourcePath.resolve(idStr + ".json");
+
+        Path newPath = Path.of(locationStr);
+        if (!newPath.isAbsolute()) {
+            LOGGER.error("Path {} is not absolute", locationStr);
+            throw UNKNOWN_BUILTIN_MAPPINGS.create(idStr);
+        }
+
+        if (!oldPath.toFile().exists() || !oldPath.toFile().isFile()) {
+            LOGGER.error("Error while reading builtin mappings. File does not exist: {}", oldPath.toAbsolutePath());
+            throw UNKNOWN_BUILTIN_MAPPINGS.create(idStr);
+        }
+
+        try {
+            Files.createDirectories(newPath.getParent());
+            Files.copy(oldPath, newPath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            LOGGER.error("Error while copying builtin mappings", e);
+            throw UNKNOWN_BUILTIN_MAPPINGS.create(idStr);
+        }
+
+        context.getSource().sendFeedback(Component.literal("Mappings \"builtin:" + idStr + "\" copied to path: " + newPath.toAbsolutePath()));
+        return 1;
     }
 
     private static int reloadMappings(CommandContext<FabricClientCommandSource> context) {
