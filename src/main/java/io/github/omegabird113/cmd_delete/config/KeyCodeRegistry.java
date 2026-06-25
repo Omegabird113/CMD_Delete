@@ -134,4 +134,10 @@ public final class KeyCodeRegistry {
     public static Map<String, Integer> getKeyMap() {
         return KEY_MAP;
     }
+
+    public static String getDumpString() {
+        return "{"
+                + String.join(", ", KEY_MAP.entrySet().stream().map( e -> e.getKey() + " -> " + e.getValue()).toArray(String[]::new))
+                + "}";
+    }
 }

@@ -24,7 +24,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Locale;
-import java.util.Map;
 
 public final class NavMappingsCommand {
     private static final DynamicCommandExceptionType INVALID_OS = new DynamicCommandExceptionType(
@@ -85,8 +84,7 @@ public final class NavMappingsCommand {
     }
 
     private static int dumpKeyMap(CommandContext<FabricClientCommandSource> context) {
-        Map<String, Integer> keymap = KeyCodeRegistry.getKeyMap();
-        context.getSource().sendFeedback(Component.literal("KeyMap dump:\n" + keymap));
+        context.getSource().sendFeedback(Component.literal("KeyMap dump:\n" + KeyCodeRegistry.getDumpString()));
         return 1;
     }
 
