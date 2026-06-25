@@ -91,6 +91,22 @@ jobs:
             exit 1
           fi
 
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PRERELEASE_FLAG=""
+          if [ "${{ inputs.release_type }}" != "release" ]; then
+            PRERELEASE_FLAG="--prerelease"
+          fi
+
+          gh release create "${{ steps.props.outputs.version }}" \
+            "${{ steps.jar.outputs.path }}" \
+            --target "${{ github.sha }}" \
+            --title "${{ inputs.release_title }}" \
+            --notes-file changelog_body.md \
+            $PRERELEASE_FLAG
+
       - name: Publish to Modrinth, CurseForge, & GitHub
         uses: Kir-Antipov/mc-publish@v3
         with:
@@ -98,10 +114,6 @@ jobs:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           curseforge-id: 1455987
           curseforge-token: ${{ secrets.CF_API_TOKEN }}
-          github-tag: ${{ steps.props.outputs.version }}
-          github-commitish: ${{ github.sha }}
-          github-prerelease: ${{ inputs.release_type != 'release' }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           files: ${{ steps.jar.outputs.path }}
           name: ${{ inputs.release_title }}
           version: ${{ steps.props.outputs.version }}
