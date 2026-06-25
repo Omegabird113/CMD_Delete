@@ -17,6 +17,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = EditBox.class, priority = 2000)
 public abstract class EditBoxMixin {
+    @Unique
+    private static final Logger LOGGER = CmdDeleteClient.getLogger(EditBoxMixin.class);
+
+    static {
+        LOGGER.debug("EditBoxMixin loaded");
+    }
+
     @Shadow
     protected abstract void deleteText(int dir, boolean wholeWord);
 
@@ -31,13 +38,6 @@ public abstract class EditBoxMixin {
 
     @Shadow
     public abstract int getWordPosition(int dir);
-
-    @Unique
-    private static final Logger LOGGER = CmdDeleteClient.getLogger(EditBoxMixin.class);
-
-    static {
-        LOGGER.debug("EditBoxMixin loaded");
-    }
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideDelete(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {

@@ -25,38 +25,31 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = AbstractSignEditScreen.class, priority = 2000)
 public abstract class SignEditScreenMixin {
-    @Shadow
-    @Final
-    protected SignBlockEntity sign;
-
-    @Shadow
-    private TextFieldHelper signField;
-
-    @Shadow
-    @Final
-    private String[] messages;
-
-    @Shadow
-    private int line;
-
-    @Unique
-    private int cmd_delete$selectionStartLine = -1;
-
-    @Unique
-    private int cmd_delete$selectionEndLine = -1;
-
-    @Unique
-    private int cmd_delete$selectionStartPos;
-
-    @Unique
-    private int cmd_delete$selectionEndPos;
-
     @Unique
     private static final Logger LOGGER = CmdDeleteClient.getLogger(SignEditScreenMixin.class);
 
     static {
         LOGGER.debug("SignEditScreenMixin loaded");
     }
+
+    @Shadow
+    @Final
+    protected SignBlockEntity sign;
+    @Shadow
+    private TextFieldHelper signField;
+    @Shadow
+    @Final
+    private String[] messages;
+    @Shadow
+    private int line;
+    @Unique
+    private int cmd_delete$selectionStartLine = -1;
+    @Unique
+    private int cmd_delete$selectionEndLine = -1;
+    @Unique
+    private int cmd_delete$selectionStartPos;
+    @Unique
+    private int cmd_delete$selectionEndPos;
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideSignEditNavigation(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {

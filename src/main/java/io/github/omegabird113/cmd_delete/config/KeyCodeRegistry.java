@@ -137,7 +137,7 @@ public final class KeyCodeRegistry {
 
     public static String getDumpString() {
         return "{"
-                + String.join(", ", KEY_MAP.entrySet().stream().map( e -> e.getKey() + " -> " + e.getValue()).toArray(String[]::new))
+                + String.join(", ", KEY_MAP.entrySet().stream().map(e -> e.getKey() + " -> " + e.getValue()).toArray(String[]::new))
                 + "}";
     }
 }

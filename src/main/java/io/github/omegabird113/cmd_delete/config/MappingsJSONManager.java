@@ -19,6 +19,7 @@ import java.util.Optional;
 
 public final class MappingsJSONManager {
     private static final Logger LOGGER = CmdDeleteClient.getLogger(MappingsJSONManager.class);
+
     private MappingsJSONManager() {
     }
 

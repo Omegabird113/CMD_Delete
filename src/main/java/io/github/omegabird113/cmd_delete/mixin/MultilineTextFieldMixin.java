@@ -21,12 +21,17 @@ import java.util.List;
 
 @Mixin(value = MultilineTextField.class, priority = 2000)
 public abstract class MultilineTextFieldMixin {
+    @Unique
+    private static final Logger LOGGER = CmdDeleteClient.getLogger(MultilineTextFieldMixin.class);
+
+    static {
+        LOGGER.debug("MultilineTextFieldMixin loaded");
+    }
+
     @Shadow
     private String value;
-
     @Shadow
     private int cursor;
-
     @Final
     @Shadow
     private List<?> displayLines;
@@ -45,13 +50,6 @@ public abstract class MultilineTextFieldMixin {
 
     @Shadow
     public abstract void seekCursorLine(int lineOffset);
-
-    @Unique
-    private static final Logger LOGGER = CmdDeleteClient.getLogger(MultilineTextFieldMixin.class);
-
-    static {
-        LOGGER.debug("MultilineTextFieldMixin loaded");
-    }
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideMultilineNavigation(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
