@@ -4,6 +4,7 @@ import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavActionUtils;
 import io.github.omegabird113.cmd_delete.command.MappingsInfoCollectionUtils;
 import io.github.omegabird113.cmd_delete.config.ActiveMappingsManager;
+import io.github.omegabird113.cmd_delete.config.MappingsIdResolutionUtils;
 import org.slf4j.Logger;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public final class NavMappingsManager {
     }
 
     private static void logMappings() {
-        LOGGER.info("Mappings id \"{}\" loaded with supported systems \"{}\" and Coverage of {}% with a registry size of {}. It supports the actions: {}", activeMappingsManager.resolveNamespacedId(currentMappingsState), List.of(currentMappingsState.mappings().getMappingsSupportedSystems()), NavActionUtils.getCoverage(getCurrentMappings()) * 100, currentMappingsState.mappings().getRegistry().getSize(), currentMappingsState.mappings().getPossibleActions());
+        LOGGER.info("Mappings id \"{}\" loaded with supported systems \"{}\" and Coverage of {}% with a registry size of {}. It supports the actions: {}", MappingsIdResolutionUtils.resolveNamespacedId(currentMappingsState), List.of(currentMappingsState.mappings().getMappingsSupportedSystems()), NavActionUtils.getCoverage(getCurrentMappings()) * 100, currentMappingsState.mappings().getRegistry().getSize(), currentMappingsState.mappings().getPossibleActions());
         LOGGER.info("The active mappings' info in \"/navmappings info\" will show as: \"{}\"", MappingsInfoCollectionUtils.getInfoFrom(currentMappingsState, false).replace("\n", " "));
         LOGGER.debug("Mappings state loaded: \"{}\"", currentMappingsState);
     }
@@ -32,7 +33,7 @@ public final class NavMappingsManager {
     public static void loadMappings() {
         currentMappingsState = activeMappingsManager.tryGetMappings();
         activeMappingsManager.trySaveMappings(
-                activeMappingsManager.resolveNamespacedId(currentMappingsState)
+                MappingsIdResolutionUtils.resolveNamespacedId(currentMappingsState)
         );
         logMappings();
     }
@@ -43,7 +44,7 @@ public final class NavMappingsManager {
             return false;
         currentMappingsState = mappingsState;
         activeMappingsManager.trySaveMappings(
-                activeMappingsManager.resolveNamespacedId(currentMappingsState)
+                MappingsIdResolutionUtils.resolveNamespacedId(currentMappingsState)
         );
         logMappings();
         return true;
@@ -51,20 +52,20 @@ public final class NavMappingsManager {
 
     public static void updateMappingsToBuiltIn(Os os) {
         currentMappingsState = activeMappingsManager.resolveMappings(
-                activeMappingsManager.resolveNamespacedId(MappingsState.Type.BUILTIN, os)
+                MappingsIdResolutionUtils.resolveNamespacedId(MappingsState.Type.BUILTIN, os)
         );
         activeMappingsManager.trySaveMappings(
-                activeMappingsManager.resolveNamespacedId(currentMappingsState)
+                MappingsIdResolutionUtils.resolveNamespacedId(currentMappingsState)
         );
         logMappings();
     }
 
     public static void updateMappingsToDefault() {
         currentMappingsState = activeMappingsManager.resolveMappings(
-                activeMappingsManager.resolveNamespacedId(MappingsState.Type.DEFAULT, "")
+                MappingsIdResolutionUtils.resolveNamespacedId(MappingsState.Type.DEFAULT, "")
         );
         activeMappingsManager.trySaveMappings(
-                activeMappingsManager.resolveNamespacedId(currentMappingsState)
+                MappingsIdResolutionUtils.resolveNamespacedId(currentMappingsState)
         );
         logMappings();
     }

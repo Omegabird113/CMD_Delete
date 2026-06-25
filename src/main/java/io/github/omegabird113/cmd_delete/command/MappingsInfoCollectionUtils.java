@@ -1,6 +1,7 @@
 package io.github.omegabird113.cmd_delete.command;
 
 import io.github.omegabird113.cmd_delete.actions.NavActionUtils;
+import io.github.omegabird113.cmd_delete.config.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.config.MappingsJSONManager;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.Os;
@@ -17,10 +18,10 @@ public final class MappingsInfoCollectionUtils {
     public static String getInfoFrom(MappingsState mappingsState, boolean includeDescription) {
         float coverage = NavActionUtils.getCoverage(mappingsState.mappings());
 
-        String namespacedId = "";
         String displayName = "";
         String description = "";
 
+        String namespacedId = "\"" + MappingsIdResolutionUtils.resolveNamespacedId(mappingsState) + "\"";
         String version = mappingsState.mappings().getRegistry().getVersion();
         String author = mappingsState.mappings().getRegistry().getAuthor();
         String keyCombinationsString = " with " + mappingsState.mappings().getRegistry().getSize() + " key combinations registered";
@@ -30,17 +31,14 @@ public final class MappingsInfoCollectionUtils {
 
         switch (mappingsState.type()) {
             case CUSTOM -> {
-                namespacedId = "custom:" + mappingsState.mappings().getRegistry().getId();
                 displayName = "\"" + mappingsState.mappings().getRegistry().getName() + "\"";
                 description = mappingsState.mappings().getRegistry().getDescription();
             }
             case BUILTIN -> {
-                namespacedId = "builtin:" + String.join("_", systemStrings).toLowerCase(Locale.ROOT);
                 displayName = mappingsState.mappings().getRegistry().getName();
                 description = mappingsState.mappings().getRegistry().getDescription();
             }
             case DEFAULT -> {
-                namespacedId = "\"\"";
                 displayName = "Default Mappings (Resolved to " + String.join(" and ", systemStrings) + ")";
                 description = "The hard-coded default behaviour to set the mappings to the pre-bundled mappings for the OS of the system when the client is loaded.";
             }

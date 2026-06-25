@@ -9,6 +9,9 @@ import org.slf4j.Logger;
 import java.io.IOException;
 import java.nio.file.Files;
 
+import static io.github.omegabird113.cmd_delete.config.MappingsIdResolutionUtils.removeNamespaceFromId;
+import static io.github.omegabird113.cmd_delete.config.MappingsIdResolutionUtils.resolveType;
+
 public class ActiveMappingsManager {
     private static final Logger LOGGER = CmdDeleteClient.getLogger(ActiveMappingsManager.class);
     private final NavMappings navMappings;
@@ -31,47 +34,6 @@ public class ActiveMappingsManager {
         if (type == MappingsState.Type.DEFAULT)
             id = "";
         return new MappingsState(navMappings, type, id);
-    }
-
-    public String resolveNamespacedId(MappingsState.Type type, String id) {
-        String prefixText = switch (type) {
-            case CUSTOM -> "custom:";
-            case BUILTIN -> "builtin:";
-            case DEFAULT -> "";
-        };
-        return prefixText + id;
-    }
-
-    public String resolveNamespacedId(MappingsState.Type type, Os os) {
-        String prefixText = switch (type) {
-            case CUSTOM -> "custom:";
-            case BUILTIN -> "builtin:";
-            case DEFAULT -> "";
-        };
-        String osText = switch (os) {
-            case WINDOWS, LINUX -> "windows_linux";
-            case MAC -> "mac";
-        };
-        return prefixText + osText;
-    }
-
-    public String resolveNamespacedId(MappingsState mappingState) {
-        MappingsState.Type type = mappingState.type();
-        String id = mappingState.id();
-        return resolveNamespacedId(type, id);
-    }
-
-    public MappingsState.Type resolveType(String namespacedId) {
-        if (namespacedId.startsWith("custom:"))
-            return MappingsState.Type.CUSTOM;
-        else if (namespacedId.startsWith("builtin:"))
-            return MappingsState.Type.BUILTIN;
-        else
-            return MappingsState.Type.DEFAULT;
-    }
-
-    String removeNamespaceFromId(String namespacedId) {
-        return namespacedId.replaceFirst("custom:|builtin:", "");
     }
 
     String resolveDefaultMappingsNonNamespacedId() {
