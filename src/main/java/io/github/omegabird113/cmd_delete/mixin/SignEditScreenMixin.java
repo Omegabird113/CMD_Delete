@@ -35,19 +35,26 @@ public abstract class SignEditScreenMixin {
     @Shadow
     @Final
     protected SignBlockEntity sign;
+
     @Shadow
     private TextFieldHelper signField;
+
     @Shadow
     @Final
     private String[] messages;
+
     @Shadow
     private int line;
+
     @Unique
     private int cmd_delete$selectionStartLine = -1;
+
     @Unique
     private int cmd_delete$selectionEndLine = -1;
+
     @Unique
     private int cmd_delete$selectionStartPos;
+
     @Unique
     private int cmd_delete$selectionEndPos;
 

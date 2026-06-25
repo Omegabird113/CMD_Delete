@@ -30,8 +30,10 @@ public abstract class MultilineTextFieldMixin {
 
     @Shadow
     private String value;
+
     @Shadow
     private int cursor;
+
     @Final
     @Shadow
     private List<?> displayLines;
