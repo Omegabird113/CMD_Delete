@@ -13,7 +13,7 @@ import java.util.Arrays;
 import static io.github.omegabird113.cmd_delete.actions.NavAction.NONE;
 
 public final class NavMappings {
-    private MappingsRegistry registry;
+    private MappingsRegistry registry = null;
 
     public MappingsRegistry getRegistry() {
         return registry;
