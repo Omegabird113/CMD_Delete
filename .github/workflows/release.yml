@@ -46,7 +46,7 @@ jobs:
         uses: actions/setup-java@v5
         with:
           java-version: 25
-          distribution: "temurin"
+          distribution: "microsoft"
           cache: gradle
 
       - name: Make gradlew executable
