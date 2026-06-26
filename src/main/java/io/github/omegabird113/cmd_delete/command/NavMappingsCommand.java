@@ -17,6 +17,7 @@ import io.github.omegabird113.cmd_delete.mappings.Os;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.network.chat.Component;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -34,6 +35,9 @@ public final class NavMappingsCommand {
     );
     private static final DynamicCommandExceptionType UNKNOWN_BUILTIN_MAPPINGS = new DynamicCommandExceptionType(
             id -> Component.literal("Could not load builtin navmappings: " + id)
+    );
+    private static final DynamicCommandExceptionType FAILED_CUSTOM_MAPPINGS_IMPORT = new DynamicCommandExceptionType(
+            location -> Component.literal("Could not import custom navmappings from: " + location)
     );
 
     private static final Logger LOGGER = CmdDeleteClient.getLogger(NavMappingsCommand.class);
@@ -78,7 +82,8 @@ public final class NavMappingsCommand {
                                 .then(argument("id", StringArgumentType.word())
                                         .then(argument("location", StringArgumentType.greedyString()).executes(NavMappingsCommand::exportCustom)))
                         )
-                )
+                ).then(literal("import")
+                        .then(argument("location", StringArgumentType.greedyString()).executes(NavMappingsCommand::importCustom)))
         );
     }
 
@@ -150,6 +155,36 @@ public final class NavMappingsCommand {
         }
 
         context.getSource().sendFeedback(Component.literal("Mappings \"builtin:" + idStr + "\" copied to path: " + newPath.toAbsolutePath()));
+        return 1;
+    }
+
+    private static int importCustom(CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+        String locationStr = StringArgumentType.getString(context, "location");
+
+        Path configPath = CmdDeleteClient.MAPPINGS_JSONS_PATH;
+
+        Path oldPath = Path.of(locationStr);
+        Path newPath = configPath.resolve(FilenameUtils.getBaseName(locationStr) + ".json");
+
+        if (!newPath.isAbsolute()) {
+            LOGGER.error("From path \"{}\" for custom import is not absolute", locationStr);
+            throw FAILED_CUSTOM_MAPPINGS_IMPORT.create(locationStr);
+        }
+
+        if (!oldPath.toFile().exists() || !oldPath.toFile().isFile()) {
+            LOGGER.error("Error while reading custom mappings to import them. File does not exist: {}", oldPath.toAbsolutePath());
+            throw FAILED_CUSTOM_MAPPINGS_IMPORT.create(locationStr);
+        }
+
+        try {
+            Files.createDirectories(newPath.getParent());
+            Files.copy(oldPath, newPath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            LOGGER.error("Error while copying custom mappings", e);
+            throw FAILED_CUSTOM_MAPPINGS_IMPORT.create(locationStr);
+        }
+
+        context.getSource().sendFeedback(Component.literal("Mappings from " + locationStr + " copied to path now available as \"custom:" + FilenameUtils.getBaseName(locationStr) + "\""));
         return 1;
     }
 
