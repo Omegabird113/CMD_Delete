@@ -47,17 +47,11 @@ public final class NavMappingsCommand {
 
     private static final SuggestionProvider<FabricClientCommandSource> BUILTIN_SUGGESTIONS =
             (_, builder) ->
-                    SharedSuggestionProvider.suggest(
-                            List.of("windows_linux", "mac"),
-                            builder
-                    );
+                    SharedSuggestionProvider.suggest(List.of("windows_linux", "mac"), builder);
 
     private static final SuggestionProvider<FabricClientCommandSource> CUSTOM_SUGGESTIONS =
             (_, builder) ->
-                    SharedSuggestionProvider.suggest(
-                            MappingsJSONManager.getAvailableOptions(false),
-                            builder
-                    );
+                    SharedSuggestionProvider.suggest(MappingsJSONManager.getAvailableOptions(false), builder);
 
     private static final Logger LOGGER = CmdDeleteClient.getLogger(NavMappingsCommand.class);
 
