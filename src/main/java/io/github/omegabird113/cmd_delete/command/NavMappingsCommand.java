@@ -8,14 +8,17 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.config.KeyCodeRegistry;
+import io.github.omegabird113.cmd_delete.config.MappingsJSONManager;
 import io.github.omegabird113.cmd_delete.config.MappingsRegistry;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
@@ -25,6 +28,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.Locale;
 
 public final class NavMappingsCommand {
@@ -41,6 +45,20 @@ public final class NavMappingsCommand {
             location -> Component.literal("Could not import custom navmappings from: " + location)
     );
 
+    private static final SuggestionProvider<FabricClientCommandSource> BUILTIN_SUGGESTIONS =
+            (_, builder) ->
+                    SharedSuggestionProvider.suggest(
+                            List.of("windows_linux", "mac"),
+                            builder
+                    );
+
+    private static final SuggestionProvider<FabricClientCommandSource> CUSTOM_SUGGESTIONS =
+            (_, builder) ->
+                    SharedSuggestionProvider.suggest(
+                            MappingsJSONManager.getAvailableOptions(false),
+                            builder
+                    );
+
     private static final Logger LOGGER = CmdDeleteClient.getLogger(NavMappingsCommand.class);
 
     private NavMappingsCommand() {
@@ -56,14 +74,11 @@ public final class NavMappingsCommand {
                 .then(literal("set")
                         .then(literal("builtin")
                                 .then(argument("os", StringArgumentType.word())
-                                        .suggests((_, builder) -> {
-                                            builder.suggest("mac");
-                                            builder.suggest("windows_linux");
-                                            return builder.buildFuture();
-                                        })
+                                        .suggests(BUILTIN_SUGGESTIONS)
                                         .executes(NavMappingsCommand::setBuiltIn)))
                         .then(literal("custom")
                                 .then(argument("id", StringArgumentType.word())
+                                        .suggests(CUSTOM_SUGGESTIONS)
                                         .executes(NavMappingsCommand::setCustom)))
                         .then(literal("default")
                                 .executes(NavMappingsCommand::setDefault))
@@ -78,9 +93,11 @@ public final class NavMappingsCommand {
                 .then(literal("export")
                         .then(literal("builtin")
                                 .then(argument("id", StringArgumentType.word())
+                                        .suggests(BUILTIN_SUGGESTIONS)
                                         .then(argument("location", StringArgumentType.greedyString()).executes(NavMappingsCommand::exportBuiltin)))
                         ).then(literal("custom")
                                 .then(argument("id", StringArgumentType.word())
+                                        .suggests(CUSTOM_SUGGESTIONS)
                                         .then(argument("location", StringArgumentType.greedyString()).executes(NavMappingsCommand::exportCustom)))
                         )
                 ).then(literal("import")

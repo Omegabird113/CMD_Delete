@@ -145,7 +145,7 @@ public final class MappingsJSONManager {
         }
     }
 
-    public static List<String> getAvailableOptions() {
+    public static List<String> getAvailableOptions(boolean namespacedIds) {
         List<String> options = new ArrayList<>();
 
         File configDirectory = CmdDeleteClient.MAPPINGS_JSONS_PATH.toFile();
@@ -160,7 +160,7 @@ public final class MappingsJSONManager {
 
         for (File file : files)
             if (file.getName().endsWith(".json"))
-                options.add("custom:" + FilenameUtils.removeExtension(file.getName()));
+                options.add((namespacedIds ? "custom:" : "") + FilenameUtils.removeExtension(file.getName()));
 
         return options;
     }

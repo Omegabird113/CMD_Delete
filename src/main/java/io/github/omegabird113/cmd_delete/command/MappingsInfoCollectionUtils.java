@@ -59,7 +59,7 @@ public final class MappingsInfoCollectionUtils {
                         "builtin:mac"
                 )
         );
-        internal.addAll(MappingsJSONManager.getAvailableOptions());
+        internal.addAll(MappingsJSONManager.getAvailableOptions(true));
         return internal.toArray(String[]::new);
     }
 }
