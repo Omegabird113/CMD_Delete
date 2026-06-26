@@ -14,7 +14,7 @@ import static io.github.omegabird113.cmd_delete.config.MappingsIdResolutionUtils
 import static io.github.omegabird113.cmd_delete.config.MappingsIdResolutionUtils.resolveType;
 
 public class ActiveMappingsManager {
-    private static final Logger LOGGER = LoggingManager.getInitializerLogger(ActiveMappingsManager.class);
+    private static final Logger LOGGER = LoggingManager.getLogger(ActiveMappingsManager.class);
     private final NavMappings navMappings;
     private final Os system;
 

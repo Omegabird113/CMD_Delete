@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 public final class MappingsJSONManager {
-    private static final Logger LOGGER = LoggingManager.getInitializerLogger(MappingsJSONManager.class);
+    private static final Logger LOGGER = LoggingManager.getLogger(MappingsJSONManager.class);
 
     private MappingsJSONManager() {
     }

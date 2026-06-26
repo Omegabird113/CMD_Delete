@@ -57,7 +57,7 @@ public final class NavMappingsCommand {
             (_, builder) ->
                     SharedSuggestionProvider.suggest(MappingsJSONManager.getAvailableOptions(false), builder);
 
-    private static final Logger LOGGER = LoggingManager.getInitializerLogger(NavMappingsCommand.class);
+    private static final Logger LOGGER = LoggingManager.getLogger(NavMappingsCommand.class);
 
     private NavMappingsCommand() {
     }

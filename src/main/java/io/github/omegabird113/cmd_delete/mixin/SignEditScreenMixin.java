@@ -26,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = AbstractSignEditScreen.class, priority = 2000)
 public abstract class SignEditScreenMixin {
     @Unique
-    private static final Logger LOGGER = LoggingManager.getInitializerLogger(SignEditScreenMixin.class);
+    private static final Logger LOGGER = LoggingManager.getLogger(SignEditScreenMixin.class);
 
     static {
         LOGGER.debug("SignEditScreenMixin loaded");

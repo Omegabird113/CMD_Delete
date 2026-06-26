@@ -11,7 +11,7 @@ public final class PathConstants {
     private static final Path GAME_PATH = FabricLoader.getInstance().getGameDir();
     public static final Path ACTIVE_MAPPINGS_FILE_PATH = GAME_PATH.resolve("config/cmd_delete/.active_mappings");
     public static final Path MAPPINGS_JSONS_PATH = GAME_PATH.resolve("config/cmd_delete/mappings/");
-    private static final Logger LOGGER = LoggingManager.getInitializerLogger(PathConstants.class);
+    private static final Logger LOGGER = LoggingManager.getLogger(PathConstants.class);
 
     static {
         LOGGER.debug("Resolved MAPPINGS_RESOURCE_PATH=\"{}\", MAPPINGS_JSONS_PATH=\"{}\", ACTIVE_MAPPINGS_FILE_PATH=\"{}\", GAME_PATH=\"{}\"", PathConstants.MAPPINGS_RESOURCE_PATH, PathConstants.MAPPINGS_JSONS_PATH, PathConstants.ACTIVE_MAPPINGS_FILE_PATH, PathConstants.GAME_PATH);
