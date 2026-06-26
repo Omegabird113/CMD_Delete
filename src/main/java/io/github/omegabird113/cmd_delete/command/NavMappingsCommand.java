@@ -21,6 +21,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -132,25 +133,23 @@ public final class NavMappingsCommand {
         String idStr = StringArgumentType.getString(context, "id");
         String locationStr = StringArgumentType.getString(context, "location");
 
-        Path resourcePath = CmdDeleteClient.MAPPINGS_RESOURCE_PATH;
-        Path oldPath = resourcePath.resolve(idStr + ".json");
-
         Path newPath = Path.of(locationStr);
         if (!newPath.isAbsolute()) {
             LOGGER.error("New path \"{}\" for builtin copy is not absolute", locationStr);
             throw UNKNOWN_BUILTIN_MAPPINGS.create(idStr);
         }
 
-        if (!oldPath.toFile().exists() || !oldPath.toFile().isFile()) {
-            LOGGER.error("Error while reading builtin mappings. File does not exist: {}", oldPath.toAbsolutePath());
-            throw UNKNOWN_BUILTIN_MAPPINGS.create(idStr);
-        }
+        String resourceSubPathStr = "/mappings/" + idStr + ".json";
 
-        try {
+        try (InputStream resourceStream = NavMappingsCommand.class.getResourceAsStream(resourceSubPathStr)) {
+            if (resourceStream == null) {
+                LOGGER.error("Builtin mappings do not exist: {}", resourceSubPathStr);
+                throw UNKNOWN_BUILTIN_MAPPINGS.create(idStr);
+            }
             Files.createDirectories(newPath.getParent());
-            Files.copy(oldPath, newPath, StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(resourceStream, newPath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            LOGGER.error("Error while copying builtin mappings", e);
+            LOGGER.error("Error while exporting builtin mappings", e);
             throw UNKNOWN_BUILTIN_MAPPINGS.create(idStr);
         }
 
