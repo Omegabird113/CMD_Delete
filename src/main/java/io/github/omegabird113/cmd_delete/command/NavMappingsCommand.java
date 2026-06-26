@@ -87,6 +87,7 @@ public final class NavMappingsCommand {
                 .then(literal("list").executes(NavMappingsCommand::printMappingsList))
                 .then(literal("reload").executes(NavMappingsCommand::reloadMappings))
                 .then(literal("debug")
+                        .then(literal("aboutCmdDelete").executes(NavMappingsCommand::printCmdDeleteAbout))
                         .then(literal("dumpRegistry").executes(NavMappingsCommand::dumpRegistry))
                         .then(literal("dumpKeymap").executes(NavMappingsCommand::dumpKeyMap))
                 )
@@ -242,6 +243,14 @@ public final class NavMappingsCommand {
     private static int printMappingsList(CommandContext<FabricClientCommandSource> context) {
         String[] options = MappingsInfoCollectionUtils.getMappingsList();
         context.getSource().sendFeedback(Component.literal("The currently available mappings options are:\n" + String.join("\n", options)));
+        return 1;
+    }
+
+    private static int printCmdDeleteAbout(CommandContext<FabricClientCommandSource> context) {
+        String about = "CMD + Delete (modid: " + CmdDeleteClient.MODID
+                + ") by Omegabird113 v" + CmdDeleteClient.VERSION
+                + " using mappings format version " + CmdDeleteClient.MAPPINGS_FORMAT_VERSION;
+        context.getSource().sendFeedback(Component.literal(about));
         return 1;
     }
 
