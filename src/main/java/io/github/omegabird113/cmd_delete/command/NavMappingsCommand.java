@@ -21,6 +21,8 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import org.apache.commons.io.FilenameUtils;
+import org.jetbrains.annotations.Contract;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -63,7 +65,7 @@ public final class NavMappingsCommand {
         LOGGER.info("Registered client command \"/navmappings\" through Fabric API");
     }
 
-    private static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
+    private static void register(@NonNull CommandDispatcher<FabricClientCommandSource> dispatcher) {
         dispatcher.register(literal("navmappings")
                 .then(literal("set")
                         .then(literal("builtin")
@@ -102,13 +104,13 @@ public final class NavMappingsCommand {
         );
     }
 
-    private static int dumpRegistry(CommandContext<FabricClientCommandSource> context) {
+    private static int dumpRegistry(@NonNull CommandContext<FabricClientCommandSource> context) {
         MappingsRegistry mr = NavMappingsManager.getCurrentMappings().getRegistry();
         context.getSource().sendFeedback(Component.literal("Registry dump:\n" + mr.toString().replace("\t", "    ")));
         return 1;
     }
 
-    private static int dumpKeyMap(CommandContext<FabricClientCommandSource> context) {
+    private static int dumpKeyMap(@NonNull CommandContext<FabricClientCommandSource> context) {
         context.getSource().sendFeedback(Component.literal("KeyMap dump:\n" + KeyCodeRegistry.getDumpString()));
         return 1;
     }
@@ -201,7 +203,7 @@ public final class NavMappingsCommand {
         return 1;
     }
 
-    private static int reloadMappings(CommandContext<FabricClientCommandSource> context) {
+    private static int reloadMappings(@NonNull CommandContext<FabricClientCommandSource> context) {
         NavMappingsManager.loadMappings();
         context.getSource().sendFeedback(Component.literal("Reloaded mappings"));
         return 1;
@@ -223,26 +225,26 @@ public final class NavMappingsCommand {
         return 1;
     }
 
-    private static int setDefault(CommandContext<FabricClientCommandSource> context) {
+    private static int setDefault(@NonNull CommandContext<FabricClientCommandSource> context) {
         NavMappingsManager.updateMappingsToDefault();
         context.getSource().sendFeedback(Component.literal("Set nav mappings to default"));
         return 1;
     }
 
-    private static int printMappingsInfo(CommandContext<FabricClientCommandSource> context) {
+    private static int printMappingsInfo(@NonNull CommandContext<FabricClientCommandSource> context) {
         MappingsState currentMappingState = NavMappingsManager.getMappingsState();
         String info = MappingsInfoCollectionUtils.getInfoFrom(currentMappingState, true);
         context.getSource().sendFeedback(Component.literal("The currently active mappings are:\n" + info));
         return 1;
     }
 
-    private static int printMappingsList(CommandContext<FabricClientCommandSource> context) {
+    private static int printMappingsList(@NonNull CommandContext<FabricClientCommandSource> context) {
         String[] options = MappingsInfoCollectionUtils.getMappingsList();
         context.getSource().sendFeedback(Component.literal("The currently available mappings options are:\n" + String.join("\n", options)));
         return 1;
     }
 
-    private static int printCmdDeleteAbout(CommandContext<FabricClientCommandSource> context) {
+    private static int printCmdDeleteAbout(@NonNull CommandContext<FabricClientCommandSource> context) {
         String about = "CMD + Delete (modid: " + CmdDeleteClient.MODID
                 + ") by Omegabird113 v" + CmdDeleteClient.VERSION
                 + " using mappings format version " + CmdDeleteClient.MAPPINGS_FORMAT_VERSION;
@@ -259,18 +261,20 @@ public final class NavMappingsCommand {
         };
     }
 
-    private static String resolveOsId(Os os) {
+    private static @NonNull String resolveOsId(@NonNull Os os) {
         return switch (os) {
             case MAC -> "mac";
             case WINDOWS, LINUX -> "windows_linux";
         };
     }
 
-    private static LiteralArgumentBuilder<FabricClientCommandSource> literal(String name) {
+    @Contract(value = "_ -> new", pure = true)
+    private static @NonNull LiteralArgumentBuilder<FabricClientCommandSource> literal(String name) {
         return LiteralArgumentBuilder.literal(name);
     }
 
-    private static <T> RequiredArgumentBuilder<FabricClientCommandSource, T> argument(String name, ArgumentType<T> type) {
+    @Contract(value = "_, _ -> new", pure = true)
+    private static <T> @NonNull RequiredArgumentBuilder<FabricClientCommandSource, T> argument(String name, ArgumentType<T> type) {
         return RequiredArgumentBuilder.argument(name, type);
     }
 }

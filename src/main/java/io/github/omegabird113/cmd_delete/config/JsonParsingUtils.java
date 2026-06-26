@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Locale;
 import java.util.Map;
@@ -12,14 +13,14 @@ final class JsonParsingUtils {
     private JsonParsingUtils() {
     }
 
-    public static String getStringElse(JsonObject parent, String fieldName, String defaultValue) {
+    public static String getStringElse(@NonNull JsonObject parent, String fieldName, String defaultValue) {
         if (!parent.has(fieldName))
             return defaultValue;
         String value = requireString(parent, fieldName).trim();
         return value.isEmpty() ? defaultValue : value;
     }
 
-    public static JsonObject requireObject(JsonObject parent, String fieldName) {
+    public static JsonObject requireObject(@NonNull JsonObject parent, String fieldName) {
         if (!parent.has(fieldName))
             throw new JsonParseException("Missing required field: " + fieldName);
 
@@ -30,7 +31,7 @@ final class JsonParsingUtils {
         return element.getAsJsonObject();
     }
 
-    public static JsonArray requireArray(JsonObject parent, String fieldName) {
+    public static JsonArray requireArray(@NonNull JsonObject parent, String fieldName) {
         if (!parent.has(fieldName))
             throw new JsonParseException("Missing required field: " + fieldName);
 
@@ -41,7 +42,7 @@ final class JsonParsingUtils {
         return element.getAsJsonArray();
     }
 
-    public static String requireString(JsonObject parent, String fieldName) {
+    public static String requireString(@NonNull JsonObject parent, String fieldName) {
         if (!parent.has(fieldName))
             throw new JsonParseException("Missing required field: " + fieldName);
 
@@ -52,7 +53,7 @@ final class JsonParsingUtils {
         return element.getAsString();
     }
 
-    public static boolean getOptionalBoolean(JsonObject parent, String fieldName) {
+    public static boolean getOptionalBoolean(@NonNull JsonObject parent, String fieldName) {
         if (!parent.has(fieldName))
             return false;
 
@@ -63,7 +64,7 @@ final class JsonParsingUtils {
         return element.getAsBoolean();
     }
 
-    public static int requireInt(JsonObject parent, String fieldName) {
+    public static int requireInt(@NonNull JsonObject parent, String fieldName) {
         if (!parent.has(fieldName))
             throw new JsonParseException("Missing required field: " + fieldName);
 
@@ -79,7 +80,7 @@ final class JsonParsingUtils {
         }
     }
 
-    public static int requireKeyCode(JsonObject parent, String fieldName) throws JsonParseException {
+    public static int requireKeyCode(@NonNull JsonObject parent, String fieldName) throws JsonParseException {
         final Map<String, Integer> keyMap = KeyCodeRegistry.getKeyMap();
 
         if (!parent.has(fieldName))

@@ -2,6 +2,7 @@ package io.github.omegabird113.cmd_delete.config;
 
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.mappings.Os;
+import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -46,7 +47,8 @@ public final class MappingsRegistry {
         return registry;
     }
 
-    Optional<Map<@NonNull KeyCombo, @NonNull NavAction>> getInternalDisabledRegistry() {
+    @Contract(pure = true)
+    @NonNull Optional<Map<@NonNull KeyCombo, @NonNull NavAction>> getInternalDisabledRegistry() {
         return Optional.ofNullable(disabledRegistry);
     }
 
@@ -90,7 +92,7 @@ public final class MappingsRegistry {
         return registry.size();
     }
 
-    private String registryStringUtil(@Nullable Map<@NonNull KeyCombo, @NonNull NavAction> registry) {
+    private @NonNull String registryStringUtil(@Nullable Map<@NonNull KeyCombo, @NonNull NavAction> registry) {
         if (registry == null)
             return "null";
         if (registry.isEmpty())

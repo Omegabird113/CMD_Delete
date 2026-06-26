@@ -4,6 +4,8 @@ import com.google.gson.*;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.mappings.Os;
+import org.jetbrains.annotations.Contract;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 
 import java.lang.reflect.Type;
@@ -24,7 +26,7 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
             .collect(Collectors.toUnmodifiableMap(NavAction::name, Function.identity()));
 
     @Override
-    public MappingsRegistry deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public @NonNull MappingsRegistry deserialize(@NonNull JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         if (!json.isJsonObject())
             throw new JsonParseException("Expected a JSON object at root");
         JsonObject jsonObject = json.getAsJsonObject();
@@ -102,7 +104,8 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
                 : new MappingsRegistry(localKeys, disabledKeys, container.systems(), inherits, container.name(), container.author(), container.description(), container.version(), container.id());
     }
 
-    private MetadataContainer parseMeta(JsonObject meta) {
+    @Contract("_ -> new")
+    private @NonNull MetadataContainer parseMeta(JsonObject meta) {
         String name = getStringElse(meta, "name", "Unnamed Custom Mappings");
         String author = getStringElse(meta, "author", "unknown");
         String description = getStringElse(meta, "description", "No description provided");
@@ -124,11 +127,11 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
             throw new JsonParseException("No systems found");
     }
 
-    private List<KeyCombo> expandKeyWildcards(int key,
-                                              boolean hasShift, boolean shiftValue,
-                                              boolean hasAltOption, boolean altOptionValue,
-                                              boolean hasControl, boolean controlValue,
-                                              boolean hasSuperCommand, boolean superCommandValue) {
+    private @NonNull List<KeyCombo> expandKeyWildcards(int key,
+                                                       boolean hasShift, boolean shiftValue,
+                                                       boolean hasAltOption, boolean altOptionValue,
+                                                       boolean hasControl, boolean controlValue,
+                                                       boolean hasSuperCommand, boolean superCommandValue) {
 
         List<Boolean> shiftVals = hasShift ? List.of(shiftValue) : List.of(false, true);
         List<Boolean> altOptionals = hasAltOption ? List.of(altOptionValue) : List.of(false, true);
@@ -144,7 +147,7 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
         return results;
     }
 
-    private Set<Os> parseSystems(JsonArray systemsArray) {
+    private @NonNull Set<Os> parseSystems(@NonNull JsonArray systemsArray) {
         Set<Os> systems = new LinkedHashSet<>();
 
         for (JsonElement systemElement : systemsArray) {

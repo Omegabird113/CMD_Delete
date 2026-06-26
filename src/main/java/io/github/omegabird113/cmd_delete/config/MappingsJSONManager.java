@@ -6,6 +6,7 @@ import com.google.gson.JsonParseException;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.mappings.NavMappings;
 import org.apache.commons.io.FilenameUtils;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 
 import java.io.File;
@@ -23,7 +24,7 @@ public final class MappingsJSONManager {
     private MappingsJSONManager() {
     }
 
-    private static MappingsRegistry loadFromResourceMappingsDir(String id) throws IOException {
+    private static @NonNull MappingsRegistry loadFromResourceMappingsDir(String id) throws IOException {
         Path path = CmdDeleteClient.MAPPINGS_RESOURCE_PATH.resolve(id + ".json");
 
         Gson gson = new GsonBuilder()
@@ -38,7 +39,7 @@ public final class MappingsJSONManager {
         }
     }
 
-    private static MappingsRegistry loadFromCustomMappingsDir(String id) throws IOException {
+    private static @NonNull MappingsRegistry loadFromCustomMappingsDir(String id) throws IOException {
         Path path = CmdDeleteClient.MAPPINGS_JSONS_PATH.resolve(id + ".json");
         if (!Files.exists(path))
             throw new FileNotFoundException("Custom mapping file not found at: " + path);
@@ -92,7 +93,7 @@ public final class MappingsJSONManager {
         }
     }
 
-    private static MappingsRegistry resolveInheritance(MappingsRegistry startRegistry) throws IOException {
+    private static @NonNull MappingsRegistry resolveInheritance(MappingsRegistry startRegistry) throws IOException {
         List<MappingsRegistry> registries = new ArrayList<>();
         List<String> ids = new ArrayList<>();
         MappingsRegistry current = startRegistry;
@@ -145,7 +146,7 @@ public final class MappingsJSONManager {
         }
     }
 
-    public static List<String> getAvailableOptions(boolean namespacedIds) {
+    public static @NonNull List<String> getAvailableOptions(boolean namespacedIds) {
         List<String> options = new ArrayList<>();
 
         File configDirectory = CmdDeleteClient.MAPPINGS_JSONS_PATH.toFile();

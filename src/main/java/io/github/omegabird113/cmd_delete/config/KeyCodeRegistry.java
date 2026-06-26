@@ -1,5 +1,7 @@
 package io.github.omegabird113.cmd_delete.config;
 
+import org.jspecify.annotations.NonNull;
+
 import java.util.Map;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -135,7 +137,7 @@ public final class KeyCodeRegistry {
         return KEY_MAP;
     }
 
-    public static String getDumpString() {
+    public static @NonNull String getDumpString() {
         return "{"
                 + String.join(", ", KEY_MAP.entrySet().stream().map(e -> e.getKey() + " -> " + e.getValue()).toArray(String[]::new))
                 + "}";

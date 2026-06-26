@@ -6,6 +6,7 @@ import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.KeyCombo;
 import io.github.omegabird113.cmd_delete.config.MappingsRegistry;
 import net.minecraft.client.input.KeyEvent;
+import org.jspecify.annotations.NonNull;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.Arrays;
@@ -33,7 +34,7 @@ public final class NavMappings {
         return NONE;
     }
 
-    public NavAction getAction(KeyEvent event, Window window) {
+    public NavAction getAction(@NonNull KeyEvent event, Window window) {
         int key = event.key();
         boolean shift = event.hasShiftDown();
         boolean alt = event.hasAltDown();
@@ -43,7 +44,7 @@ public final class NavMappings {
         return getAction(key, shift, alt, control, windows);
     }
 
-    public NavAction[] getPossibleActions() {
+    public NavAction @NonNull [] getPossibleActions() {
         if (registry == null)
             return new NavAction[0];
         return Arrays.stream(registry.getValues())
@@ -52,7 +53,7 @@ public final class NavMappings {
                 .toArray(NavAction[]::new);
     }
 
-    public Os[] getMappingsSupportedSystems() {
+    public Os @NonNull [] getMappingsSupportedSystems() {
         if (registry == null)
             return new Os[0];
         return registry.getSystems().stream()

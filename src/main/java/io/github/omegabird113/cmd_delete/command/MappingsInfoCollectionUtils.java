@@ -5,6 +5,7 @@ import io.github.omegabird113.cmd_delete.config.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.config.MappingsJSONManager;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.Os;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +16,7 @@ public final class MappingsInfoCollectionUtils {
     private MappingsInfoCollectionUtils() {
     }
 
-    public static String getInfoFrom(MappingsState mappingsState, boolean includeDescription) {
+    public static @NonNull String getInfoFrom(@NonNull MappingsState mappingsState, boolean includeDescription) {
         float coverage = NavActionUtils.getCoverage(mappingsState.mappings());
 
         String displayName = "";

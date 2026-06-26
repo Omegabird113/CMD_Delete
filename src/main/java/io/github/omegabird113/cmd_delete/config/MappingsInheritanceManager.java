@@ -1,6 +1,8 @@
 package io.github.omegabird113.cmd_delete.config;
 
 import io.github.omegabird113.cmd_delete.actions.NavAction;
+import org.jetbrains.annotations.Contract;
+import org.jspecify.annotations.NonNull;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +13,8 @@ public final class MappingsInheritanceManager {
     private MappingsInheritanceManager() {
     }
 
-    public static MappingsRegistry merge(List<MappingsRegistry> toMerge) {
+    @Contract("_ -> new")
+    public static @NonNull MappingsRegistry merge(@NonNull List<MappingsRegistry> toMerge) {
         MappingsRegistry first = toMerge.getFirst();
         Map<KeyCombo, NavAction> firstMap = first.getInternalRegistry();
         Map<KeyCombo, NavAction> localRegistry = new HashMap<>(firstMap);

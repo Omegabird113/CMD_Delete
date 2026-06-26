@@ -2,12 +2,15 @@ package io.github.omegabird113.cmd_delete.config;
 
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.Os;
+import org.jetbrains.annotations.Contract;
+import org.jspecify.annotations.NonNull;
 
 public final class MappingsIdResolutionUtils {
     private MappingsIdResolutionUtils() {
     }
 
-    public static String resolveNamespacedId(MappingsState.Type type, String id) {
+    @Contract(pure = true)
+    public static @NonNull String resolveNamespacedId(MappingsState.@NonNull Type type, String id) {
         String prefixText = switch (type) {
             case CUSTOM -> "custom:";
             case BUILTIN -> "builtin:";
@@ -16,7 +19,8 @@ public final class MappingsIdResolutionUtils {
         return prefixText + id;
     }
 
-    public static String resolveNamespacedId(MappingsState.Type type, Os os) {
+    @Contract(pure = true)
+    public static @NonNull String resolveNamespacedId(MappingsState.@NonNull Type type, Os os) {
         String prefixText = switch (type) {
             case CUSTOM -> "custom:";
             case BUILTIN -> "builtin:";
@@ -29,13 +33,13 @@ public final class MappingsIdResolutionUtils {
         return prefixText + osText;
     }
 
-    public static String resolveNamespacedId(MappingsState mappingState) {
+    public static @NonNull String resolveNamespacedId(@NonNull MappingsState mappingState) {
         MappingsState.Type type = mappingState.type();
         String id = mappingState.id();
         return resolveNamespacedId(type, id);
     }
 
-    public static MappingsState.Type resolveType(String namespacedId) {
+    public static MappingsState.Type resolveType(@NonNull String namespacedId) {
         if (namespacedId.startsWith("custom:"))
             return MappingsState.Type.CUSTOM;
         else if (namespacedId.startsWith("builtin:"))
@@ -44,7 +48,8 @@ public final class MappingsIdResolutionUtils {
             return MappingsState.Type.DEFAULT;
     }
 
-    public static String removeNamespaceFromId(String namespacedId) {
+    @Contract(pure = true)
+    public static @NonNull String removeNamespaceFromId(@NonNull String namespacedId) {
         return namespacedId.replaceFirst("custom:|builtin:", "");
     }
 }

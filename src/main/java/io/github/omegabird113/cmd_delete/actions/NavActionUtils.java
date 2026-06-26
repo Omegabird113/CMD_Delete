@@ -1,6 +1,8 @@
 package io.github.omegabird113.cmd_delete.actions;
 
 import io.github.omegabird113.cmd_delete.mappings.NavMappings;
+import org.jetbrains.annotations.Contract;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Arrays;
 
@@ -13,7 +15,8 @@ public final class NavActionUtils {
     private NavActionUtils() {
     }
 
-    public static int getOffset(NavAction action) {
+    @Contract(pure = true)
+    public static int getOffset(@NonNull NavAction action) {
         return switch (action) {
             case NAV_LINE_LEFT, SEL_LINE_LEFT, DEL_LINE_LEFT, NAV_WORD_LEFT, SEL_WORD_LEFT, DEL_WORD_LEFT ->
                     OFFSET_LEFT;
@@ -24,7 +27,8 @@ public final class NavActionUtils {
         };
     }
 
-    public static boolean isMoveAction(NavAction action) {
+    @Contract(pure = true)
+    public static boolean isMoveAction(@NonNull NavAction action) {
         return switch (action) {
             case NAV_LINE_LEFT, NAV_LINE_RIGHT,
                  NAV_WORD_LEFT, NAV_WORD_RIGHT,
