@@ -121,7 +121,7 @@ public final class NavMappingsCommand {
             Files.copy(oldPath, newPath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             LOGGER.error("Error while copying custom mappings", e);
-            throw UNKNOWN_BUILTIN_MAPPINGS.create(idStr);
+            throw UNKNOWN_CUSTOM_MAPPINGS.create(idStr);
         }
 
         context.getSource().sendFeedback(Component.literal("Mappings \"builtin:" + idStr + "\" copied to path: " + newPath.toAbsolutePath()));
@@ -166,7 +166,7 @@ public final class NavMappingsCommand {
         Path oldPath = Path.of(locationStr);
         Path newPath = configPath.resolve(FilenameUtils.getBaseName(locationStr) + ".json");
 
-        if (!newPath.isAbsolute()) {
+        if (!oldPath.isAbsolute()) {
             LOGGER.error("From path \"{}\" for custom import is not absolute", locationStr);
             throw FAILED_CUSTOM_MAPPINGS_IMPORT.create(locationStr);
         }
