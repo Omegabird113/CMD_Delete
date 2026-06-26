@@ -90,12 +90,14 @@ public final class NavMappingsCommand {
                                 .then(argument("id", StringArgumentType.word())
                                         .suggests(BUILTIN_SUGGESTIONS)
                                         .then(argument("location", StringArgumentType.greedyString()).executes(NavMappingsCommand::exportBuiltin)))
-                        ).then(literal("custom")
+                        )
+                        .then(literal("custom")
                                 .then(argument("id", StringArgumentType.word())
                                         .suggests(CUSTOM_SUGGESTIONS)
                                         .then(argument("location", StringArgumentType.greedyString()).executes(NavMappingsCommand::exportCustom)))
                         )
-                ).then(literal("import")
+                )
+                .then(literal("import")
                         .then(argument("location", StringArgumentType.greedyString()).executes(NavMappingsCommand::importCustom)))
         );
     }
