@@ -11,6 +11,7 @@ import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.LoggingManager;
+import io.github.omegabird113.cmd_delete.PathConstants;
 import io.github.omegabird113.cmd_delete.config.KeyCodeRegistry;
 import io.github.omegabird113.cmd_delete.config.MappingsJSONManager;
 import io.github.omegabird113.cmd_delete.config.MappingsRegistry;
@@ -120,7 +121,7 @@ public final class NavMappingsCommand {
         String idStr = StringArgumentType.getString(context, "id");
         String locationStr = StringArgumentType.getString(context, "location");
 
-        Path configPath = CmdDeleteClient.MAPPINGS_JSONS_PATH;
+        Path configPath = PathConstants.MAPPINGS_JSONS_PATH;
         Path oldPath = configPath.resolve(idStr + ".json");
 
         Path newPath = Path.of(locationStr);
@@ -177,7 +178,7 @@ public final class NavMappingsCommand {
     private static int importCustom(CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
         String locationStr = StringArgumentType.getString(context, "location");
 
-        Path configPath = CmdDeleteClient.MAPPINGS_JSONS_PATH;
+        Path configPath = PathConstants.MAPPINGS_JSONS_PATH;
 
         Path oldPath = Path.of(locationStr);
         Path newPath = configPath.resolve(FilenameUtils.getBaseName(locationStr) + ".json");

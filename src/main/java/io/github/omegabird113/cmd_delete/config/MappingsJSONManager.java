@@ -3,8 +3,8 @@ package io.github.omegabird113.cmd_delete.config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
-import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.LoggingManager;
+import io.github.omegabird113.cmd_delete.PathConstants;
 import io.github.omegabird113.cmd_delete.mappings.NavMappings;
 import org.apache.commons.io.FilenameUtils;
 import org.jspecify.annotations.NonNull;
@@ -26,7 +26,7 @@ public final class MappingsJSONManager {
     }
 
     private static @NonNull MappingsRegistry loadFromResourceMappingsDir(String id) throws IOException {
-        Path path = CmdDeleteClient.MAPPINGS_RESOURCE_PATH.resolve(id + ".json");
+        Path path = PathConstants.MAPPINGS_RESOURCE_PATH.resolve(id + ".json");
 
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(MappingsRegistry.class, new MappingsJSONDeserializer())
@@ -41,7 +41,7 @@ public final class MappingsJSONManager {
     }
 
     private static @NonNull MappingsRegistry loadFromCustomMappingsDir(String id) throws IOException {
-        Path path = CmdDeleteClient.MAPPINGS_JSONS_PATH.resolve(id + ".json");
+        Path path = PathConstants.MAPPINGS_JSONS_PATH.resolve(id + ".json");
         if (!Files.exists(path))
             throw new FileNotFoundException("Custom mapping file not found at: " + path);
 
@@ -125,7 +125,7 @@ public final class MappingsJSONManager {
     }
 
     public static void tryMakeConfigFiles() {
-        File configDirectory = CmdDeleteClient.MAPPINGS_JSONS_PATH.toFile();
+        File configDirectory = PathConstants.MAPPINGS_JSONS_PATH.toFile();
         if (!configDirectory.exists() || !configDirectory.isDirectory()) {
             boolean s = configDirectory.mkdirs();
             if (!s)
@@ -133,7 +133,7 @@ public final class MappingsJSONManager {
             else
                 LOGGER.info("Created mappings config directory at: {}", configDirectory.getAbsolutePath());
         }
-        File activeMappingsFile = CmdDeleteClient.ACTIVE_MAPPINGS_FILE_PATH.toFile();
+        File activeMappingsFile = PathConstants.ACTIVE_MAPPINGS_FILE_PATH.toFile();
         if (!activeMappingsFile.exists() || !activeMappingsFile.isFile()) {
             try {
                 boolean s = activeMappingsFile.createNewFile();
@@ -150,7 +150,7 @@ public final class MappingsJSONManager {
     public static @NonNull List<String> getAvailableOptions(boolean namespacedIds) {
         List<String> options = new ArrayList<>();
 
-        File configDirectory = CmdDeleteClient.MAPPINGS_JSONS_PATH.toFile();
+        File configDirectory = PathConstants.MAPPINGS_JSONS_PATH.toFile();
         if (!configDirectory.exists() || !configDirectory.isDirectory()) {
             tryMakeConfigFiles();
             return options;

@@ -1,7 +1,7 @@
 package io.github.omegabird113.cmd_delete.config;
 
-import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.LoggingManager;
+import io.github.omegabird113.cmd_delete.PathConstants;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.NavMappings;
 import io.github.omegabird113.cmd_delete.mappings.Os;
@@ -59,12 +59,12 @@ public class ActiveMappingsManager {
     }
 
     void writeActiveMappings(String namespacedId) throws IOException {
-        Files.createDirectories(CmdDeleteClient.ACTIVE_MAPPINGS_FILE_PATH.getParent());
-        Files.writeString(CmdDeleteClient.ACTIVE_MAPPINGS_FILE_PATH, namespacedId);
+        Files.createDirectories(PathConstants.ACTIVE_MAPPINGS_FILE_PATH.getParent());
+        Files.writeString(PathConstants.ACTIVE_MAPPINGS_FILE_PATH, namespacedId);
     }
 
     String readActiveMappings() throws IOException {
-        return Files.readString(CmdDeleteClient.ACTIVE_MAPPINGS_FILE_PATH);
+        return Files.readString(PathConstants.ACTIVE_MAPPINGS_FILE_PATH);
     }
 
     public MappingsState tryGetMappings() {
