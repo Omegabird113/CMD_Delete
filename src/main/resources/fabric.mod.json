@@ -3,7 +3,7 @@
   "id": "cmd_delete",
   "version": "1.2.0-rc1+mc26.1",
   "name": "CMD + Delete",
-  "description": "Fixes Minecraft’s text editing behavior on macOS so it has the proper modifier keybinds for cmd/option line/word navigation and deletion.",
+  "description": "A text navigation and editing shortcuts framework for Minecraft, allowing macOS users to experience native text editing behavior and everyone else to define their own custom shortcuts.",
   "authors": [
     "Omegabird113"
   ],
