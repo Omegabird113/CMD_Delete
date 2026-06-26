@@ -125,7 +125,7 @@ public final class NavMappingsCommand {
             throw UNKNOWN_CUSTOM_MAPPINGS.create(idStr);
         }
 
-        context.getSource().sendFeedback(Component.literal("Mappings \"builtin:" + idStr + "\" copied to path: " + newPath.toAbsolutePath()));
+        context.getSource().sendFeedback(Component.literal("Mappings \"custom:" + idStr + "\" copied to path: " + newPath.toAbsolutePath()));
         return 1;
     }
 
