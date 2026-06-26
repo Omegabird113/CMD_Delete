@@ -69,9 +69,14 @@ public final class NavMappingsCommand {
                 .then(literal("debug")
                         .then(literal("dumpRegistry").executes(NavMappingsCommand::dumpRegistry))
                         .then(literal("dumpKeymap").executes(NavMappingsCommand::dumpKeyMap))
-                        .then(literal("exportBuiltin")
+                )
+                .then(literal("export")
+                        .then(literal("builtin")
                                 .then(argument("id", StringArgumentType.word())
                                         .then(argument("location", StringArgumentType.greedyString()).executes(NavMappingsCommand::exportBuiltin)))
+                        ).then(literal("custom")
+                                .then(argument("id", StringArgumentType.word())
+                                        .then(argument("location", StringArgumentType.greedyString()).executes(NavMappingsCommand::exportCustom)))
                         )
                 )
         );
@@ -88,6 +93,36 @@ public final class NavMappingsCommand {
         return 1;
     }
 
+    private static int exportCustom(CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+        String idStr = StringArgumentType.getString(context, "id");
+        String locationStr = StringArgumentType.getString(context, "location");
+
+        Path configPath = CmdDeleteClient.MAPPINGS_JSONS_PATH;
+        Path oldPath = configPath.resolve(idStr + ".json");
+
+        Path newPath = Path.of(locationStr);
+        if (!newPath.isAbsolute()) {
+            LOGGER.error("New path \"{}\" for custom copy is not absolute", locationStr);
+            throw UNKNOWN_CUSTOM_MAPPINGS.create(idStr);
+        }
+
+        if (!oldPath.toFile().exists() || !oldPath.toFile().isFile()) {
+            LOGGER.error("Error while reading custom mappings. File does not exist: {}", oldPath.toAbsolutePath());
+            throw UNKNOWN_CUSTOM_MAPPINGS.create(idStr);
+        }
+
+        try {
+            Files.createDirectories(newPath.getParent());
+            Files.copy(oldPath, newPath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            LOGGER.error("Error while copying custom mappings", e);
+            throw UNKNOWN_BUILTIN_MAPPINGS.create(idStr);
+        }
+
+        context.getSource().sendFeedback(Component.literal("Mappings \"builtin:" + idStr + "\" copied to path: " + newPath.toAbsolutePath()));
+        return 1;
+    }
+
     private static int exportBuiltin(CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
         String idStr = StringArgumentType.getString(context, "id");
         String locationStr = StringArgumentType.getString(context, "location");
@@ -97,7 +132,7 @@ public final class NavMappingsCommand {
 
         Path newPath = Path.of(locationStr);
         if (!newPath.isAbsolute()) {
-            LOGGER.error("Path {} is not absolute", locationStr);
+            LOGGER.error("New path \"{}\" for builtin copy is not absolute", locationStr);
             throw UNKNOWN_BUILTIN_MAPPINGS.create(idStr);
         }
 
