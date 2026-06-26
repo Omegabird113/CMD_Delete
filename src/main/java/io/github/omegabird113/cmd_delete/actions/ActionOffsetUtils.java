@@ -1,18 +1,15 @@
 package io.github.omegabird113.cmd_delete.actions;
 
-import io.github.omegabird113.cmd_delete.mappings.NavMappings;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 
-import java.util.Arrays;
-
-public final class NavActionUtils {
+public final class ActionOffsetUtils {
     public static final int OFFSET_LEFT = -1;
     public static final int OFFSET_RIGHT = 1;
     public static final int OFFSET_DOWN = 1;
     public static final int OFFSET_UP = -1;
 
-    private NavActionUtils() {
+    private ActionOffsetUtils() {
     }
 
     @Contract(pure = true)
@@ -35,14 +32,5 @@ public final class NavActionUtils {
                  NAV_TEXT_START, NAV_TEXT_END -> true;
             default -> false;
         };
-    }
-
-    public static float getCoverage(NavMappings mapping) {
-        int total = Arrays.stream(NavAction.values())
-                .filter(action -> action != NavAction.NONE)
-                .toArray(NavAction[]::new)
-                .length;
-        int support = mapping.getPossibleActions().length;
-        return ((float) support) / total;
     }
 }

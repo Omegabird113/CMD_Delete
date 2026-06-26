@@ -60,4 +60,13 @@ public final class NavMappings {
                 .distinct()
                 .toArray(Os[]::new);
     }
+
+    public float getCoverage() {
+        int total = Arrays.stream(NavAction.values())
+                .filter(action -> action != NavAction.NONE)
+                .toArray(NavAction[]::new)
+                .length;
+        int support = this.getPossibleActions().length;
+        return ((float) support) / total;
+    }
 }
