@@ -1,5 +1,7 @@
-package io.github.omegabird113.cmd_delete;
+package io.github.omegabird113.cmd_delete.config;
 
+import io.github.omegabird113.cmd_delete.CmdDeleteClient;
+import io.github.omegabird113.cmd_delete.LoggingManager;
 import net.fabricmc.loader.api.FabricLoader;
 import org.slf4j.Logger;
 

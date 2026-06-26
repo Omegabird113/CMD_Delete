@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import io.github.omegabird113.cmd_delete.LoggingManager;
-import io.github.omegabird113.cmd_delete.PathConstants;
 import io.github.omegabird113.cmd_delete.mappings.NavMappings;
 import org.apache.commons.io.FilenameUtils;
 import org.jspecify.annotations.NonNull;

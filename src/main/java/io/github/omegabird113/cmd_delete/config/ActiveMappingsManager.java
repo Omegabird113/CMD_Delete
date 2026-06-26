@@ -1,7 +1,6 @@
 package io.github.omegabird113.cmd_delete.config;
 
 import io.github.omegabird113.cmd_delete.LoggingManager;
-import io.github.omegabird113.cmd_delete.PathConstants;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.NavMappings;
 import io.github.omegabird113.cmd_delete.mappings.Os;

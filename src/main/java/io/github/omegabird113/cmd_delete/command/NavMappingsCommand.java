@@ -11,7 +11,7 @@ import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.LoggingManager;
-import io.github.omegabird113.cmd_delete.PathConstants;
+import io.github.omegabird113.cmd_delete.config.PathConstants;
 import io.github.omegabird113.cmd_delete.config.KeyCodeRegistry;
 import io.github.omegabird113.cmd_delete.config.MappingsJSONManager;
 import io.github.omegabird113.cmd_delete.config.MappingsRegistry;
