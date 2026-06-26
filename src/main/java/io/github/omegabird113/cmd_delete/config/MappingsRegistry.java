@@ -92,6 +92,7 @@ public final class MappingsRegistry {
         return registry.size();
     }
 
+    @Contract(pure = true)
     private @NonNull String registryStringUtil(@Nullable Map<@NonNull KeyCombo, @NonNull NavAction> registry) {
         if (registry == null)
             return "null";

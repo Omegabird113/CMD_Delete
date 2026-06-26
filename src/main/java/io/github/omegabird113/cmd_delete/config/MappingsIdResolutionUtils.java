@@ -39,6 +39,7 @@ public final class MappingsIdResolutionUtils {
         return resolveNamespacedId(type, id);
     }
 
+    @Contract(pure = true)
     public static MappingsState.Type resolveType(@NonNull String namespacedId) {
         if (namespacedId.startsWith("custom:"))
             return MappingsState.Type.CUSTOM;

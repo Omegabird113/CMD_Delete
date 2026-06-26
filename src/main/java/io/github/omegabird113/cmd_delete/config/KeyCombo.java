@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 public record KeyCombo(int key, boolean shift, boolean altOption, boolean control,
                        boolean superCommand) {
 
-    private static final Map<String, Integer> keyMap = KeyCodeRegistry.getKeyMap();
-    private static final Map<Integer, String> reversedKeyMap = keyMap.entrySet().stream().collect(
+    private static final @NonNull Map<String, Integer> keyMap = KeyCodeRegistry.getKeyMap();
+    private static final @NonNull Map<Integer, String> reversedKeyMap = keyMap.entrySet().stream().collect(
             Collectors.toUnmodifiableMap(Map.Entry::getValue, Map.Entry::getKey));
     private static final boolean isMac = Os.getCurrent() == Os.MAC;
 

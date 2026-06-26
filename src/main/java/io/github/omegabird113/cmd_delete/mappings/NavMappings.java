@@ -6,6 +6,7 @@ import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.KeyCombo;
 import io.github.omegabird113.cmd_delete.config.MappingsRegistry;
 import net.minecraft.client.input.KeyEvent;
+import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import org.lwjgl.glfw.GLFW;
 
@@ -24,6 +25,7 @@ public final class NavMappings {
         this.registry = registry;
     }
 
+    @Contract(pure = true)
     public NavAction getAction(int key, boolean shift, boolean altOption, boolean control, boolean superCommand) {
         if (registry == null)
             return NONE;
@@ -34,6 +36,7 @@ public final class NavMappings {
         return NONE;
     }
 
+    @Contract(pure = true)
     public NavAction getAction(@NonNull KeyEvent event, Window window) {
         int key = event.key();
         boolean shift = event.hasShiftDown();
@@ -44,6 +47,7 @@ public final class NavMappings {
         return getAction(key, shift, alt, control, windows);
     }
 
+    @Contract(pure = true)
     public NavAction @NonNull [] getPossibleActions() {
         if (registry == null)
             return new NavAction[0];
@@ -53,6 +57,7 @@ public final class NavMappings {
                 .toArray(NavAction[]::new);
     }
 
+    @Contract(pure = true)
     public Os @NonNull [] getMappingsSupportedSystems() {
         if (registry == null)
             return new Os[0];
@@ -61,6 +66,7 @@ public final class NavMappings {
                 .toArray(Os[]::new);
     }
 
+    @Contract(pure = true)
     public float getCoverage() {
         int total = Arrays.stream(NavAction.values())
                 .filter(action -> action != NavAction.NONE)

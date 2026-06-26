@@ -4,6 +4,7 @@ import io.github.omegabird113.cmd_delete.config.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.config.MappingsJSONManager;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.Os;
+import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public final class MappingsInfoCollectionUtils {
     private MappingsInfoCollectionUtils() {
     }
 
+    @Contract(pure = true)
     public static @NonNull String getInfoFrom(@NonNull MappingsState mappingsState, boolean includeDescription) {
         float coverage = mappingsState.mappings().getCoverage();
 
@@ -51,6 +53,7 @@ public final class MappingsInfoCollectionUtils {
         return includeDescription ? baseString + coverageString + descriptionString : baseString + coverageString;
     }
 
+    @Contract(pure = true)
     public static String[] getMappingsList() {
         List<String> internal = new ArrayList<>(
                 List.of(

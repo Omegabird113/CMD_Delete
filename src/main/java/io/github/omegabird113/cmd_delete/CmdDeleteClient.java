@@ -6,14 +6,15 @@ import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.MixinEnvironment;
 
 import java.util.concurrent.TimeUnit;
 
 public final class CmdDeleteClient implements ClientModInitializer {
-    public static final String MODID = "cmd_delete";
-    public static final String VERSION = FabricLoader.getInstance().getModContainer(MODID)
+    public static final @NonNull String MODID = "cmd_delete";
+    public static final @NonNull String VERSION = FabricLoader.getInstance().getModContainer(MODID)
             .map(container -> container.getMetadata().getVersion().getFriendlyString())
             .orElse("<unknown>");
     public static final int MAPPINGS_FORMAT_VERSION = 2;

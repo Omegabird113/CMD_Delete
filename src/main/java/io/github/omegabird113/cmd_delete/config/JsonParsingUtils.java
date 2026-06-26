@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 
 import java.util.Locale;
@@ -13,6 +14,7 @@ final class JsonParsingUtils {
     private JsonParsingUtils() {
     }
 
+    @Contract(pure = true)
     public static String getStringElse(@NonNull JsonObject parent, String fieldName, String defaultValue) {
         if (!parent.has(fieldName))
             return defaultValue;
@@ -53,6 +55,7 @@ final class JsonParsingUtils {
         return element.getAsString();
     }
 
+    @Contract(pure = true)
     public static boolean getOptionalBoolean(@NonNull JsonObject parent, String fieldName) {
         if (!parent.has(fieldName))
             return false;

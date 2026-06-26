@@ -18,12 +18,12 @@ import static io.github.omegabird113.cmd_delete.config.JsonParsingUtils.*;
 
 public final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistry> {
     private static final Logger LOGGER = LoggingManager.getLogger(MappingsJSONManager.class);
-    private static final Map<String, Os> OS_MAP = Map.of(
+    private static final @NonNull Map<String, Os> OS_MAP = Map.of(
             "windows", Os.WINDOWS,
             "mac", Os.MAC,
             "linux", Os.LINUX
     );
-    private static final Map<String, NavAction> NAV_ACTION_MAP = Arrays.stream(NavAction.values())
+    private static final @NonNull Map<@NonNull String, @NonNull NavAction> NAV_ACTION_MAP = Arrays.stream(NavAction.values())
             .collect(Collectors.toUnmodifiableMap(NavAction::name, Function.identity()));
 
     @Override

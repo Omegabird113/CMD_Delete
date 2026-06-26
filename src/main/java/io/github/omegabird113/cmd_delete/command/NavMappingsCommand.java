@@ -117,7 +117,7 @@ public final class NavMappingsCommand {
         return 1;
     }
 
-    private static int exportCustom(CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+    private static int exportCustom(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
         String idStr = StringArgumentType.getString(context, "id");
         String locationStr = StringArgumentType.getString(context, "location");
 
@@ -147,7 +147,7 @@ public final class NavMappingsCommand {
         return 1;
     }
 
-    private static int exportBuiltin(CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+    private static int exportBuiltin(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
         String idStr = StringArgumentType.getString(context, "id");
         String locationStr = StringArgumentType.getString(context, "location");
 
@@ -175,7 +175,7 @@ public final class NavMappingsCommand {
         return 1;
     }
 
-    private static int importCustom(CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+    private static int importCustom(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
         String locationStr = StringArgumentType.getString(context, "location");
 
         Path configPath = PathConstants.MAPPINGS_JSONS_PATH;
@@ -211,7 +211,7 @@ public final class NavMappingsCommand {
         return 1;
     }
 
-    private static int setBuiltIn(CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+    private static int setBuiltIn(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
         String osName = StringArgumentType.getString(context, "os");
         Os os = resolveOs(osName);
         NavMappingsManager.updateMappingsToBuiltIn(os);
@@ -219,7 +219,7 @@ public final class NavMappingsCommand {
         return 1;
     }
 
-    private static int setCustom(CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+    private static int setCustom(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
         String id = StringArgumentType.getString(context, "id");
         if (!NavMappingsManager.updateMappingsToCustom(id))
             throw UNKNOWN_CUSTOM_MAPPINGS.create(id);
@@ -254,7 +254,7 @@ public final class NavMappingsCommand {
         return 1;
     }
 
-    private static Os resolveOs(String osName) throws CommandSyntaxException {
+    private static @NonNull Os resolveOs(@NonNull String osName) throws CommandSyntaxException {
         osName = osName.toLowerCase(Locale.ROOT);
         return switch (osName) {
             case "mac" -> Os.MAC;

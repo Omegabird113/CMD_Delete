@@ -6,6 +6,7 @@ import com.google.gson.JsonParseException;
 import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.mappings.NavMappings;
 import org.apache.commons.io.FilenameUtils;
+import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 
@@ -146,6 +147,7 @@ public final class MappingsJSONManager {
         }
     }
 
+    @Contract(pure = true)
     public static @NonNull List<String> getAvailableOptions(boolean namespacedIds) {
         List<String> options = new ArrayList<>();
 
