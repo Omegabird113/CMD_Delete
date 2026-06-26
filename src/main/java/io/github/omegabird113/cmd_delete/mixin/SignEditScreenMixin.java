@@ -1,6 +1,6 @@
 package io.github.omegabird113.cmd_delete.mixin;
 
-import io.github.omegabird113.cmd_delete.CmdDeleteClient;
+import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
@@ -26,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = AbstractSignEditScreen.class, priority = 2000)
 public abstract class SignEditScreenMixin {
     @Unique
-    private static final Logger LOGGER = CmdDeleteClient.getLogger(SignEditScreenMixin.class);
+    private static final Logger LOGGER = LoggingManager.getInitializerLogger(SignEditScreenMixin.class);
 
     static {
         LOGGER.debug("SignEditScreenMixin loaded");

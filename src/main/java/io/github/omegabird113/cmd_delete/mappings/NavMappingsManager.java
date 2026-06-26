@@ -1,6 +1,6 @@
 package io.github.omegabird113.cmd_delete.mappings;
 
-import io.github.omegabird113.cmd_delete.CmdDeleteClient;
+import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.command.MappingsInfoCollectionUtils;
 import io.github.omegabird113.cmd_delete.config.ActiveMappingsManager;
 import io.github.omegabird113.cmd_delete.config.MappingsIdResolutionUtils;
@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import java.util.List;
 
 public final class NavMappingsManager {
-    private static final Logger LOGGER = CmdDeleteClient.getLogger(NavMappingsManager.class);
+    private static final Logger LOGGER = LoggingManager.getInitializerLogger(NavMappingsManager.class);
     private static final NavMappings NAV_MAPPINGS = new NavMappings();
     private static final ActiveMappingsManager ACTIVE_MAPPINGS_MANAGER = new ActiveMappingsManager(
             NAV_MAPPINGS, Os.getCurrent()

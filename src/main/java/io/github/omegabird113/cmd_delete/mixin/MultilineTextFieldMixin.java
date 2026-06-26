@@ -1,6 +1,6 @@
 package io.github.omegabird113.cmd_delete.mixin;
 
-import io.github.omegabird113.cmd_delete.CmdDeleteClient;
+import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
@@ -22,7 +22,7 @@ import java.util.List;
 @Mixin(value = MultilineTextField.class, priority = 2000)
 public abstract class MultilineTextFieldMixin {
     @Unique
-    private static final Logger LOGGER = CmdDeleteClient.getLogger(MultilineTextFieldMixin.class);
+    private static final Logger LOGGER = LoggingManager.getInitializerLogger(MultilineTextFieldMixin.class);
 
     static {
         LOGGER.debug("MultilineTextFieldMixin loaded");

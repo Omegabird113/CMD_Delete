@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
+import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.mappings.NavMappings;
 import org.apache.commons.io.FilenameUtils;
 import org.jspecify.annotations.NonNull;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 public final class MappingsJSONManager {
-    private static final Logger LOGGER = CmdDeleteClient.getLogger(MappingsJSONManager.class);
+    private static final Logger LOGGER = LoggingManager.getInitializerLogger(MappingsJSONManager.class);
 
     private MappingsJSONManager() {
     }

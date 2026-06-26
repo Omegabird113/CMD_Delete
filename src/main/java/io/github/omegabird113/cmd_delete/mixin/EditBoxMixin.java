@@ -1,6 +1,6 @@
 package io.github.omegabird113.cmd_delete.mixin;
 
-import io.github.omegabird113.cmd_delete.CmdDeleteClient;
+import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = EditBox.class, priority = 2000)
 public abstract class EditBoxMixin {
     @Unique
-    private static final Logger LOGGER = CmdDeleteClient.getLogger(EditBoxMixin.class);
+    private static final Logger LOGGER = LoggingManager.getInitializerLogger(EditBoxMixin.class);
 
     static {
         LOGGER.debug("EditBoxMixin loaded");

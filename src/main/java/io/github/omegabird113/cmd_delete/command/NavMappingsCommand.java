@@ -10,6 +10,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
+import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.config.KeyCodeRegistry;
 import io.github.omegabird113.cmd_delete.config.MappingsJSONManager;
 import io.github.omegabird113.cmd_delete.config.MappingsRegistry;
@@ -55,7 +56,7 @@ public final class NavMappingsCommand {
             (_, builder) ->
                     SharedSuggestionProvider.suggest(MappingsJSONManager.getAvailableOptions(false), builder);
 
-    private static final Logger LOGGER = CmdDeleteClient.getLogger(NavMappingsCommand.class);
+    private static final Logger LOGGER = LoggingManager.getInitializerLogger(NavMappingsCommand.class);
 
     private NavMappingsCommand() {
     }

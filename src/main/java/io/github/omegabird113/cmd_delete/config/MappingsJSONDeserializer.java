@@ -2,6 +2,7 @@ package io.github.omegabird113.cmd_delete.config;
 
 import com.google.gson.*;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
+import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 import org.jetbrains.annotations.Contract;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 import static io.github.omegabird113.cmd_delete.config.JsonParsingUtils.*;
 
 public final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistry> {
-    private static final Logger LOGGER = CmdDeleteClient.getLogger(MappingsJSONManager.class);
+    private static final Logger LOGGER = LoggingManager.getInitializerLogger(MappingsJSONManager.class);
     private static final Map<String, Os> OS_MAP = Map.of(
             "windows", Os.WINDOWS,
             "mac", Os.MAC,

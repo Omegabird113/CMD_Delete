@@ -6,9 +6,7 @@ import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
-import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.MixinEnvironment;
 
 import java.nio.file.Path;
@@ -22,18 +20,10 @@ public final class CmdDeleteClient implements ClientModInitializer {
     public static final int MAPPINGS_FORMAT_VERSION = 2;
     public static final Path MAPPINGS_RESOURCE_PATH = FabricLoader.getInstance().getModContainer(CmdDeleteClient.MODID)
             .orElseThrow().findPath("mappings/").orElseThrow();
-    private static final Logger LOGGER = getLogger();
+    private static final Logger LOGGER = LoggingManager.getInitializerLogger();
     private static final Path GAME_PATH = FabricLoader.getInstance().getGameDir();
     public static final Path MAPPINGS_JSONS_PATH = GAME_PATH.resolve("config/cmd_delete/mappings/");
     public static final Path ACTIVE_MAPPINGS_FILE_PATH = GAME_PATH.resolve("config/cmd_delete/.active_mappings");
-
-    public static Logger getLogger(@NonNull Class<?> clazz) {
-        return LoggerFactory.getLogger(MODID + "/" + clazz.getSimpleName());
-    }
-
-    private static Logger getLogger() {
-        return LoggerFactory.getLogger(MODID);
-    }
 
     @Override
     public void onInitializeClient() {
