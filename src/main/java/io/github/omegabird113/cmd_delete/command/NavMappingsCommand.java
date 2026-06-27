@@ -11,10 +11,7 @@ import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.LoggingManager;
-import io.github.omegabird113.cmd_delete.config.PathConstants;
-import io.github.omegabird113.cmd_delete.config.KeyCodeRegistry;
-import io.github.omegabird113.cmd_delete.config.MappingsJSONManager;
-import io.github.omegabird113.cmd_delete.config.MappingsRegistry;
+import io.github.omegabird113.cmd_delete.config.*;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import io.github.omegabird113.cmd_delete.mappings.Os;
@@ -207,7 +204,7 @@ public final class NavMappingsCommand {
 
     private static int reloadMappings(@NonNull CommandContext<FabricClientCommandSource> context) {
         NavMappingsManager.loadMappings();
-        context.getSource().sendFeedback(Component.literal("Reloaded mappings"));
+        context.getSource().sendFeedback(Component.literal("Reloaded mappings: \"" + MappingsIdResolutionUtils.resolveNamespacedId(NavMappingsManager.getMappingsState()) + "\""));
         return 1;
     }
 
