@@ -20,7 +20,7 @@ All Issues, Pull Requests (PRs), Security Reports, and other contributions must 
 
 ## Pull Request Rules
 - PRs must have a limited scope of only 1 feature or bug fix.
-- PRs must pass checks and have all merge comflicts resolved.
+- PRs must pass checks and have all merge conflicts resolved.
 - Low quality or large change PRs will get closed (potentially without comment).
 - You agree that you have the legal rights to your contributions
 - You agree that your contribution will be licensed under the [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0).
