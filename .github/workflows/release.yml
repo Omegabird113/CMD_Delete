@@ -15,10 +15,7 @@ on:
           - release
           - beta
           - alpha
-      changelog:
-        description: "Changelog entries (comma-separated)"
-        required: true
-        type: string
+  
 
 concurrency:
   group: release-${{ github.ref }}
@@ -73,15 +70,13 @@ jobs:
           JAR="$JARS"
           echo "path=$JAR" >> "$GITHUB_OUTPUT"
 
-      - name: Format changelog
+      - name: Check that changelog exists
         run: |
-          echo "${{ inputs.changelog }}" \
-            | tr ',' '\n' \
-            | sed 's/^[[:space:]]*//' \
-            | sed 's/[[:space:]]*$//' \
-            | sed '/^$/d' \
-            | sed 's/^/- /' > changelog_body.md
-
+          test -f changelog.md || {
+            echo "Missing changelog.md"
+            exit 1
+          }
+    
       - name: Check if release already exists
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -104,7 +99,7 @@ jobs:
             "${{ steps.jar.outputs.path }}" \
             --target "${{ github.sha }}" \
             --title "${{ inputs.release_title }}" \
-            --notes-file changelog_body.md \
+            --notes-file changelog.md \
             $PRERELEASE_FLAG
 
       - name: Publish to Modrinth, CurseForge, & GitHub
@@ -118,7 +113,7 @@ jobs:
           name: ${{ inputs.release_title }}
           version: ${{ steps.props.outputs.version }}
           version-type: ${{ inputs.release_type }}
-          changelog-file: changelog_body.md
+          changelog-file: changelog.md
           java: 25
           game-versions: |
             >1.21.11 <=26.2
