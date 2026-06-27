@@ -27,6 +27,7 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     modImplementation 'com.google.code.gson:gson:2.14.0'
+    modImplementation "org.jspecify:jspecify:1.0.0"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 }
 

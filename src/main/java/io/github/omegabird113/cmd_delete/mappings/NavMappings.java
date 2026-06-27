@@ -5,7 +5,7 @@ import com.mojang.blaze3d.platform.Window;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.KeyCombo;
 import io.github.omegabird113.cmd_delete.config.MappingsRegistry;
-import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.gui.screens.Screen;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import org.lwjgl.glfw.GLFW;
@@ -37,12 +37,12 @@ public final class NavMappings {
     }
 
     @Contract(pure = true)
-    public NavAction getAction(@NonNull KeyEvent event, Window window) {
-        int key = event.key();
-        boolean shift = event.hasShiftDown();
-        boolean alt = event.hasAltDown();
-        boolean control = event.hasControlDown();
-        boolean windows = InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_SUPER) || InputConstants.isKeyDown(window, GLFW.GLFW_KEY_RIGHT_SUPER);
+    public NavAction getAction(int key, Window window) {
+        boolean shift = Screen.hasShiftDown();
+        boolean alt = Screen.hasAltDown();
+        boolean control = Screen.hasControlDown();
+
+        boolean windows = InputConstants.isKeyDown(window.getWindow(), GLFW.GLFW_KEY_LEFT_SUPER) || InputConstants.isKeyDown(window.getWindow(), GLFW.GLFW_KEY_RIGHT_SUPER);
 
         return getAction(key, shift, alt, control, windows);
     }

@@ -1,7 +1,7 @@
 package io.github.omegabird113.cmd_delete.mixin;
 
+import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
-import io.github.omegabird113.cmd_delete.actions.NavActionManager;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
@@ -15,9 +15,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class EditBoxMixin {
     @Shadow
     public abstract void deleteWords(int i);
-
-    @Shadow
-    public abstract void deleteChars(int i);
 
     @Shadow
     public abstract void deleteCharsToPos(int pos);
@@ -35,8 +32,7 @@ public abstract class EditBoxMixin {
     private void cmd_delete$overrideDelete(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         NavAction action = NavMappingsManager.getCurrentMappings()
                 .getAction(keyCode, Minecraft.getInstance().getWindow());
-        int direction = NavActionManager.getDirection(action);
-
+        int direction = ActionOffsetUtils.getOffset(action);
         switch (action) {
             case DEL_LINE_LEFT, DEL_LINE_RIGHT -> this.deleteCharsToPos(direction < 0 ? 0 : this.getValue().length());
             case DEL_WORD_LEFT, DEL_WORD_RIGHT -> this.deleteWords(direction);

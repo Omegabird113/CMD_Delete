@@ -1,7 +1,7 @@
 package io.github.omegabird113.cmd_delete.mixin;
 
 import io.github.omegabird113.cmd_delete.actions.NavAction;
-import io.github.omegabird113.cmd_delete.actions.NavActionManager;
+import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -60,19 +60,19 @@ public abstract class SignEditScreenMixin {
         boolean down = keyCode == GLFW.GLFW_KEY_DOWN;
 
         // Reset selection if player moves w/o shift
-        if (!shift && (up || down || left || right || NavActionManager.isMoveAction(action))) {
+        if (!shift && (up || down || left || right || ActionOffsetUtils.isMoveAction(action))) {
             this.cmd_delete$clearMultilineSelection();
         }
 
         if (action == NavAction.NONE && !shift && (left || right)) {
-            int sideDirection = left ? NavActionManager.DIRECTION_LEFT : NavActionManager.DIRECTION_RIGHT;
+            int sideDirection = left ? ActionOffsetUtils.OFFSET_LEFT : ActionOffsetUtils.OFFSET_RIGHT;
             if (this.cmd_delete$tryMoveToNextLineByCharacter(sideDirection)) {
                 cir.setReturnValue(true);
                 return;
             }
         }
 
-        int direction = NavActionManager.getDirection(action);
+        int direction = ActionOffsetUtils.getOffset(action);
 
         switch (action) {
             case SEL_TEXT_UP, SEL_TEXT_DOWN -> this.cmd_delete$selectVertical(direction);
@@ -143,11 +143,11 @@ public abstract class SignEditScreenMixin {
     @Unique
     private boolean cmd_delete$tryMoveToNextLineByCharacter(int direction) {
         // At line edges, plain arrows move to the previous/next line
-        if (direction == NavActionManager.DIRECTION_LEFT && this.signField.getCursorPos() == 0 && this.line > 0) {
+        if (direction == ActionOffsetUtils.OFFSET_LEFT && this.signField.getCursorPos() == 0 && this.line > 0) {
             this.line--;
             this.signField.setCursorToEnd(false);
             return true;
-        } else if (direction == NavActionManager.DIRECTION_RIGHT && this.signField.getCursorPos() == this.cmd_delete$currentLineMessage().length() && this.line < this.messages.length - 1) {
+        } else if (direction == ActionOffsetUtils.OFFSET_RIGHT && this.signField.getCursorPos() == this.cmd_delete$currentLineMessage().length() && this.line < this.messages.length - 1) {
             this.line++;
             this.signField.setCursorToStart(false);
             return true;
@@ -173,10 +173,10 @@ public abstract class SignEditScreenMixin {
         // At line edges, move to next line if needed
         int nextLine = this.cmd_delete$getNextWordLine(direction);
 
-        if (direction == NavActionManager.DIRECTION_LEFT && this.signField.getCursorPos() == 0 && nextLine != this.line) {
+        if (direction == ActionOffsetUtils.OFFSET_LEFT && this.signField.getCursorPos() == 0 && nextLine != this.line) {
             this.line = nextLine;
             this.signField.setCursorToEnd(false);
-        } else if (direction == NavActionManager.DIRECTION_RIGHT && this.signField.getCursorPos() == this.cmd_delete$currentLineMessage().length() && nextLine != this.line) {
+        } else if (direction == ActionOffsetUtils.OFFSET_RIGHT && this.signField.getCursorPos() == this.cmd_delete$currentLineMessage().length() && nextLine != this.line) {
             this.line = nextLine;
             this.signField.setCursorToStart(false);
         }
@@ -190,7 +190,7 @@ public abstract class SignEditScreenMixin {
 
     @Unique
     private void cmd_delete$moveToLineEdge(int direction, boolean extendSelection) {
-        if (direction == NavActionManager.DIRECTION_LEFT) {
+        if (direction == ActionOffsetUtils.OFFSET_LEFT) {
             this.signField.setCursorToStart(extendSelection);
         } else {
             this.signField.setCursorToEnd(extendSelection);
@@ -215,7 +215,7 @@ public abstract class SignEditScreenMixin {
 
     @Unique
     private void cmd_delete$moveToTextEdge(int direction, boolean extendSelection) {
-        if (direction == NavActionManager.DIRECTION_UP) {
+        if (direction == ActionOffsetUtils.OFFSET_UP) {
             this.line = 0;
             this.signField.setCursorToStart(extendSelection);
         } else {
