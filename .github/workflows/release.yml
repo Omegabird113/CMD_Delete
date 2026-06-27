@@ -15,10 +15,6 @@ on:
           - release
           - beta
           - alpha
-      changelog:
-        description: "Changelog entries (comma-separated)"
-        required: true
-        type: string
 
 concurrency:
   group: release-${{ github.ref }}
@@ -46,7 +42,7 @@ jobs:
         uses: actions/setup-java@v5
         with:
           java-version: 25
-          distribution: "temurin"
+          distribution: "microsoft"
           cache: gradle
 
       - name: Make gradlew executable
@@ -73,14 +69,12 @@ jobs:
           JAR="$JARS"
           echo "path=$JAR" >> "$GITHUB_OUTPUT"
 
-      - name: Format changelog
+      - name: Check that changelog exists
         run: |
-          echo "${{ inputs.changelog }}" \
-            | tr ',' '\n' \
-            | sed 's/^[[:space:]]*//' \
-            | sed 's/[[:space:]]*$//' \
-            | sed '/^$/d' \
-            | sed 's/^/- /' > changelog_body.md
+          test -f changelog.md || {
+            echo "Missing changelog.md"
+            exit 1
+          }
 
       - name: Check if release already exists
         env:
@@ -91,6 +85,22 @@ jobs:
             exit 1
           fi
 
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PRERELEASE_FLAG=""
+          if [ "${{ inputs.release_type }}" != "release" ]; then
+            PRERELEASE_FLAG="--prerelease"
+          fi
+
+          gh release create "${{ steps.props.outputs.version }}" \
+            "${{ steps.jar.outputs.path }}" \
+            --target "${{ github.sha }}" \
+            --title "${{ inputs.release_title }}" \
+            --notes-file changelog.md \
+            $PRERELEASE_FLAG
+
       - name: Publish to Modrinth, CurseForge, & GitHub
         uses: Kir-Antipov/mc-publish@v3
         with:
@@ -98,15 +108,11 @@ jobs:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           curseforge-id: 1455987
           curseforge-token: ${{ secrets.CF_API_TOKEN }}
-          github-tag: ${{ steps.props.outputs.version }}
-          github-commitish: ${{ github.sha }}
-          github-prerelease: ${{ inputs.release_type != 'release' }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           files: ${{ steps.jar.outputs.path }}
           name: ${{ inputs.release_title }}
           version: ${{ steps.props.outputs.version }}
           version-type: ${{ inputs.release_type }}
-          changelog-file: changelog_body.md
+          changelog-file: changelog.md
           java: 21
           game-versions: |
             >=1.21.11 <26.1

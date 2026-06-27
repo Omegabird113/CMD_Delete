@@ -1,84 +1,82 @@
 package io.github.omegabird113.cmd_delete.mappings;
 
-import io.github.omegabird113.cmd_delete.CmdDeleteClient;
-import io.github.omegabird113.cmd_delete.actions.NavActionManager;
+import io.github.omegabird113.cmd_delete.LoggingManager;
+import io.github.omegabird113.cmd_delete.command.MappingsInfoCollectionUtils;
 import io.github.omegabird113.cmd_delete.config.ActiveMappingsManager;
+import io.github.omegabird113.cmd_delete.config.MappingsIdResolutionUtils;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.slf4j.Logger;
 
-import java.util.Locale;
+import java.util.List;
 
-public class NavMappingsManager {
-    private static final INavMappings WINDOWS_LINUX_MAPPINGS = new WindowsLinuxNavMappings();
-    private static final INavMappings MAC_MAPPINGS = new MacNavMappings();
-    private static final CustomNavMappings CUSTOM_MAPPINGS = new CustomNavMappings();
-
-    private static final ActiveMappingsManager activeMappingsManager = new ActiveMappingsManager(
-            WINDOWS_LINUX_MAPPINGS, MAC_MAPPINGS, CUSTOM_MAPPINGS, getOs()
+public final class NavMappingsManager {
+    private static final Logger LOGGER = LoggingManager.getLogger(NavMappingsManager.class);
+    private static final @NonNull NavMappings NAV_MAPPINGS = new NavMappings();
+    private static final @NonNull ActiveMappingsManager ACTIVE_MAPPINGS_MANAGER = new ActiveMappingsManager(
+            NAV_MAPPINGS, Os.getCurrent()
     );
+    private static @Nullable MappingsState currentMappingsState;
 
-    private static MappingsState currentMappingsState;
+    private NavMappingsManager() {
+    }
 
-    public static INavMappings getCurrentMappings() {
+    public static NavMappings getCurrentMappings() {
+        if (currentMappingsState == null) {
+            return NAV_MAPPINGS;
+        }
         return currentMappingsState.mappings();
     }
 
     private static void logMappings() {
-        CmdDeleteClient.LOGGER.info("Mappings id \"{}\" ({}) loaded with supported systems: {}", activeMappingsManager.resolveNamespacedId(currentMappingsState), currentMappingsState.mappings().getClass(), currentMappingsState.mappings().getMappingsSupportedSystems());
-        CmdDeleteClient.LOGGER.info("The loaded mappings have {}% coverage with supported actions: {}", NavActionManager.getCoverage(getCurrentMappings()) * 100, getCurrentMappings().getPossibleActions());
+        assert currentMappingsState != null;
+        LOGGER.info("Mappings id \"{}\" loaded with supported systems \"{}\" and Coverage of {}% with a registry size of {}. It supports the actions: {}", MappingsIdResolutionUtils.resolveNamespacedId(getMappingsState()), List.of(currentMappingsState.mappings().getMappingsSupportedSystems()), getCurrentMappings().getCoverage() * 100, currentMappingsState.mappings().getRegistry().getSize(), currentMappingsState.mappings().getPossibleActions());
+        LOGGER.info("The active mappings' info in \"/navmappings info\" will show as: \"{}\"", MappingsInfoCollectionUtils.getInfoFrom(getMappingsState(), false).replace("\n", " "));
+        LOGGER.debug("Mappings state loaded: \"{}\"", currentMappingsState);
     }
 
     public static void loadMappings() {
-        currentMappingsState = activeMappingsManager.tryGetMappings();
-        activeMappingsManager.trySaveMappings(
-                activeMappingsManager.resolveNamespacedId(currentMappingsState)
+        currentMappingsState = ACTIVE_MAPPINGS_MANAGER.tryGetMappings();
+        ACTIVE_MAPPINGS_MANAGER.trySaveMappings(
+                MappingsIdResolutionUtils.resolveNamespacedId(getMappingsState())
         );
         logMappings();
     }
 
-    public static boolean updateMappingsToCustom(String id) {
-        MappingsState mappingsState = activeMappingsManager.tryResolveCustomMappings(id);
-        if (mappingsState == null) {
+    public static boolean updateMappingsToCustom(@NonNull String id) {
+        MappingsState mappingsState = ACTIVE_MAPPINGS_MANAGER.tryResolveCustomMappings(id);
+        if (mappingsState == null)
             return false;
-        }
         currentMappingsState = mappingsState;
-        activeMappingsManager.trySaveMappings(
-                activeMappingsManager.resolveNamespacedId(currentMappingsState)
+        ACTIVE_MAPPINGS_MANAGER.trySaveMappings(
+                MappingsIdResolutionUtils.resolveNamespacedId(getMappingsState())
         );
         logMappings();
         return true;
     }
 
     public static void updateMappingsToBuiltIn(Os os) {
-        currentMappingsState = activeMappingsManager.resolveMappings(
-                activeMappingsManager.resolveNamespacedId(MappingsState.Type.BUILTIN, os)
+        currentMappingsState = ACTIVE_MAPPINGS_MANAGER.resolveMappings(
+                MappingsIdResolutionUtils.resolveNamespacedId(MappingsState.Type.BUILTIN, os)
         );
-        activeMappingsManager.trySaveMappings(
-                activeMappingsManager.resolveNamespacedId(currentMappingsState)
+        ACTIVE_MAPPINGS_MANAGER.trySaveMappings(
+                MappingsIdResolutionUtils.resolveNamespacedId(getMappingsState())
         );
         logMappings();
     }
 
     public static void updateMappingsToDefault() {
-        currentMappingsState = activeMappingsManager.resolveMappings(
-                activeMappingsManager.resolveNamespacedId(MappingsState.Type.DEFAULT, "")
+        currentMappingsState = ACTIVE_MAPPINGS_MANAGER.resolveMappings(
+                MappingsIdResolutionUtils.resolveNamespacedId(MappingsState.Type.DEFAULT, "")
         );
-        activeMappingsManager.trySaveMappings(
-                activeMappingsManager.resolveNamespacedId(currentMappingsState)
+        ACTIVE_MAPPINGS_MANAGER.trySaveMappings(
+                MappingsIdResolutionUtils.resolveNamespacedId(getMappingsState())
         );
         logMappings();
     }
 
-    public static Os getOs() {
-        String os = System.getProperty("os.name").toLowerCase(Locale.ROOT);
-        if (os.contains("mac")) {
-            return Os.MAC;
-        } else if (os.contains("win")) {
-            return Os.WINDOWS;
-        } else {
-            return Os.LINUX;
-        }
-    }
-
-    public static MappingsState getMappingsState() {
+    public static @NonNull MappingsState getMappingsState() {
+        assert currentMappingsState != null;
         return currentMappingsState;
     }
 }

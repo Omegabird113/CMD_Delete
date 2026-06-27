@@ -1,12 +1,14 @@
 package io.github.omegabird113.cmd_delete.mixin;
 
+import io.github.omegabird113.cmd_delete.LoggingManager;
+import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
-import io.github.omegabird113.cmd_delete.actions.NavActionManager;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.MultilineTextField;
 import net.minecraft.client.gui.components.Whence;
 import net.minecraft.client.input.KeyEvent;
+import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -19,6 +21,13 @@ import java.util.List;
 
 @Mixin(value = MultilineTextField.class, priority = 2000)
 public abstract class MultilineTextFieldMixin {
+    @Unique
+    private static final Logger LOGGER = LoggingManager.getLogger(MultilineTextFieldMixin.class);
+
+    static {
+        LOGGER.debug("MultilineTextFieldMixin loaded");
+    }
+
     @Shadow
     private String value;
 
@@ -47,7 +56,7 @@ public abstract class MultilineTextFieldMixin {
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideMultilineNavigation(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
         NavAction action = NavMappingsManager.getCurrentMappings().getAction(event, Minecraft.getInstance().getWindow());
-        int direction = NavActionManager.getDirection(action);
+        int direction = ActionOffsetUtils.getOffset(action);
 
         switch (action) {
             case DEL_LINE_LEFT, DEL_LINE_RIGHT -> {
@@ -118,9 +127,7 @@ public abstract class MultilineTextFieldMixin {
 
     @Unique
     private void cmd_delete$moveToLineEdge(int direction) {
-        this.seekCursor(Whence.ABSOLUTE, direction < 0
-                ? this.cmd_delete$getLineStart()
-                : this.cmd_delete$getLineEnd());
+        this.seekCursor(Whence.ABSOLUTE, direction < 0 ? this.cmd_delete$getLineStart() : this.cmd_delete$getLineEnd());
     }
 
     @Unique
@@ -139,43 +146,29 @@ public abstract class MultilineTextFieldMixin {
     private MultilineTextFieldStringViewAccessor cmd_delete$getCursorLineView() {
         for (Object lineView : this.displayLines) {
             MultilineTextFieldStringViewAccessor accessor = (MultilineTextFieldStringViewAccessor) lineView;
-            if (this.cursor >= accessor.cmd_delete$getBeginIndex() && this.cursor <= accessor.cmd_delete$getEndIndex()) {
+            if (this.cursor >= accessor.cmd_delete$getBeginIndex() && this.cursor <= accessor.cmd_delete$getEndIndex())
                 return accessor;
-            }
         }
-
-        return this.displayLines.isEmpty()
-                ? null
-                : (MultilineTextFieldStringViewAccessor) this.displayLines.getLast();
+        return this.displayLines.isEmpty() ? null : (MultilineTextFieldStringViewAccessor) this.displayLines.getLast();
     }
 
     @Unique
     private int cmd_delete$getPreviousWordStart() {
         int pos = Math.clamp(this.cursor, 0, this.value.length());
-
-        while (pos > 0 && Character.isWhitespace(this.value.charAt(pos - 1))) {
+        while (pos > 0 && Character.isWhitespace(this.value.charAt(pos - 1)))
             pos--;
-        }
-
-        while (pos > 0 && !Character.isWhitespace(this.value.charAt(pos - 1))) {
+        while (pos > 0 && !Character.isWhitespace(this.value.charAt(pos - 1)))
             pos--;
-        }
-
         return pos;
     }
 
     @Unique
     private int cmd_delete$getNextWordStart() {
         int pos = Math.clamp(this.cursor, 0, this.value.length());
-
-        while (pos < this.value.length() && !Character.isWhitespace(this.value.charAt(pos))) {
+        while (pos < this.value.length() && !Character.isWhitespace(this.value.charAt(pos)))
             pos++;
-        }
-
-        while (pos < this.value.length() && Character.isWhitespace(this.value.charAt(pos))) {
+        while (pos < this.value.length() && Character.isWhitespace(this.value.charAt(pos)))
             pos++;
-        }
-
         return pos;
     }
 }
