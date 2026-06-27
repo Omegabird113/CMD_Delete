@@ -47,11 +47,11 @@ public final class NavMappingsCommand {
     );
 
     private static final SuggestionProvider<FabricClientCommandSource> BUILTIN_SUGGESTIONS =
-            (_, builder) ->
+            (source, builder) ->
                     SharedSuggestionProvider.suggest(List.of("windows_linux", "mac"), builder);
 
     private static final SuggestionProvider<FabricClientCommandSource> CUSTOM_SUGGESTIONS =
-            (_, builder) ->
+            (source, builder) ->
                     SharedSuggestionProvider.suggest(MappingsJSONManager.getAvailableOptions(false), builder);
 
     private static final Logger LOGGER = LoggingManager.getLogger(NavMappingsCommand.class);
@@ -60,10 +60,10 @@ public final class NavMappingsCommand {
     }
 
     public static void register() {
-        ClientCommandRegistrationCallback.EVENT.register((dispatcher, _) -> register(dispatcher));
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, context) -> register(dispatcher));
         LOGGER.info("Registered client command \"/navmappings\" through Fabric API");
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, context) -> register(dispatcher));
-        CmdDeleteClient.LOGGER.info("Registered client \"/navmappings\" command through Fabric API");
+        LOGGER.info("Registered client \"/navmappings\" command through Fabric API");
     }
 
     private static void register(@NonNull CommandDispatcher<FabricClientCommandSource> dispatcher) {

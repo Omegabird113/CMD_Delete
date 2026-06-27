@@ -85,7 +85,7 @@ public final class MappingsJSONManager {
         try {
             MappingsRegistry registry = custom ? loadFromCustomMappingsDir(id) : loadFromResourceMappingsDir(id);
             return Optional.of(registry);
-        } catch (FileNotFoundException _) {
+        } catch (FileNotFoundException ignored) {
             LOGGER.error("Could not access {} mapping file \"{}\" because it does not exist.", custom ? "custom" : "builtin", id);
             return Optional.empty();
         } catch (IOException | JsonParseException e) {
