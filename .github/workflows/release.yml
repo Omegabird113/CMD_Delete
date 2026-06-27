@@ -15,7 +15,6 @@ on:
           - release
           - beta
           - alpha
-  
 
 concurrency:
   group: release-${{ github.ref }}

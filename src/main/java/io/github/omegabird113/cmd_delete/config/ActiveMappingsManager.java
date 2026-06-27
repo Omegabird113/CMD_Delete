@@ -68,7 +68,8 @@ public class ActiveMappingsManager {
         return Files.readString(PathConstants.ACTIVE_MAPPINGS_FILE_PATH);
     }
 
-    @Nullable public MappingsState tryGetMappings() {
+    @Nullable
+    public MappingsState tryGetMappings() {
         String namespacedId = "";
         try {
             namespacedId = readActiveMappings();
