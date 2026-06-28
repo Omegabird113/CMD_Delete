@@ -103,7 +103,7 @@ public abstract class SignEditScreenMixin {
                 this.cmd_delete$moveToTextEdge(direction, false);
             }
             case SEL_TEXT_START, SEL_TEXT_END -> this.cmd_delete$selectToTextEdge(direction);
-            default -> {
+            case NONE -> {
                 return;
             }
         }

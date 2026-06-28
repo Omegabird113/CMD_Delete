@@ -117,7 +117,7 @@ public abstract class MultilineTextFieldMixin {
                 this.setSelecting(true);
                 this.seekCursorLine(direction);
             }
-            default -> {
+            case NONE -> {
                 return;
             }
         }

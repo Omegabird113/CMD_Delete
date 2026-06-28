@@ -53,7 +53,7 @@ public abstract class EditBoxMixin {
                     this.moveCursorTo(direction < 0 ? 0 : this.getValue().length(), true);
             case NAV_WORD_LEFT, NAV_WORD_RIGHT -> this.moveCursorTo(this.getWordPosition(direction), false);
             case SEL_WORD_LEFT, SEL_WORD_RIGHT -> this.moveCursorTo(this.getWordPosition(direction), true);
-            default -> {
+            case NONE -> {
                 return;
             }
         }
