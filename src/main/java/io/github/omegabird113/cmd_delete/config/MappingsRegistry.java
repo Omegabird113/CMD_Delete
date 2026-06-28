@@ -19,9 +19,12 @@ public final class MappingsRegistry {
     private final @NonNull String version;
     private final @NonNull String id;
 
-    MappingsRegistry(Map<@NonNull KeyCombo, @NonNull NavAction> registry, Collection<@NonNull Os> systems, @NonNull String inherits, @NonNull String name, @NonNull String author, @NonNull String description, @NonNull String version, @NonNull String id) {
+    MappingsRegistry(Map<@NonNull KeyCombo, @NonNull NavAction> registry, @Nullable Map<@NonNull KeyCombo, @NonNull NavAction> disabledRegistry, Collection<@NonNull Os> systems, @NonNull String inherits, @NonNull String name, @NonNull String author, @NonNull String description, @NonNull String version, @NonNull String id) {
         this.registry = Map.copyOf(registry);
-        this.disabledRegistry = null;
+        if (disabledRegistry != null)
+            this.disabledRegistry = Map.copyOf(disabledRegistry);
+        else
+            this.disabledRegistry = null;
         this.systems = List.copyOf(systems);
         this.inherits = inherits;
         this.name = name;
@@ -31,16 +34,8 @@ public final class MappingsRegistry {
         this.id = id;
     }
 
-    MappingsRegistry(Map<@NonNull KeyCombo, @NonNull NavAction> registry, Map<@NonNull KeyCombo, @NonNull NavAction> disabledRegistry, Collection<@NonNull Os> systems, @NonNull String inherits, @NonNull String name, @NonNull String author, @NonNull String description, @NonNull String version, @NonNull String id) {
-        this.registry = Map.copyOf(registry);
-        this.disabledRegistry = Map.copyOf(disabledRegistry);
-        this.systems = List.copyOf(systems);
-        this.inherits = inherits;
-        this.name = name;
-        this.author = author;
-        this.description = description;
-        this.version = version;
-        this.id = id;
+    MappingsRegistry(Map<@NonNull KeyCombo, @NonNull NavAction> registry, Collection<@NonNull Os> systems, @NonNull String inherits, @NonNull String name, @NonNull String author, @NonNull String description, @NonNull String version, @NonNull String id) {
+        this(registry, null, systems, inherits, name, author, description, version, id);
     }
 
     @NonNull Map<@NonNull KeyCombo, @NonNull NavAction> getInternalRegistry() {
