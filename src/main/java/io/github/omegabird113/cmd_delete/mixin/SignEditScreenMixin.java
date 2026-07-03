@@ -13,6 +13,7 @@ import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 import org.joml.Vector2f;
+import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -126,7 +127,7 @@ public abstract class SignEditScreenMixin {
                 this.signField.setCursorToEnd(false);
             }
             case NONE -> {
-                if (!NavMappingsManager.getCurrentMappings().getRegistry().getFeatureFlags().overrideVanillaNavigation() || event.isEscape())
+                if (!NavMappingsManager.getCurrentMappings().getRegistry().getFeatureFlags().overrideVanillaNavigation() || event.isEscape() || event.key() == GLFW.GLFW_KEY_ENTER)
                     return;
             }
         }

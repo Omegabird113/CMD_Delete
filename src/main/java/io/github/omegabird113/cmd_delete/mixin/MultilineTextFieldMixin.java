@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.MultilineTextField;
 import net.minecraft.client.gui.components.Whence;
 import net.minecraft.client.input.KeyEvent;
+import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -144,7 +145,7 @@ public abstract class MultilineTextFieldMixin {
                 this.seekCursorLine(1);
             }
             case NONE -> {
-                if (!NavMappingsManager.getCurrentMappings().getRegistry().getFeatureFlags().overrideVanillaNavigation() || event.isEscape())
+                if (!NavMappingsManager.getCurrentMappings().getRegistry().getFeatureFlags().overrideVanillaNavigation() || event.isEscape() || event.key() == GLFW.GLFW_KEY_ENTER)
                     return;
             }
         }
