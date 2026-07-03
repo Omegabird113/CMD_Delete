@@ -117,6 +117,32 @@ public abstract class MultilineTextFieldMixin {
                 this.setSelecting(true);
                 this.seekCursorLine(direction);
             }
+            case OVR_NAV_CHAR_LEFT -> {
+                this.setSelecting(false);
+                this.seekCursor(Whence.RELATIVE, -1);
+            }
+            case OVR_NAV_CHAR_RIGHT -> {
+                this.setSelecting(false);
+                this.seekCursor(Whence.RELATIVE, 1);
+            }
+            case OVR_SEL_CHAR_LEFT -> {
+                this.setSelecting(true);
+                this.seekCursor(Whence.RELATIVE, -1);
+            }
+            case OVR_SEL_CHAR_RIGHT -> {
+                this.setSelecting(true);
+                this.seekCursor(Whence.RELATIVE, 1);
+            }
+            case OVR_DEL_CHAR_LEFT -> this.deleteText(-1);
+            case OVR_DEL_CHAR_RIGHT -> this.deleteText(1);
+            case OVR_NAV_TEXT_UP -> {
+                this.setSelecting(false);
+                this.seekCursorLine(-1);
+            }
+            case OVR_NAV_TEXT_DOWN -> {
+                this.setSelecting(false);
+                this.seekCursorLine(1);
+            }
             case NONE -> {
                 if (!NavMappingsManager.getCurrentMappings().getRegistry().getFeatureFlags().overrideVanillaNavigation() || event.isEscape())
                     return;
