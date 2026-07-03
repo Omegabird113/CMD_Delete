@@ -34,10 +34,10 @@ public final class NavMappings {
         NavAction action = registry.get(registryKey);
         if (action != null)
             if (ActionOffsetUtils.isOverrideAction(action))
-                return (registry != null ) ?
+                return (registry != null) ?
                         ((registry.getFeatureFlags().overrideVanillaNavigation()
-                                 ? action
-                                 : NONE)
+                          ? action
+                          : NONE)
                         )
                         : NONE;
             else

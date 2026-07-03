@@ -77,7 +77,7 @@ public abstract class EditBoxMixin {
                 if (this.isEditable())
                     this.deleteChars(1);
             }
-            case SEL_TEXT_UP, SEL_TEXT_DOWN, OVR_NAV_TEXT_UP, OVR_NAV_TEXT_DOWN-> {
+            case SEL_TEXT_UP, SEL_TEXT_DOWN, OVR_NAV_TEXT_UP, OVR_NAV_TEXT_DOWN -> {
                 return;
             }
             case NONE -> {

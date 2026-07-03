@@ -2,7 +2,7 @@ package io.github.omegabird113.cmd_delete.config;
 
 public record FeatureFlags(Boolean overrideVanillaNavigation,
                            Boolean crossLineSignMovement) {
-     static FeatureFlags merge(FeatureFlags parent, FeatureFlags child) {
+    static FeatureFlags merge(FeatureFlags parent, FeatureFlags child) {
         boolean overrideVanillaNavigation;
         boolean crossLineSignMovement;
 
