@@ -3,12 +3,14 @@ package io.github.omegabird113.cmd_delete.config;
 import com.google.gson.*;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.LoggingManager;
+import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 
+import javax.swing.*;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.function.Function;
@@ -52,6 +54,9 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
                 LOGGER.warn("Invalid action specified by custom mappings: \"{}\". All key-combos registered in this action skipped...", actionName);
                 continue;
             }
+
+            if (ActionOffsetUtils.isOverrideAction(action) && fv == 2)
+                throw new JsonParseException("Format version 2 file specified actions of fv 3: " + actionName);
 
             JsonArray bindings = requireArray(actions, actionName);
 
