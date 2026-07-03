@@ -1,15 +1,7 @@
 package io.github.omegabird113.cmd_delete.config;
 
-import org.jspecify.annotations.NonNull;
-
 public record FeatureFlags(Boolean overrideVanillaNavigation,
                            Boolean crossLineSignMovement) {
-//    @Override
-//    public @NonNull String toString() {
-//        return "FeatureFlags(overrideVanillaNavigation=" + this.overrideVanillaNavigation
-//                + ", crossLineSignMovement=" + this.crossLineSignMovement + ")";
-//    }
-
      static FeatureFlags merge(FeatureFlags parent, FeatureFlags child) {
         boolean overrideVanillaNavigation;
         boolean crossLineSignMovement;
