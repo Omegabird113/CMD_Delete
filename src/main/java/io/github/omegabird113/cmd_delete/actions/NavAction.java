@@ -19,7 +19,6 @@ public enum NavAction {
     SEL_TEXT_END,
     SEL_TEXT_UP,
     SEL_TEXT_DOWN,
-    NONE,
     OVR_NAV_CHAR_LEFT,
     OVR_NAV_CHAR_RIGHT,
     OVR_SEL_CHAR_LEFT,
@@ -27,5 +26,6 @@ public enum NavAction {
     OVR_DEL_CHAR_LEFT,
     OVR_DEL_CHAR_RIGHT,
     OVR_NAV_TEXT_UP,
-    OVR_NAV_TEXT_DOWN
+    OVR_NAV_TEXT_DOWN,
+    NONE
 }
