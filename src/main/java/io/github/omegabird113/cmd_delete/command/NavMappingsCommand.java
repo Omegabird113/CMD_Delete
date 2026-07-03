@@ -246,7 +246,7 @@ public final class NavMappingsCommand {
     private static int printCmdDeleteAbout(@NonNull CommandContext<FabricClientCommandSource> context) {
         String about = "CMD + Delete (modid: " + CmdDeleteClient.MODID
                 + ") by Omegabird113 v" + CmdDeleteClient.VERSION
-                + " using mappings format version " + CmdDeleteClient.MAPPINGS_FORMAT_VERSION;
+                + " using mappings format version " + CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION;
         context.getSource().sendFeedback(Component.literal(about));
         return 1;
     }
