@@ -76,12 +76,9 @@ public abstract class EditBoxMixin {
                 if (this.isEditable())
                     this.deleteChars(1);
             }
-            case OVR_NAV_TEXT_UP,
-                 OVR_NAV_TEXT_DOWN,
-                 SEL_TEXT_UP,
-                 SEL_TEXT_DOWN,
-                 NONE -> {
-                return;
+            case OVR_NAV_TEXT_UP, OVR_NAV_TEXT_DOWN, SEL_TEXT_UP, SEL_TEXT_DOWN, NONE -> {
+                if (!NavMappingsManager.getCurrentMappings().getRegistry().getFeatureFlags().overrideVanillaNavigation() || event.isEscape())
+                    return;
             }
         }
 

@@ -118,7 +118,7 @@ public abstract class MultilineTextFieldMixin {
                 this.seekCursorLine(direction);
             }
             case NONE -> {
-                if (!NavMappingsManager.getCurrentMappings().getRegistry().getFeatureFlags().overrideVanillaNavigation())
+                if (!NavMappingsManager.getCurrentMappings().getRegistry().getFeatureFlags().overrideVanillaNavigation() || event.isEscape())
                     return;
             }
         }
