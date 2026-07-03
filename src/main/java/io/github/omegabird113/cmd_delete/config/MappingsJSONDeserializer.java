@@ -129,7 +129,7 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
             if (overrideVanillaNavigation == null && inherits.isEmpty())
                 overrideVanillaNavigation = false;
             if (crossLineSignMovement == null && inherits.isEmpty())
-                overrideVanillaNavigation = true;
+                crossLineSignMovement = true;
             return new FeatureFlags(overrideVanillaNavigation, crossLineSignMovement);
         }
     }
