@@ -14,7 +14,7 @@ public final class NavMappingsManager {
     private static final Logger LOGGER = LoggingManager.getLogger(NavMappingsManager.class);
     private static final @NonNull NavMappings NAV_MAPPINGS = new NavMappings();
     private static final @NonNull ActiveMappingsManager ACTIVE_MAPPINGS_MANAGER = new ActiveMappingsManager(
-            NAV_MAPPINGS, Os.getCurrent()
+            NAV_MAPPINGS, Os.USING
     );
     private static @Nullable MappingsState currentMappingsState;
 

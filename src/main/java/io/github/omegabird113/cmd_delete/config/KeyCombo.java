@@ -12,7 +12,7 @@ public record KeyCombo(int key, boolean shift, boolean altOption, boolean contro
     private static final @NonNull Map<String, Integer> keyMap = KeyCodeRegistry.getKeyMap();
     private static final @NonNull Map<Integer, String> reversedKeyMap = keyMap.entrySet().stream().collect(
             Collectors.toUnmodifiableMap(Map.Entry::getValue, Map.Entry::getKey));
-    private static final boolean isMac = Os.getCurrent() == Os.MAC;
+    private static final boolean isMac = Os.USING == Os.MAC;
 
     @Override
     public @NonNull String toString() {
