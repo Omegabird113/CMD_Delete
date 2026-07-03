@@ -104,7 +104,8 @@ public abstract class SignEditScreenMixin {
             }
             case SEL_TEXT_START, SEL_TEXT_END -> this.cmd_delete$selectToTextEdge(direction);
             case NONE -> {
-                return;
+                if (!NavMappingsManager.getCurrentMappings().getRegistry().getFeatureFlags().overrideVanillaNavigation())
+                    return;
             }
         }
 
