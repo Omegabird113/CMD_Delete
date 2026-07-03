@@ -10,7 +10,6 @@ import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 
-import javax.swing.*;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.function.Function;
@@ -128,7 +127,7 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
             Boolean overrideVanillaNavigation = getNullableBoolean(flags, "overrideVanillaNavigation");
             Boolean crossLineSignMovement = getNullableBoolean(flags, "crossLineSignMovement");
             if (overrideVanillaNavigation == null && inherits.isEmpty())
-               overrideVanillaNavigation = false;
+                overrideVanillaNavigation = false;
             if (crossLineSignMovement == null && inherits.isEmpty())
                 overrideVanillaNavigation = true;
             return new FeatureFlags(overrideVanillaNavigation, crossLineSignMovement);
