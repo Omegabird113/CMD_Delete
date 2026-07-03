@@ -103,10 +103,27 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
         }
 
         MetadataContainer container = parseMeta(requireObject(jsonObject, "meta"));
-        FeatureFlags ff = new FeatureFlags(true, true);
+        FeatureFlags ff = parseFlags(jsonObject, fv);
 
         return disabledKeys.isEmpty() ? new MappingsRegistry(localKeys, container.systems(), ff, inherits, container.name(), container.author(), container.description(), container.version(), container.id())
                 : new MappingsRegistry(localKeys, disabledKeys, container.systems(), ff, inherits, container.name(), container.author(), container.description(), container.version(), container.id());
+    }
+
+    @Contract("_, _ -> new")
+    private @NonNull FeatureFlags parseFlags(JsonObject root, int fv) {
+        if (fv == 2)
+            return new FeatureFlags(false, true);
+        else {
+            JsonObject flags;
+            try {
+                flags = requireObject(root, "flags");
+            } catch (JsonParseException _) {
+                return new FeatureFlags(false, true);
+            }
+            Boolean overrideVanillaNavigation = getNullableBoolean(flags, "overrideVanillaNavigation");
+            Boolean crossLineSignMovement = getNullableBoolean(flags, "crossLineSignMovement");
+            return new FeatureFlags(overrideVanillaNavigation, crossLineSignMovement);
+        }
     }
 
     @Contract("_ -> new")
