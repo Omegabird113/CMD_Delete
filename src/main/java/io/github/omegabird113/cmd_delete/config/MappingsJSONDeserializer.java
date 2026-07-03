@@ -108,14 +108,14 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
         }
 
         MetadataContainer container = parseMeta(requireObject(jsonObject, "meta"));
-        FeatureFlags ff = parseFlags(jsonObject, fv);
+        FeatureFlags ff = parseFlags(jsonObject, fv, inherits);
 
         return disabledKeys.isEmpty() ? new MappingsRegistry(localKeys, container.systems(), ff, inherits, container.name(), container.author(), container.description(), container.version(), container.id())
                 : new MappingsRegistry(localKeys, disabledKeys, container.systems(), ff, inherits, container.name(), container.author(), container.description(), container.version(), container.id());
     }
 
-    @Contract("_, _ -> new")
-    private @NonNull FeatureFlags parseFlags(JsonObject root, int fv) {
+    @Contract("_, _, _ -> new")
+    private @NonNull FeatureFlags parseFlags(JsonObject root, int fv, String inherits) {
         if (fv == 2)
             return new FeatureFlags(false, true);
         else {
@@ -127,6 +127,10 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
             }
             Boolean overrideVanillaNavigation = getNullableBoolean(flags, "overrideVanillaNavigation");
             Boolean crossLineSignMovement = getNullableBoolean(flags, "crossLineSignMovement");
+            if (overrideVanillaNavigation == null && inherits.isEmpty())
+               overrideVanillaNavigation = false;
+            if (crossLineSignMovement == null && inherits.isEmpty())
+                overrideVanillaNavigation = true;
             return new FeatureFlags(overrideVanillaNavigation, crossLineSignMovement);
         }
     }
