@@ -9,19 +9,19 @@ import java.util.stream.Collectors;
 public record KeyCombo(int key, boolean shift, boolean altOption, boolean control,
                        boolean superCommand) {
 
-    private static final @NonNull Map<String, Integer> keyMap = KeyCodeRegistry.getKeyMap();
-    private static final @NonNull Map<Integer, String> reversedKeyMap = keyMap.entrySet().stream().collect(
+    private static final @NonNull Map<String, Integer> KEY_MAP = KeyCodeRegistry.getKeyMap();
+    private static final @NonNull Map<Integer, String> REVERSED_KEY_MAP = KEY_MAP.entrySet().stream().collect(
             Collectors.toUnmodifiableMap(Map.Entry::getValue, Map.Entry::getKey));
-    private static final boolean isMac = Os.USING == Os.MAC;
+    private static final boolean IS_MAC = Os.USING == Os.MAC;
 
     @Override
     public @NonNull String toString() {
         return "<" +
                 (control ? "ctrl+" : "")
-                + (superCommand ? (isMac ? "cmd+" : "sup+") : "")
-                + (altOption ? (isMac ? "opt+" : "alt+") : "")
+                + (superCommand ? (IS_MAC ? "cmd+" : "sup+") : "")
+                + (altOption ? (IS_MAC ? "opt+" : "alt+") : "")
                 + (shift ? "shift+" : "")
-                + (reversedKeyMap.get(key) != null ? reversedKeyMap.get(key) : key)
+                + (REVERSED_KEY_MAP.get(key) != null ? REVERSED_KEY_MAP.get(key) : key)
                 + ">";
     }
 }
