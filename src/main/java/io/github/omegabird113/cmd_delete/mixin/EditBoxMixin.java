@@ -1,7 +1,6 @@
 package io.github.omegabird113.cmd_delete.mixin;
 
 import io.github.omegabird113.cmd_delete.LoggingManager;
-import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import net.minecraft.client.Minecraft;
@@ -39,23 +38,50 @@ public abstract class EditBoxMixin {
     @Shadow
     public abstract int getWordPosition(int dir);
 
+    @Shadow
+    public abstract void moveCursor(int dir, boolean extendSelection);
+
+    @Shadow
+    public abstract void deleteChars(int dir);
+
+    @Shadow
+    protected abstract boolean isEditable();
+
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideDelete(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
         NavAction action = NavMappingsManager.getCurrentMappings().getAction(event, Minecraft.getInstance().getWindow());
-        int direction = ActionOffsetUtils.getOffset(action);
 
         switch (action) {
-            case DEL_LINE_LEFT, DEL_LINE_RIGHT -> this.deleteCharsToPos(direction < 0 ? 0 : this.getValue().length());
-            case DEL_WORD_LEFT, DEL_WORD_RIGHT -> this.deleteText(direction, true);
-            case NAV_LINE_LEFT, NAV_LINE_RIGHT, NAV_TEXT_START, NAV_TEXT_END ->
-                    this.moveCursorTo(direction < 0 ? 0 : this.getValue().length(), false);
-            case SEL_LINE_LEFT, SEL_LINE_RIGHT, SEL_TEXT_START, SEL_TEXT_END ->
-                    this.moveCursorTo(direction < 0 ? 0 : this.getValue().length(), true);
-            case NAV_WORD_LEFT, NAV_WORD_RIGHT -> this.moveCursorTo(this.getWordPosition(direction), false);
-            case SEL_WORD_LEFT, SEL_WORD_RIGHT -> this.moveCursorTo(this.getWordPosition(direction), true);
-            case NONE -> {
-                if (!NavMappingsManager.getCurrentMappings().getRegistry().getFeatureFlags().overrideVanillaNavigation())
-                    return;
+            case DEL_LINE_LEFT -> this.deleteCharsToPos(0);
+            case DEL_LINE_RIGHT -> this.deleteCharsToPos(this.getValue().length());
+            case DEL_WORD_LEFT -> this.deleteText(-1, true);
+            case DEL_WORD_RIGHT -> this.deleteText(1, true);
+            case NAV_LINE_LEFT, NAV_TEXT_START -> this.moveCursorTo(0, false);
+            case NAV_LINE_RIGHT, NAV_TEXT_END -> this.moveCursorTo(this.getValue().length(), false);
+            case SEL_LINE_LEFT, SEL_TEXT_START -> this.moveCursorTo(0, true);
+            case SEL_LINE_RIGHT, SEL_TEXT_END -> this.moveCursorTo(this.getValue().length(), true);
+            case NAV_WORD_LEFT -> this.moveCursorTo(this.getWordPosition(-1), false);
+            case NAV_WORD_RIGHT -> this.moveCursorTo(this.getWordPosition(1), false);
+            case SEL_WORD_LEFT -> this.moveCursorTo(this.getWordPosition(-1), true);
+            case SEL_WORD_RIGHT -> this.moveCursorTo(this.getWordPosition(1), true);
+            case OVR_NAV_CHAR_LEFT -> this.moveCursor(-1, false);
+            case OVR_NAV_CHAR_RIGHT -> this.moveCursor(1, false);
+            case OVR_SEL_CHAR_LEFT -> this.moveCursor(-1, true);
+            case OVR_SEL_CHAR_RIGHT -> this.moveCursor(1, true);
+            case OVR_DEL_CHAR_LEFT -> {
+                if (this.isEditable())
+                    this.deleteChars(-1);
+            }
+            case OVR_DEL_CHAR_RIGHT -> {
+                if (this.isEditable())
+                    this.deleteChars(1);
+            }
+            case OVR_NAV_TEXT_UP,
+                 OVR_NAV_TEXT_DOWN,
+                 SEL_TEXT_UP,
+                 SEL_TEXT_DOWN,
+                 NONE -> {
+                return;
             }
         }
 
