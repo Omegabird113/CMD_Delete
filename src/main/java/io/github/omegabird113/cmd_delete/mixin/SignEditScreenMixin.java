@@ -13,6 +13,7 @@ import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 import org.joml.Vector2f;
+import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -79,7 +80,12 @@ public abstract class SignEditScreenMixin {
         int direction = ActionOffsetUtils.getOffset(action);
 
         switch (action) {
-            case SEL_TEXT_UP, SEL_TEXT_DOWN -> this.cmd_delete$selectVertical(direction);
+            case SEL_TEXT_UP, SEL_TEXT_DOWN -> {
+                if (NavMappingsManager.getCurrentMappings().getRegistry().getFeatureFlags().crossLineSignMovement())
+                    this.cmd_delete$selectVertical(direction);
+                else
+                    return;
+            }
             case DEL_LINE_LEFT, DEL_LINE_RIGHT -> {
                 this.cmd_delete$clearMultilineSelection();
                 this.cmd_delete$deleteToLineEdge(direction);
@@ -103,12 +109,67 @@ public abstract class SignEditScreenMixin {
                 this.cmd_delete$moveToTextEdge(direction, false);
             }
             case SEL_TEXT_START, SEL_TEXT_END -> this.cmd_delete$selectToTextEdge(direction);
+            case OVR_NAV_CHAR_LEFT, OVR_NAV_CHAR_RIGHT -> {
+                this.cmd_delete$clearMultilineSelection();
+                this.cmd_delete$moveByChars(direction, false);
+            }
+            case OVR_SEL_CHAR_LEFT, OVR_SEL_CHAR_RIGHT -> this.cmd_delete$selectByChars(direction);
+            case OVR_DEL_CHAR_LEFT, OVR_DEL_CHAR_RIGHT -> {
+                this.cmd_delete$clearMultilineSelection();
+                this.cmd_delete$deleteByChars(direction);
+            }
+            case OVR_NAV_TEXT_UP, OVR_NAV_TEXT_DOWN -> {
+                this.cmd_delete$clearMultilineSelection();
+                if (NavMappingsManager.getCurrentMappings().getRegistry().getFeatureFlags().crossLineSignMovement())
+                    this.line = (this.line + direction) & 3;
+                else
+                    this.line = Math.clamp(this.messages.length - 1, 0, this.line + direction);
+                this.signField.setCursorToEnd(false);
+            }
             case NONE -> {
-                return;
+                if (!NavMappingsManager.getCurrentMappings().getRegistry().getFeatureFlags().overrideVanillaNavigation() || event.isEscape() || event.key() == GLFW.GLFW_KEY_ENTER)
+                    return;
             }
         }
 
         cir.setReturnValue(true);
+    }
+
+    @Unique
+    private void cmd_delete$deleteByChars(int direction) {
+        this.cmd_delete$moveToNextCharacterLineIfNeeded(direction);
+        this.signField.removeCharsFromCursor(direction);
+    }
+
+    @Unique
+    private void cmd_delete$moveByChars(int direction, boolean extendSelection) {
+        this.cmd_delete$moveToNextCharacterLineIfNeeded(direction);
+        this.signField.moveByChars(direction, extendSelection);
+    }
+
+    @Unique
+    private void cmd_delete$selectByChars(int direction) {
+        this.cmd_delete$updateSelectionStart();
+        this.cmd_delete$moveByChars(direction, true);
+        this.cmd_delete$updateSelectionEnd();
+        this.cmd_delete$syncCurrentLineSelection();
+    }
+
+    @Unique
+    private void cmd_delete$moveToNextCharacterLineIfNeeded(int direction) {
+        if (!NavMappingsManager.getCurrentMappings().getRegistry().getFeatureFlags().crossLineSignMovement())
+            return;
+        if (direction == ActionOffsetUtils.OFFSET_LEFT
+                && this.signField.getCursorPos() == 0
+                && this.line > 0) {
+            this.line--;
+            this.signField.setCursorToEnd(false);
+        } else if (direction == ActionOffsetUtils.OFFSET_RIGHT
+                && this.signField.getCursorPos() == this.cmd_delete$currentLineMessage().length()
+                && this.line < this.messages.length - 1) {
+            this.line++;
+            this.signField.setCursorToStart(false);
+        }
     }
 
     // Resets local selection after typing because typing changes it
@@ -144,18 +205,11 @@ public abstract class SignEditScreenMixin {
 
     @Unique
     private boolean cmd_delete$tryMoveToNextLineByCharacter(int direction) {
-        // At line edges, plain arrows move to the previous/next line
-        if (direction == ActionOffsetUtils.OFFSET_LEFT && this.signField.getCursorPos() == 0 && this.line > 0) {
-            this.line--;
-            this.signField.setCursorToEnd(false);
-            return true;
-        } else if (direction == ActionOffsetUtils.OFFSET_RIGHT && this.signField.getCursorPos() == this.cmd_delete$currentLineMessage().length() && this.line < this.messages.length - 1) {
-            this.line++;
-            this.signField.setCursorToStart(false);
-            return true;
-        }
-
-        return false;
+        if (!NavMappingsManager.getCurrentMappings().getRegistry().getFeatureFlags().crossLineSignMovement())
+            return false;
+        int oldLine = this.line;
+        this.cmd_delete$moveToNextCharacterLineIfNeeded(direction);
+        return oldLine != this.line;
     }
 
     @Unique
@@ -172,9 +226,9 @@ public abstract class SignEditScreenMixin {
 
     @Unique
     private void cmd_delete$moveToNextWordLineIfNeeded(int direction) {
-        // At line edges, move to next line if needed
+        if (!NavMappingsManager.getCurrentMappings().getRegistry().getFeatureFlags().crossLineSignMovement())
+            return;
         int nextLine = this.cmd_delete$getNextWordLine(direction);
-
         if (direction == ActionOffsetUtils.OFFSET_LEFT && this.signField.getCursorPos() == 0 && nextLine != this.line) {
             this.line = nextLine;
             this.signField.setCursorToEnd(false);
@@ -244,6 +298,8 @@ public abstract class SignEditScreenMixin {
 
     @Unique
     private int cmd_delete$getNextWordLine(int direction) {
+        if (!NavMappingsManager.getCurrentMappings().getRegistry().getFeatureFlags().crossLineSignMovement())
+            return this.line;
         for (int nextLine = this.line + direction; nextLine >= 0 && nextLine < this.messages.length; nextLine += direction)
             if (!this.messages[nextLine].isEmpty())
                 return nextLine;

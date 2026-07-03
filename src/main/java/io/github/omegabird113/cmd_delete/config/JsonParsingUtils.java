@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Locale;
 import java.util.Map;
@@ -55,7 +56,6 @@ final class JsonParsingUtils {
         return element.getAsString();
     }
 
-    @Contract(pure = true)
     public static boolean getOptionalBoolean(@NonNull JsonObject parent, String fieldName) {
         if (!parent.has(fieldName))
             return false;
@@ -63,6 +63,18 @@ final class JsonParsingUtils {
         JsonElement element = parent.get(fieldName);
         if (!element.isJsonPrimitive() || !element.getAsJsonPrimitive().isBoolean())
             throw new JsonParseException("Expected \"" + fieldName + "\" to be a boolean");
+
+        return element.getAsBoolean();
+    }
+
+    @Contract(pure = true)
+    public static @Nullable Boolean getNullableBoolean(@NonNull JsonObject parent, String fieldName) {
+        if (!parent.has(fieldName))
+            return null;
+
+        JsonElement element = parent.get(fieldName);
+        if (!element.isJsonPrimitive() || !element.getAsJsonPrimitive().isBoolean())
+            return null;
 
         return element.getAsBoolean();
     }

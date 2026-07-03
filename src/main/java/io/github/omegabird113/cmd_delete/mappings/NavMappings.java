@@ -2,6 +2,7 @@ package io.github.omegabird113.cmd_delete.mappings;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Window;
+import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.KeyCombo;
 import io.github.omegabird113.cmd_delete.config.MappingsRegistry;
@@ -32,7 +33,15 @@ public final class NavMappings {
         KeyCombo registryKey = new KeyCombo(key, shift, altOption, control, superCommand);
         NavAction action = registry.get(registryKey);
         if (action != null)
-            return action;
+            if (ActionOffsetUtils.isOverrideAction(action))
+                return (registry != null) ?
+                        ((registry.getFeatureFlags().overrideVanillaNavigation()
+                          ? action
+                          : NONE)
+                        )
+                        : NONE;
+            else
+                return action;
         return NONE;
     }
 

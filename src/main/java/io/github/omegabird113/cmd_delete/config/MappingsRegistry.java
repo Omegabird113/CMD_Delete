@@ -12,6 +12,7 @@ public final class MappingsRegistry {
     private final @NonNull Map<@NonNull KeyCombo, @NonNull NavAction> registry;
     private final @Nullable Map<@NonNull KeyCombo, @NonNull NavAction> disabledRegistry;
     private final @NonNull List<@NonNull Os> systems;
+    private final @NonNull FeatureFlags featureFlags;
     private final @NonNull String inherits;
     private final @NonNull String name;
     private final @NonNull String author;
@@ -19,8 +20,9 @@ public final class MappingsRegistry {
     private final @NonNull String version;
     private final @NonNull String id;
 
-    MappingsRegistry(Map<@NonNull KeyCombo, @NonNull NavAction> registry, @Nullable Map<@NonNull KeyCombo, @NonNull NavAction> disabledRegistry, Collection<@NonNull Os> systems, @NonNull String inherits, @NonNull String name, @NonNull String author, @NonNull String description, @NonNull String version, @NonNull String id) {
+    MappingsRegistry(Map<@NonNull KeyCombo, @NonNull NavAction> registry, @Nullable Map<@NonNull KeyCombo, @NonNull NavAction> disabledRegistry, Collection<@NonNull Os> systems, @NonNull FeatureFlags featureFlags, @NonNull String inherits, @NonNull String name, @NonNull String author, @NonNull String description, @NonNull String version, @NonNull String id) {
         this.registry = Map.copyOf(registry);
+        this.featureFlags = featureFlags;
         if (disabledRegistry != null)
             this.disabledRegistry = Map.copyOf(disabledRegistry);
         else
@@ -34,8 +36,8 @@ public final class MappingsRegistry {
         this.id = id;
     }
 
-    MappingsRegistry(Map<@NonNull KeyCombo, @NonNull NavAction> registry, Collection<@NonNull Os> systems, @NonNull String inherits, @NonNull String name, @NonNull String author, @NonNull String description, @NonNull String version, @NonNull String id) {
-        this(registry, null, systems, inherits, name, author, description, version, id);
+    MappingsRegistry(Map<@NonNull KeyCombo, @NonNull NavAction> registry, Collection<@NonNull Os> systems, @NonNull FeatureFlags featureFlags, @NonNull String inherits, @NonNull String name, @NonNull String author, @NonNull String description, @NonNull String version, @NonNull String id) {
+        this(registry, null, systems, featureFlags, inherits, name, author, description, version, id);
     }
 
     @NonNull Map<@NonNull KeyCombo, @NonNull NavAction> getInternalRegistry() {
@@ -83,6 +85,10 @@ public final class MappingsRegistry {
         return id;
     }
 
+    public @NonNull FeatureFlags getFeatureFlags() {
+        return featureFlags;
+    }
+
     public int getSize() {
         return registry.size();
     }
@@ -122,12 +128,14 @@ public final class MappingsRegistry {
                             inherits="%s",
                             hashCode=%d,
                             registry=%s,
-                            disabledRegistry=%s
+                            disabledRegistry=%s,
+                            featureFlags=%s
                         )""",
                 name, author, description, version, id, inherits,
                 hashCode(),
                 registryStringUtil(registry),
-                registryStringUtil(disabledRegistry));
+                registryStringUtil(disabledRegistry),
+                featureFlags);
     }
 
     @Override

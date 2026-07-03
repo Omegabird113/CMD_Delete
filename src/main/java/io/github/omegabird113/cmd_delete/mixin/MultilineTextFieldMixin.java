@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.MultilineTextField;
 import net.minecraft.client.gui.components.Whence;
 import net.minecraft.client.input.KeyEvent;
+import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -117,8 +118,35 @@ public abstract class MultilineTextFieldMixin {
                 this.setSelecting(true);
                 this.seekCursorLine(direction);
             }
+            case OVR_NAV_CHAR_LEFT -> {
+                this.setSelecting(false);
+                this.seekCursor(Whence.RELATIVE, -1);
+            }
+            case OVR_NAV_CHAR_RIGHT -> {
+                this.setSelecting(false);
+                this.seekCursor(Whence.RELATIVE, 1);
+            }
+            case OVR_SEL_CHAR_LEFT -> {
+                this.setSelecting(true);
+                this.seekCursor(Whence.RELATIVE, -1);
+            }
+            case OVR_SEL_CHAR_RIGHT -> {
+                this.setSelecting(true);
+                this.seekCursor(Whence.RELATIVE, 1);
+            }
+            case OVR_DEL_CHAR_LEFT -> this.deleteText(-1);
+            case OVR_DEL_CHAR_RIGHT -> this.deleteText(1);
+            case OVR_NAV_TEXT_UP -> {
+                this.setSelecting(false);
+                this.seekCursorLine(-1);
+            }
+            case OVR_NAV_TEXT_DOWN -> {
+                this.setSelecting(false);
+                this.seekCursorLine(1);
+            }
             case NONE -> {
-                return;
+                if (!NavMappingsManager.getCurrentMappings().getRegistry().getFeatureFlags().overrideVanillaNavigation() || event.isEscape() || event.key() == GLFW.GLFW_KEY_ENTER)
+                    return;
             }
         }
 

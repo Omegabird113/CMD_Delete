@@ -3,6 +3,7 @@ package io.github.omegabird113.cmd_delete.config;
 import com.google.gson.*;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.LoggingManager;
+import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 import org.jetbrains.annotations.Contract;
@@ -33,8 +34,11 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
         JsonObject jsonObject = json.getAsJsonObject();
 
         int fv = requireInt(jsonObject, "fv");
-        if (fv != CmdDeleteClient.MAPPINGS_FORMAT_VERSION)
-            throw new JsonParseException("Invalid format version number: " + fv + ". The current format version is: " + CmdDeleteClient.MAPPINGS_FORMAT_VERSION);
+        if (fv != CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION)
+            if (fv >= CmdDeleteClient.MINIMUM_MAPPINGS_FORMAT_VERSION)
+                LOGGER.warn("Old mappings version ({}) used by custom mappings. Please update to version {}", fv, CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION);
+            else
+                throw new JsonParseException("Invalid format version number: " + fv + ". The current format version is: " + CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION);
 
         String inherits = getStringElse(jsonObject, "inherits", "");
 
@@ -49,6 +53,9 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
                 LOGGER.warn("Invalid action specified by custom mappings: \"{}\". All key-combos registered in this action skipped...", actionName);
                 continue;
             }
+
+            if (ActionOffsetUtils.isOverrideAction(action) && fv == 2)
+                throw new JsonParseException("Format version 2 file specified actions of fv 3: " + actionName);
 
             JsonArray bindings = requireArray(actions, actionName);
 
@@ -100,9 +107,31 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
         }
 
         MetadataContainer container = parseMeta(requireObject(jsonObject, "meta"));
+        FeatureFlags ff = parseFlags(jsonObject, fv, inherits);
 
-        return disabledKeys.isEmpty() ? new MappingsRegistry(localKeys, container.systems(), inherits, container.name(), container.author(), container.description(), container.version(), container.id())
-                : new MappingsRegistry(localKeys, disabledKeys, container.systems(), inherits, container.name(), container.author(), container.description(), container.version(), container.id());
+        return disabledKeys.isEmpty() ? new MappingsRegistry(localKeys, container.systems(), ff, inherits, container.name(), container.author(), container.description(), container.version(), container.id())
+                : new MappingsRegistry(localKeys, disabledKeys, container.systems(), ff, inherits, container.name(), container.author(), container.description(), container.version(), container.id());
+    }
+
+    @Contract("_, _, _ -> new")
+    private @NonNull FeatureFlags parseFlags(JsonObject root, int fv, String inherits) {
+        if (fv == 2)
+            return new FeatureFlags(false, true);
+        else {
+            JsonObject flags;
+            try {
+                flags = requireObject(root, "flags");
+            } catch (JsonParseException _) {
+                return new FeatureFlags(false, true);
+            }
+            Boolean overrideVanillaNavigation = getNullableBoolean(flags, "overrideVanillaNavigation");
+            Boolean crossLineSignMovement = getNullableBoolean(flags, "crossLineSignMovement");
+            if (overrideVanillaNavigation == null && inherits.isEmpty())
+                overrideVanillaNavigation = false;
+            if (crossLineSignMovement == null && inherits.isEmpty())
+                crossLineSignMovement = true;
+            return new FeatureFlags(overrideVanillaNavigation, crossLineSignMovement);
+        }
     }
 
     @Contract("_ -> new")

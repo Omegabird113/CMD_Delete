@@ -17,14 +17,15 @@ public final class CmdDeleteClient implements ClientModInitializer {
     public static final @NonNull String VERSION = FabricLoader.getInstance().getModContainer(MODID)
             .map(container -> container.getMetadata().getVersion().getFriendlyString())
             .orElse("<unknown>");
-    public static final int MAPPINGS_FORMAT_VERSION = 2;
+    public static final int CURRENT_MAPPINGS_FORMAT_VERSION = 3;
+    public static final int MINIMUM_MAPPINGS_FORMAT_VERSION = 2;
     private static final Logger LOGGER = LoggingManager.getInitializerLogger();
 
     @Override
     public void onInitializeClient() {
         final long startTime = System.nanoTime();
 
-        LOGGER.info("Initializing client mod \"{}\" (version: {}, mappings format version: {})...", MODID, VERSION, MAPPINGS_FORMAT_VERSION);
+        LOGGER.info("Initializing client mod \"{}\" (version: {}, mappings format version: {}, minimum mappings compatible version: {})...", MODID, VERSION, CURRENT_MAPPINGS_FORMAT_VERSION, MINIMUM_MAPPINGS_FORMAT_VERSION);
         LOGGER.info("User appears to be running system: {}", Os.USING);
 
         MixinEnvironment mixinEnv = MixinEnvironment.getCurrentEnvironment();
