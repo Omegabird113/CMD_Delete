@@ -57,28 +57,23 @@ public final class MappingsJSONManager {
         }
     }
 
-    public static boolean tryLoadCustomMappings(String id, NavMappings mappings) {
+    public static Optional<NavMappings> tryLoadCustomMappings(String id) {
         Optional<MappingsRegistry> registry = getRegistryFrom(true, id);
         if (registry.isPresent()) {
             try {
                 MappingsRegistry resolved = resolveInheritance(registry.get());
-                mappings.setRegistry(resolved);
-                return true;
+                return Optional.of(new NavMappings(resolved));
             } catch (IOException e) {
                 LOGGER.error("Failed to resolve custom mappings inheritance for \"{}\"", id, e);
-                return false;
+                return Optional.empty();
             }
         } else
-            return false;
+            return Optional.empty();
     }
 
-    public static boolean tryLoadBuiltinMappings(String id, NavMappings mappings) {
+    public static Optional<NavMappings> tryLoadBuiltinMappings(String id) {
         Optional<MappingsRegistry> registry = getRegistryFrom(false, id);
-        if (registry.isPresent()) {
-            mappings.setRegistry(registry.get());
-            return true;
-        } else
-            return false;
+        return registry.map(NavMappings::new);
     }
 
     public static Optional<MappingsRegistry> getRegistryFrom(boolean custom, String id) {

@@ -12,10 +12,7 @@ import java.util.List;
 
 public final class NavMappingsManager {
     private static final Logger LOGGER = LoggingManager.getLogger(NavMappingsManager.class);
-    private static final @NonNull NavMappings NAV_MAPPINGS = new NavMappings();
-    private static final @NonNull ActiveMappingsManager ACTIVE_MAPPINGS_MANAGER = new ActiveMappingsManager(
-            NAV_MAPPINGS, Os.USING
-    );
+    private static final @NonNull ActiveMappingsManager ACTIVE_MAPPINGS_MANAGER = new ActiveMappingsManager();
     private static @Nullable MappingsState currentMappingsState;
 
     private NavMappingsManager() {
@@ -23,7 +20,7 @@ public final class NavMappingsManager {
 
     public static NavMappings getCurrentMappings() {
         if (currentMappingsState == null) {
-            return NAV_MAPPINGS;
+            throw new IllegalStateException("No current mappings state has been set, but the mappings were accessed");
         }
         return currentMappingsState.mappings();
     }

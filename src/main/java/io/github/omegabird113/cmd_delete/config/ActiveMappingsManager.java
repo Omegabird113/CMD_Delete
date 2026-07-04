@@ -10,36 +10,30 @@ import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Optional;
 
 import static io.github.omegabird113.cmd_delete.config.MappingsIdResolutionUtils.removeNamespaceFromId;
 import static io.github.omegabird113.cmd_delete.config.MappingsIdResolutionUtils.resolveType;
 
-public class ActiveMappingsManager {
+public final class ActiveMappingsManager {
     private static final Logger LOGGER = LoggingManager.getLogger(ActiveMappingsManager.class);
-    private final @NonNull NavMappings navMappings;
-    private final @NonNull Os system;
-
-    public ActiveMappingsManager(@NonNull NavMappings navMappings, @NonNull Os system) {
-        this.navMappings = navMappings;
-        this.system = system;
-    }
 
     public @Nullable MappingsState tryResolveCustomMappings(@NonNull String id) {
-        if (!MappingsJSONManager.tryLoadCustomMappings(id, navMappings))
-            return null;
-        return new MappingsState(navMappings, MappingsState.Type.CUSTOM, id);
+        Optional<NavMappings> mappings = MappingsJSONManager.tryLoadCustomMappings(id);
+        return mappings.map(navMappings -> new MappingsState(navMappings, MappingsState.Type.CUSTOM, id)).orElse(null);
     }
 
     public @Nullable MappingsState tryResolveBuiltinMappings(@NonNull String id, MappingsState.@NonNull Type type) {
-        if (!MappingsJSONManager.tryLoadBuiltinMappings(id, navMappings))
+        Optional<NavMappings> mappings = MappingsJSONManager.tryLoadBuiltinMappings(id);
+        if (mappings.isEmpty())
             return null;
         if (type == MappingsState.Type.DEFAULT)
             id = "";
-        return new MappingsState(navMappings, type, id);
+        return new MappingsState(mappings.get(), type, id);
     }
 
     @NonNull String resolveDefaultMappingsNonNamespacedId() {
-        if (system == Os.MAC)
+        if (Os.USING == Os.MAC)
             return "mac";
         else
             return "windows_linux";

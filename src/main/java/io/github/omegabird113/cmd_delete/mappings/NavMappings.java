@@ -16,14 +16,14 @@ import java.util.Arrays;
 import static io.github.omegabird113.cmd_delete.actions.NavAction.NONE;
 
 public final class NavMappings {
-    private MappingsRegistry registry = null;
+    private final MappingsRegistry registry;
+
+    public NavMappings(MappingsRegistry registry) {
+        this.registry = registry;
+    }
 
     public MappingsRegistry getRegistry() {
         return registry;
-    }
-
-    public void setRegistry(MappingsRegistry registry) {
-        this.registry = registry;
     }
 
     @Contract(pure = true)
