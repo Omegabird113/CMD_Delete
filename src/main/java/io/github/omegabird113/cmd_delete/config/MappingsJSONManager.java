@@ -34,8 +34,8 @@ public final class MappingsJSONManager {
 
         try (java.io.BufferedReader reader = Files.newBufferedReader(path)) {
             MappingsRegistry registry = gson.fromJson(reader, MappingsRegistry.class);
-            if (!registry.getId().equals(id))
-                throw new JsonParseException("Builtin mappings id \"" + registry.getId() + "\" does not match filename \"" + id + "\"");
+            if (!registry.id().equals(id))
+                throw new JsonParseException("Builtin mappings id \"" + registry.id() + "\" does not match filename \"" + id + "\"");
             return registry;
         }
     }
@@ -51,8 +51,8 @@ public final class MappingsJSONManager {
 
         try (java.io.BufferedReader reader = Files.newBufferedReader(path)) {
             MappingsRegistry registry = gson.fromJson(reader, MappingsRegistry.class);
-            if (!registry.getId().equals(id))
-                throw new JsonParseException("Custom mappings id \"" + registry.getId() + "\" does not match filename \"" + id + "\"");
+            if (!registry.id().equals(id))
+                throw new JsonParseException("Custom mappings id \"" + registry.id() + "\" does not match filename \"" + id + "\"");
             return registry;
         }
     }
@@ -96,22 +96,22 @@ public final class MappingsJSONManager {
         String namespacePrefix = "custom:";
         while (true) {
             registries.add(current);
-            ids.add(namespacePrefix + current.getId());
-            if (current.getInherits().isEmpty()) {
+            ids.add(namespacePrefix + current.id());
+            if (current.inherits().isEmpty()) {
                 if (registries.size() == 1)
-                    LOGGER.info("Resolved no inheritance from mappings: \"{}\"", namespacePrefix + current.getId());
+                    LOGGER.info("Resolved no inheritance from mappings: \"{}\"", namespacePrefix + current.id());
                 else
-                    LOGGER.info("Resolved inheritance of mappings \"{}\" with a chain of: {}", namespacePrefix + current.getId(), String.join(" -> ", ids));
+                    LOGGER.info("Resolved inheritance of mappings \"{}\" with a chain of: {}", namespacePrefix + current.id(), String.join(" -> ", ids));
                 break;
             } else {
-                boolean inheritsCustom = current.getInherits().startsWith("custom:");
-                String idToGet = MappingsIdResolutionUtils.removeNamespaceFromId(current.getInherits());
+                boolean inheritsCustom = current.inherits().startsWith("custom:");
+                String idToGet = MappingsIdResolutionUtils.removeNamespaceFromId(current.inherits());
                 Optional<MappingsRegistry> newRegistry = getRegistryFrom(inheritsCustom, idToGet);
                 namespacePrefix = inheritsCustom ? "custom:" : "builtin:";
                 if (newRegistry.isEmpty())
-                    throw new IOException("Failed to resolve inheritance of " + (inheritsCustom ? "custom" : "builtin") + " mappings \"" + idToGet + "\" by mappings \"" + current.getId() + "\" because the inherited registry couldn't load.");
-                if (ids.contains(namespacePrefix + newRegistry.get().getId()))
-                    throw new IOException("Duplicate inheritance of " + (inheritsCustom ? "custom" : "builtin") + " mappings \"" + idToGet + "\" by mappings \"" + current.getId() + "\" in chain of: " + String.join(" -> ", ids));
+                    throw new IOException("Failed to resolve inheritance of " + (inheritsCustom ? "custom" : "builtin") + " mappings \"" + idToGet + "\" by mappings \"" + current.id() + "\" because the inherited registry couldn't load.");
+                if (ids.contains(namespacePrefix + newRegistry.get().id()))
+                    throw new IOException("Duplicate inheritance of " + (inheritsCustom ? "custom" : "builtin") + " mappings \"" + idToGet + "\" by mappings \"" + current.id() + "\" in chain of: " + String.join(" -> ", ids));
                 current = newRegistry.get();
             }
         }

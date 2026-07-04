@@ -81,7 +81,7 @@ public abstract class EditBoxMixin {
                 return;
             }
             case NONE -> {
-                if (!NavMappingsManager.getCurrentMappings().registry().getFeatureFlags().overrideVanillaNavigation() || event.isEscape() || event.key() == GLFW.GLFW_KEY_ENTER)
+                if (!NavMappingsManager.getCurrentMappings().registry().featureFlags().overrideVanillaNavigation() || event.isEscape() || event.key() == GLFW.GLFW_KEY_ENTER)
                     return;
             }
         }

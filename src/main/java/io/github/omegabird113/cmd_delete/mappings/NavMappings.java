@@ -24,7 +24,7 @@ public record NavMappings(MappingsRegistry registry) {
         NavAction action = registry.get(registryKey);
         if (action != null)
             if (ActionOffsetUtils.isOverrideAction(action))
-                return (registry.getFeatureFlags().overrideVanillaNavigation() ? action : NONE);
+                return (registry.featureFlags().overrideVanillaNavigation() ? action : NONE);
             else
                 return action;
         return NONE;
@@ -55,7 +55,7 @@ public record NavMappings(MappingsRegistry registry) {
     public Os @NonNull [] getMappingsSupportedSystems() {
         if (registry == null)
             return new Os[0];
-        return registry.getSystems().stream()
+        return registry.systems().stream()
                 .distinct()
                 .toArray(Os[]::new);
     }

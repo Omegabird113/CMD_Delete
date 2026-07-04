@@ -109,8 +109,7 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
         MetadataContainer container = parseMeta(requireObject(jsonObject, "meta"));
         FeatureFlags ff = parseFlags(jsonObject, fv, inherits);
 
-        return disabledKeys.isEmpty() ? new MappingsRegistry(localKeys, container.systems(), ff, inherits, container.name(), container.author(), container.description(), container.version(), container.id())
-                : new MappingsRegistry(localKeys, disabledKeys, container.systems(), ff, inherits, container.name(), container.author(), container.description(), container.version(), container.id());
+        return new MappingsRegistry(localKeys, (disabledKeys.isEmpty() ? null : disabledKeys), List.copyOf(container.systems()), ff, inherits, container.name(), container.author(), container.description(), container.version(), container.id());
     }
 
     @Contract("_, _, _ -> new")

@@ -18,7 +18,7 @@ public final class MappingsInheritanceManager {
         MappingsRegistry first = toMerge.getFirst();
         Map<KeyCombo, NavAction> firstMap = first.getInternalRegistry();
         Map<KeyCombo, NavAction> localRegistry = new HashMap<>(firstMap);
-        FeatureFlags featureFlags = first.getFeatureFlags();
+        FeatureFlags featureFlags = first.featureFlags();
 
         for (int i = 1; i < toMerge.size(); i++) {
             MappingsRegistry currentRegistry = toMerge.get(i);
@@ -28,11 +28,11 @@ public final class MappingsInheritanceManager {
                     localRegistry.remove(entry.getKey(), entry.getValue());
             Map<KeyCombo, NavAction> enabledMap = currentRegistry.getInternalRegistry();
             localRegistry.putAll(enabledMap);
-            featureFlags = FeatureFlags.merge(featureFlags, currentRegistry.getFeatureFlags());
+            featureFlags = FeatureFlags.merge(featureFlags, currentRegistry.featureFlags());
         }
 
         MappingsRegistry last = toMerge.getLast();
 
-        return new MappingsRegistry(localRegistry, last.getSystems(), featureFlags, "", last.getName(), last.getAuthor(), last.getDescription(), last.getVersion(), last.getId());
+        return new MappingsRegistry(localRegistry, null, last.systems(), featureFlags, "", last.name(), last.author(), last.description(), last.version(), last.id());
     }
 }
