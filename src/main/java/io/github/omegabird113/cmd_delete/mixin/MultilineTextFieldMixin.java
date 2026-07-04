@@ -160,20 +160,20 @@ public abstract class MultilineTextFieldMixin {
 
     @Unique
     private int cmd_delete$getLineStart() {
-        MultilineTextFieldStringViewAccessor lineView = this.cmd_delete$getCursorLineView();
+        final MultilineTextFieldStringViewAccessor lineView = this.cmd_delete$getCursorLineView();
         return lineView == null ? 0 : lineView.cmd_delete$getBeginIndex();
     }
 
     @Unique
     private int cmd_delete$getLineEnd() {
-        MultilineTextFieldStringViewAccessor lineView = this.cmd_delete$getCursorLineView();
+        final MultilineTextFieldStringViewAccessor lineView = this.cmd_delete$getCursorLineView();
         return lineView == null ? this.value.length() : lineView.cmd_delete$getEndIndex();
     }
 
     @Unique
     private MultilineTextFieldStringViewAccessor cmd_delete$getCursorLineView() {
         for (Object lineView : this.displayLines) {
-            MultilineTextFieldStringViewAccessor accessor = (MultilineTextFieldStringViewAccessor) lineView;
+            final MultilineTextFieldStringViewAccessor accessor = (MultilineTextFieldStringViewAccessor) lineView;
             if (this.cursor >= accessor.cmd_delete$getBeginIndex() && this.cursor <= accessor.cmd_delete$getEndIndex())
                 return accessor;
         }

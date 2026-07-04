@@ -28,7 +28,7 @@ public final class CmdDeleteClient implements ClientModInitializer {
         LOGGER.info("Initializing client mod \"{}\" (version: {}, mappings format version: {}, minimum mappings compatible version: {})...", MODID, VERSION, CURRENT_MAPPINGS_FORMAT_VERSION, MINIMUM_MAPPINGS_FORMAT_VERSION);
         LOGGER.info("User appears to be running system: {}", Os.USING);
 
-        MixinEnvironment mixinEnv = MixinEnvironment.getCurrentEnvironment();
+        final MixinEnvironment mixinEnv = MixinEnvironment.getCurrentEnvironment();
         LOGGER.debug("Mixin version {} with obfuscation \"{}\" and compatability level \"{}\" in phase \"{}\" on side \"{}\"", mixinEnv.getVersion(), mixinEnv.getObfuscationContext(), MixinEnvironment.getCompatibilityLevel(), mixinEnv.getPhase(), mixinEnv.getSide());
 
         MappingsJSONManager.tryMakeConfigFiles();

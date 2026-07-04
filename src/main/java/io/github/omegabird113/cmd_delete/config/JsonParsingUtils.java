@@ -19,7 +19,7 @@ final class JsonParsingUtils {
     public static String getStringElse(@NonNull JsonObject parent, String fieldName, String defaultValue) {
         if (!parent.has(fieldName))
             return defaultValue;
-        String value = requireString(parent, fieldName).trim();
+        final String value = requireString(parent, fieldName).trim();
         return value.isEmpty() ? defaultValue : value;
     }
 
@@ -27,7 +27,7 @@ final class JsonParsingUtils {
         if (!parent.has(fieldName))
             throw new JsonParseException("Missing required field: " + fieldName);
 
-        JsonElement element = parent.get(fieldName);
+        final JsonElement element = parent.get(fieldName);
         if (!element.isJsonObject())
             throw new JsonParseException("Expected \"" + fieldName + "\" to be an object");
 
@@ -38,7 +38,7 @@ final class JsonParsingUtils {
         if (!parent.has(fieldName))
             throw new JsonParseException("Missing required field: " + fieldName);
 
-        JsonElement element = parent.get(fieldName);
+        final JsonElement element = parent.get(fieldName);
         if (!element.isJsonArray())
             throw new JsonParseException("Expected \"" + fieldName + "\" to be an array");
 
@@ -49,7 +49,7 @@ final class JsonParsingUtils {
         if (!parent.has(fieldName))
             throw new JsonParseException("Missing required field: " + fieldName);
 
-        JsonElement element = parent.get(fieldName);
+        final JsonElement element = parent.get(fieldName);
         if (!element.isJsonPrimitive() || !element.getAsJsonPrimitive().isString())
             throw new JsonParseException("Expected \"" + fieldName + "\" to be a string");
 
@@ -60,7 +60,7 @@ final class JsonParsingUtils {
         if (!parent.has(fieldName))
             return false;
 
-        JsonElement element = parent.get(fieldName);
+        final JsonElement element = parent.get(fieldName);
         if (!element.isJsonPrimitive() || !element.getAsJsonPrimitive().isBoolean())
             throw new JsonParseException("Expected \"" + fieldName + "\" to be a boolean");
 
@@ -72,7 +72,7 @@ final class JsonParsingUtils {
         if (!parent.has(fieldName))
             return null;
 
-        JsonElement element = parent.get(fieldName);
+        final JsonElement element = parent.get(fieldName);
         if (!element.isJsonPrimitive() || !element.getAsJsonPrimitive().isBoolean())
             return null;
 
@@ -83,11 +83,11 @@ final class JsonParsingUtils {
         if (!parent.has(fieldName))
             throw new JsonParseException("Missing required field: " + fieldName);
 
-        JsonElement element = parent.get(fieldName);
+        final JsonElement element = parent.get(fieldName);
         if (!element.isJsonPrimitive() || !element.getAsJsonPrimitive().isNumber())
             throw new JsonParseException("Expected \"" + fieldName + "\" to be a number");
 
-        String s = element.getAsString();
+        final String s = element.getAsString();
         try {
             return Integer.parseInt(s);
         } catch (NumberFormatException e) {
@@ -101,14 +101,14 @@ final class JsonParsingUtils {
         if (!parent.has(fieldName))
             throw new JsonParseException("Missing required field: " + fieldName);
 
-        JsonElement element = parent.get(fieldName);
+        final JsonElement element = parent.get(fieldName);
         if (!element.isJsonPrimitive() || (!element.getAsJsonPrimitive().isString() && !element.getAsJsonPrimitive().isNumber()))
             throw new JsonParseException("Expected \"" + fieldName + "\" to be a string or a number");
 
-        String keyString = element.getAsString().toLowerCase(Locale.ROOT).trim();
+        final String keyString = element.getAsString().toLowerCase(Locale.ROOT).trim();
 
         if (element.getAsJsonPrimitive().isString()) {
-            Integer keyCode = keyMap.get(keyString);
+            final Integer keyCode = keyMap.get(keyString);
             if (keyCode == null)
                 throw new JsonParseException("Unknown key \"" + keyString + "\".");
             else

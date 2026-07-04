@@ -19,12 +19,12 @@ public final class ActiveMappingsManager {
     private static final Logger LOGGER = LoggingManager.getLogger(ActiveMappingsManager.class);
 
     public @Nullable MappingsState tryResolveCustomMappings(@NonNull String id) {
-        Optional<NavMappings> mappings = MappingsJSONManager.tryLoadCustomMappings(id);
+        final Optional<NavMappings> mappings = MappingsJSONManager.tryLoadCustomMappings(id);
         return mappings.map(navMappings -> new MappingsState(navMappings, MappingsState.Type.CUSTOM, id)).orElse(null);
     }
 
     public @Nullable MappingsState tryResolveBuiltinMappings(@NonNull String id, MappingsState.@NonNull Type type) {
-        Optional<NavMappings> mappings = MappingsJSONManager.tryLoadBuiltinMappings(id);
+        final Optional<NavMappings> mappings = MappingsJSONManager.tryLoadBuiltinMappings(id);
         if (mappings.isEmpty())
             return null;
         if (type == MappingsState.Type.DEFAULT)
@@ -40,9 +40,9 @@ public final class ActiveMappingsManager {
     }
 
     public @Nullable MappingsState resolveMappings(@NonNull String namespacedId) {
-        String id = removeNamespaceFromId(namespacedId);
-        MappingsState.Type type = resolveType(namespacedId);
-        MappingsState mappingsState = switch (type) {
+        final String id = removeNamespaceFromId(namespacedId);
+        final MappingsState.Type type = resolveType(namespacedId);
+        final MappingsState mappingsState = switch (type) {
             case CUSTOM -> tryResolveCustomMappings(id);
             case BUILTIN -> tryResolveBuiltinMappings(removeNamespaceFromId(id), MappingsState.Type.BUILTIN);
             case DEFAULT ->

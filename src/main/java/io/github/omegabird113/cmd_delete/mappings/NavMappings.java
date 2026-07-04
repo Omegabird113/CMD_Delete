@@ -18,7 +18,7 @@ import static io.github.omegabird113.cmd_delete.actions.NavAction.NONE;
 public record NavMappings(@NonNull MappingsRegistry registry) {
     @Contract(pure = true)
     public NavAction getAction(KeyCombo keyCombo) {
-        NavAction action = registry.get(keyCombo);
+        final NavAction action = registry.get(keyCombo);
         if (action != null)
             if (ActionOffsetUtils.isOverrideAction(action))
                 return (registry.featureFlags().overrideVanillaNavigation() ? action : NONE);
@@ -29,13 +29,13 @@ public record NavMappings(@NonNull MappingsRegistry registry) {
 
     @Contract(pure = true)
     public NavAction getAction(@NonNull KeyEvent event, Window window) {
-        int key = event.key();
-        boolean shift = event.hasShiftDown();
-        boolean alt = event.hasAltDown();
-        boolean control = event.hasControlDown();
-        boolean windows = InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_SUPER) || InputConstants.isKeyDown(window, GLFW.GLFW_KEY_RIGHT_SUPER);
+        final int key = event.key();
+        final boolean shift = event.hasShiftDown();
+        final boolean alt = event.hasAltDown();
+        final boolean control = event.hasControlDown();
+        final boolean windows = InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_SUPER) || InputConstants.isKeyDown(window, GLFW.GLFW_KEY_RIGHT_SUPER);
 
-        KeyCombo keyCombo = new KeyCombo(key, shift, alt, control, windows);
+        final KeyCombo keyCombo = new KeyCombo(key, shift, alt, control, windows);
         return getAction(keyCombo);
     }
 
@@ -56,11 +56,11 @@ public record NavMappings(@NonNull MappingsRegistry registry) {
 
     @Contract(pure = true)
     public float getCoverage() {
-        int total = Arrays.stream(NavAction.values())
+        final int total = Arrays.stream(NavAction.values())
                 .filter(action -> action != NONE)
                 .toArray(NavAction[]::new)
                 .length;
-        int support = this.getPossibleActions().length;
+        final int support = this.getPossibleActions().length;
         return ((float) support) / total;
     }
 }

@@ -15,24 +15,24 @@ public final class MappingsInheritanceManager {
 
     @Contract("_ -> new")
     public static @NonNull MappingsRegistry merge(@NonNull List<MappingsRegistry> toMerge) {
-        MappingsRegistry first = toMerge.getFirst();
-        Map<KeyCombo, NavAction> firstMap = first.getInternalRegistry();
-        Map<KeyCombo, NavAction> localRegistry = new HashMap<>(firstMap);
-        FeatureFlags featureFlags = first.featureFlags();
+        final MappingsRegistry first = toMerge.getFirst();
+        final Map<KeyCombo, NavAction> firstMap = first.getInternalRegistry();
+        final Map<KeyCombo, NavAction> localRegistry = new HashMap<>(firstMap);
+        FeatureFlags currentFeatureFlags = first.featureFlags();
 
         for (int i = 1; i < toMerge.size(); i++) {
-            MappingsRegistry currentRegistry = toMerge.get(i);
-            Optional<Map<KeyCombo, NavAction>> disabledMap = currentRegistry.getInternalDisabledRegistry();
+            final MappingsRegistry currentRegistry = toMerge.get(i);
+            final Optional<Map<KeyCombo, NavAction>> disabledMap = currentRegistry.getInternalDisabledRegistry();
             if (disabledMap.isPresent())
                 for (Map.Entry<KeyCombo, NavAction> entry : disabledMap.get().entrySet())
                     localRegistry.remove(entry.getKey(), entry.getValue());
-            Map<KeyCombo, NavAction> enabledMap = currentRegistry.getInternalRegistry();
+            final Map<KeyCombo, NavAction> enabledMap = currentRegistry.getInternalRegistry();
             localRegistry.putAll(enabledMap);
-            featureFlags = FeatureFlags.merge(featureFlags, currentRegistry.featureFlags());
+            currentFeatureFlags = FeatureFlags.merge(currentFeatureFlags, currentRegistry.featureFlags());
         }
 
-        MappingsRegistry last = toMerge.getLast();
+        final MappingsRegistry last = toMerge.getLast();
 
-        return new MappingsRegistry(localRegistry, null, last.systems(), featureFlags, "", last.name(), last.author(), last.description(), last.version(), last.id());
+        return new MappingsRegistry(localRegistry, null, last.systems(), currentFeatureFlags, "", last.name(), last.author(), last.description(), last.version(), last.id());
     }
 }

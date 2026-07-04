@@ -61,8 +61,8 @@ public abstract class SignEditScreenMixin {
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideSignEditNavigation(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
-        NavAction action = NavMappingsManager.getCurrentMappings().getAction(event, Minecraft.getInstance().getWindow());
-        boolean shift = event.hasShiftDown();
+        final NavAction action = NavMappingsManager.getCurrentMappings().getAction(event, Minecraft.getInstance().getWindow());
+        final boolean shift = event.hasShiftDown();
 
         // Reset selection if player moves w/o shift
         if (!shift && (event.isUp() || event.isDown() || event.isLeft() || event.isRight() || ActionOffsetUtils.isMoveAction(action)))
@@ -70,14 +70,14 @@ public abstract class SignEditScreenMixin {
 
         if (action == NavAction.NONE && !shift && (event.isLeft() || event.isRight())) {
             // If line changed, we handled it, else continue
-            int sideDirection = event.isLeft() ? ActionOffsetUtils.OFFSET_LEFT : ActionOffsetUtils.OFFSET_RIGHT;
+            final int sideDirection = event.isLeft() ? ActionOffsetUtils.OFFSET_LEFT : ActionOffsetUtils.OFFSET_RIGHT;
             if (this.cmd_delete$tryMoveToNextLineByCharacter(sideDirection)) {
                 cir.setReturnValue(true);
                 return;
             }
         }
 
-        int direction = ActionOffsetUtils.getOffset(action);
+        final int direction = ActionOffsetUtils.getOffset(action);
 
         switch (action) {
             case SEL_TEXT_UP, SEL_TEXT_DOWN -> {
@@ -185,19 +185,19 @@ public abstract class SignEditScreenMixin {
         if (this.cmd_delete$hasNoMultilineSelection())
             return;
 
-        int textLineHeight = this.sign.getTextLineHeight();
-        int yOffset = this.messages.length * textLineHeight / 2;
+        final int textLineHeight = this.sign.getTextLineHeight();
+        final int yOffset = this.messages.length * textLineHeight / 2;
 
         for (int workingLine = 0; workingLine < this.messages.length; workingLine++) {
             if (workingLine == this.line || !this.cmd_delete$lineHasSelection(workingLine))
                 continue;
 
-            String message = this.messages[workingLine];
-            int start = this.cmd_delete$getSelectionStart(workingLine);
-            int end = this.cmd_delete$getSelectionEnd(workingLine);
-            int x1 = this.cmd_delete$getTextAtX(message, start);
-            int x2 = this.cmd_delete$getTextAtX(message, end);
-            int y = workingLine * textLineHeight - yOffset;
+            final String message = this.messages[workingLine];
+            final int start = this.cmd_delete$getSelectionStart(workingLine);
+            final int end = this.cmd_delete$getSelectionEnd(workingLine);
+            final int x1 = this.cmd_delete$getTextAtX(message, start);
+            final int x2 = this.cmd_delete$getTextAtX(message, end);
+            final int y = workingLine * textLineHeight - yOffset;
 
             graphics.textHighlight(Math.min(x1, x2), y, Math.max(x1, x2), y + textLineHeight, true);
         }
@@ -207,7 +207,7 @@ public abstract class SignEditScreenMixin {
     private boolean cmd_delete$tryMoveToNextLineByCharacter(int direction) {
         if (!NavMappingsManager.getCurrentFeatureFlags().crossLineSignMovement())
             return false;
-        int oldLine = this.line;
+        final int oldLine = this.line;
         this.cmd_delete$moveToNextCharacterLineIfNeeded(direction);
         return oldLine != this.line;
     }
@@ -228,7 +228,7 @@ public abstract class SignEditScreenMixin {
     private void cmd_delete$moveToNextWordLineIfNeeded(int direction) {
         if (!NavMappingsManager.getCurrentFeatureFlags().crossLineSignMovement())
             return;
-        int nextLine = this.cmd_delete$getNextWordLine(direction);
+        final int nextLine = this.cmd_delete$getNextWordLine(direction);
         if (direction == ActionOffsetUtils.OFFSET_LEFT && this.signField.getCursorPos() == 0 && nextLine != this.line) {
             this.line = nextLine;
             this.signField.setCursorToEnd(false);
@@ -399,9 +399,9 @@ public abstract class SignEditScreenMixin {
 
     @Unique
     private int cmd_delete$getTextAtX(String message, int position) {
-        Font font = Minecraft.getInstance().font;
-        String shapedMessage = font.isBidirectional() ? font.bidirectionalShaping(message) : message;
-        int clampedPosition = Math.min(position, shapedMessage.length());
+        final Font font = Minecraft.getInstance().font;
+        final String shapedMessage = font.isBidirectional() ? font.bidirectionalShaping(message) : message;
+        final int clampedPosition = Math.min(position, shapedMessage.length());
         return font.width(shapedMessage.substring(0, clampedPosition)) - font.width(shapedMessage) / 2;
     }
 }

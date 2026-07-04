@@ -18,16 +18,16 @@ public final class MappingsInfoCollectionUtils {
 
     @Contract(pure = true)
     public static @NonNull String getInfoFrom(@NonNull MappingsState mappingsState, boolean includeDescription) {
-        float coverage = mappingsState.mappings().getCoverage();
+        final float coverage = mappingsState.mappings().getCoverage();
 
         String displayName = "";
         String description = "";
 
-        String namespacedId = "\"" + MappingsIdResolutionUtils.resolveNamespacedId(mappingsState) + "\"";
-        String version = mappingsState.mappings().registry().version();
-        String author = mappingsState.mappings().registry().author();
-        String keyCombinationsString = " with " + mappingsState.mappings().registry().getSize() + " key combinations registered";
-        String[] systemStrings = Arrays.stream(mappingsState.mappings().getMappingsSupportedSystems())
+        final String namespacedId = "\"" + MappingsIdResolutionUtils.resolveNamespacedId(mappingsState) + "\"";
+        final String version = mappingsState.mappings().registry().version();
+        final String author = mappingsState.mappings().registry().author();
+        final String keyCombinationsString = " with " + mappingsState.mappings().registry().getSize() + " key combinations registered";
+        final String[] systemStrings = Arrays.stream(mappingsState.mappings().getMappingsSupportedSystems())
                 .map(Os::name)
                 .toArray(String[]::new);
 
@@ -46,16 +46,16 @@ public final class MappingsInfoCollectionUtils {
             }
         }
 
-        String baseString = displayName + " (id: " + namespacedId + ") v" + version + " by " + author;
-        String descriptionString = "\nDescription:\n" + description;
-        String coverageString = "\nThese mappings have " + String.format(Locale.ROOT, "%.2f", coverage * 100) + "% action coverage" + keyCombinationsString + ".";
+        final String baseString = displayName + " (id: " + namespacedId + ") v" + version + " by " + author;
+        final String descriptionString = "\nDescription:\n" + description;
+        final String coverageString = "\nThese mappings have " + String.format(Locale.ROOT, "%.2f", coverage * 100) + "% action coverage" + keyCombinationsString + ".";
 
         return includeDescription ? baseString + coverageString + descriptionString : baseString + coverageString;
     }
 
     @Contract(pure = true)
     public static String[] getMappingsList() {
-        List<String> internal = new ArrayList<>(
+        final List<String> internal = new ArrayList<>(
                 List.of(
                         "default",
                         "builtin:windows_linux",
