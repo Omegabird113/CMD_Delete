@@ -20,19 +20,23 @@ public final class NavMappingsManager {
     private NavMappingsManager() {
     }
 
-    public static @NonNull NavMappings getCurrentMappings() {
+    public static @NonNull MappingsState getMappingsState() {
         if (currentMappingsState == null) {
             throw new IllegalStateException("No current mappings state has been set, but the mappings were accessed");
         }
-        return currentMappingsState.mappings();
+        return currentMappingsState;
     }
 
-    public static MappingsRegistry getCurrentMappingsRegistry() {
-        return getCurrentMappings().registry();
+    public static @NonNull NavMappings getCurrentMappings() {
+        return getMappingsState().mappings();
     }
 
-    public static FeatureFlags getCurrentFeatureFlags() {
-        return getCurrentMappings().registry().featureFlags();
+    public static @NonNull MappingsRegistry getCurrentMappingsRegistry() {
+        return getMappingsState().mappings().registry();
+    }
+
+    public static @NonNull FeatureFlags getCurrentFeatureFlags() {
+        return getMappingsState().mappings().registry().featureFlags();
     }
 
     private static void logMappings() {
@@ -80,10 +84,5 @@ public final class NavMappingsManager {
                 MappingsIdResolutionUtils.resolveNamespacedId(getMappingsState())
         );
         logMappings();
-    }
-
-    public static @NonNull MappingsState getMappingsState() {
-        assert currentMappingsState != null;
-        return currentMappingsState;
     }
 }
