@@ -15,11 +15,9 @@ import java.util.Arrays;
 
 import static io.github.omegabird113.cmd_delete.actions.NavAction.NONE;
 
-public record NavMappings(MappingsRegistry registry) {
+public record NavMappings(@NonNull MappingsRegistry registry) {
     @Contract(pure = true)
     public NavAction getAction(int key, boolean shift, boolean altOption, boolean control, boolean superCommand) {
-        if (registry == null)
-            return NONE;
         KeyCombo registryKey = new KeyCombo(key, shift, altOption, control, superCommand);
         NavAction action = registry.get(registryKey);
         if (action != null)
@@ -43,8 +41,6 @@ public record NavMappings(MappingsRegistry registry) {
 
     @Contract(pure = true)
     public NavAction @NonNull [] getPossibleActions() {
-        if (registry == null)
-            return new NavAction[0];
         return Arrays.stream(registry.getValues())
                 .filter(action -> action != NONE)
                 .distinct()
@@ -53,8 +49,6 @@ public record NavMappings(MappingsRegistry registry) {
 
     @Contract(pure = true)
     public Os @NonNull [] getMappingsSupportedSystems() {
-        if (registry == null)
-            return new Os[0];
         return registry.systems().stream()
                 .distinct()
                 .toArray(Os[]::new);
