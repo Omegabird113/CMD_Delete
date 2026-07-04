@@ -20,7 +20,6 @@ public record MappingsRegistry(
         @NonNull String version,
         @NonNull String id
 ) {
-
     public MappingsRegistry {
         internalRegistry = Map.copyOf(internalRegistry);
         internalDisabledRegistry = internalDisabledRegistry == null ? null : Map.copyOf(internalDisabledRegistry);
