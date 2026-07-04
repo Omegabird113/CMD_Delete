@@ -3,7 +3,9 @@ package io.github.omegabird113.cmd_delete.mappings;
 import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.command.MappingsInfoCollectionUtils;
 import io.github.omegabird113.cmd_delete.config.ActiveMappingsManager;
+import io.github.omegabird113.cmd_delete.config.FeatureFlags;
 import io.github.omegabird113.cmd_delete.config.MappingsIdResolutionUtils;
+import io.github.omegabird113.cmd_delete.config.MappingsRegistry;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
@@ -18,11 +20,19 @@ public final class NavMappingsManager {
     private NavMappingsManager() {
     }
 
-    public static NavMappings getCurrentMappings() {
+    public static @NonNull NavMappings getCurrentMappings() {
         if (currentMappingsState == null) {
             throw new IllegalStateException("No current mappings state has been set, but the mappings were accessed");
         }
         return currentMappingsState.mappings();
+    }
+
+    public static MappingsRegistry getCurrentMappingsRegistry() {
+        return getCurrentMappings().registry();
+    }
+
+    public static FeatureFlags getCurrentFeatureFlags() {
+        return getCurrentMappings().registry().featureFlags();
     }
 
     private static void logMappings() {
