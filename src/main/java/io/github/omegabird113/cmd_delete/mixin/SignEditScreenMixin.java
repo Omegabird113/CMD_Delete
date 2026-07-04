@@ -81,7 +81,7 @@ public abstract class SignEditScreenMixin {
 
         switch (action) {
             case SEL_TEXT_UP, SEL_TEXT_DOWN -> {
-                if (NavMappingsManager.getCurrentMappings().getRegistry().getFeatureFlags().crossLineSignMovement())
+                if (NavMappingsManager.getCurrentMappings().registry().getFeatureFlags().crossLineSignMovement())
                     this.cmd_delete$selectVertical(direction);
                 else
                     return;
@@ -120,14 +120,14 @@ public abstract class SignEditScreenMixin {
             }
             case OVR_NAV_TEXT_UP, OVR_NAV_TEXT_DOWN -> {
                 this.cmd_delete$clearMultilineSelection();
-                if (NavMappingsManager.getCurrentMappings().getRegistry().getFeatureFlags().crossLineSignMovement())
+                if (NavMappingsManager.getCurrentMappings().registry().getFeatureFlags().crossLineSignMovement())
                     this.line = (this.line + direction) & 3;
                 else
                     this.line = Math.clamp(this.messages.length - 1, 0, this.line + direction);
                 this.signField.setCursorToEnd(false);
             }
             case NONE -> {
-                if (!NavMappingsManager.getCurrentMappings().getRegistry().getFeatureFlags().overrideVanillaNavigation() || event.isEscape() || event.key() == GLFW.GLFW_KEY_ENTER)
+                if (!NavMappingsManager.getCurrentMappings().registry().getFeatureFlags().overrideVanillaNavigation() || event.isEscape() || event.key() == GLFW.GLFW_KEY_ENTER)
                     return;
             }
         }
@@ -157,7 +157,7 @@ public abstract class SignEditScreenMixin {
 
     @Unique
     private void cmd_delete$moveToNextCharacterLineIfNeeded(int direction) {
-        if (!NavMappingsManager.getCurrentMappings().getRegistry().getFeatureFlags().crossLineSignMovement())
+        if (!NavMappingsManager.getCurrentMappings().registry().getFeatureFlags().crossLineSignMovement())
             return;
         if (direction == ActionOffsetUtils.OFFSET_LEFT
                 && this.signField.getCursorPos() == 0
@@ -205,7 +205,7 @@ public abstract class SignEditScreenMixin {
 
     @Unique
     private boolean cmd_delete$tryMoveToNextLineByCharacter(int direction) {
-        if (!NavMappingsManager.getCurrentMappings().getRegistry().getFeatureFlags().crossLineSignMovement())
+        if (!NavMappingsManager.getCurrentMappings().registry().getFeatureFlags().crossLineSignMovement())
             return false;
         int oldLine = this.line;
         this.cmd_delete$moveToNextCharacterLineIfNeeded(direction);
@@ -226,7 +226,7 @@ public abstract class SignEditScreenMixin {
 
     @Unique
     private void cmd_delete$moveToNextWordLineIfNeeded(int direction) {
-        if (!NavMappingsManager.getCurrentMappings().getRegistry().getFeatureFlags().crossLineSignMovement())
+        if (!NavMappingsManager.getCurrentMappings().registry().getFeatureFlags().crossLineSignMovement())
             return;
         int nextLine = this.cmd_delete$getNextWordLine(direction);
         if (direction == ActionOffsetUtils.OFFSET_LEFT && this.signField.getCursorPos() == 0 && nextLine != this.line) {
@@ -298,7 +298,7 @@ public abstract class SignEditScreenMixin {
 
     @Unique
     private int cmd_delete$getNextWordLine(int direction) {
-        if (!NavMappingsManager.getCurrentMappings().getRegistry().getFeatureFlags().crossLineSignMovement())
+        if (!NavMappingsManager.getCurrentMappings().registry().getFeatureFlags().crossLineSignMovement())
             return this.line;
         for (int nextLine = this.line + direction; nextLine >= 0 && nextLine < this.messages.length; nextLine += direction)
             if (!this.messages[nextLine].isEmpty())

@@ -104,7 +104,7 @@ public final class NavMappingsCommand {
     }
 
     private static int dumpRegistry(@NonNull CommandContext<FabricClientCommandSource> context) {
-        MappingsRegistry mr = NavMappingsManager.getCurrentMappings().getRegistry();
+        MappingsRegistry mr = NavMappingsManager.getCurrentMappings().registry();
         context.getSource().sendFeedback(Component.literal("Registry dump:\n" + mr.toString().replace("\t", "    ")));
         return 1;
     }

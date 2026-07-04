@@ -24,21 +24,21 @@ public final class MappingsInfoCollectionUtils {
         String description = "";
 
         String namespacedId = "\"" + MappingsIdResolutionUtils.resolveNamespacedId(mappingsState) + "\"";
-        String version = mappingsState.mappings().getRegistry().getVersion();
-        String author = mappingsState.mappings().getRegistry().getAuthor();
-        String keyCombinationsString = " with " + mappingsState.mappings().getRegistry().getSize() + " key combinations registered";
+        String version = mappingsState.mappings().registry().getVersion();
+        String author = mappingsState.mappings().registry().getAuthor();
+        String keyCombinationsString = " with " + mappingsState.mappings().registry().getSize() + " key combinations registered";
         String[] systemStrings = Arrays.stream(mappingsState.mappings().getMappingsSupportedSystems())
                 .map(Os::name)
                 .toArray(String[]::new);
 
         switch (mappingsState.type()) {
             case CUSTOM -> {
-                displayName = "\"" + mappingsState.mappings().getRegistry().getName() + "\"";
-                description = mappingsState.mappings().getRegistry().getDescription();
+                displayName = "\"" + mappingsState.mappings().registry().getName() + "\"";
+                description = mappingsState.mappings().registry().getDescription();
             }
             case BUILTIN -> {
-                displayName = mappingsState.mappings().getRegistry().getName();
-                description = mappingsState.mappings().getRegistry().getDescription();
+                displayName = mappingsState.mappings().registry().getName();
+                description = mappingsState.mappings().registry().getDescription();
             }
             case DEFAULT -> {
                 displayName = "Default Mappings (Resolved to " + String.join(" and ", systemStrings) + ")";

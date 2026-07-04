@@ -15,17 +15,7 @@ import java.util.Arrays;
 
 import static io.github.omegabird113.cmd_delete.actions.NavAction.NONE;
 
-public final class NavMappings {
-    private final MappingsRegistry registry;
-
-    public NavMappings(MappingsRegistry registry) {
-        this.registry = registry;
-    }
-
-    public MappingsRegistry getRegistry() {
-        return registry;
-    }
-
+public record NavMappings(MappingsRegistry registry) {
     @Contract(pure = true)
     public NavAction getAction(int key, boolean shift, boolean altOption, boolean control, boolean superCommand) {
         if (registry == null)
@@ -73,7 +63,7 @@ public final class NavMappings {
     @Contract(pure = true)
     public float getCoverage() {
         int total = Arrays.stream(NavAction.values())
-                .filter(action -> action != NavAction.NONE)
+                .filter(action -> action != NONE)
                 .toArray(NavAction[]::new)
                 .length;
         int support = this.getPossibleActions().length;
