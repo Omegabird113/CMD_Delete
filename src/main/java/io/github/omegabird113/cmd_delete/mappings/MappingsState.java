@@ -15,7 +15,7 @@ public record MappingsState(@NonNull NavMappings mappings, @NonNull Type type, @
                 + "\" (class: "
                 + mappings
                 + ") with registry:\n"
-                + mappings.registry().toString();
+                + mappings.registry();
     }
 
     public enum Type {
