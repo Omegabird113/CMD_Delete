@@ -17,9 +17,8 @@ import static io.github.omegabird113.cmd_delete.actions.NavAction.NONE;
 
 public record NavMappings(@NonNull MappingsRegistry registry) {
     @Contract(pure = true)
-    public NavAction getAction(int key, boolean shift, boolean altOption, boolean control, boolean superCommand) {
-        KeyCombo registryKey = new KeyCombo(key, shift, altOption, control, superCommand);
-        NavAction action = registry.get(registryKey);
+    public NavAction getAction(KeyCombo keyCombo) {
+        NavAction action = registry.get(keyCombo);
         if (action != null)
             if (ActionOffsetUtils.isOverrideAction(action))
                 return (registry.featureFlags().overrideVanillaNavigation() ? action : NONE);
@@ -36,7 +35,8 @@ public record NavMappings(@NonNull MappingsRegistry registry) {
         boolean control = event.hasControlDown();
         boolean windows = InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_SUPER) || InputConstants.isKeyDown(window, GLFW.GLFW_KEY_RIGHT_SUPER);
 
-        return getAction(key, shift, alt, control, windows);
+        KeyCombo keyCombo = new KeyCombo(key, shift, alt, control, windows);
+        return getAction(keyCombo);
     }
 
     @Contract(pure = true)
