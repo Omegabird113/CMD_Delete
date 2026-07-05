@@ -1,7 +1,6 @@
 package io.github.omegabird113.cmd_delete.config;
 
 import io.github.omegabird113.cmd_delete.LoggingManager;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
@@ -44,7 +43,7 @@ public final class PathConstants {
         return activeMappingsFilePath;
     }
 
-    public static @NotNull Path getMappingsJSONPath() {
+    public static @NonNull Path getMappingsJSONPath() {
         if (mappingsJSONPath == null)
             throw new IllegalStateException("Mappings JSON path has not been set");
         return mappingsJSONPath;
