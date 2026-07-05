@@ -113,12 +113,11 @@ final class JsonParsingUtils {
                 throw new JsonParseException("Unknown key \"" + keyString + "\".");
             else
                 return keyCode;
-        } else {
+        } else
             try {
                 return Integer.parseInt(keyString);
             } catch (NumberFormatException e) {
                 throw new JsonParseException("Expected \"" + fieldName + "\" to be a string or an integer");
             }
-        }
     }
 }

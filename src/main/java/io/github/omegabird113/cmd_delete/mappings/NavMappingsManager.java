@@ -21,9 +21,8 @@ public final class NavMappingsManager {
     }
 
     public static @NonNull MappingsState getMappingsState() {
-        if (currentMappingsState == null) {
+        if (currentMappingsState == null)
             throw new IllegalStateException("No current mappings state has been set, but the mappings were accessed");
-        }
         return currentMappingsState;
     }
 
