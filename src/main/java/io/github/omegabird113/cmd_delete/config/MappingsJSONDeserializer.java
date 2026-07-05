@@ -140,14 +140,11 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
         final String version = getStringElse(meta, "version", "unknown").replace("$$cmd_delete$$", CmdDeleteClient.VERSION);
         final String id = requireString(meta, "id");
 
-        if (meta.has("systems")) {
-            final JsonArray systems = requireArray(meta, "systems");
-            final Set<Os> parsedSystems = parseSystems(systems);
-            if (parsedSystems.isEmpty())
-                throw new JsonParseException("No systems found");
-            return new MetadataContainer(name, author, version, description, id, parsedSystems);
-        } else
+        final JsonArray systems = requireArray(meta, "systems");
+        final Set<Os> parsedSystems = parseSystems(systems);
+        if (parsedSystems.isEmpty())
             throw new JsonParseException("No systems found");
+        return new MetadataContainer(name, author, version, description, id, parsedSystems);
     }
 
     private @NonNull KeyCombo[] expandKeyWildcards(int key,
