@@ -9,11 +9,12 @@ import org.slf4j.Logger;
 import java.nio.file.Path;
 
 public final class PathConstants {
+    private static final Logger LOGGER = LoggingManager.getLogger(PathConstants.class);
+
     private static @Nullable Path mappingsResourcePath;
     private static @Nullable Path activeMappingsFilePath;
     private static @Nullable Path mappingsJSONPath;
     private static boolean initialized = false;
-    private static final Logger LOGGER = LoggingManager.getLogger(PathConstants.class);
 
     private PathConstants() {
     }
