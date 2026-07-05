@@ -157,14 +157,14 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
                                                        boolean hasControl, boolean controlValue,
                                                        boolean hasSuperCommand, boolean superCommandValue) {
 
-        final List<Boolean> shiftVals = hasShift ? List.of(shiftValue) : List.of(false, true);
-        final List<Boolean> altOptionals = hasAltOption ? List.of(altOptionValue) : List.of(false, true);
-        final List<Boolean> controlVals = hasControl ? List.of(controlValue) : List.of(false, true);
-        final List<Boolean> superCommandVals = hasSuperCommand ? List.of(superCommandValue) : List.of(false, true);
+        final boolean[] shiftVals = hasShift ? new boolean[]{shiftValue} : new boolean[]{false, true};
+        final boolean[] altOptionVals = hasAltOption ? new boolean[]{altOptionValue} : new boolean[]{false, true};
+        final boolean[] controlVals = hasControl ? new boolean[]{controlValue} : new boolean[]{false, true};
+        final boolean[] superCommandVals = hasSuperCommand ? new boolean[]{superCommandValue} : new boolean[]{false, true};
 
         final List<KeyCombo> results = new ArrayList<>();
         for (boolean s : shiftVals)
-            for (boolean a : altOptionals)
+            for (boolean a : altOptionVals)
                 for (boolean c : controlVals)
                     for (boolean sup : superCommandVals)
                         results.add(new KeyCombo(key, s, a, c, sup));
