@@ -85,7 +85,7 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
                 final boolean hasSuperCommand = binding.has("superCommand");
                 final boolean superCommandValue = getOptionalBoolean(binding, "superCommand");
 
-                final List<KeyCombo> keys = expandKeyWildcards(
+                final KeyCombo[] keys = expandKeyWildcards(
                         keyCode,
                         hasShift, shiftValue,
                         hasAltOption, altOptionValue,
@@ -151,7 +151,7 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
             throw new JsonParseException("No systems found");
     }
 
-    private @NonNull List<KeyCombo> expandKeyWildcards(int key,
+    private @NonNull KeyCombo[] expandKeyWildcards(int key,
                                                        boolean hasShift, boolean shiftValue,
                                                        boolean hasAltOption, boolean altOptionValue,
                                                        boolean hasControl, boolean controlValue,
@@ -168,7 +168,7 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
                 for (boolean c : controlVals)
                     for (boolean sup : superCommandVals)
                         results.add(new KeyCombo(key, s, a, c, sup));
-        return results;
+        return results.toArray(KeyCombo[]::new);
     }
 
     private @NonNull Set<Os> parseSystems(@NonNull JsonArray systemsArray) {
