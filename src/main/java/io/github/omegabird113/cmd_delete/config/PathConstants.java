@@ -28,7 +28,7 @@ public final class PathConstants {
 
         initialized = true;
         MappingsJSONManager.tryMakeConfigFiles();
-        LOGGER.info("Initialized paths locations for the mod... (mappingsResourcePath=\"{}\", mappingsJSONPath=\"{}\", activeMappingsFilePath=\"{}\", gamePath=\"{}\")", PathConstants.mappingsResourcePath, PathConstants.mappingsJSONPath, PathConstants.activeMappingsFilePath, gamePath);
+        LOGGER.debug("Initialized paths locations for the mod... (mappingsResourcePath=\"{}\", mappingsJSONPath=\"{}\", activeMappingsFilePath=\"{}\", gamePath=\"{}\")", PathConstants.mappingsResourcePath, PathConstants.mappingsJSONPath, PathConstants.activeMappingsFilePath, gamePath);
     }
 
     public static @NonNull Path getMappingsResourcePath() {
