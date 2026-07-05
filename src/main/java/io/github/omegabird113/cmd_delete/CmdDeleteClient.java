@@ -1,7 +1,7 @@
 package io.github.omegabird113.cmd_delete;
 
 import io.github.omegabird113.cmd_delete.command.NavMappingsCommand;
-import io.github.omegabird113.cmd_delete.config.MappingsJSONManager;
+import io.github.omegabird113.cmd_delete.config.PathConstants;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 import net.fabricmc.api.ClientModInitializer;
@@ -10,6 +10,7 @@ import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.MixinEnvironment;
 
+import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
 
 public final class CmdDeleteClient implements ClientModInitializer {
@@ -31,7 +32,11 @@ public final class CmdDeleteClient implements ClientModInitializer {
         final MixinEnvironment mixinEnv = MixinEnvironment.getCurrentEnvironment();
         LOGGER.debug("Mixin version {} with obfuscation \"{}\" and compatability level \"{}\" in phase \"{}\" on side \"{}\"", mixinEnv.getVersion(), mixinEnv.getObfuscationContext(), MixinEnvironment.getCompatibilityLevel(), mixinEnv.getPhase(), mixinEnv.getSide());
 
-        MappingsJSONManager.tryMakeConfigFiles();
+        final Path gameDir = FabricLoader.getInstance().getGameDir();
+        final Path resourceMappingsDir = FabricLoader.getInstance().getModContainer(CmdDeleteClient.MODID)
+                .orElseThrow().findPath("mappings/").orElseThrow();
+        PathConstants.init(gameDir, resourceMappingsDir);
+
         NavMappingsManager.loadMappings();
         NavMappingsCommand.register();
 

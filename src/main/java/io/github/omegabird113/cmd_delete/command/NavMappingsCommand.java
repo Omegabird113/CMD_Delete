@@ -118,7 +118,7 @@ public final class NavMappingsCommand {
         final String idStr = StringArgumentType.getString(context, "id");
         final String locationStr = StringArgumentType.getString(context, "location");
 
-        final Path configPath = PathConstants.MAPPINGS_JSONS_PATH;
+        final Path configPath = PathConstants.getMappingsJSONPath();
         final Path oldPath = configPath.resolve(idStr + ".json");
 
         final Path newPath = Path.of(locationStr);
@@ -175,7 +175,7 @@ public final class NavMappingsCommand {
     private static int importCustom(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
         final String locationStr = StringArgumentType.getString(context, "location");
 
-        final Path configPath = PathConstants.MAPPINGS_JSONS_PATH;
+        final Path configPath = PathConstants.getMappingsJSONPath();
 
         final Path oldPath = Path.of(locationStr);
         final Path newPath = configPath.resolve(FilenameUtils.getBaseName(locationStr) + ".json");

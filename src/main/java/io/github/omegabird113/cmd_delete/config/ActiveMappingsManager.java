@@ -54,12 +54,12 @@ public final class ActiveMappingsManager {
     }
 
     void writeActiveMappings(String namespacedId) throws IOException {
-        Files.createDirectories(PathConstants.ACTIVE_MAPPINGS_FILE_PATH.getParent());
-        Files.writeString(PathConstants.ACTIVE_MAPPINGS_FILE_PATH, namespacedId);
+        Files.createDirectories(PathConstants.getActiveMappingsFilePath().getParent());
+        Files.writeString(PathConstants.getActiveMappingsFilePath(), namespacedId);
     }
 
     @NonNull String readActiveMappings() throws IOException {
-        return Files.readString(PathConstants.ACTIVE_MAPPINGS_FILE_PATH);
+        return Files.readString(PathConstants.getActiveMappingsFilePath());
     }
 
     @Nullable

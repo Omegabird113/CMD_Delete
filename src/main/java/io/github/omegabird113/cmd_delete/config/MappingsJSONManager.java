@@ -26,7 +26,7 @@ public final class MappingsJSONManager {
     }
 
     private static @NonNull MappingsRegistry loadFromResourceMappingsDir(String id) throws IOException {
-        final Path path = PathConstants.MAPPINGS_RESOURCE_PATH.resolve(id + ".json");
+        final Path path = PathConstants.getMappingsResourcePath().resolve(id + ".json");
 
         final Gson gson = new GsonBuilder()
                 .registerTypeAdapter(MappingsRegistry.class, new MappingsJSONDeserializer())
@@ -41,7 +41,7 @@ public final class MappingsJSONManager {
     }
 
     private static @NonNull MappingsRegistry loadFromCustomMappingsDir(String id) throws IOException {
-        final Path path = PathConstants.MAPPINGS_JSONS_PATH.resolve(id + ".json");
+        final Path path = PathConstants.getMappingsJSONPath().resolve(id + ".json");
         if (!Files.exists(path))
             throw new FileNotFoundException("Custom mapping file not found at: " + path);
 
@@ -120,7 +120,7 @@ public final class MappingsJSONManager {
     }
 
     public static void tryMakeConfigFiles() {
-        final File configDirectory = PathConstants.MAPPINGS_JSONS_PATH.toFile();
+        final File configDirectory = PathConstants.getMappingsJSONPath().toFile();
         if (!configDirectory.exists() || !configDirectory.isDirectory()) {
             boolean s = configDirectory.mkdirs();
             if (!s)
@@ -128,7 +128,7 @@ public final class MappingsJSONManager {
             else
                 LOGGER.info("Created mappings config directory at: {}", configDirectory.getAbsolutePath());
         }
-        final File activeMappingsFile = PathConstants.ACTIVE_MAPPINGS_FILE_PATH.toFile();
+        final File activeMappingsFile = PathConstants.getActiveMappingsFilePath().toFile();
         if (!activeMappingsFile.exists() || !activeMappingsFile.isFile()) {
             try {
                 boolean s = activeMappingsFile.createNewFile();
@@ -146,7 +146,7 @@ public final class MappingsJSONManager {
     public static @NonNull List<String> getAvailableOptions(boolean namespacedIds) {
         final List<String> options = new ArrayList<>();
 
-        final File configDirectory = PathConstants.MAPPINGS_JSONS_PATH.toFile();
+        final File configDirectory = PathConstants.getMappingsJSONPath().toFile();
         if (!configDirectory.exists() || !configDirectory.isDirectory()) {
             tryMakeConfigFiles();
             return options;
