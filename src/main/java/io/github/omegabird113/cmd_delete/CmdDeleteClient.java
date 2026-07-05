@@ -31,18 +31,33 @@ public final class CmdDeleteClient implements ClientModInitializer {
 
         final MixinEnvironment mixinEnv = MixinEnvironment.getCurrentEnvironment();
         LOGGER.debug("Mixin version {} with obfuscation \"{}\" and compatability level \"{}\" in phase \"{}\" on side \"{}\"", mixinEnv.getVersion(), mixinEnv.getObfuscationContext(), MixinEnvironment.getCompatibilityLevel(), mixinEnv.getPhase(), mixinEnv.getSide());
+        final long startLogTime = System.nanoTime();
 
         final Path gameDir = FabricLoader.getInstance().getGameDir();
         final Path resourceMappingsDir = FabricLoader.getInstance().getModContainer(CmdDeleteClient.MODID)
                 .orElseThrow().findPath("mappings/").orElseThrow();
         PathConstants.init(gameDir, resourceMappingsDir);
 
+        final long fileInitTime = System.nanoTime();
+
         NavMappingsManager.loadMappings();
+        final long loadMappingsTime = System.nanoTime();
+
         NavMappingsCommand.register();
+        final long registerTime = System.nanoTime();
 
-        final long takenNanos = System.nanoTime() - startTime;
-        final long takenMillis = TimeUnit.NANOSECONDS.toMillis(takenNanos);
+        final long startLogTakenNanos = startLogTime - startTime;
+        final double startLogTakenMillis = startLogTakenNanos / 1000000.0;
+        final long fileInitTakenNanos = fileInitTime - startLogTime;
+        final double fileInitTakenMillis = fileInitTakenNanos / 1000000.0;
+        final long loadMappingsTakenNanos = loadMappingsTime - fileInitTime;
+        final double loadMappingsTakenMillis = loadMappingsTakenNanos / 1000000.0;
+        final long registerTakenNanos = registerTime - loadMappingsTime;
+        final double registerTakenMillis = registerTakenNanos / 1000000.0;
+        final long totalTakenNanos = registerTime - startTime;
+        final long totalTakenMillis = TimeUnit.NANOSECONDS.toMillis(totalTakenNanos);
 
-        LOGGER.info("Finished initializing after a total of {} milliseconds", takenMillis);
+        LOGGER.info("Finished initializing after a total of {} milliseconds", totalTakenMillis);
+        LOGGER.debug("Startup/mixin: {}ms, File init: {}ms, Mappings load: {}ms, /navmappings register: {}ms, Total: {}ms", startLogTakenMillis, fileInitTakenMillis, loadMappingsTakenMillis, registerTakenMillis, totalTakenMillis);
     }
 }
