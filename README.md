@@ -24,7 +24,7 @@ You can define your own custom mappings in configuration files with the location
 sample.json:
 ```json
 {
-  "fv": 2,
+  "fv": 3,
   "inherits": "builtin:mac",
   "meta": {
     "name": "Example custom mapping",
@@ -60,14 +60,16 @@ sample.json:
 mac.json:
 ```json
 {
-  "fv": 2,
+  "fv": 3,
   "meta": {
     "name": "Mac mappings",
-    "author": "Omegabird113",
-    "description": "This is actually a copy of the built-in macOS mappings for CMD + Delete 1.2.0!",
-    "version": "1.0.0",
+    "author": "$$cmd_delete$$",
+    "description": "Pre-bundled mappings for macOS.",
+    "version": "$$cmd_delete$$",
     "id": "mac",
-    "systems": ["mac"]
+    "systems": [
+      "mac"
+    ]
   },
   "actions": {
     "NAV_TEXT_START": [
@@ -123,21 +125,50 @@ mac.json:
     ],
     "SEL_TEXT_DOWN": [
       {"key": "down", "superCommand": false, "altOption": false, "shift": true}
+    ],
+    "OVR_NAV_CHAR_LEFT": [
+      {"key": "left", "superCommand": false, "altOption": false, "shift": false}
+    ],
+    "OVR_NAV_CHAR_RIGHT": [
+      {"key": "right", "superCommand": false, "altOption": false, "shift": false}
+    ],
+    "OVR_SEL_CHAR_LEFT": [
+      {"key": "left", "superCommand": false, "altOption": false, "shift": true}
+    ],
+    "OVR_SEL_CHAR_RIGHT": [
+      {"key": "right", "superCommand": false, "altOption": false, "shift": true}
+    ],
+    "OVR_DEL_CHAR_LEFT": [
+      {"key": "backspace", "superCommand": false, "altOption": false, "shift": false}
+    ],
+    "OVR_DEL_CHAR_RIGHT": [
+      {"key": "delete", "superCommand": false, "altOption": false, "shift": false}
+    ],
+    "OVR_NAV_TEXT_UP": [
+      {"key": "up", "superCommand": false, "altOption": false, "shift": false}
+    ],
+    "OVR_NAV_TEXT_DOWN": [
+      {"key": "down", "superCommand": false, "altOption": false, "shift": false}
     ]
+  },
+  "flags": {
+    "overrideVanillaNavigation": true,
+    "crossLineSignMovement": true
   }
 }
 ```
 
 ### Features
 Custom mappings can:
-- You don't have to define every modifier combination, because key modifiers use wildcard expansion where any modifier not included is treated as `true` OR `false`.
-- You don't have to memorize raw GLFW keycodes, as CMD + Delete provides support for using friendly keyname strings defined by it instead. If a keyname is not defined, you can still choose to use a raw GLFW keycode in your JSON.
+- Use wildcard expansion where any modifier not included in a key combo is treated as `true` OR `false`.
+- Use friendly keyname strings defined by CMD + Delete instead of GLFW keycodes. If a keyname is not defined, you can still choose to use a raw GLFW keycode in your JSON.
 - Inherit keybinds from the builtin mappings or other custom mappings by setting the top-level `inherits` value to `custom:<id>` to inherit a custom JSON, or `builtin:<id>` or just `<id>` to inherit a builtin JSON.
-- They can patch & override the mappings they inherit by setting the keybind to have `enabled` property as `false`. Note that CMD + Delete always removes your disabled keybinds before adding your enabled keybinds, allowing a patch-then-reimplement pattern to be easily done.
+- Patch & override the mappings they inherit by setting the keybind to have `enabled` property as `false`. Note that CMD + Delete always removes your disabled keybinds before adding your enabled keybinds, allowing a patch-then-reimplement pattern to be easily done.
+- Set certain boolean feature flags to control the mod's behavior.
 
 Note that:
-- The format version `fv` is currently `2` and your mappings should match that.
-- The `meta.id` field must exactly match the filename
+- The format version `fv` is currently `3` and your mappings should match that (Though old mappings of format version `2` are still supported in-game).
+- The `meta.id` field must exactly match the filename without the `.json` extension
 
 ### The /navmappings command
 CMD + Delete includes an in-game, client `/navmappings` command for checking, switching, importing, exporting, and debugging mappings without manually touching config files.
