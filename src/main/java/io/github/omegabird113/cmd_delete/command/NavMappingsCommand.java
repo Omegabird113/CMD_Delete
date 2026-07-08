@@ -86,6 +86,7 @@ public final class NavMappingsCommand {
                 .then(literal("debug")
                         .then(literal("aboutCmdDelete").executes(NavMappingsCommand::printCmdDeleteAbout))
                         .then(literal("dumpActions").executes(NavMappingsCommand::dumpActions))
+                        .then(literal("dumpFeatureFlags").executes(NavMappingsCommand::dumpFeatureFlags))
                         .then(literal("dumpRegistry").executes(NavMappingsCommand::dumpRegistry))
                         .then(literal("dumpKeymap").executes(NavMappingsCommand::dumpKeyMap))
                 )
@@ -115,6 +116,11 @@ public final class NavMappingsCommand {
     private static int dumpActions(@NonNull CommandContext<FabricClientCommandSource> context) {
         final String actionsDump = String.join(", ", Arrays.stream(NavAction.values()).map(NavAction::name).toArray(String[]::new));
         context.getSource().sendFeedback(Component.literal("Actions dump:\n" + actionsDump));
+        return 1;
+    }
+
+    private static int dumpFeatureFlags(@NonNull CommandContext<FabricClientCommandSource> context) {
+        context.getSource().sendFeedback(Component.literal("Feature flags dump:\noverrideVanillaNavigation - default false\ncrossLineSignMovement - default true"));
         return 1;
     }
 
