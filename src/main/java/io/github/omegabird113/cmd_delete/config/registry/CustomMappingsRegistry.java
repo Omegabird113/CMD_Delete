@@ -25,7 +25,7 @@ public class CustomMappingsRegistry {
     }
 
     public NavAction[] getValues() {
-        return registry.values().toArray(NavAction[]::new);
+        return registry.values().toArray(new NavAction[0]);
     }
 
     public ArrayList<Os> getSystems() {

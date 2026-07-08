@@ -15,13 +15,17 @@ import java.util.stream.Collectors;
 import static io.github.omegabird113.cmd_delete.config.load.JsonParsingUtils.*;
 
 public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMappingsRegistry> {
-    private static final Map<String, Os> osMap = Map.of(
-            "windows", Os.WINDOWS,
-            "mac", Os.MAC,
-            "linux", Os.LINUX
-    );
+    private static final Map<String, Os> osMap = genOsMap();
     private static final Map<String, NavAction> navActionMap = Arrays.stream(NavAction.values())
-            .collect(Collectors.toUnmodifiableMap(NavAction::name, Function.identity()));
+            .collect(Collectors.toMap(NavAction::name, Function.identity()));
+
+    private static Map<String, Os> genOsMap() {
+        Map<String, Os> map = new HashMap<>();
+        map.put("windows", Os.WINDOWS);
+        map.put("mac", Os.MAC);
+        map.put("linux", Os.LINUX);
+        return map;
+    }
 
     @Override
     public CustomMappingsRegistry deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
@@ -121,10 +125,10 @@ public class CustomMappingsJSONDeserializer implements JsonDeserializer<CustomMa
                                                                boolean hasControl, boolean controlValue,
                                                                boolean hasSuperCommand, boolean superCommandValue) {
 
-        List<Boolean> shiftVals = hasShift ? List.of(shiftValue) : List.of(false, true);
-        List<Boolean> altOptionals = hasAltOption ? List.of(altOptionValue) : List.of(false, true);
-        List<Boolean> controlVals = hasControl ? List.of(controlValue) : List.of(false, true);
-        List<Boolean> superCommandVals = hasSuperCommand ? List.of(superCommandValue) : List.of(false, true);
+        boolean[] shiftVals = hasShift ? new boolean[]{shiftValue} : new boolean[]{false, true};
+        boolean[] altOptionals = hasAltOption ? new boolean[]{altOptionValue} : new boolean[]{false, true};
+        boolean[] controlVals = hasControl ? new boolean[]{controlValue} : new boolean[]{false, true};
+        boolean[] superCommandVals = hasSuperCommand ? new boolean[]{superCommandValue} : new boolean[]{false, true};
 
         List<CustomMappingsRegistryKey> results = new ArrayList<>();
         for (boolean s : shiftVals)

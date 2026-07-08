@@ -30,7 +30,7 @@ public class NavMappingsCommand {
 
     public static void register() {
         registerCommand();
-        CmdDeleteClient.LOGGER.info("Registered client \"/navmappings\" command through Fabric API");
+        CmdDeleteClient.LOGGER.debug("Registered client \"/navmappings\" command through Fabric API");
     }
 
     private static void registerCommand() {
@@ -91,18 +91,30 @@ public class NavMappingsCommand {
 
     private static Os resolveOs(String osName) throws CommandSyntaxException {
         osName = osName.toLowerCase(Locale.ROOT);
-        return switch (osName) {
-            case "mac" -> Os.MAC;
-            case "windows_linux" -> Os.WINDOWS;
-            default -> throw INVALID_OS.create(osName);
-        };
+        switch (osName) {
+            case "mac": {
+                return Os.MAC;
+            }
+            case "windows_linux": {
+                return Os.WINDOWS;
+            }
+            default: {
+                throw INVALID_OS.create(osName);
+            }
+        }
     }
 
     private static String resolveOsId(Os os) {
-        return switch (os) {
-            case MAC -> "mac";
-            case WINDOWS, LINUX -> "windows_linux";
-        };
+        switch (os) {
+            case MAC: {
+                return "mac";
+            }
+            case WINDOWS:
+            case LINUX: {
+                return "windows_linux";
+            }
+        }
+        return "";
     }
 
     private static LiteralArgumentBuilder<FabricClientCommandSource> literal(String name) {

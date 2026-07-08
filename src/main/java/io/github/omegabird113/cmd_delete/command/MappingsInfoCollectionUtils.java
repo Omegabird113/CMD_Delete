@@ -28,7 +28,7 @@ public final class MappingsInfoCollectionUtils {
         String keyCombinationsString = "";
 
         switch (mappingsState.type()) {
-            case CUSTOM -> {
+            case CUSTOM: {
                 CustomNavMappings custom = (CustomNavMappings) mappingsState.mappings();
 
                 namespacedId = "custom:" + custom.getRegistry().getFilename();
@@ -38,8 +38,9 @@ public final class MappingsInfoCollectionUtils {
                 author = custom.getRegistry().getAuthor();
 
                 keyCombinationsString = " with " + custom.getRegistry().getSize() + " key combinations registered";
+                break;
             }
-            case BUILTIN -> {
+            case BUILTIN: {
                 String[] systemStrings = Arrays.stream(mappingsState.mappings().getMappingsSupportedSystems())
                         .map(Os::name)
                         .toArray(String[]::new);
@@ -49,8 +50,9 @@ public final class MappingsInfoCollectionUtils {
                 description = "Hard-coded mappings for the specified operating system(s).";
                 version = CmdDeleteClient.VERSION;
                 author = "Omegabird113";
+                break;
             }
-            case DEFAULT -> {
+            case DEFAULT: {
                 String[] systemStrings = Arrays.stream(mappingsState.mappings().getMappingsSupportedSystems())
                         .map(Os::name)
                         .toArray(String[]::new);
@@ -60,6 +62,7 @@ public final class MappingsInfoCollectionUtils {
                 description = "The default behaviour to set the mappings to the hard-coded mappings for the OS you're currently using.";
                 version = CmdDeleteClient.VERSION;
                 author = "Omegabird113";
+                break;
             }
         }
 
@@ -71,14 +74,11 @@ public final class MappingsInfoCollectionUtils {
     }
 
     public static String[] getMappingsList() {
-        List<String> internal = new ArrayList<>(
-                List.of(
-                        "default",
-                        "builtin:windows_linux",
-                        "builtin:mac"
-                )
-        );
+        List<String> internal = new ArrayList<>();
+        internal.add("default");
+        internal.add("builtin:windows_linux");
+        internal.add("builtin:mac");
         internal.addAll(CustomMappingsJSONManager.getAvailableOptions());
-        return internal.toArray(String[]::new);
+        return internal.toArray(new String[0]);
     }
 }

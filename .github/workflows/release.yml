@@ -45,7 +45,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v5
         with:
-          java-version: 17
+          java-version: 8
           distribution: "temurin"
           cache: gradle
 
@@ -107,7 +107,7 @@ jobs:
           version: ${{ steps.props.outputs.version }}
           version-type: ${{ inputs.release_type }}
           changelog-file: changelog_body.md
-          java: 17
+          java: 8
           game-versions: |
-            >=1.17 <1.18
+            >=1.16 <1.17
           loaders: fabric

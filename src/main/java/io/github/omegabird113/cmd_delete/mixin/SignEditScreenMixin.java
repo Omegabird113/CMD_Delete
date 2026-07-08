@@ -6,6 +6,7 @@ import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.actions.NavActionManager;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.font.TextFieldHelper;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.SignEditScreen;
@@ -70,31 +71,56 @@ public abstract class SignEditScreenMixin {
         int direction = NavActionManager.getDirection(action);
 
         switch (action) {
-            case SEL_TEXT_UP, SEL_TEXT_DOWN -> this.cmd_delete$selectVertical(direction);
-            case DEL_LINE_LEFT, DEL_LINE_RIGHT -> {
+            case SEL_TEXT_UP:
+            case SEL_TEXT_DOWN: {
+                this.cmd_delete$selectVertical(direction);
+                break;
+            }
+            case DEL_LINE_LEFT:
+            case DEL_LINE_RIGHT: {
                 this.cmd_delete$clearMultilineSelection();
                 this.cmd_delete$deleteToLineEdge(direction);
+                break;
             }
-            case DEL_WORD_LEFT, DEL_WORD_RIGHT -> {
+            case DEL_WORD_LEFT:
+            case DEL_WORD_RIGHT: {
                 this.cmd_delete$clearMultilineSelection();
                 this.cmd_delete$deleteByWords(direction);
+                break;
             }
-            case NAV_LINE_LEFT, NAV_LINE_RIGHT -> {
+            case NAV_LINE_LEFT:
+            case NAV_LINE_RIGHT: {
                 this.cmd_delete$clearMultilineSelection();
                 this.cmd_delete$moveToLineEdge(direction, false);
+                break;
             }
-            case SEL_LINE_LEFT, SEL_LINE_RIGHT -> this.cmd_delete$selectToLineEdge(direction);
-            case NAV_WORD_LEFT, NAV_WORD_RIGHT -> {
+            case SEL_LINE_LEFT:
+            case SEL_LINE_RIGHT: {
+                this.cmd_delete$selectToLineEdge(direction);
+                break;
+            }
+            case NAV_WORD_LEFT:
+            case NAV_WORD_RIGHT: {
                 this.cmd_delete$clearMultilineSelection();
                 this.cmd_delete$moveByWords(direction, false);
+                break;
             }
-            case SEL_WORD_LEFT, SEL_WORD_RIGHT -> this.cmd_delete$selectByWords(direction);
-            case NAV_TEXT_START, NAV_TEXT_END -> {
+            case SEL_WORD_LEFT:
+            case SEL_WORD_RIGHT: {
+                this.cmd_delete$selectByWords(direction);
+                break;
+            }
+            case NAV_TEXT_START:
+            case NAV_TEXT_END: {
                 this.cmd_delete$clearMultilineSelection();
                 this.cmd_delete$moveToTextEdge(direction, false);
+                break;
             }
-            case SEL_TEXT_START, SEL_TEXT_END -> this.cmd_delete$selectToTextEdge(direction);
-            default -> {
+            case SEL_TEXT_START:
+            case SEL_TEXT_END: {
+                    this.cmd_delete$selectToTextEdge(direction);
+            }
+            default: {
                 return;
             }
         }
@@ -379,7 +405,7 @@ public abstract class SignEditScreenMixin {
 
     @Unique
     private int cmd_delete$getTextAtX(String message, int position) {
-        var font = Minecraft.getInstance().font;
+        Font font = Minecraft.getInstance().font;
         String shapedMessage = font.isBidirectional() ? font.bidirectionalShaping(message) : message;
         int clampedPosition = Math.min(position, shapedMessage.length());
         return font.width(shapedMessage.substring(0, clampedPosition)) - font.width(shapedMessage) / 2;

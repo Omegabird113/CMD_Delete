@@ -66,27 +66,59 @@ public abstract class BookEditScreenMixin {
         boolean changedText = false;
 
         switch (action) {
-            case DEL_LINE_LEFT, DEL_LINE_RIGHT -> {
+            case DEL_LINE_LEFT:
+            case DEL_LINE_RIGHT: {
                 this.cmd_delete$deleteToLineEdge(edit, direction);
                 changedText = true;
+                break;
             }
-            case DEL_WORD_LEFT -> {
+            case DEL_WORD_LEFT: {
                 this.cmd_delete$removeWordsFromCursor(edit, NavActionManager.DIRECTION_LEFT);
                 changedText = true;
+                break;
             }
-            case DEL_WORD_RIGHT -> {
+            case DEL_WORD_RIGHT: {
                 this.cmd_delete$removeWordsFromCursor(edit, NavActionManager.DIRECTION_RIGHT);
                 changedText = true;
+                break;
             }
-            case NAV_LINE_LEFT, NAV_LINE_RIGHT -> this.cmd_delete$moveToLineEdge(edit, direction, false);
-            case SEL_LINE_LEFT, SEL_LINE_RIGHT -> this.cmd_delete$moveToLineEdge(edit, direction, true);
-            case NAV_WORD_LEFT -> edit.moveByWords(NavActionManager.DIRECTION_LEFT);
-            case NAV_WORD_RIGHT -> edit.moveByWords(NavActionManager.DIRECTION_RIGHT);
-            case SEL_WORD_LEFT -> edit.moveByWords(NavActionManager.DIRECTION_LEFT, true);
-            case SEL_WORD_RIGHT -> edit.moveByWords(NavActionManager.DIRECTION_RIGHT, true);
-            case SEL_TEXT_START, NAV_TEXT_START -> edit.setCursorPos(0, action == NavAction.SEL_TEXT_START);
-            case SEL_TEXT_END, NAV_TEXT_END -> edit.setCursorPos(this.cmd_delete$getEditLength(), action == NavAction.SEL_TEXT_END);
-            default -> {
+            case NAV_LINE_LEFT:
+            case NAV_LINE_RIGHT: {
+                this.cmd_delete$moveToLineEdge(edit, direction, false);
+                break;
+            }
+            case SEL_LINE_LEFT:
+            case SEL_LINE_RIGHT: {
+                this.cmd_delete$moveToLineEdge(edit, direction, true);
+                break;
+            }
+            case NAV_WORD_LEFT: {
+                edit.moveByWords(NavActionManager.DIRECTION_LEFT, false);
+                break;
+            }
+            case NAV_WORD_RIGHT: {
+                edit.moveByWords(NavActionManager.DIRECTION_RIGHT, false);
+                break;
+            }
+            case SEL_WORD_LEFT: {
+                edit.moveByWords(NavActionManager.DIRECTION_LEFT, true);
+                break;
+            }
+            case SEL_WORD_RIGHT: {
+                edit.moveByWords(NavActionManager.DIRECTION_RIGHT, true);
+                break;
+            }
+            case SEL_TEXT_START:
+            case NAV_TEXT_START: {
+                edit.setCursorPos(0, action == NavAction.SEL_TEXT_START);
+                break;
+            }
+            case SEL_TEXT_END:
+            case NAV_TEXT_END: {
+                edit.setCursorPos(this.cmd_delete$getEditLength(), action == NavAction.SEL_TEXT_END);
+                break;
+            }
+            default: {
                 return;
             }
         }

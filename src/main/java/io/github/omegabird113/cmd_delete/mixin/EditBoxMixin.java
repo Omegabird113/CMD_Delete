@@ -41,38 +41,62 @@ public abstract class EditBoxMixin {
         int direction = NavActionManager.getDirection(action);
 
         switch (action) {
-            case DEL_LINE_LEFT -> {
+            case DEL_LINE_LEFT: {
                 int cursor = this.getCursorPosition();
                 this.deleteChars(-cursor);
+                break;
             }
-            case DEL_LINE_RIGHT -> {
+            case DEL_LINE_RIGHT: {
                 int cursor = this.getCursorPosition();
                 int end = this.getValue().length();
                 this.deleteChars(end - cursor);
+                break;
             }
-            case DEL_WORD_LEFT, DEL_WORD_RIGHT -> this.deleteWords(direction);
-            case NAV_LINE_LEFT, NAV_TEXT_START -> this.moveCursorTo(0);
-            case NAV_LINE_RIGHT, NAV_TEXT_END -> this.moveCursorTo(this.getValue().length());
-            case SEL_LINE_LEFT, SEL_TEXT_START -> {
+            case DEL_WORD_LEFT:
+            case DEL_WORD_RIGHT: {
+                this.deleteWords(direction);
+                break;
+            }
+            case NAV_LINE_LEFT:
+            case NAV_TEXT_START: {
+                this.moveCursorTo(0);
+                break;
+            }
+            case NAV_LINE_RIGHT:
+            case NAV_TEXT_END: {
+                this.moveCursorTo(this.getValue().length());
+                break;
+            }
+            case SEL_LINE_LEFT:
+            case SEL_TEXT_START: {
                 boolean old = this.shiftPressed;
                 this.shiftPressed = true;
                 this.moveCursorTo(0);
                 this.shiftPressed = old;
+                break;
             }
-            case SEL_LINE_RIGHT, SEL_TEXT_END -> {
+            case SEL_LINE_RIGHT:
+            case SEL_TEXT_END: {
                 boolean old = this.shiftPressed;
                 this.shiftPressed = true;
                 this.moveCursorTo(this.getValue().length());
                 this.shiftPressed = old;
+                break;
             }
-            case NAV_WORD_LEFT, NAV_WORD_RIGHT -> this.moveCursorTo(this.getWordPosition(direction));
-            case SEL_WORD_LEFT, SEL_WORD_RIGHT -> {
+            case NAV_WORD_LEFT:
+            case NAV_WORD_RIGHT: {
+                this.moveCursorTo(this.getWordPosition(direction));
+                break;
+            }
+            case SEL_WORD_LEFT:
+            case SEL_WORD_RIGHT: {
                 boolean old = this.shiftPressed;
                 this.shiftPressed = true;
                 this.moveCursorTo(this.getWordPosition(direction));
                 this.shiftPressed = old;
+                break;
             }
-            default -> {
+            default: {
                 return;
             }
         }

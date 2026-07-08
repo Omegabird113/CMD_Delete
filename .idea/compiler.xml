@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="17" />
+    <bytecodeTargetLevel target="1.8" />
   </component>
   <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_STRING" value="&quot;-AoutRefMapFile=$PROJECT_DIR$/build/classes/java/main/cmd_delete-refmap.json&quot; -AdefaultObfuscationEnv=named:intermediary -Aquiet=true &quot;-AoutMapFileNamedIntermediary=$PROJECT_DIR$/build/loom-cache/mixin-map-loom.mappings.1_18_2.layered+hash.2198-v2.main.tiny&quot; -AinMapFileNamedIntermediary=$USER_HOME$/.gradle/caches/fabric-loom/1.18.2/loom.mappings.1_18_2.layered+hash.2198-v2/mappings.tiny" />
+    <option name="ADDITIONAL_OPTIONS_STRING" value="&quot;-AoutRefMapFile=$PROJECT_DIR$/build/classes/java/main/cmd_delete-refmap.json&quot; -AdefaultObfuscationEnv=named:intermediary &quot;-AoutMapFileNamedIntermediary=$PROJECT_DIR$/build/loom-cache/mixin-map-1.16.5-1.16.5-v2.0.tiny&quot; -AinMapFileNamedIntermediary=$USER_HOME$/.gradle/caches/fabric-loom/mappings/net.minecraft.mappings-1.16.5.tiny.tiny" />
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="io.github.omegabird113.CMD_Delete.test" options="&quot;-AoutRefMapFile=$PROJECT_DIR$/build/classes/java/test/test-cmd_delete-refmap.json&quot; -AdefaultObfuscationEnv=named:intermediary -Aquiet=true &quot;-AoutMapFileNamedIntermediary=$PROJECT_DIR$/build/loom-cache/mixin-map-loom.mappings.1_18_2.layered+hash.2198-v2.test.tiny&quot; -AinMapFileNamedIntermediary=$USER_HOME$/.gradle/caches/fabric-loom/1.18.2/loom.mappings.1_18_2.layered+hash.2198-v2/mappings.tiny" />
+      <module name="io.github.omegabird113.CMD_Delete.test" options="&quot;-AoutRefMapFile=$PROJECT_DIR$/build/classes/java/test/cmd_delete-refmap.json&quot; -AdefaultObfuscationEnv=named:intermediary &quot;-AoutMapFileNamedIntermediary=$PROJECT_DIR$/build/loom-cache/mixin-map-1.16.5-1.16.5-v2.1.tiny&quot; -AinMapFileNamedIntermediary=$USER_HOME$/.gradle/caches/fabric-loom/mappings/net.minecraft.mappings-1.16.5.tiny.tiny" />
     </option>
   </component>
 </project>

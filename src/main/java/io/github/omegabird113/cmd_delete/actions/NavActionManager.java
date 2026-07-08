@@ -11,23 +11,52 @@ public class NavActionManager {
     public static final int DIRECTION_UP = -1;
 
     public static int getDirection(NavAction action) {
-        return switch (action) {
-            case NAV_LINE_LEFT, SEL_LINE_LEFT, DEL_LINE_LEFT, NAV_WORD_LEFT, SEL_WORD_LEFT, DEL_WORD_LEFT ->
-                    DIRECTION_LEFT;
-            case NAV_LINE_RIGHT, SEL_LINE_RIGHT, DEL_LINE_RIGHT, NAV_WORD_RIGHT, SEL_WORD_RIGHT, DEL_WORD_RIGHT, NONE ->
-                    DIRECTION_RIGHT;
-            case NAV_TEXT_START, SEL_TEXT_START, SEL_TEXT_UP -> DIRECTION_UP;
-            case NAV_TEXT_END, SEL_TEXT_END, SEL_TEXT_DOWN -> DIRECTION_DOWN;
-        };
+         switch (action) {
+             case NAV_LINE_LEFT:
+             case SEL_LINE_LEFT:
+             case DEL_LINE_LEFT:
+             case NAV_WORD_LEFT:
+             case SEL_WORD_LEFT:
+             case DEL_WORD_LEFT: {
+                 return DIRECTION_LEFT;
+             }
+             case NAV_LINE_RIGHT:
+             case SEL_LINE_RIGHT:
+             case DEL_LINE_RIGHT:
+             case NAV_WORD_RIGHT:
+             case SEL_WORD_RIGHT:
+             case DEL_WORD_RIGHT:
+             case NONE: {
+                 return DIRECTION_RIGHT;
+             }
+             case NAV_TEXT_START:
+             case SEL_TEXT_START:
+             case SEL_TEXT_UP: {
+                 return DIRECTION_UP;
+             }
+             case NAV_TEXT_END:
+             case SEL_TEXT_END:
+             case SEL_TEXT_DOWN: {
+                 return DIRECTION_DOWN;
+             }
+        }
+        return 0;
     }
 
     public static boolean isMoveAction(NavAction action) {
-        return switch (action) {
-            case NAV_LINE_LEFT, NAV_LINE_RIGHT,
-                 NAV_WORD_LEFT, NAV_WORD_RIGHT,
-                 NAV_TEXT_START, NAV_TEXT_END -> true;
-            default -> false;
-        };
+         switch (action) {
+             case NAV_LINE_LEFT:
+             case NAV_LINE_RIGHT:
+             case NAV_WORD_LEFT:
+             case NAV_WORD_RIGHT:
+             case NAV_TEXT_START:
+             case NAV_TEXT_END: {
+                 return true;
+             }
+             default: {
+                 return false;
+             }
+         }
     }
 
     public static float getCoverage(INavMappings mapping) {

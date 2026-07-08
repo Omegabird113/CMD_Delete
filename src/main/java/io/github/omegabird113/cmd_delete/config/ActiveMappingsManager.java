@@ -9,8 +9,10 @@ import io.github.omegabird113.cmd_delete.mappings.Os;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Locale;
 
 public class ActiveMappingsManager {
@@ -51,23 +53,43 @@ public class ActiveMappingsManager {
     }
 
     public String resolveNamespacedId(MappingsState.Type type, String id) {
-        String prefixText = switch (type) {
-            case CUSTOM -> "custom:";
-            case BUILTIN -> "builtin:";
-            case DEFAULT -> "";
-        };
+        String prefixText = "";
+        switch (type) {
+            case CUSTOM: {
+                prefixText = "custom:";
+                break;
+            }
+            case BUILTIN: {
+                prefixText = "builtin:";
+                break;
+            }
+        }
         return prefixText + id;
     }
 
     public String resolveNamespacedId(MappingsState.Type type, Os os) {
-        String prefixText = switch (type) {
-            case CUSTOM -> "custom:";
-            case BUILTIN -> "builtin:";
-            case DEFAULT -> "";
-        };
-        String osText = switch (os) {
-            case WINDOWS, LINUX -> "windows_linux";
-            case MAC -> "mac";
+        String prefixText = "";
+        switch (type) {
+            case CUSTOM: {
+                prefixText = "custom:";
+                break;
+            }
+            case BUILTIN: {
+                prefixText = "builtin:";
+                break;
+            }
+        }
+        String osText = "";
+        switch (os) {
+            case WINDOWS:
+            case LINUX: {
+                osText = "windows_linux";
+                break;
+            }
+            case MAC: {
+                osText = "mac";
+                break;
+            }
         };
         return prefixText + osText;
     }
@@ -95,10 +117,20 @@ public class ActiveMappingsManager {
     public MappingsState resolveMappings(String namespacedId) {
         String id = removeNamespaceFromId(namespacedId);
         MappingsState.Type type = resolveType(namespacedId);
-        MappingsState mappingsState = switch (type) {
-            case CUSTOM -> tryResolveCustomMappings(id);
-            case BUILTIN -> new MappingsState(resolveOsMappings(id), type, id);
-            case DEFAULT -> new MappingsState(resolveDefaultMappings(), type, id);
+        MappingsState mappingsState = null;
+        switch (type) {
+            case CUSTOM: {
+                mappingsState = tryResolveCustomMappings(id);
+                break;
+            }
+            case BUILTIN: {
+                mappingsState = new MappingsState(resolveOsMappings(id), type, id);
+                break;
+            }
+            case DEFAULT: {
+                mappingsState = new MappingsState(resolveDefaultMappings(), type, id);
+                break;
+            }
         };
         if (mappingsState == null)
             return new MappingsState(resolveDefaultMappings(), MappingsState.Type.DEFAULT, "");
@@ -107,11 +139,16 @@ public class ActiveMappingsManager {
 
     void writeActiveMappings(String namespacedId) throws IOException {
         Files.createDirectories(activeFilePath.getParent());
-        Files.writeString(activeFilePath, namespacedId);
+        Files.write(activeFilePath, namespacedId.getBytes(StandardCharsets.UTF_8));
     }
 
     String readActiveMappings() throws IOException {
-        return Files.readString(activeFilePath);
+        List<String> lines = Files.readAllLines(activeFilePath);
+        try {
+            return Files.readAllLines(activeFilePath).get(0);
+        } catch (Exception ignored) {
+            return "";
+        }
     }
 
     public MappingsState tryGetMappings() {
