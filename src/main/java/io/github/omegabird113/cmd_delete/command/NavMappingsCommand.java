@@ -11,6 +11,7 @@ import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.LoggingManager;
+import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.*;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
@@ -29,6 +30,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -83,6 +85,7 @@ public final class NavMappingsCommand {
                 .then(literal("reload").executes(NavMappingsCommand::reloadMappings))
                 .then(literal("debug")
                         .then(literal("aboutCmdDelete").executes(NavMappingsCommand::printCmdDeleteAbout))
+                        .then(literal("dumpActions").executes(NavMappingsCommand::dumpActions))
                         .then(literal("dumpRegistry").executes(NavMappingsCommand::dumpRegistry))
                         .then(literal("dumpKeymap").executes(NavMappingsCommand::dumpKeyMap))
                 )
@@ -106,6 +109,12 @@ public final class NavMappingsCommand {
     private static int dumpRegistry(@NonNull CommandContext<FabricClientCommandSource> context) {
         final MappingsRegistry mr = NavMappingsManager.getCurrentMappingsRegistry();
         context.getSource().sendFeedback(Component.literal("Registry dump:\n" + mr.toString().replace("\t", "    ")));
+        return 1;
+    }
+
+    private static int dumpActions(@NonNull CommandContext<FabricClientCommandSource> context) {
+        final String actionsDump = String.join(", ", Arrays.stream(NavAction.values()).map(NavAction::name).toArray(String[]::new));
+        context.getSource().sendFeedback(Component.literal("Actions dump:\n" + actionsDump));
         return 1;
     }
 
