@@ -6,6 +6,7 @@
   "mixins": [],
   "client": [
     "BookEditScreenMixin",
+    "ChatScreenMixin",
     "EditBoxMixin",
     "SignEditScreenMixin"
   ],

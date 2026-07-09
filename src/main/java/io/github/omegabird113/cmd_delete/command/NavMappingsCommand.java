@@ -11,8 +11,6 @@ import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import io.github.omegabird113.cmd_delete.mappings.Os;
-import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
-import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.network.chat.TextComponent;
 
 import java.util.Locale;
@@ -34,7 +32,7 @@ public class NavMappingsCommand {
     }
 
     private static void registerCommand() {
-        ClientCommandManager.DISPATCHER.register(literal("navmappings")
+        LocalCommandManager.DISPATCHER.register(literal("navmappings")
                 .then(literal("set")
                         .then(literal("builtin")
                                 .then(argument("os", StringArgumentType.word())
@@ -53,7 +51,7 @@ public class NavMappingsCommand {
                 .then(literal("list").executes(NavMappingsCommand::printMappingsList)));
     }
 
-    private static int setBuiltIn(CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+    private static int setBuiltIn(CommandContext<LocalCommandSource> context) throws CommandSyntaxException {
         String osName = StringArgumentType.getString(context, "os");
         Os os = resolveOs(osName);
         NavMappingsManager.updateMappingsToBuiltIn(os);
@@ -61,7 +59,7 @@ public class NavMappingsCommand {
         return 1;
     }
 
-    private static int setCustom(CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+    private static int setCustom(CommandContext<LocalCommandSource> context) throws CommandSyntaxException {
         String id = StringArgumentType.getString(context, "id");
         if (!NavMappingsManager.updateMappingsToCustom(id)) {
             throw UNKNOWN_CUSTOM_MAPPINGS.create(id);
@@ -70,20 +68,20 @@ public class NavMappingsCommand {
         return 1;
     }
 
-    private static int setDefault(CommandContext<FabricClientCommandSource> context) {
+    private static int setDefault(CommandContext<LocalCommandSource> context) {
         NavMappingsManager.updateMappingsToDefault();
         context.getSource().sendFeedback(text("Set nav mappings to default"));
         return 1;
     }
 
-    private static int printMappingsInfo(CommandContext<FabricClientCommandSource> context) {
+    private static int printMappingsInfo(CommandContext<LocalCommandSource> context) {
         MappingsState currentMappingState = NavMappingsManager.getMappingsState();
         String info = MappingsInfoCollectionUtils.getInfoFrom(currentMappingState, true);
         context.getSource().sendFeedback(text("The currently active mappings are:\n" + info));
         return 1;
     }
 
-    private static int printMappingsList(CommandContext<FabricClientCommandSource> context) {
+    private static int printMappingsList(CommandContext<LocalCommandSource> context) {
         String[] options = MappingsInfoCollectionUtils.getMappingsList();
         context.getSource().sendFeedback(text("The currently available mappings options are:\n" + String.join("\n", options)));
         return 1;
@@ -117,11 +115,11 @@ public class NavMappingsCommand {
         return "";
     }
 
-    private static LiteralArgumentBuilder<FabricClientCommandSource> literal(String name) {
+    private static LiteralArgumentBuilder<LocalCommandSource> literal(String name) {
         return LiteralArgumentBuilder.literal(name);
     }
 
-    private static <T> RequiredArgumentBuilder<FabricClientCommandSource, T> argument(String name, ArgumentType<T> type) {
+    private static <T> RequiredArgumentBuilder<LocalCommandSource, T> argument(String name, ArgumentType<T> type) {
         return RequiredArgumentBuilder.argument(name, type);
     }
 
