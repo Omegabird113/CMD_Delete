@@ -148,10 +148,10 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
     }
 
     private @NonNull KeyCombo[] expandKeyWildcards(int key,
-                                                       boolean hasShift, boolean shiftValue,
-                                                       boolean hasAltOption, boolean altOptionValue,
-                                                       boolean hasControl, boolean controlValue,
-                                                       boolean hasSuperCommand, boolean superCommandValue) {
+                                                   boolean hasShift, boolean shiftValue,
+                                                   boolean hasAltOption, boolean altOptionValue,
+                                                   boolean hasControl, boolean controlValue,
+                                                   boolean hasSuperCommand, boolean superCommandValue) {
 
         final boolean[] shiftVals = hasShift ? new boolean[]{shiftValue} : new boolean[]{false, true};
         final boolean[] altOptionVals = hasAltOption ? new boolean[]{altOptionValue} : new boolean[]{false, true};
