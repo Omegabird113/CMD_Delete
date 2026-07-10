@@ -15,10 +15,6 @@ on:
           - release
           - beta
           - alpha
-      changelog:
-        description: "Changelog entries (comma-separated)"
-        required: true
-        type: string
 
 concurrency:
   group: release-${{ github.ref }}
@@ -37,77 +33,97 @@ jobs:
       - name: Read gradle.properties
         id: props
         run: |
+          set -euo pipefail
           version=$(grep -E '^mod_version\s*=' gradle.properties | sed 's/.*=\s*//')
-          loader_version=$(grep -E '^loader_version\s*=' gradle.properties | sed 's/.*=\s*//')
           echo "version=$version" >> "$GITHUB_OUTPUT"
-          echo "loader_version=$loader_version" >> "$GITHUB_OUTPUT"
 
       - name: Set up JDK
         uses: actions/setup-java@v5
         with:
           java-version: 17
-          distribution: "temurin"
+          distribution: "microsoft"
           cache: gradle
 
       - name: Make gradlew executable
         run: chmod +x gradlew
 
       - name: Build
-        run: ./gradlew build
+        run: ./gradlew clean build --stacktrace
 
       - name: Locate built JAR
         id: jar
         run: |
-          JARS=$(find build/libs -maxdepth 1 -type f -name "*.jar" \
-            ! -name "*-sources.jar" \
-            ! -name "*-javadoc.jar")
+          set -euo pipefail
+          mapfile -t JARS < <(
+            find build/libs -maxdepth 1 -type f -name "*.jar" \
+              ! -name "*-sources.jar" \
+              ! -name "*-javadoc.jar" \
+              ! -name "*-dev.jar"
+          )
 
-          COUNT=$(echo "$JARS" | wc -l)
-
-          if [ "$COUNT" -ne 1 ]; then
-            echo "ERROR: Expected exactly 1 JAR, found $COUNT"
-            echo "$JARS"
+          if [ "${#JARS[@]}" -eq 0 ]; then
+            echo "ERROR: No release JAR found."
             exit 1
           fi
 
-          JAR="$JARS"
-          echo "path=$JAR" >> "$GITHUB_OUTPUT"
+          if [ "${#JARS[@]}" -gt 1 ]; then
+            echo "Multiple candidate JARs found:"
+            printf ' - %s\n' "${JARS[@]}"
+            echo "Using the first one."
+          fi
 
-      - name: Format changelog
+          echo "path=${JARS[0]}" >> "$GITHUB_OUTPUT"
+
+      - name: Check that changelog exists
         run: |
-          echo "${{ inputs.changelog }}" \
-            | tr ',' '\n' \
-            | sed 's/^[[:space:]]*//' \
-            | sed 's/[[:space:]]*$//' \
-            | sed '/^$/d' \
-            | sed 's/^/- /' > changelog_body.md
+          set -euo pipefail
+          test -f changelog.md || {
+            echo "Missing changelog.md"
+            exit 1
+          }
 
       - name: Check if release already exists
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          set -euo pipefail
           if gh release view "${{ steps.props.outputs.version }}" >/dev/null 2>&1; then
             echo "ERROR: Release ${{ steps.props.outputs.version }} already exists"
             exit 1
           fi
 
-      - name: Publish to Modrinth, CurseForge, & GitHub
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          PRERELEASE_FLAG=""
+          if [ "${{ inputs.release_type }}" != "release" ]; then
+            PRERELEASE_FLAG="--prerelease"
+          fi
+
+          gh release create "${{ steps.props.outputs.version }}" \
+            "${{ steps.jar.outputs.path }}" \
+            --target "${{ github.sha }}" \
+            --title "${{ inputs.release_title }}" \
+            --notes-file changelog.md \
+            $PRERELEASE_FLAG
+
+      - name: Publish to Modrinth & CurseForge
         uses: Kir-Antipov/mc-publish@v3
         with:
           modrinth-id: xrOWVab9
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           curseforge-id: 1455987
           curseforge-token: ${{ secrets.CF_API_TOKEN }}
-          github-tag: ${{ steps.props.outputs.version }}
-          github-commitish: ${{ github.sha }}
-          github-prerelease: ${{ inputs.release_type != 'release' }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           files: ${{ steps.jar.outputs.path }}
           name: ${{ inputs.release_title }}
           version: ${{ steps.props.outputs.version }}
           version-type: ${{ inputs.release_type }}
-          changelog-file: changelog_body.md
+          changelog-file: changelog.md
           java: 17
           game-versions: |
-            >1.19 <1.20.2
-          loaders: fabric
+            >=1.20.5 <1.21.6
+          loaders: |
+            fabric
+            quilt

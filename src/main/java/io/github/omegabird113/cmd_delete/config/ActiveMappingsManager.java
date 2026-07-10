@@ -1,91 +1,42 @@
 package io.github.omegabird113.cmd_delete.config;
 
-import io.github.omegabird113.cmd_delete.CmdDeleteClient;
-import io.github.omegabird113.cmd_delete.config.load.CustomMappingsJSONManager;
-import io.github.omegabird113.cmd_delete.mappings.CustomNavMappings;
-import io.github.omegabird113.cmd_delete.mappings.INavMappings;
+import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
+import io.github.omegabird113.cmd_delete.mappings.NavMappings;
 import io.github.omegabird113.cmd_delete.mappings.Os;
-import net.fabricmc.loader.api.FabricLoader;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Locale;
+import java.util.Optional;
 
-public class ActiveMappingsManager {
-    private static final Path gamePath = FabricLoader.getInstance().getGameDir();
-    private static final Path activeFilePath = gamePath.resolve("config/cmd_delete/.active_mappings");
+import static io.github.omegabird113.cmd_delete.config.MappingsIdResolutionUtils.removeNamespaceFromId;
+import static io.github.omegabird113.cmd_delete.config.MappingsIdResolutionUtils.resolveType;
 
-    private final INavMappings WINDOWS_LINUX;
-    private final INavMappings MAC;
-    private final CustomNavMappings CUSTOM;
+public final class ActiveMappingsManager {
+    private static final Logger LOGGER = LoggingManager.getLogger(ActiveMappingsManager.class);
 
-    private final Os system;
-
-    public ActiveMappingsManager(INavMappings windowsLinux, INavMappings mac, CustomNavMappings custom, Os system) {
-        WINDOWS_LINUX = windowsLinux;
-        MAC = mac;
-        CUSTOM = custom;
-        this.system = system;
+    public @Nullable MappingsState tryResolveCustomMappings(@NonNull String id) {
+        final Optional<NavMappings> mappings = MappingsJSONManager.tryLoadCustomMappings(id);
+        return mappings.map(navMappings -> new MappingsState(navMappings, MappingsState.Type.CUSTOM, id)).orElse(null);
     }
 
-    INavMappings resolveDefaultMappings() {
-        if (system == Os.MAC)
-            return MAC;
-        return WINDOWS_LINUX;
-    }
-
-    public MappingsState tryResolveCustomMappings(String id) {
-        if (!CustomMappingsJSONManager.tryLoadCustomMappings(id, CUSTOM)) {
+    public @Nullable MappingsState tryResolveBuiltinMappings(@NonNull String id, MappingsState.@NonNull Type type) {
+        final Optional<NavMappings> mappings = MappingsJSONManager.tryLoadBuiltinMappings(id);
+        if (mappings.isEmpty())
             return null;
-        }
-        return new MappingsState(CUSTOM, MappingsState.Type.CUSTOM, id);
+        if (type == MappingsState.Type.DEFAULT)
+            id = "";
+        return new MappingsState(mappings.get(), type, id);
     }
 
-    INavMappings resolveOsMappings(String os) {
-        os = os.toLowerCase(Locale.ROOT);
-        if (os.equals("mac"))
-            return MAC;
-        return WINDOWS_LINUX;
-    }
-
-    public String resolveNamespacedId(MappingsState.Type type, String id) {
-        String prefixText = switch (type) {
-            case CUSTOM -> "custom:";
-            case BUILTIN -> "builtin:";
-            case DEFAULT -> "";
-        };
-        return prefixText + id;
-    }
-
-    public String resolveNamespacedId(MappingsState.Type type, Os os) {
-        String prefixText = switch (type) {
-            case CUSTOM -> "custom:";
-            case BUILTIN -> "builtin:";
-            case DEFAULT -> "";
-        };
-        String osText = switch (os) {
-            case WINDOWS, LINUX -> "windows_linux";
-            case MAC -> "mac";
-        };
-        return prefixText + osText;
-    }
-
-    public String resolveNamespacedId(MappingsState mappingState) {
-        MappingsState.Type type = mappingState.type();
-        String id = mappingState.id();
-        return resolveNamespacedId(type, id);
-    }
-
-    public MappingsState.Type resolveType(String namespacedId) {
-        if (namespacedId.startsWith("custom:")) {
-            return MappingsState.Type.CUSTOM;
-        } else if (namespacedId.startsWith("builtin:")) {
-            return MappingsState.Type.BUILTIN;
-        } else {
-            return MappingsState.Type.DEFAULT;
-        }
+    @NonNull String resolveDefaultMappingsNonNamespacedId() {
+        if (Os.USING == Os.MAC)
+            return "mac";
+        else
+            return "windows_linux";
     }
 
     String removeNamespaceFromId(String namespacedId) {
@@ -101,25 +52,26 @@ public class ActiveMappingsManager {
             case DEFAULT -> new MappingsState(resolveDefaultMappings(), type, id);
         };
         if (mappingsState == null)
-            return new MappingsState(resolveDefaultMappings(), MappingsState.Type.DEFAULT, "");
+            return tryResolveBuiltinMappings(resolveDefaultMappingsNonNamespacedId(), MappingsState.Type.DEFAULT);
         return mappingsState;
     }
 
     void writeActiveMappings(String namespacedId) throws IOException {
-        Files.createDirectories(activeFilePath.getParent());
-        Files.writeString(activeFilePath, namespacedId);
+        Files.createDirectories(PathConstants.getActiveMappingsFilePath().getParent());
+        Files.writeString(PathConstants.getActiveMappingsFilePath(), namespacedId);
     }
 
-    String readActiveMappings() throws IOException {
-        return Files.readString(activeFilePath);
+    @NonNull String readActiveMappings() throws IOException {
+        return Files.readString(PathConstants.getActiveMappingsFilePath());
     }
 
+    @Nullable
     public MappingsState tryGetMappings() {
         String namespacedId = "";
         try {
             namespacedId = readActiveMappings();
         } catch (IOException e) {
-            CmdDeleteClient.LOGGER.error("Error while loading active mappings from file: {}", e.getMessage());
+            LOGGER.error("Error while loading active mappings from file: {}", e.getMessage());
         }
         return resolveMappings(namespacedId);
     }
@@ -128,7 +80,7 @@ public class ActiveMappingsManager {
         try {
             writeActiveMappings(namespacedId);
         } catch (IOException e) {
-            CmdDeleteClient.LOGGER.error("Error while saving active mappings to file: {}", e.getMessage());
+            LOGGER.error("Error while saving active mappings to file: {}", e.getMessage());
         }
     }
 }
