@@ -1,14 +1,11 @@
 package io.github.omegabird113.cmd_delete.mixin;
 
 import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
-import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.input.KeyEvent;
 import org.lwjgl.glfw.GLFW;
-import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -45,11 +42,11 @@ public abstract class EditBoxMixin {
     private void cmd_delete$overrideDelete(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         NavAction action = NavMappingsManager.getCurrentMappings()
                 .getAction(keyCode, Minecraft.getInstance().getWindow());
+        int direction = ActionOffsetUtils.getOffset(action);
         switch (action) {
             case DEL_LINE_LEFT -> this.deleteCharsToPos(0);
             case DEL_LINE_RIGHT -> this.deleteCharsToPos(this.getValue().length());
-            case DEL_WORD_LEFT -> this.deleteText(-1, true);
-            case DEL_WORD_RIGHT -> this.deleteText(1, true);
+            case DEL_WORD_LEFT, DEL_WORD_RIGHT -> this.deleteWords(direction);
             case NAV_LINE_LEFT, NAV_TEXT_START -> this.moveCursorTo(0, false);
             case NAV_LINE_RIGHT, NAV_TEXT_END -> this.moveCursorTo(this.getValue().length(), false);
             case SEL_LINE_LEFT, SEL_TEXT_START -> this.moveCursorTo(0, true);
@@ -74,7 +71,7 @@ public abstract class EditBoxMixin {
                 return;
             }
             case NONE -> {
-                if (!NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation() || event.isEscape() || event.key() == GLFW.GLFW_KEY_ENTER)
+                if (!NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation() || keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER)
                     return;
             }
         }

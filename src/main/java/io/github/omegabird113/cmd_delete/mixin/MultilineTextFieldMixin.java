@@ -7,7 +7,6 @@ import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.MultilineTextField;
 import net.minecraft.client.gui.components.Whence;
-import net.minecraft.client.input.KeyEvent;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
@@ -145,7 +144,7 @@ public abstract class MultilineTextFieldMixin {
                 this.seekCursorLine(1);
             }
             case NONE -> {
-                if (!NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation() || event.isEscape() || event.key() == GLFW.GLFW_KEY_ENTER)
+                if (!NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation() || keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER)
                     return;
             }
         }
@@ -176,9 +175,8 @@ public abstract class MultilineTextFieldMixin {
     private MultilineTextFieldStringViewAccessor cmd_delete$getCursorLineView() {
         for (Object lineView : this.displayLines) {
             final MultilineTextFieldStringViewAccessor accessor = (MultilineTextFieldStringViewAccessor) lineView;
-            if (this.cursor >= accessor.cmd_delete$getBeginIndex() && this.cursor <= accessor.cmd_delete$getEndIndex()) {
+            if (this.cursor >= accessor.cmd_delete$getBeginIndex() && this.cursor <= accessor.cmd_delete$getEndIndex())
                 return accessor;
-            }
         }
 
         return this.displayLines.isEmpty()
@@ -189,30 +187,20 @@ public abstract class MultilineTextFieldMixin {
     @Unique
     private int cmd_delete$getPreviousWordStart() {
         int pos = Math.clamp(this.cursor, 0, this.value.length());
-
-        while (pos > 0 && Character.isWhitespace(this.value.charAt(pos - 1))) {
+        while (pos > 0 && Character.isWhitespace(this.value.charAt(pos - 1)))
             pos--;
-        }
-
-        while (pos > 0 && !Character.isWhitespace(this.value.charAt(pos - 1))) {
+        while (pos > 0 && !Character.isWhitespace(this.value.charAt(pos - 1)))
             pos--;
-        }
-
         return pos;
     }
 
     @Unique
     private int cmd_delete$getNextWordStart() {
         int pos = Math.clamp(this.cursor, 0, this.value.length());
-
-        while (pos < this.value.length() && !Character.isWhitespace(this.value.charAt(pos))) {
+        while (pos < this.value.length() && !Character.isWhitespace(this.value.charAt(pos)))
             pos++;
-        }
-
-        while (pos < this.value.length() && Character.isWhitespace(this.value.charAt(pos))) {
+        while (pos < this.value.length() && Character.isWhitespace(this.value.charAt(pos)))
             pos++;
-        }
-
         return pos;
     }
 }

@@ -6,7 +6,6 @@ import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.KeyCombo;
 import io.github.omegabird113.cmd_delete.config.MappingsRegistry;
-import net.minecraft.client.gui.screens.Screen;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import org.lwjgl.glfw.GLFW;
@@ -29,11 +28,10 @@ public record NavMappings(@NonNull MappingsRegistry registry) {
 
     @Contract(pure = true)
     public NavAction getAction(int key, Window window) {
-        boolean shift = Screen.hasShiftDown();
-        boolean alt = Screen.hasAltDown();
-        boolean control = Screen.hasControlDown();
-
-        boolean windows = InputConstants.isKeyDown(window.getWindow(), GLFW.GLFW_KEY_LEFT_SUPER) || InputConstants.isKeyDown(window.getWindow(), GLFW.GLFW_KEY_RIGHT_SUPER);
+        final boolean shift = InputConstants.isKeyDown(window.getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT) || InputConstants.isKeyDown(window.getWindow(), GLFW.GLFW_KEY_RIGHT_SHIFT);
+        final boolean alt = InputConstants.isKeyDown(window.getWindow(), GLFW.GLFW_KEY_LEFT_ALT) || InputConstants.isKeyDown(window.getWindow(), GLFW.GLFW_KEY_RIGHT_ALT);
+        final boolean control = InputConstants.isKeyDown(window.getWindow(), GLFW.GLFW_KEY_LEFT_CONTROL) || InputConstants.isKeyDown(window.getWindow(), GLFW.GLFW_KEY_RIGHT_CONTROL);
+        final boolean windows = InputConstants.isKeyDown(window.getWindow(), GLFW.GLFW_KEY_LEFT_SUPER) || InputConstants.isKeyDown(window.getWindow(), GLFW.GLFW_KEY_RIGHT_SUPER);
 
         final KeyCombo keyCombo = new KeyCombo(key, shift, alt, control, windows);
         return getAction(keyCombo);
