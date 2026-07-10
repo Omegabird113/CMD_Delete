@@ -1,4 +1,4 @@
-### 1.3.0 Release Candidate 1
+### 1.3.0
 
 Changes:
 
@@ -10,4 +10,7 @@ Changes:
 - Added the `/navmappings debug dumpActions` and `/navmappings debug dumpFeatureFlags` subcommands
 - Internal code improvements
 
-Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.2.0+mc26.1...1.3.0-rc1+mc26.1
+Changes since RC 1:
+- Internal code improvements
+
+Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.2.0+mc26.1...1.3.0+mc26.1
