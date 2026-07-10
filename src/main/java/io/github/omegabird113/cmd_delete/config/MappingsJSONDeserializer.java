@@ -111,7 +111,6 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
         return new MappingsRegistry(localKeys, (disabledKeys.isEmpty() ? null : disabledKeys), List.copyOf(container.systems()), ff, inherits, container.name(), container.author(), container.description(), container.version(), container.id());
     }
 
-    @Contract("_, _, _ -> new")
     private @NonNull FeatureFlags parseFlags(JsonObject root, int fv, String inherits) {
         if (fv == 2)
             return new FeatureFlags(false, true);
@@ -119,7 +118,7 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
             final JsonObject flags;
             try {
                 flags = requireObject(root, "flags");
-            } catch (JsonParseException _) {
+            } catch (JsonParseException ignored) {
                 return new FeatureFlags(false, true);
             }
             Boolean overrideVanillaNavigation = getNullableBoolean(flags, "overrideVanillaNavigation");
