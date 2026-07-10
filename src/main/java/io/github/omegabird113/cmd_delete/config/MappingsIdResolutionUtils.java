@@ -11,7 +11,7 @@ public final class MappingsIdResolutionUtils {
 
     @Contract(pure = true)
     public static @NonNull String resolveNamespacedId(MappingsState.@NonNull Type type, String id) {
-        String prefixText = switch (type) {
+        final String prefixText = switch (type) {
             case CUSTOM -> "custom:";
             case BUILTIN -> "builtin:";
             case DEFAULT -> "";
@@ -21,12 +21,12 @@ public final class MappingsIdResolutionUtils {
 
     @Contract(pure = true)
     public static @NonNull String resolveNamespacedId(MappingsState.@NonNull Type type, Os os) {
-        String prefixText = switch (type) {
+        final String prefixText = switch (type) {
             case CUSTOM -> "custom:";
             case BUILTIN -> "builtin:";
             case DEFAULT -> "";
         };
-        String osText = switch (os) {
+        final String osText = switch (os) {
             case WINDOWS, LINUX -> "windows_linux";
             case MAC -> "mac";
         };
@@ -34,8 +34,8 @@ public final class MappingsIdResolutionUtils {
     }
 
     public static @NonNull String resolveNamespacedId(@NonNull MappingsState mappingState) {
-        MappingsState.Type type = mappingState.type();
-        String id = mappingState.id();
+        final MappingsState.Type type = mappingState.type();
+        final String id = mappingState.id();
         return resolveNamespacedId(type, id);
     }
 

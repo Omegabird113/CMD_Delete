@@ -26,64 +26,59 @@ public final class MappingsJSONManager {
     }
 
     private static @NonNull MappingsRegistry loadFromResourceMappingsDir(String id) throws IOException {
-        Path path = PathConstants.MAPPINGS_RESOURCE_PATH.resolve(id + ".json");
+        final Path path = PathConstants.getMappingsResourcePath().resolve(id + ".json");
 
-        Gson gson = new GsonBuilder()
+        final Gson gson = new GsonBuilder()
                 .registerTypeAdapter(MappingsRegistry.class, new MappingsJSONDeserializer())
                 .create();
 
         try (java.io.BufferedReader reader = Files.newBufferedReader(path)) {
-            MappingsRegistry registry = gson.fromJson(reader, MappingsRegistry.class);
-            if (!registry.getId().equals(id))
-                throw new JsonParseException("Builtin mappings id \"" + registry.getId() + "\" does not match filename \"" + id + "\"");
+            final MappingsRegistry registry = gson.fromJson(reader, MappingsRegistry.class);
+            if (!registry.id().equals(id))
+                throw new JsonParseException("Builtin mappings id \"" + registry.id() + "\" does not match filename \"" + id + "\"");
             return registry;
         }
     }
 
     private static @NonNull MappingsRegistry loadFromCustomMappingsDir(String id) throws IOException {
-        Path path = PathConstants.MAPPINGS_JSONS_PATH.resolve(id + ".json");
+        final Path path = PathConstants.getMappingsJSONPath().resolve(id + ".json");
         if (!Files.exists(path))
             throw new FileNotFoundException("Custom mapping file not found at: " + path);
 
-        Gson gson = new GsonBuilder()
+        final Gson gson = new GsonBuilder()
                 .registerTypeAdapter(MappingsRegistry.class, new MappingsJSONDeserializer())
                 .create();
 
         try (java.io.BufferedReader reader = Files.newBufferedReader(path)) {
-            MappingsRegistry registry = gson.fromJson(reader, MappingsRegistry.class);
-            if (!registry.getId().equals(id))
-                throw new JsonParseException("Custom mappings id \"" + registry.getId() + "\" does not match filename \"" + id + "\"");
+            final MappingsRegistry registry = gson.fromJson(reader, MappingsRegistry.class);
+            if (!registry.id().equals(id))
+                throw new JsonParseException("Custom mappings id \"" + registry.id() + "\" does not match filename \"" + id + "\"");
             return registry;
         }
     }
 
-    public static boolean tryLoadCustomMappings(String id, NavMappings mappings) {
-        Optional<MappingsRegistry> registry = getRegistryFrom(true, id);
+    public static Optional<NavMappings> tryLoadCustomMappings(String id) {
+        final Optional<MappingsRegistry> registry = getRegistryFrom(true, id);
         if (registry.isPresent()) {
             try {
-                MappingsRegistry resolved = resolveInheritance(registry.get());
-                mappings.setRegistry(resolved);
-                return true;
+                final MappingsRegistry resolved = resolveInheritance(registry.get());
+                return Optional.of(new NavMappings(resolved));
             } catch (IOException e) {
                 LOGGER.error("Failed to resolve custom mappings inheritance for \"{}\"", id, e);
-                return false;
+                return Optional.empty();
             }
         } else
-            return false;
+            return Optional.empty();
     }
 
-    public static boolean tryLoadBuiltinMappings(String id, NavMappings mappings) {
-        Optional<MappingsRegistry> registry = getRegistryFrom(false, id);
-        if (registry.isPresent()) {
-            mappings.setRegistry(registry.get());
-            return true;
-        } else
-            return false;
+    public static Optional<NavMappings> tryLoadBuiltinMappings(String id) {
+        final Optional<MappingsRegistry> registry = getRegistryFrom(false, id);
+        return registry.map(NavMappings::new);
     }
 
     public static Optional<MappingsRegistry> getRegistryFrom(boolean custom, String id) {
         try {
-            MappingsRegistry registry = custom ? loadFromCustomMappingsDir(id) : loadFromResourceMappingsDir(id);
+            final MappingsRegistry registry = custom ? loadFromCustomMappingsDir(id) : loadFromResourceMappingsDir(id);
             return Optional.of(registry);
         } catch (FileNotFoundException ignored) {
             LOGGER.error("Could not access {} mapping file \"{}\" because it does not exist.", custom ? "custom" : "builtin", id);
@@ -95,28 +90,28 @@ public final class MappingsJSONManager {
     }
 
     private static @NonNull MappingsRegistry resolveInheritance(MappingsRegistry startRegistry) throws IOException {
-        List<MappingsRegistry> registries = new ArrayList<>();
-        List<String> ids = new ArrayList<>();
+        final List<MappingsRegistry> registries = new ArrayList<>();
+        final List<String> ids = new ArrayList<>();
         MappingsRegistry current = startRegistry;
         String namespacePrefix = "custom:";
         while (true) {
             registries.add(current);
-            ids.add(namespacePrefix + current.getId());
-            if (current.getInherits().isEmpty()) {
+            ids.add(namespacePrefix + current.id());
+            if (current.inherits().isEmpty()) {
                 if (registries.size() == 1)
-                    LOGGER.info("Resolved no inheritance from mappings: \"{}\"", namespacePrefix + current.getId());
+                    LOGGER.info("Resolved no inheritance from mappings: \"{}\"", namespacePrefix + current.id());
                 else
-                    LOGGER.info("Resolved inheritance of mappings \"{}\" with a chain of: {}", namespacePrefix + current.getId(), String.join(" -> ", ids));
+                    LOGGER.info("Resolved inheritance of mappings \"{}\" with a chain of: {}", namespacePrefix + current.id(), String.join(" -> ", ids));
                 break;
             } else {
-                boolean inheritsCustom = current.getInherits().startsWith("custom:");
-                String idToGet = MappingsIdResolutionUtils.removeNamespaceFromId(current.getInherits());
-                Optional<MappingsRegistry> newRegistry = getRegistryFrom(inheritsCustom, idToGet);
+                boolean inheritsCustom = current.inherits().startsWith("custom:");
+                final String idToGet = MappingsIdResolutionUtils.removeNamespaceFromId(current.inherits());
+                final Optional<MappingsRegistry> newRegistry = getRegistryFrom(inheritsCustom, idToGet);
                 namespacePrefix = inheritsCustom ? "custom:" : "builtin:";
                 if (newRegistry.isEmpty())
-                    throw new IOException("Failed to resolve inheritance of " + (inheritsCustom ? "custom" : "builtin") + " mappings \"" + idToGet + "\" by mappings \"" + current.getId() + "\" because the inherited registry couldn't load.");
-                if (ids.contains(namespacePrefix + newRegistry.get().getId()))
-                    throw new IOException("Duplicate inheritance of " + (inheritsCustom ? "custom" : "builtin") + " mappings \"" + idToGet + "\" by mappings \"" + current.getId() + "\" in chain of: " + String.join(" -> ", ids));
+                    throw new IOException("Failed to resolve inheritance of " + (inheritsCustom ? "custom" : "builtin") + " mappings \"" + idToGet + "\" by mappings \"" + current.id() + "\" because the inherited registry couldn't load.");
+                if (ids.contains(namespacePrefix + newRegistry.get().id()))
+                    throw new IOException("Duplicate inheritance of " + (inheritsCustom ? "custom" : "builtin") + " mappings \"" + idToGet + "\" by mappings \"" + current.id() + "\" in chain of: " + String.join(" -> ", ids));
                 current = newRegistry.get();
             }
         }
@@ -125,7 +120,7 @@ public final class MappingsJSONManager {
     }
 
     public static void tryMakeConfigFiles() {
-        File configDirectory = PathConstants.MAPPINGS_JSONS_PATH.toFile();
+        final File configDirectory = PathConstants.getMappingsJSONPath().toFile();
         if (!configDirectory.exists() || !configDirectory.isDirectory()) {
             boolean s = configDirectory.mkdirs();
             if (!s)
@@ -133,7 +128,7 @@ public final class MappingsJSONManager {
             else
                 LOGGER.info("Created mappings config directory at: {}", configDirectory.getAbsolutePath());
         }
-        File activeMappingsFile = PathConstants.ACTIVE_MAPPINGS_FILE_PATH.toFile();
+        final File activeMappingsFile = PathConstants.getActiveMappingsFilePath().toFile();
         if (!activeMappingsFile.exists() || !activeMappingsFile.isFile()) {
             try {
                 boolean s = activeMappingsFile.createNewFile();
@@ -149,15 +144,15 @@ public final class MappingsJSONManager {
 
     @Contract(pure = true)
     public static @NonNull List<String> getAvailableOptions(boolean namespacedIds) {
-        List<String> options = new ArrayList<>();
+        final List<String> options = new ArrayList<>();
 
-        File configDirectory = PathConstants.MAPPINGS_JSONS_PATH.toFile();
+        final File configDirectory = PathConstants.getMappingsJSONPath().toFile();
         if (!configDirectory.exists() || !configDirectory.isDirectory()) {
             tryMakeConfigFiles();
             return options;
         }
 
-        File[] files = configDirectory.listFiles();
+        final File[] files = configDirectory.listFiles();
         if (files == null)
             return options;
 

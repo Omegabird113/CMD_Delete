@@ -9,8 +9,10 @@ public enum Os {
     LINUX,
     MAC;
 
+    public static final Os USING = getCurrent();
+
     @Contract(pure = true)
-    public static Os getCurrent() {
+    private static Os getCurrent() {
         String os = System.getProperty("os.name").toLowerCase(Locale.ROOT);
         if (os.contains("mac"))
             return MAC;
