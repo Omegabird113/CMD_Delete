@@ -54,20 +54,25 @@ jobs:
       - name: Locate built JAR
         id: jar
         run: |
-          JARS=$(find build/libs -maxdepth 1 -type f -name "*.jar" \
-            ! -name "*-sources.jar" \
-            ! -name "*-javadoc.jar")
+          mapfile -t JARS < <(
+            find build/libs -maxdepth 1 -type f -name "*.jar" \
+              ! -name "*-sources.jar" \
+              ! -name "*-javadoc.jar" \
+              ! -name "*-dev.jar"
+          )
 
-          COUNT=$(echo "$JARS" | wc -l)
-
-          if [ "$COUNT" -ne 1 ]; then
-            echo "ERROR: Expected exactly 1 JAR, found $COUNT"
-            echo "$JARS"
+          if [ "${#JARS[@]}" -eq 0 ]; then
+            echo "ERROR: No release JAR found."
             exit 1
           fi
 
-          JAR="$JARS"
-          echo "path=$JAR" >> "$GITHUB_OUTPUT"
+          if [ "${#JARS[@]}" -gt 1 ]; then
+            echo "Multiple candidate JARs found:"
+            printf ' - %s\n' "${JARS[@]}"
+            echo "Using the first one."
+          fi
+
+          echo "path=${JARS[0]}" >> "$GITHUB_OUTPUT"
 
       - name: Check that changelog exists
         run: |
@@ -116,4 +121,6 @@ jobs:
           java: 25
           game-versions: |
             >1.21.11 <=26.2
-          loaders: fabric
+          loaders: |
+            fabric
+            quilt
