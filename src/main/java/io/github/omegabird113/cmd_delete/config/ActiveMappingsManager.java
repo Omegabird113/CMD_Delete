@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Optional;
 
-import static io.github.omegabird113.cmd_delete.config.MappingsIdResolutionUtils.removeNamespaceFromId;
 import static io.github.omegabird113.cmd_delete.config.MappingsIdResolutionUtils.resolveType;
 
 public final class ActiveMappingsManager {
@@ -43,13 +42,14 @@ public final class ActiveMappingsManager {
         return namespacedId.replaceFirst("custom:|builtin:", "");
     }
 
-    public MappingsState resolveMappings(String namespacedId) {
-        String id = removeNamespaceFromId(namespacedId);
-        MappingsState.Type type = resolveType(namespacedId);
-        MappingsState mappingsState = switch (type) {
+    public @Nullable MappingsState resolveMappings(@NonNull String namespacedId) {
+        final String id = removeNamespaceFromId(namespacedId);
+        final MappingsState.Type type = resolveType(namespacedId);
+        final MappingsState mappingsState = switch (type) {
             case CUSTOM -> tryResolveCustomMappings(id);
-            case BUILTIN -> new MappingsState(resolveOsMappings(id), type, id);
-            case DEFAULT -> new MappingsState(resolveDefaultMappings(), type, id);
+            case BUILTIN -> tryResolveBuiltinMappings(removeNamespaceFromId(id), MappingsState.Type.BUILTIN);
+            case DEFAULT ->
+                    tryResolveBuiltinMappings(resolveDefaultMappingsNonNamespacedId(), MappingsState.Type.DEFAULT);
         };
         if (mappingsState == null)
             return tryResolveBuiltinMappings(resolveDefaultMappingsNonNamespacedId(), MappingsState.Type.DEFAULT);

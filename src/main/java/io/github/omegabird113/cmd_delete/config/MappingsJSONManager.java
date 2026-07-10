@@ -116,7 +116,25 @@ public final class MappingsJSONManager {
             }
         }
         LOGGER.debug("Resolved inheritance chain of {} ({}) from registries: {\n{}\n}", ids, registries.stream().map(MappingsRegistry::hashCode).toArray(), String.join("\n--------------------\n", registries.stream().map(MappingsRegistry::toString).toList()));
-        return MappingsInheritanceManager.merge(registries.reversed());
+        return MappingsInheritanceManager.merge(reverseList(registries));
+    }
+
+    public static <T> List<T> reverseList(List<T> list) {
+        if (list == null || list.size() <= 1)
+            return List.of();
+
+        ArrayList<T> internal = new ArrayList<>(list);
+        int left = 0;
+        int right = list.size() - 1;
+        while (left < right) {
+            T item = internal.get(left);
+            internal.set(left, list.get(right));
+            internal.set(right, item);
+
+            left++;
+            right--;
+        }
+        return List.copyOf(internal);
     }
 
     public static void tryMakeConfigFiles() {

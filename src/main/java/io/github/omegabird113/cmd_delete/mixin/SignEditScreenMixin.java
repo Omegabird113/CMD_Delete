@@ -34,7 +34,7 @@ public abstract class SignEditScreenMixin {
 
     @Shadow
     @Final
-    protected SignBlockEntity sign;
+    private SignBlockEntity sign;
 
     @Shadow
     private TextFieldHelper signField;
@@ -128,7 +128,7 @@ public abstract class SignEditScreenMixin {
                 if (NavMappingsManager.getCurrentFeatureFlags().crossLineSignMovement())
                     this.line = (this.line + direction) & 3;
                 else
-                    this.line = Math.clamp(this.messages.length - 1, 0, this.line + direction);
+                    this.line = direction > 0 ? Math.min(this.messages.length - 1, this.line + direction) : Math.max(0, this.line + direction);
                 this.signField.setCursorToEnd(false);
             }
             case NONE -> {

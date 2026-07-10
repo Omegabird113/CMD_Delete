@@ -33,13 +33,13 @@ public abstract class EditBoxMixin {
     public abstract int getCursorPosition();
 
     @Shadow
-    public abstract void moveCursor(int dir, boolean extendSelection);
-
-    @Shadow
     public abstract void deleteChars(int dir);
 
     @Shadow
     protected abstract boolean isEditable();
+
+    @Shadow
+    private int cursorPos;
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideDelete(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
@@ -56,8 +56,6 @@ public abstract class EditBoxMixin {
                 int end = this.getValue().length();
                 this.deleteChars(end - cursor);
             }
-            case DEL_LINE_LEFT -> this.deleteCharsToPos(0);
-            case DEL_LINE_RIGHT -> this.deleteCharsToPos(this.getValue().length());
             case DEL_WORD_LEFT, DEL_WORD_RIGHT -> this.deleteWords(direction);
             case NAV_LINE_LEFT, NAV_TEXT_START -> this.moveCursorTo(0);
             case NAV_LINE_RIGHT, NAV_TEXT_END -> this.moveCursorTo(this.getValue().length());
@@ -80,19 +78,13 @@ public abstract class EditBoxMixin {
                 this.moveCursorTo(this.getWordPosition(direction));
                 this.shiftPressed = old;
             }
-            default -> {
-            case NAV_LINE_LEFT, NAV_TEXT_START -> this.moveCursorTo(0, false);
-            case NAV_LINE_RIGHT, NAV_TEXT_END -> this.moveCursorTo(this.getValue().length(), false);
-            case SEL_LINE_LEFT, SEL_TEXT_START -> this.moveCursorTo(0, true);
-            case SEL_LINE_RIGHT, SEL_TEXT_END -> this.moveCursorTo(this.getValue().length(), true);
-            case NAV_WORD_LEFT -> this.moveCursorTo(this.getWordPosition(-1), false);
-            case NAV_WORD_RIGHT -> this.moveCursorTo(this.getWordPosition(1), false);
-            case SEL_WORD_LEFT -> this.moveCursorTo(this.getWordPosition(-1), true);
-            case SEL_WORD_RIGHT -> this.moveCursorTo(this.getWordPosition(1), true);
-            case OVR_NAV_CHAR_LEFT -> this.moveCursor(-1, false);
-            case OVR_NAV_CHAR_RIGHT -> this.moveCursor(1, false);
-            case OVR_SEL_CHAR_LEFT -> this.moveCursor(-1, true);
-            case OVR_SEL_CHAR_RIGHT -> this.moveCursor(1, true);
+            case OVR_NAV_CHAR_LEFT, OVR_NAV_CHAR_RIGHT -> this.moveCursorTo(this.cursorPos + direction);
+            case OVR_SEL_CHAR_LEFT, OVR_SEL_CHAR_RIGHT -> {
+                boolean old = this.shiftPressed;
+                this.shiftPressed = true;
+                this.moveCursorTo(this.cursorPos + direction);
+                this.shiftPressed = old;
+            }
             case OVR_DEL_CHAR_LEFT -> {
                 if (this.isEditable())
                     this.deleteChars(-1);

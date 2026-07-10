@@ -15,7 +15,7 @@ public final class MappingsInheritanceManager {
 
     @Contract("_ -> new")
     public static @NonNull MappingsRegistry merge(@NonNull List<MappingsRegistry> toMerge) {
-        final MappingsRegistry first = toMerge.getFirst();
+        final MappingsRegistry first = toMerge.get(0);
         final Map<KeyCombo, NavAction> firstMap = first.getInternalRegistry();
         final Map<KeyCombo, NavAction> localRegistry = new HashMap<>(firstMap);
         FeatureFlags currentFeatureFlags = first.featureFlags();
@@ -31,7 +31,7 @@ public final class MappingsInheritanceManager {
             currentFeatureFlags = FeatureFlags.merge(currentFeatureFlags, currentRegistry.featureFlags());
         }
 
-        final MappingsRegistry last = toMerge.getLast();
+        final MappingsRegistry last = toMerge.get(toMerge.size() - 1);
 
         return new MappingsRegistry(localRegistry, null, last.systems(), currentFeatureFlags, "", last.name(), last.author(), last.description(), last.version(), last.id());
     }
