@@ -33,10 +33,9 @@ jobs:
       - name: Read gradle.properties
         id: props
         run: |
+          set -euo pipefail
           version=$(grep -E '^mod_version\s*=' gradle.properties | sed 's/.*=\s*//')
-          loader_version=$(grep -E '^loader_version\s*=' gradle.properties | sed 's/.*=\s*//')
           echo "version=$version" >> "$GITHUB_OUTPUT"
-          echo "loader_version=$loader_version" >> "$GITHUB_OUTPUT"
 
       - name: Set up JDK
         uses: actions/setup-java@v5
@@ -49,28 +48,35 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build
-        run: ./gradlew build
+        run: ./gradlew clean build --stacktrace
 
       - name: Locate built JAR
         id: jar
         run: |
-          JARS=$(find build/libs -maxdepth 1 -type f -name "*.jar" \
-            ! -name "*-sources.jar" \
-            ! -name "*-javadoc.jar")
+          set -euo pipefail
+          mapfile -t JARS < <(
+            find build/libs -maxdepth 1 -type f -name "*.jar" \
+              ! -name "*-sources.jar" \
+              ! -name "*-javadoc.jar" \
+              ! -name "*-dev.jar"
+          )
 
-          COUNT=$(echo "$JARS" | wc -l)
-
-          if [ "$COUNT" -ne 1 ]; then
-            echo "ERROR: Expected exactly 1 JAR, found $COUNT"
-            echo "$JARS"
+          if [ "${#JARS[@]}" -eq 0 ]; then
+            echo "ERROR: No release JAR found."
             exit 1
           fi
 
-          JAR="$JARS"
-          echo "path=$JAR" >> "$GITHUB_OUTPUT"
+          if [ "${#JARS[@]}" -gt 1 ]; then
+            echo "Multiple candidate JARs found:"
+            printf ' - %s\n' "${JARS[@]}"
+            echo "Using the first one."
+          fi
+
+          echo "path=${JARS[0]}" >> "$GITHUB_OUTPUT"
 
       - name: Check that changelog exists
         run: |
+          set -euo pipefail
           test -f changelog.md || {
             echo "Missing changelog.md"
             exit 1
@@ -80,6 +86,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          set -euo pipefail
           if gh release view "${{ steps.props.outputs.version }}" >/dev/null 2>&1; then
             echo "ERROR: Release ${{ steps.props.outputs.version }} already exists"
             exit 1
@@ -89,6 +96,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          set -euo pipefail
           PRERELEASE_FLAG=""
           if [ "${{ inputs.release_type }}" != "release" ]; then
             PRERELEASE_FLAG="--prerelease"
@@ -101,7 +109,7 @@ jobs:
             --notes-file changelog.md \
             $PRERELEASE_FLAG
 
-      - name: Publish to Modrinth, CurseForge, & GitHub
+      - name: Publish to Modrinth & CurseForge
         uses: Kir-Antipov/mc-publish@v3
         with:
           modrinth-id: xrOWVab9
@@ -116,4 +124,6 @@ jobs:
           java: 21
           game-versions: |
             >=1.20.5 <1.21.6
-          loaders: fabric
+          loaders: |
+            fabric
+            quilt

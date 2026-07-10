@@ -3,7 +3,9 @@ package io.github.omegabird113.cmd_delete.mappings;
 import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.command.MappingsInfoCollectionUtils;
 import io.github.omegabird113.cmd_delete.config.ActiveMappingsManager;
+import io.github.omegabird113.cmd_delete.config.FeatureFlags;
 import io.github.omegabird113.cmd_delete.config.MappingsIdResolutionUtils;
+import io.github.omegabird113.cmd_delete.config.MappingsRegistry;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
@@ -12,25 +14,33 @@ import java.util.List;
 
 public final class NavMappingsManager {
     private static final Logger LOGGER = LoggingManager.getLogger(NavMappingsManager.class);
-    private static final @NonNull NavMappings NAV_MAPPINGS = new NavMappings();
-    private static final @NonNull ActiveMappingsManager ACTIVE_MAPPINGS_MANAGER = new ActiveMappingsManager(
-            NAV_MAPPINGS, Os.getCurrent()
-    );
+    private static final @NonNull ActiveMappingsManager ACTIVE_MAPPINGS_MANAGER = new ActiveMappingsManager();
     private static @Nullable MappingsState currentMappingsState;
 
     private NavMappingsManager() {
     }
 
-    public static NavMappings getCurrentMappings() {
-        if (currentMappingsState == null) {
-            return NAV_MAPPINGS;
-        }
-        return currentMappingsState.mappings();
+    public static @NonNull MappingsState getMappingsState() {
+        if (currentMappingsState == null)
+            throw new IllegalStateException("No current mappings state has been set, but the mappings were accessed");
+        return currentMappingsState;
+    }
+
+    public static @NonNull NavMappings getCurrentMappings() {
+        return getMappingsState().mappings();
+    }
+
+    public static @NonNull MappingsRegistry getCurrentMappingsRegistry() {
+        return getMappingsState().mappings().registry();
+    }
+
+    public static @NonNull FeatureFlags getCurrentFeatureFlags() {
+        return getMappingsState().mappings().registry().featureFlags();
     }
 
     private static void logMappings() {
         assert currentMappingsState != null;
-        LOGGER.info("Mappings id \"{}\" loaded with supported systems \"{}\" and Coverage of {}% with a registry size of {}. It supports the actions: {}", MappingsIdResolutionUtils.resolveNamespacedId(getMappingsState()), List.of(currentMappingsState.mappings().getMappingsSupportedSystems()), getCurrentMappings().getCoverage() * 100, currentMappingsState.mappings().getRegistry().getSize(), currentMappingsState.mappings().getPossibleActions());
+        LOGGER.info("Mappings id \"{}\" loaded with supported systems \"{}\" and Coverage of {}% with a registry size of {}. It supports the actions: {}", MappingsIdResolutionUtils.resolveNamespacedId(getMappingsState()), List.of(currentMappingsState.mappings().getMappingsSupportedSystems()), getCurrentMappings().getCoverage() * 100, currentMappingsState.mappings().registry().getSize(), currentMappingsState.mappings().getPossibleActions());
         LOGGER.info("The active mappings' info in \"/navmappings info\" will show as: \"{}\"", MappingsInfoCollectionUtils.getInfoFrom(getMappingsState(), false).replace("\n", " "));
         LOGGER.debug("Mappings state loaded: \"{}\"", currentMappingsState);
     }
@@ -73,10 +83,5 @@ public final class NavMappingsManager {
                 MappingsIdResolutionUtils.resolveNamespacedId(getMappingsState())
         );
         logMappings();
-    }
-
-    public static @NonNull MappingsState getMappingsState() {
-        assert currentMappingsState != null;
-        return currentMappingsState;
     }
 }

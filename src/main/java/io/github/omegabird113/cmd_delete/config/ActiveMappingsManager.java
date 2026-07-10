@@ -10,45 +10,39 @@ import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Optional;
 
 import static io.github.omegabird113.cmd_delete.config.MappingsIdResolutionUtils.removeNamespaceFromId;
 import static io.github.omegabird113.cmd_delete.config.MappingsIdResolutionUtils.resolveType;
 
-public class ActiveMappingsManager {
+public final class ActiveMappingsManager {
     private static final Logger LOGGER = LoggingManager.getLogger(ActiveMappingsManager.class);
-    private final @NonNull NavMappings navMappings;
-    private final @NonNull Os system;
-
-    public ActiveMappingsManager(@NonNull NavMappings navMappings, @NonNull Os system) {
-        this.navMappings = navMappings;
-        this.system = system;
-    }
 
     public @Nullable MappingsState tryResolveCustomMappings(@NonNull String id) {
-        if (!MappingsJSONManager.tryLoadCustomMappings(id, navMappings))
-            return null;
-        return new MappingsState(navMappings, MappingsState.Type.CUSTOM, id);
+        final Optional<NavMappings> mappings = MappingsJSONManager.tryLoadCustomMappings(id);
+        return mappings.map(navMappings -> new MappingsState(navMappings, MappingsState.Type.CUSTOM, id)).orElse(null);
     }
 
     public @Nullable MappingsState tryResolveBuiltinMappings(@NonNull String id, MappingsState.@NonNull Type type) {
-        if (!MappingsJSONManager.tryLoadBuiltinMappings(id, navMappings))
+        final Optional<NavMappings> mappings = MappingsJSONManager.tryLoadBuiltinMappings(id);
+        if (mappings.isEmpty())
             return null;
         if (type == MappingsState.Type.DEFAULT)
             id = "";
-        return new MappingsState(navMappings, type, id);
+        return new MappingsState(mappings.get(), type, id);
     }
 
     @NonNull String resolveDefaultMappingsNonNamespacedId() {
-        if (system == Os.MAC)
+        if (Os.USING == Os.MAC)
             return "mac";
         else
             return "windows_linux";
     }
 
     public @Nullable MappingsState resolveMappings(@NonNull String namespacedId) {
-        String id = removeNamespaceFromId(namespacedId);
-        MappingsState.Type type = resolveType(namespacedId);
-        MappingsState mappingsState = switch (type) {
+        final String id = removeNamespaceFromId(namespacedId);
+        final MappingsState.Type type = resolveType(namespacedId);
+        final MappingsState mappingsState = switch (type) {
             case CUSTOM -> tryResolveCustomMappings(id);
             case BUILTIN -> tryResolveBuiltinMappings(removeNamespaceFromId(id), MappingsState.Type.BUILTIN);
             case DEFAULT ->
@@ -60,12 +54,12 @@ public class ActiveMappingsManager {
     }
 
     void writeActiveMappings(String namespacedId) throws IOException {
-        Files.createDirectories(PathConstants.ACTIVE_MAPPINGS_FILE_PATH.getParent());
-        Files.writeString(PathConstants.ACTIVE_MAPPINGS_FILE_PATH, namespacedId);
+        Files.createDirectories(PathConstants.getActiveMappingsFilePath().getParent());
+        Files.writeString(PathConstants.getActiveMappingsFilePath(), namespacedId);
     }
 
     @NonNull String readActiveMappings() throws IOException {
-        return Files.readString(PathConstants.ACTIVE_MAPPINGS_FILE_PATH);
+        return Files.readString(PathConstants.getActiveMappingsFilePath());
     }
 
     @Nullable

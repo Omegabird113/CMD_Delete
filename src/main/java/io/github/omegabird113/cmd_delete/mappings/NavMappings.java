@@ -2,6 +2,7 @@ package io.github.omegabird113.cmd_delete.mappings;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Window;
+import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.KeyCombo;
 import io.github.omegabird113.cmd_delete.config.MappingsRegistry;
@@ -14,25 +15,15 @@ import java.util.Arrays;
 
 import static io.github.omegabird113.cmd_delete.actions.NavAction.NONE;
 
-public final class NavMappings {
-    private MappingsRegistry registry = null;
-
-    public MappingsRegistry getRegistry() {
-        return registry;
-    }
-
-    public void setRegistry(MappingsRegistry registry) {
-        this.registry = registry;
-    }
-
+public record NavMappings(@NonNull MappingsRegistry registry) {
     @Contract(pure = true)
-    public NavAction getAction(int key, boolean shift, boolean altOption, boolean control, boolean superCommand) {
-        if (registry == null)
-            return NONE;
-        KeyCombo registryKey = new KeyCombo(key, shift, altOption, control, superCommand);
-        NavAction action = registry.get(registryKey);
+    public NavAction getAction(KeyCombo keyCombo) {
+        final NavAction action = registry.get(keyCombo);
         if (action != null)
-            return action;
+            if (ActionOffsetUtils.isOverrideAction(action))
+                return (registry.featureFlags().overrideVanillaNavigation() ? action : NONE);
+            else
+                return action;
         return NONE;
     }
 
@@ -44,13 +35,12 @@ public final class NavMappings {
 
         boolean windows = InputConstants.isKeyDown(window.getWindow(), GLFW.GLFW_KEY_LEFT_SUPER) || InputConstants.isKeyDown(window.getWindow(), GLFW.GLFW_KEY_RIGHT_SUPER);
 
-        return getAction(key, shift, alt, control, windows);
+        final KeyCombo keyCombo = new KeyCombo(key, shift, alt, control, windows);
+        return getAction(keyCombo);
     }
 
     @Contract(pure = true)
     public NavAction @NonNull [] getPossibleActions() {
-        if (registry == null)
-            return new NavAction[0];
         return Arrays.stream(registry.getValues())
                 .filter(action -> action != NONE)
                 .distinct()
@@ -59,20 +49,18 @@ public final class NavMappings {
 
     @Contract(pure = true)
     public Os @NonNull [] getMappingsSupportedSystems() {
-        if (registry == null)
-            return new Os[0];
-        return registry.getSystems().stream()
+        return registry.systems().stream()
                 .distinct()
                 .toArray(Os[]::new);
     }
 
     @Contract(pure = true)
     public float getCoverage() {
-        int total = Arrays.stream(NavAction.values())
-                .filter(action -> action != NavAction.NONE)
+        final int total = Arrays.stream(NavAction.values())
+                .filter(action -> action != NONE)
                 .toArray(NavAction[]::new)
                 .length;
-        int support = this.getPossibleActions().length;
+        final int support = this.getPossibleActions().length;
         return ((float) support) / total;
     }
 }

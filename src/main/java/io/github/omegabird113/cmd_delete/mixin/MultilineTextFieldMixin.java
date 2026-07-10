@@ -1,11 +1,15 @@
 package io.github.omegabird113.cmd_delete.mixin;
 
+import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.MultilineTextField;
 import net.minecraft.client.gui.components.Whence;
+import net.minecraft.client.input.KeyEvent;
+import org.lwjgl.glfw.GLFW;
+import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -18,6 +22,13 @@ import java.util.List;
 
 @Mixin(value = MultilineTextField.class, priority = 2000)
 public abstract class MultilineTextFieldMixin {
+    @Unique
+    private static final Logger LOGGER = LoggingManager.getLogger(MultilineTextFieldMixin.class);
+
+    static {
+        LOGGER.debug("MultilineTextFieldMixin loaded");
+    }
+
     @Shadow
     private String value;
 
@@ -107,8 +118,35 @@ public abstract class MultilineTextFieldMixin {
                 this.setSelecting(true);
                 this.seekCursorLine(direction);
             }
-            default -> {
-                return;
+            case OVR_NAV_CHAR_LEFT -> {
+                this.setSelecting(false);
+                this.seekCursor(Whence.RELATIVE, -1);
+            }
+            case OVR_NAV_CHAR_RIGHT -> {
+                this.setSelecting(false);
+                this.seekCursor(Whence.RELATIVE, 1);
+            }
+            case OVR_SEL_CHAR_LEFT -> {
+                this.setSelecting(true);
+                this.seekCursor(Whence.RELATIVE, -1);
+            }
+            case OVR_SEL_CHAR_RIGHT -> {
+                this.setSelecting(true);
+                this.seekCursor(Whence.RELATIVE, 1);
+            }
+            case OVR_DEL_CHAR_LEFT -> this.deleteText(-1);
+            case OVR_DEL_CHAR_RIGHT -> this.deleteText(1);
+            case OVR_NAV_TEXT_UP -> {
+                this.setSelecting(false);
+                this.seekCursorLine(-1);
+            }
+            case OVR_NAV_TEXT_DOWN -> {
+                this.setSelecting(false);
+                this.seekCursorLine(1);
+            }
+            case NONE -> {
+                if (!NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation() || event.isEscape() || event.key() == GLFW.GLFW_KEY_ENTER)
+                    return;
             }
         }
 
@@ -124,20 +162,20 @@ public abstract class MultilineTextFieldMixin {
 
     @Unique
     private int cmd_delete$getLineStart() {
-        MultilineTextFieldStringViewAccessor lineView = this.cmd_delete$getCursorLineView();
+        final MultilineTextFieldStringViewAccessor lineView = this.cmd_delete$getCursorLineView();
         return lineView == null ? 0 : lineView.cmd_delete$getBeginIndex();
     }
 
     @Unique
     private int cmd_delete$getLineEnd() {
-        MultilineTextFieldStringViewAccessor lineView = this.cmd_delete$getCursorLineView();
+        final MultilineTextFieldStringViewAccessor lineView = this.cmd_delete$getCursorLineView();
         return lineView == null ? this.value.length() : lineView.cmd_delete$getEndIndex();
     }
 
     @Unique
     private MultilineTextFieldStringViewAccessor cmd_delete$getCursorLineView() {
         for (Object lineView : this.displayLines) {
-            MultilineTextFieldStringViewAccessor accessor = (MultilineTextFieldStringViewAccessor) lineView;
+            final MultilineTextFieldStringViewAccessor accessor = (MultilineTextFieldStringViewAccessor) lineView;
             if (this.cursor >= accessor.cmd_delete$getBeginIndex() && this.cursor <= accessor.cmd_delete$getEndIndex()) {
                 return accessor;
             }

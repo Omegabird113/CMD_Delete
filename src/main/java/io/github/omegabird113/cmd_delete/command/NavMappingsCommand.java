@@ -11,6 +11,7 @@ import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.LoggingManager;
+import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.*;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
@@ -29,6 +30,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -85,6 +87,8 @@ public final class NavMappingsCommand {
                 .then(literal("reload").executes(NavMappingsCommand::reloadMappings))
                 .then(literal("debug")
                         .then(literal("aboutCmdDelete").executes(NavMappingsCommand::printCmdDeleteAbout))
+                        .then(literal("dumpActions").executes(NavMappingsCommand::dumpActions))
+                        .then(literal("dumpFeatureFlags").executes(NavMappingsCommand::dumpFeatureFlags))
                         .then(literal("dumpRegistry").executes(NavMappingsCommand::dumpRegistry))
                         .then(literal("dumpKeymap").executes(NavMappingsCommand::dumpKeyMap))
                 )
@@ -106,8 +110,19 @@ public final class NavMappingsCommand {
     }
 
     private static int dumpRegistry(@NonNull CommandContext<FabricClientCommandSource> context) {
-        MappingsRegistry mr = NavMappingsManager.getCurrentMappings().getRegistry();
+        final MappingsRegistry mr = NavMappingsManager.getCurrentMappingsRegistry();
         context.getSource().sendFeedback(Component.literal("Registry dump:\n" + mr.toString().replace("\t", "    ")));
+        return 1;
+    }
+
+    private static int dumpActions(@NonNull CommandContext<FabricClientCommandSource> context) {
+        final String actionsDump = String.join(", ", Arrays.stream(NavAction.values()).map(NavAction::name).toArray(String[]::new));
+        context.getSource().sendFeedback(Component.literal("Actions dump:\n" + actionsDump));
+        return 1;
+    }
+
+    private static int dumpFeatureFlags(@NonNull CommandContext<FabricClientCommandSource> context) {
+        context.getSource().sendFeedback(Component.literal("Feature flags dump:\noverrideVanillaNavigation - default false\ncrossLineSignMovement - default true"));
         return 1;
     }
 
@@ -117,13 +132,13 @@ public final class NavMappingsCommand {
     }
 
     private static int exportCustom(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
-        String idStr = StringArgumentType.getString(context, "id");
-        String locationStr = StringArgumentType.getString(context, "location");
+        final String idStr = StringArgumentType.getString(context, "id");
+        final String locationStr = StringArgumentType.getString(context, "location");
 
-        Path configPath = PathConstants.MAPPINGS_JSONS_PATH;
-        Path oldPath = configPath.resolve(idStr + ".json");
+        final Path configPath = PathConstants.getMappingsJSONPath();
+        final Path oldPath = configPath.resolve(idStr + ".json");
 
-        Path newPath = Path.of(locationStr);
+        final Path newPath = Path.of(locationStr);
         if (!newPath.isAbsolute()) {
             LOGGER.error("New path \"{}\" for custom copy is not absolute", locationStr);
             throw UNKNOWN_CUSTOM_MAPPINGS.create(idStr);
@@ -147,16 +162,16 @@ public final class NavMappingsCommand {
     }
 
     private static int exportBuiltin(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
-        String idStr = StringArgumentType.getString(context, "id");
-        String locationStr = StringArgumentType.getString(context, "location");
+        final String idStr = StringArgumentType.getString(context, "id");
+        final String locationStr = StringArgumentType.getString(context, "location");
 
-        Path newPath = Path.of(locationStr);
+        final Path newPath = Path.of(locationStr);
         if (!newPath.isAbsolute()) {
             LOGGER.error("New path \"{}\" for builtin copy is not absolute", locationStr);
             throw UNKNOWN_BUILTIN_MAPPINGS.create(idStr);
         }
 
-        String resourceSubPathStr = "/mappings/" + idStr + ".json";
+        final String resourceSubPathStr = "/mappings/" + idStr + ".json";
 
         try (InputStream resourceStream = NavMappingsCommand.class.getResourceAsStream(resourceSubPathStr)) {
             if (resourceStream == null) {
@@ -175,12 +190,12 @@ public final class NavMappingsCommand {
     }
 
     private static int importCustom(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
-        String locationStr = StringArgumentType.getString(context, "location");
+        final String locationStr = StringArgumentType.getString(context, "location");
 
-        Path configPath = PathConstants.MAPPINGS_JSONS_PATH;
+        final Path configPath = PathConstants.getMappingsJSONPath();
 
-        Path oldPath = Path.of(locationStr);
-        Path newPath = configPath.resolve(FilenameUtils.getBaseName(locationStr) + ".json");
+        final Path oldPath = Path.of(locationStr);
+        final Path newPath = configPath.resolve(FilenameUtils.getBaseName(locationStr) + ".json");
 
         if (!oldPath.isAbsolute()) {
             LOGGER.error("From path \"{}\" for custom import is not absolute", locationStr);
@@ -211,15 +226,15 @@ public final class NavMappingsCommand {
     }
 
     private static int setBuiltIn(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
-        String osName = StringArgumentType.getString(context, "os");
-        Os os = resolveOs(osName);
+        final String osName = StringArgumentType.getString(context, "os");
+        final Os os = resolveOs(osName);
         NavMappingsManager.updateMappingsToBuiltIn(os);
         context.getSource().sendFeedback(Component.literal("Set nav mappings to builtin:" + resolveOsId(os)));
         return 1;
     }
 
     private static int setCustom(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
-        String id = StringArgumentType.getString(context, "id");
+        final String id = StringArgumentType.getString(context, "id");
         if (!NavMappingsManager.updateMappingsToCustom(id))
             throw UNKNOWN_CUSTOM_MAPPINGS.create(id);
         context.getSource().sendFeedback(Component.literal("Set nav mappings to custom:" + id));
@@ -233,22 +248,22 @@ public final class NavMappingsCommand {
     }
 
     private static int printMappingsInfo(@NonNull CommandContext<FabricClientCommandSource> context) {
-        MappingsState currentMappingState = NavMappingsManager.getMappingsState();
-        String info = MappingsInfoCollectionUtils.getInfoFrom(currentMappingState, true);
+        final MappingsState currentMappingState = NavMappingsManager.getMappingsState();
+        final String info = MappingsInfoCollectionUtils.getInfoFrom(currentMappingState, true);
         context.getSource().sendFeedback(Component.literal("The currently active mappings are:\n" + info));
         return 1;
     }
 
     private static int printMappingsList(@NonNull CommandContext<FabricClientCommandSource> context) {
-        String[] options = MappingsInfoCollectionUtils.getMappingsList();
+        final String[] options = MappingsInfoCollectionUtils.getMappingsList();
         context.getSource().sendFeedback(Component.literal("The currently available mappings options are:\n" + String.join("\n", options)));
         return 1;
     }
 
     private static int printCmdDeleteAbout(@NonNull CommandContext<FabricClientCommandSource> context) {
-        String about = "CMD + Delete (modid: " + CmdDeleteClient.MODID
+        final String about = "CMD + Delete (modid: " + CmdDeleteClient.MODID
                 + ") by Omegabird113 v" + CmdDeleteClient.VERSION
-                + " using mappings format version " + CmdDeleteClient.MAPPINGS_FORMAT_VERSION;
+                + " using mappings format version " + CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION;
         context.getSource().sendFeedback(Component.literal(about));
         return 1;
     }
