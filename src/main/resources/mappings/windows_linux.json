@@ -178,7 +178,7 @@
     ]
   },
   "flags": {
-    "overrideVanillaNavigation": true,
+    "overrideVanillaNavigation": false,
     "crossLineSignMovement": true
   }
 }

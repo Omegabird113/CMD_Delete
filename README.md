@@ -15,6 +15,12 @@ Not only does CMD + Delete fix the macOS text behavior, it also expands Minecraf
 1. If you use this mod on Windows or Linux, and you don't use custom mappings, nothing will change from vanilla Minecraft.
 2. If you have any problems with this mod, **please report them as Issues on GitHub**. This mod is Open Source and Pull Requests are very much welcome! :)
 
+> [!Note]
+>
+> CMD + Delete is a **Fabric mod** which also supports interopting with Quilt and Forge/NeoForge (but **only with [Sinytra Connector](https://modrinth.com/mod/connector)**).
+
+![A showcase of opt/cmd + backspace in chat.](./showcase.gif)
+
 ## Custom Mappings
 
 You can define your own custom mappings in configuration files with the location & name: `<minecraft install>/config/cmd_delete/mappings/<id>.json`. These allow you to customize the text navigation shortcut behavior in Minecraft for your own taste & configuration. 
