@@ -1,6 +1,7 @@
 package io.github.omegabird113.cmd_delete.command;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.mojang.brigadier.CommandDispatcher;
@@ -257,7 +258,7 @@ public final class NavMappingsCommand {
 
             Path toCopyTo = PathConstants.getMappingsJSONPath().resolve(idStr + ".json");
             try (FileWriter writer = new FileWriter(toCopyTo.toFile())) {
-                writer.write(decoded);
+                writer.write(new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject));
             } catch (IOException e) {
                 LOGGER.error("Error while importing custom mappings", e);
                 throw FAILED_CUSTOM_MAPPINGS_IMPORT.create(idStr);
