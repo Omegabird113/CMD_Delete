@@ -42,10 +42,17 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
         final String inherits = getStringElse(jsonObject, "inherits", "");
 
         final JsonObject actions = requireObject(jsonObject, "actions");
+        final HashMap<KeyCombo, NavAction> localKeys = new HashMap<>();
+        final HashMap<KeyCombo, NavAction> disabledKeys = new HashMap<>();
+        parseActions(actions, localKeys, disabledKeys, fv);
 
-        final Map<KeyCombo, NavAction> localKeys = new HashMap<>();
-        final Map<KeyCombo, NavAction> disabledKeys = new HashMap<>();
+        final MetadataContainer container = parseMeta(requireObject(jsonObject, "meta"));
+        final FeatureFlags ff = parseFlags(jsonObject, fv, inherits);
 
+        return new MappingsRegistry(localKeys, (disabledKeys.isEmpty() ? null : disabledKeys), List.copyOf(container.systems()), ff, inherits, container.name(), container.author(), container.description(), container.version(), container.id());
+    }
+
+    private void parseActions(@NonNull JsonObject actions, @NonNull HashMap<KeyCombo, NavAction> localKeys, @NonNull HashMap<KeyCombo, NavAction> disabledKeys, int fv) {
         for (String actionName : actions.keySet()) {
             NavAction action = NAV_ACTION_MAP.get(actionName.trim().toUpperCase(Locale.ROOT));
             if (action == null || action == NavAction.NONE) {
@@ -107,11 +114,6 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
                 }
             }
         }
-
-        final MetadataContainer container = parseMeta(requireObject(jsonObject, "meta"));
-        final FeatureFlags ff = parseFlags(jsonObject, fv, inherits);
-
-        return new MappingsRegistry(localKeys, (disabledKeys.isEmpty() ? null : disabledKeys), List.copyOf(container.systems()), ff, inherits, container.name(), container.author(), container.description(), container.version(), container.id());
     }
 
     @Contract("_, _, _ -> new")
