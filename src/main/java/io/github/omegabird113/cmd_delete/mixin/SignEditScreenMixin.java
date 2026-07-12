@@ -131,7 +131,7 @@ public abstract class SignEditScreenMixin {
             case OVR_PASTE -> this.signField.paste();
             case OVR_SELECT_ALL -> this.signField.selectAll();
             case NONE -> {
-                if (!NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation() || event.isEscape() || event.key() == GLFW.GLFW_KEY_ENTER)
+                if (!NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation() || event.isEscape() || event.key() == GLFW.GLFW_KEY_ENTER || event.key() == GLFW.GLFW_KEY_KP_ENTER)
                     return;
             }
         }
