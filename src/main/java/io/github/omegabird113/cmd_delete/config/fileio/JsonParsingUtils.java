@@ -12,7 +12,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.Locale;
 import java.util.Map;
 
-final class JsonParsingUtils {
+public final class JsonParsingUtils {
     private JsonParsingUtils() {
     }
 
