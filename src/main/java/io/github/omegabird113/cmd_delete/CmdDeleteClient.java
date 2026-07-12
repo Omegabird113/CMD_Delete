@@ -20,6 +20,7 @@ public final class CmdDeleteClient implements ClientModInitializer {
             .orElse("<unknown>");
     public static final int CURRENT_MAPPINGS_FORMAT_VERSION = 4;
     public static final int MINIMUM_MAPPINGS_FORMAT_VERSION = 2;
+    public static final int SHARE_CODE_FORMAT_VERSION = 1;
     private static final Logger LOGGER = LoggingManager.getInitializerLogger();
 
     @Override

@@ -1,5 +1,9 @@
 package io.github.omegabird113.cmd_delete.command;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -15,13 +19,17 @@ import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.data.KeyCodeRegistry;
 import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
+import io.github.omegabird113.cmd_delete.config.fileio.JsonParsingUtils;
 import io.github.omegabird113.cmd_delete.config.fileio.MappingsJSONManager;
 import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
+import io.github.omegabird113.cmd_delete.config.sharecode.ShareCodeDecoder;
+import io.github.omegabird113.cmd_delete.config.sharecode.ShareCodeGenerator;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.minecraft.client.Minecraft;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import org.apache.commons.io.FilenameUtils;
@@ -29,6 +37,7 @@ import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -50,6 +59,9 @@ public final class NavMappingsCommand {
     );
     private static final DynamicCommandExceptionType FAILED_CUSTOM_MAPPINGS_IMPORT = new DynamicCommandExceptionType(
             location -> Component.literal("Could not import custom navmappings from: " + location)
+    );
+    private static final DynamicCommandExceptionType INVALID_SHARE_CODE = new DynamicCommandExceptionType(
+            shareCode -> Component.literal("Invalid share code: " + shareCode)
     );
 
     private static final SuggestionProvider<FabricClientCommandSource> BUILTIN_SUGGESTIONS =
@@ -96,18 +108,39 @@ public final class NavMappingsCommand {
                 )
                 .then(literal("export")
                         .then(literal("builtin")
-                                .then(argument("id", StringArgumentType.word())
-                                        .suggests(BUILTIN_SUGGESTIONS)
-                                        .then(argument("location", StringArgumentType.greedyString()).executes(NavMappingsCommand::exportBuiltin)))
+                                .then(literal("file")
+                                        .then(argument("id", StringArgumentType.word())
+                                                .suggests(BUILTIN_SUGGESTIONS)
+                                                .then(argument("location", StringArgumentType.greedyString()).executes(NavMappingsCommand::exportBuiltin)))
+                                )
+                                .then(literal("sharecode")
+                                        .then(argument("id", StringArgumentType.word())
+                                                .suggests(BUILTIN_SUGGESTIONS)
+                                                .executes(NavMappingsCommand::exportBuiltinShareCode)))
                         )
                         .then(literal("custom")
-                                .then(argument("id", StringArgumentType.word())
-                                        .suggests(CUSTOM_SUGGESTIONS)
-                                        .then(argument("location", StringArgumentType.greedyString()).executes(NavMappingsCommand::exportCustom)))
+                                .then(literal("file")
+                                        .then(argument("id", StringArgumentType.word())
+                                                .suggests(CUSTOM_SUGGESTIONS)
+                                                .then(argument("location", StringArgumentType.greedyString()).executes(NavMappingsCommand::exportCustom)))
+                                )
+                                .then(literal("sharecode")
+                                        .then(argument("id", StringArgumentType.word())
+                                                .suggests(CUSTOM_SUGGESTIONS)
+                                                .executes(NavMappingsCommand::exportCustomShareCode))
+                                )
                         )
                 )
                 .then(literal("import")
-                        .then(argument("location", StringArgumentType.greedyString()).executes(NavMappingsCommand::importCustom)))
+                        .then(literal("file")
+                                .then(argument("location", StringArgumentType.greedyString())
+                                        .executes(NavMappingsCommand::importCustom))
+                        )
+                        .then(literal("sharecode")
+                                .then(literal("clipboard")
+                                        .executes(NavMappingsCommand::importCustomShareCode))
+                        )
+                )
         );
     }
 
@@ -163,6 +196,28 @@ public final class NavMappingsCommand {
         return 1;
     }
 
+    private static int exportCustomShareCode(@NonNull CommandContext<FabricClientCommandSource> context) {
+        final String idStr = StringArgumentType.getString(context, "id");
+
+        final String namespacedId = MappingsIdResolutionUtils.resolveNamespacedId(MappingsState.Type.CUSTOM, idStr);
+        final String shareCode = ShareCodeGenerator.generate(namespacedId);
+
+        Minecraft.getInstance().keyboardHandler.setClipboard(shareCode);
+        context.getSource().sendFeedback(Component.literal("Mappings \"custom:" + idStr + " can be shared as: " + shareCode));
+        return 1;
+    }
+
+    private static int exportBuiltinShareCode(@NonNull CommandContext<FabricClientCommandSource> context) {
+        final String idStr = StringArgumentType.getString(context, "id");
+
+        final String namespacedId = MappingsIdResolutionUtils.resolveNamespacedId(MappingsState.Type.BUILTIN, idStr);
+        final String shareCode = ShareCodeGenerator.generate(namespacedId);
+
+        Minecraft.getInstance().keyboardHandler.setClipboard(shareCode);
+        context.getSource().sendFeedback(Component.literal("Mappings \"builtin:" + idStr + " can be shared as: " + shareCode));
+        return 1;
+    }
+
     private static int exportBuiltin(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
         final String idStr = StringArgumentType.getString(context, "id");
         final String locationStr = StringArgumentType.getString(context, "location");
@@ -191,6 +246,33 @@ public final class NavMappingsCommand {
         return 1;
     }
 
+    private static int importCustomShareCode(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+        String shareCode = Minecraft.getInstance().keyboardHandler.getClipboard();
+        String decoded;
+        try {
+            decoded = ShareCodeDecoder.decode(shareCode.trim());
+
+            JsonObject jsonObject = new Gson().fromJson(decoded, JsonObject.class);
+            JsonObject meta = JsonParsingUtils.requireObject(jsonObject, "meta");
+            String idStr = JsonParsingUtils.requireString(meta, "id");
+
+            Path toCopyTo = PathConstants.getMappingsJSONPath().resolve(idStr + ".json");
+            try (FileWriter writer = new FileWriter(toCopyTo.toFile())) {
+                writer.write(new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject));
+            } catch (IOException e) {
+                LOGGER.error("Error while importing custom mappings", e);
+                throw FAILED_CUSTOM_MAPPINGS_IMPORT.create(idStr);
+            }
+
+            context.getSource().sendFeedback(Component.literal("Custom mappings sharecode imported successfully: " + idStr));
+        } catch (IllegalArgumentException | JsonParseException e) {
+            LOGGER.error("Invalid share code: {}", shareCode, e);
+            throw INVALID_SHARE_CODE.create(shareCode);
+        }
+        return 1;
+    }
+
+
     private static int importCustom(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
         final String locationStr = StringArgumentType.getString(context, "location");
 
@@ -217,7 +299,7 @@ public final class NavMappingsCommand {
             throw FAILED_CUSTOM_MAPPINGS_IMPORT.create(locationStr);
         }
 
-        context.getSource().sendFeedback(Component.literal("Mappings from " + locationStr + " copied to path now available as \"custom:" + FilenameUtils.getBaseName(locationStr) + "\""));
+        context.getSource().sendFeedback(Component.literal("Custom mappings from " + locationStr + " copied to path now available as \"custom:" + FilenameUtils.getBaseName(locationStr) + "\""));
         return 1;
     }
 
