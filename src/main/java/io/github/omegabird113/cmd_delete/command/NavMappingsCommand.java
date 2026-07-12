@@ -298,7 +298,7 @@ public final class NavMappingsCommand {
             throw FAILED_CUSTOM_MAPPINGS_IMPORT.create(locationStr);
         }
 
-        context.getSource().sendFeedback(Component.literal("Mappings from " + locationStr + " copied to path now available as \"custom:" + FilenameUtils.getBaseName(locationStr) + "\""));
+        context.getSource().sendFeedback(Component.literal("Custom mappings from " + locationStr + " copied to path now available as \"custom:" + FilenameUtils.getBaseName(locationStr) + "\""));
         return 1;
     }
 
