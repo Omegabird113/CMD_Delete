@@ -88,13 +88,16 @@ public final class NavMappingsCommand {
                         .then(literal("builtin")
                                 .then(argument("os", StringArgumentType.word())
                                         .suggests(BUILTIN_SUGGESTIONS)
-                                        .executes(NavMappingsCommand::setBuiltIn)))
+                                        .executes(NavMappingsCommand::setBuiltIn))
+                        )
                         .then(literal("custom")
                                 .then(argument("id", StringArgumentType.word())
                                         .suggests(CUSTOM_SUGGESTIONS)
-                                        .executes(NavMappingsCommand::setCustom)))
+                                        .executes(NavMappingsCommand::setCustom))
+                        )
                         .then(literal("default")
-                                .executes(NavMappingsCommand::setDefault))
+                                .executes(NavMappingsCommand::setDefault)
+                        )
                 )
                 .then(literal("info").executes(NavMappingsCommand::printMappingsInfo))
                 .then(literal("list").executes(NavMappingsCommand::printMappingsList))
@@ -116,29 +119,37 @@ public final class NavMappingsCommand {
                                 .then(literal("sharecode")
                                         .then(argument("id", StringArgumentType.word())
                                                 .suggests(BUILTIN_SUGGESTIONS)
-                                                .executes(NavMappingsCommand::exportBuiltinShareCode)))
+                                                .executes(NavMappingsCommand::exportBuiltinShareCode))
+                                )
                         )
                         .then(literal("custom")
                                 .then(literal("file")
                                         .then(argument("id", StringArgumentType.word())
                                                 .suggests(CUSTOM_SUGGESTIONS)
-                                                .then(argument("location", StringArgumentType.greedyString()).executes(NavMappingsCommand::exportCustom)))
+                                                .then(argument("location", StringArgumentType.greedyString()).executes(NavMappingsCommand::exportCustom))
+                                        )
                                 )
                                 .then(literal("sharecode")
                                         .then(argument("id", StringArgumentType.word())
                                                 .suggests(CUSTOM_SUGGESTIONS)
-                                                .executes(NavMappingsCommand::exportCustomShareCode))
+                                                .executes(NavMappingsCommand::exportCustomShareCode)
+                                        )
                                 )
                         )
                 )
                 .then(literal("import")
                         .then(literal("file")
                                 .then(argument("location", StringArgumentType.greedyString())
-                                        .executes(NavMappingsCommand::importCustom))
+                                        .executes(NavMappingsCommand::importCustom)
+                                )
                         )
                         .then(literal("sharecode")
                                 .then(literal("clipboard")
-                                        .executes(NavMappingsCommand::importCustomShareCode))
+                                        .executes(NavMappingsCommand::importCustomShareCode)
+                                )
+                                .then(literal("chat")
+                                        .then(argument("sharecode", StringArgumentType.greedyString()).executes(NavMappingsCommand::importCustomShareCodeFromChat))
+                                )
                         )
                 )
         );
@@ -203,7 +214,7 @@ public final class NavMappingsCommand {
         final String shareCode = ShareCodeGenerator.generate(namespacedId);
 
         Minecraft.getInstance().keyboardHandler.setClipboard(shareCode);
-        context.getSource().sendFeedback(Component.literal("Mappings \"custom:" + idStr + " can be shared as: " + shareCode));
+        context.getSource().sendFeedback(Component.literal("Mappings \"custom:" + idStr + "\" can be shared as: " + shareCode));
         return 1;
     }
 
@@ -214,7 +225,7 @@ public final class NavMappingsCommand {
         final String shareCode = ShareCodeGenerator.generate(namespacedId);
 
         Minecraft.getInstance().keyboardHandler.setClipboard(shareCode);
-        context.getSource().sendFeedback(Component.literal("Mappings \"builtin:" + idStr + " can be shared as: " + shareCode));
+        context.getSource().sendFeedback(Component.literal("Mappings \"builtin:" + idStr + "\" can be shared as: " + shareCode));
         return 1;
     }
 
@@ -272,6 +283,31 @@ public final class NavMappingsCommand {
         return 1;
     }
 
+    private static int importCustomShareCodeFromChat(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+        String shareCode = StringArgumentType.getString(context, "sharecode");
+        String decoded;
+        try {
+            decoded = ShareCodeDecoder.decode(shareCode.trim());
+
+            JsonObject jsonObject = new Gson().fromJson(decoded, JsonObject.class);
+            JsonObject meta = JsonParsingUtils.requireObject(jsonObject, "meta");
+            String idStr = JsonParsingUtils.requireString(meta, "id");
+
+            Path toCopyTo = PathConstants.getMappingsJSONPath().resolve(idStr + ".json");
+            try (FileWriter writer = new FileWriter(toCopyTo.toFile())) {
+                writer.write(new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject));
+            } catch (IOException e) {
+                LOGGER.error("Error while importing custom mappings", e);
+                throw FAILED_CUSTOM_MAPPINGS_IMPORT.create(idStr);
+            }
+
+            context.getSource().sendFeedback(Component.literal("Custom mappings sharecode imported successfully: " + idStr));
+        } catch (IllegalArgumentException | JsonParseException e) {
+            LOGGER.error("Invalid share code: {}", shareCode, e);
+            throw INVALID_SHARE_CODE.create(shareCode);
+        }
+        return 1;
+    }
 
     private static int importCustom(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
         final String locationStr = StringArgumentType.getString(context, "location");
