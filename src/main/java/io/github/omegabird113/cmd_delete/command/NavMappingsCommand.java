@@ -203,7 +203,7 @@ public final class NavMappingsCommand {
         final String shareCode = ShareCodeGenerator.generate(namespacedId);
 
         Minecraft.getInstance().keyboardHandler.setClipboard(shareCode);
-        context.getSource().sendFeedback(Component.literal("Mappings \"builtin:" + idStr + " can be shared as: " + shareCode));
+        context.getSource().sendFeedback(Component.literal("Mappings \"custom:" + idStr + " can be shared as: " + shareCode));
         return 1;
     }
 
