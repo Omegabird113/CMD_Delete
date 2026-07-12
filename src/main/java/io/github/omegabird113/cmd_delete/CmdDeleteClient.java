@@ -1,7 +1,7 @@
 package io.github.omegabird113.cmd_delete;
 
 import io.github.omegabird113.cmd_delete.command.NavMappingsCommand;
-import io.github.omegabird113.cmd_delete.config.PathConstants;
+import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 import net.fabricmc.api.ClientModInitializer;
@@ -18,7 +18,7 @@ public final class CmdDeleteClient implements ClientModInitializer {
     public static final @NonNull String VERSION = FabricLoader.getInstance().getModContainer(MODID)
             .map(container -> container.getMetadata().getVersion().getFriendlyString())
             .orElse("<unknown>");
-    public static final int CURRENT_MAPPINGS_FORMAT_VERSION = 3;
+    public static final int CURRENT_MAPPINGS_FORMAT_VERSION = 4;
     public static final int MINIMUM_MAPPINGS_FORMAT_VERSION = 2;
     private static final Logger LOGGER = LoggingManager.getInitializerLogger();
 

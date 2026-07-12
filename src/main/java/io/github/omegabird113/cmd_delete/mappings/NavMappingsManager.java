@@ -2,10 +2,10 @@ package io.github.omegabird113.cmd_delete.mappings;
 
 import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.command.MappingsInfoCollectionUtils;
-import io.github.omegabird113.cmd_delete.config.ActiveMappingsManager;
-import io.github.omegabird113.cmd_delete.config.FeatureFlags;
-import io.github.omegabird113.cmd_delete.config.MappingsIdResolutionUtils;
-import io.github.omegabird113.cmd_delete.config.MappingsRegistry;
+import io.github.omegabird113.cmd_delete.config.fileio.ActiveMappingsManager;
+import io.github.omegabird113.cmd_delete.config.data.FeatureFlags;
+import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
+import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;

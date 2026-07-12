@@ -1,4 +1,4 @@
-package io.github.omegabird113.cmd_delete.config;
+package io.github.omegabird113.cmd_delete.config.fileio;
 
 import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
@@ -12,8 +12,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Optional;
 
-import static io.github.omegabird113.cmd_delete.config.MappingsIdResolutionUtils.removeNamespaceFromId;
-import static io.github.omegabird113.cmd_delete.config.MappingsIdResolutionUtils.resolveType;
+import static io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils.removeNamespaceFromId;
+import static io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils.resolveType;
 
 public final class ActiveMappingsManager {
     private static final Logger LOGGER = LoggingManager.getLogger(ActiveMappingsManager.class);

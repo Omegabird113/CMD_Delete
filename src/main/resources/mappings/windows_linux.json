@@ -1,5 +1,5 @@
 {
-  "fv": 3,
+  "fv": 4,
   "meta": {
     "name": "Windows/Linux mappings",
     "author": "$$cmd_delete$$",
@@ -175,10 +175,34 @@
         "control": false,
         "shift": false
       }
+    ],
+    "OVR_COPY": [
+      {
+        "key": "c",
+        "control": true
+      }
+    ],
+    "OVR_CUT": [
+      {
+        "key": "x",
+        "control": true
+      }
+    ],
+    "OVR_PASTE": [
+      {
+        "key": "v",
+        "control": true
+      }
+    ],
+    "OVR_SELECT_ALL": [
+      {
+        "key": "a",
+        "control": true
+      }
     ]
   },
   "flags": {
-    "overrideVanillaNavigation": false,
+    "overrideVanillaNavigation": true,
     "crossLineSignMovement": true
   }
 }
