@@ -21,7 +21,8 @@ public final class ShareCodeGenerator {
     static final Base58 BASE_58 = new Base58();
     private static final Logger LOGGER = LoggingManager.getLogger(ShareCodeGenerator.class);
 
-    private ShareCodeGenerator() {}
+    private ShareCodeGenerator() {
+    }
 
     private static String collapseWhitespace(File file) throws FileNotFoundException {
         JsonElement json = JsonParser.parseReader(new FileReader(file));
