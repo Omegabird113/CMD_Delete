@@ -1,7 +1,7 @@
 package io.github.omegabird113.cmd_delete.command;
 
-import io.github.omegabird113.cmd_delete.config.MappingsIdResolutionUtils;
-import io.github.omegabird113.cmd_delete.config.MappingsJSONManager;
+import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
+import io.github.omegabird113.cmd_delete.config.fileio.MappingsJSONManager;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 import org.jetbrains.annotations.Contract;

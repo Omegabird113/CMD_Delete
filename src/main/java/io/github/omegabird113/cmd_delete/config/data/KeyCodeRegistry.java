@@ -1,4 +1,4 @@
-package io.github.omegabird113.cmd_delete.config;
+package io.github.omegabird113.cmd_delete.config.data;
 
 import org.jspecify.annotations.NonNull;
 

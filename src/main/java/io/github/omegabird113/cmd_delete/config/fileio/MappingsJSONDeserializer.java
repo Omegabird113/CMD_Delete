@@ -1,10 +1,13 @@
-package io.github.omegabird113.cmd_delete.config;
+package io.github.omegabird113.cmd_delete.config.fileio;
 
 import com.google.gson.*;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
+import io.github.omegabird113.cmd_delete.config.data.FeatureFlags;
+import io.github.omegabird113.cmd_delete.config.data.KeyCombo;
+import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
@@ -15,9 +18,9 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static io.github.omegabird113.cmd_delete.config.JsonParsingUtils.*;
+import static io.github.omegabird113.cmd_delete.config.fileio.JsonParsingUtils.*;
 
-public final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistry> {
+final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistry> {
     private static final Logger LOGGER = LoggingManager.getLogger(MappingsJSONManager.class);
     private static final @NonNull Map<String, Os> OS_MAP = Map.of(
             "windows", Os.WINDOWS,

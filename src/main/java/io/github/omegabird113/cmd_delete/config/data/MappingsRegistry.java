@@ -1,4 +1,4 @@
-package io.github.omegabird113.cmd_delete.config;
+package io.github.omegabird113.cmd_delete.config.data;
 
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.mappings.Os;
@@ -24,17 +24,6 @@ public record MappingsRegistry(
         internalRegistry = Map.copyOf(internalRegistry);
         internalDisabledRegistry = internalDisabledRegistry == null ? null : Map.copyOf(internalDisabledRegistry);
         systems = List.copyOf(systems);
-    }
-
-    @NonNull
-    Map<@NonNull KeyCombo, @NonNull NavAction> getInternalRegistry() {
-        return internalRegistry;
-    }
-
-    @Contract(pure = true)
-    @NonNull
-    Optional<Map<@NonNull KeyCombo, @NonNull NavAction>> getInternalDisabledRegistry() {
-        return Optional.ofNullable(internalDisabledRegistry);
     }
 
     public @Nullable NavAction get(@NonNull KeyCombo key) {
