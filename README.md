@@ -30,7 +30,7 @@ You can define your own custom mappings in configuration files with the location
 sample.json:
 ```json
 {
-  "fv": 3,
+  "fv": 4,
   "inherits": "builtin:mac",
   "meta": {
     "name": "Example custom mapping",
@@ -66,7 +66,7 @@ sample.json:
 mac.json:
 ```json
 {
-  "fv": 3,
+  "fv": 4,
   "meta": {
     "name": "Mac mappings",
     "author": "$$cmd_delete$$",
@@ -155,6 +155,18 @@ mac.json:
     ],
     "OVR_NAV_TEXT_DOWN": [
       {"key": "down", "superCommand": false, "altOption": false, "shift": false}
+    ],
+    "OVR_COPY": [
+      {"key": "c", "superCommand": true}
+    ],
+    "OVR_CUT": [
+      {"key": "x", "superCommand": true}
+    ],
+    "OVR_PASTE": [
+      {"key": "v", "superCommand": true}
+    ],
+    "OVR_SELECT_ALL": [
+      {"key": "a", "superCommand": true}
     ]
   },
   "flags": {
