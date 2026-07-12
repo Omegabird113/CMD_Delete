@@ -6,7 +6,10 @@ import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public record MappingsRegistry(
         @NonNull Map<@NonNull KeyCombo, @NonNull NavAction> internalRegistry,
