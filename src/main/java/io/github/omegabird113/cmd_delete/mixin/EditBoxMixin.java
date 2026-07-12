@@ -40,13 +40,19 @@ public abstract class EditBoxMixin {
     public abstract int getWordPosition(int dir);
 
     @Shadow
-    public abstract void moveCursor(int dir, boolean extendSelection);
+    public abstract void moveCursor(int dir, boolean hasShiftDown);
 
     @Shadow
     public abstract void deleteChars(int dir);
 
     @Shadow
     protected abstract boolean isEditable();
+
+    @Shadow
+    public abstract String getHighlighted();
+
+    @Shadow
+    public abstract void insertText(String input);
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideDelete(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
@@ -76,6 +82,20 @@ public abstract class EditBoxMixin {
             case OVR_DEL_CHAR_RIGHT -> {
                 if (this.isEditable())
                     this.deleteChars(1);
+            }
+            case OVR_COPY -> Minecraft.getInstance().keyboardHandler.setClipboard(this.getHighlighted());
+            case OVR_CUT -> {
+                Minecraft.getInstance().keyboardHandler.setClipboard(this.getHighlighted());
+                if (this.isEditable())
+                    this.deleteCharsToPos(this.getHighlighted().length());
+            }
+            case OVR_PASTE -> {
+                if (this.isEditable())
+                    this.insertText(Minecraft.getInstance().keyboardHandler.getClipboard());
+            }
+            case OVR_SELECT_ALL -> {
+                this.moveCursorTo(0, false);
+                this.moveCursorTo(this.getValue().length(), true);
             }
             case SEL_TEXT_UP, SEL_TEXT_DOWN, OVR_NAV_TEXT_UP, OVR_NAV_TEXT_DOWN -> {
                 return;

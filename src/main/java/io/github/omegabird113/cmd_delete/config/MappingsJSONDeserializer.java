@@ -56,6 +56,9 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
             if (ActionOffsetUtils.isOverrideAction(action) && fv == 2)
                 throw new JsonParseException("Format version 2 file specified actions of fv 3: " + actionName);
 
+            if (ActionOffsetUtils.isOverrideEditAction(action) && fv < 4)
+                throw new JsonParseException("Format version 2 or 3 file specified actions of fv 4: " + actionName);
+
             final JsonArray bindings = requireArray(actions, actionName);
 
             for (JsonElement bindingElement : bindings) {

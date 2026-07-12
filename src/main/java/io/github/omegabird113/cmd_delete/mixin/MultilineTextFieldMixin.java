@@ -40,6 +40,9 @@ public abstract class MultilineTextFieldMixin {
     private List<?> displayLines;
 
     @Shadow
+    private int selectCursor;
+
+    @Shadow
     public abstract void setSelecting(boolean selecting);
 
     @Shadow
@@ -53,6 +56,9 @@ public abstract class MultilineTextFieldMixin {
 
     @Shadow
     public abstract void seekCursorLine(int lineOffset);
+
+    @Shadow
+    public abstract String getSelectedText();
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideMultilineNavigation(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
@@ -143,6 +149,16 @@ public abstract class MultilineTextFieldMixin {
             case OVR_NAV_TEXT_DOWN -> {
                 this.setSelecting(false);
                 this.seekCursorLine(1);
+            }
+            case OVR_COPY -> Minecraft.getInstance().keyboardHandler.setClipboard(this.getSelectedText());
+            case OVR_CUT -> {
+                Minecraft.getInstance().keyboardHandler.setClipboard(this.getSelectedText());
+                this.insertText("");
+            }
+            case OVR_PASTE -> this.insertText(Minecraft.getInstance().keyboardHandler.getClipboard());
+            case OVR_SELECT_ALL -> {
+                this.cursor = this.value.length();
+                this.selectCursor = 0;
             }
             case NONE -> {
                 if (!NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation() || event.isEscape() || event.key() == GLFW.GLFW_KEY_ENTER)

@@ -27,5 +27,9 @@ public enum NavAction {
     OVR_DEL_CHAR_RIGHT,
     OVR_NAV_TEXT_UP,
     OVR_NAV_TEXT_DOWN,
+    OVR_COPY,
+    OVR_CUT,
+    OVR_PASTE,
+    OVR_SELECT_ALL,
     NONE
 }
