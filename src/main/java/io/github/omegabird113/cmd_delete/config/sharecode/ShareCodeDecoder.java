@@ -23,7 +23,7 @@ public final class ShareCodeDecoder {
         }
     }
 
-    private static String @NonNull [] getShareCodeStringArray(String shareCode) {
+    private static String @NonNull [] getShareCodeStringArray(@NonNull String shareCode) {
         String[] split = shareCode.split(":");
 
         if (split.length != 4)

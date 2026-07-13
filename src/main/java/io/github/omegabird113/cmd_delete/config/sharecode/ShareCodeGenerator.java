@@ -9,6 +9,8 @@ import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import org.apache.commons.codec.binary.Base58;
+import org.jetbrains.annotations.Contract;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 
 import java.io.*;
@@ -24,12 +26,12 @@ public final class ShareCodeGenerator {
     private ShareCodeGenerator() {
     }
 
-    private static String collapseWhitespace(File file) throws FileNotFoundException {
+    private static @NonNull String collapseWhitespace(@NonNull File file) throws FileNotFoundException {
         JsonElement json = JsonParser.parseReader(new FileReader(file));
         return new Gson().toJson(json);
     }
 
-    private static String collapseWhitespace(String namespacedId) {
+    private static @NonNull String collapseWhitespace(@NonNull String namespacedId) {
         MappingsState.Type type = MappingsIdResolutionUtils.resolveType(namespacedId);
         String id = MappingsIdResolutionUtils.removeNamespaceFromId(namespacedId);
 
@@ -44,17 +46,18 @@ public final class ShareCodeGenerator {
         }
     }
 
-    private static String compressAndBase58Encode(String contents) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    @Contract("_ -> new")
+    private static @NonNull String compressAndBase58Encode(@NonNull String contents) throws IOException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-        try (GZIPOutputStream gzip = new GZIPOutputStream(baos)) {
+        try (GZIPOutputStream gzip = new GZIPOutputStream(byteArrayOutputStream)) {
             gzip.write(contents.getBytes(StandardCharsets.UTF_8));
         }
 
-        return new String(BASE_58.encode(baos.toByteArray()), StandardCharsets.UTF_8);
+        return new String(BASE_58.encode(byteArrayOutputStream.toByteArray()), StandardCharsets.UTF_8);
     }
 
-    private static String generateCoreShareCode(String namespacedId) {
+    private static @NonNull String generateCoreShareCode(@NonNull String namespacedId) {
         MappingsState.Type type = MappingsIdResolutionUtils.resolveType(namespacedId);
         String id = MappingsIdResolutionUtils.removeNamespaceFromId(namespacedId);
 
@@ -69,14 +72,14 @@ public final class ShareCodeGenerator {
         }
     }
 
-    static long genCRC32checksum(String contents) {
+    static long genCRC32checksum(@NonNull String contents) {
         byte[] bytes = contents.getBytes(StandardCharsets.UTF_8);
         CRC32 crc32 = new CRC32();
         crc32.update(bytes, 0, bytes.length);
         return crc32.getValue();
     }
 
-    public static String generate(String namespacedId) {
+    public static @NonNull String generate(@NonNull String namespacedId) {
         return "CDS:"
                 + "EV" + CmdDeleteClient.SHARE_CODE_FORMAT_VERSION + ":"
                 + generateCoreShareCode(namespacedId) + ":"
