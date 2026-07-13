@@ -177,88 +177,80 @@ public final class NavMappingsCommand {
         return 1;
     }
 
-    private static int exportCustom(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
-        final String idStr = StringArgumentType.getString(context, "id");
-        final String locationStr = StringArgumentType.getString(context, "location");
-
-        final Path configPath = PathConstants.getMappingsJSONPath();
-        final Path oldPath = configPath.resolve(idStr + ".json");
-
-        final Path newPath = Path.of(locationStr);
-        if (!newPath.isAbsolute()) {
-            LOGGER.error("New path \"{}\" for custom copy is not absolute", locationStr);
-            throw UNKNOWN_CUSTOM_MAPPINGS.create(idStr);
-        }
-
-        if (!oldPath.toFile().exists() || !oldPath.toFile().isFile()) {
-            LOGGER.error("Error while reading custom mappings. File does not exist: {}", oldPath.toAbsolutePath());
-            throw UNKNOWN_CUSTOM_MAPPINGS.create(idStr);
-        }
-
-        try {
-            Files.createDirectories(newPath.getParent());
-            Files.copy(oldPath, newPath, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            LOGGER.error("Error while copying custom mappings", e);
-            throw UNKNOWN_CUSTOM_MAPPINGS.create(idStr);
-        }
-
-        context.getSource().sendFeedback(Component.literal("Mappings \"custom:" + idStr + "\" copied to path: " + newPath.toAbsolutePath()));
-        return 1;
-    }
-
-    private static int exportCustomShareCode(@NonNull CommandContext<FabricClientCommandSource> context) {
+    private static void exportShareCode(@NonNull CommandContext<FabricClientCommandSource> context, boolean custom) {
         final String idStr = StringArgumentType.getString(context, "id");
 
-        final String namespacedId = MappingsIdResolutionUtils.resolveNamespacedId(MappingsState.Type.CUSTOM, idStr);
+        final String namespacedId = MappingsIdResolutionUtils.resolveNamespacedId(custom ? MappingsState.Type.CUSTOM : MappingsState.Type.BUILTIN, idStr);
         final String shareCode = ShareCodeGenerator.generate(namespacedId);
 
         Minecraft.getInstance().keyboardHandler.setClipboard(shareCode);
-        context.getSource().sendFeedback(Component.literal("Mappings \"custom:" + idStr + "\" can be shared as: " + shareCode));
+        context.getSource().sendFeedback(Component.literal("Mappings \"" + (custom ? "custom:" : "builtin:") + idStr + "\" can be shared as: " + shareCode));
+    }
+
+    private static int exportCustomShareCode(@NonNull CommandContext<FabricClientCommandSource> context) {
+        exportShareCode(context, true);
         return 1;
     }
 
     private static int exportBuiltinShareCode(@NonNull CommandContext<FabricClientCommandSource> context) {
-        final String idStr = StringArgumentType.getString(context, "id");
-
-        final String namespacedId = MappingsIdResolutionUtils.resolveNamespacedId(MappingsState.Type.BUILTIN, idStr);
-        final String shareCode = ShareCodeGenerator.generate(namespacedId);
-
-        Minecraft.getInstance().keyboardHandler.setClipboard(shareCode);
-        context.getSource().sendFeedback(Component.literal("Mappings \"builtin:" + idStr + "\" can be shared as: " + shareCode));
+        exportShareCode(context, false);
         return 1;
     }
 
     private static int exportBuiltin(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+        exportMappings(context, false);
+        return 1;
+    }
+
+    private static int exportCustom(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+        exportMappings(context, true);
+        return 1;
+    }
+
+    private static void exportMappings(@NonNull CommandContext<FabricClientCommandSource> context, boolean custom) throws CommandSyntaxException {
         final String idStr = StringArgumentType.getString(context, "id");
         final String locationStr = StringArgumentType.getString(context, "location");
 
         final Path newPath = Path.of(locationStr);
         if (!newPath.isAbsolute()) {
-            LOGGER.error("New path \"{}\" for builtin copy is not absolute", locationStr);
-            throw UNKNOWN_BUILTIN_MAPPINGS.create(idStr);
-        }
-
-        final String resourceSubPathStr = "/mappings/" + idStr + ".json";
-
-        try (InputStream resourceStream = NavMappingsCommand.class.getResourceAsStream(resourceSubPathStr)) {
-            if (resourceStream == null) {
-                LOGGER.error("Builtin mappings do not exist: {}", resourceSubPathStr);
+            LOGGER.error("New path \"{}\" for {} copy is not absolute", locationStr, custom ? "custom" : "builtin");
+            if (custom)
+                throw UNKNOWN_CUSTOM_MAPPINGS.create(idStr);
+            else
                 throw UNKNOWN_BUILTIN_MAPPINGS.create(idStr);
-            }
-            Files.createDirectories(newPath.getParent());
-            Files.copy(resourceStream, newPath, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            LOGGER.error("Error while exporting builtin mappings", e);
-            throw UNKNOWN_BUILTIN_MAPPINGS.create(idStr);
         }
 
-        context.getSource().sendFeedback(Component.literal("Mappings \"builtin:" + idStr + "\" copied to path: " + newPath.toAbsolutePath()));
-        return 1;
+        try {
+            Files.createDirectories(newPath.getParent());
+            if (custom) {
+                final Path oldPath = PathConstants.getMappingsJSONPath().resolve(idStr + ".json");
+                if (!Files.isRegularFile(oldPath)) {
+                    LOGGER.error("Error while reading custom mappings. File does not exist: {}", oldPath.toAbsolutePath());
+                    throw UNKNOWN_CUSTOM_MAPPINGS.create(idStr);
+                }
+                Files.copy(oldPath, newPath, StandardCopyOption.REPLACE_EXISTING);
+            } else {
+                final String resourceSubPathStr = "/mappings/" + idStr + ".json";
+                try (InputStream resourceStream = NavMappingsCommand.class.getResourceAsStream(resourceSubPathStr)) {
+                    if (resourceStream == null) {
+                        LOGGER.error("Builtin mappings do not exist: {}", resourceSubPathStr);
+                        throw UNKNOWN_BUILTIN_MAPPINGS.create(idStr);
+                    }
+                    Files.copy(resourceStream, newPath, StandardCopyOption.REPLACE_EXISTING);
+                }
+            }
+        } catch (IOException e) {
+            LOGGER.error("Error while {} mappings", custom ? "copying custom" : "exporting builtin", e);
+            if (custom)
+                throw UNKNOWN_CUSTOM_MAPPINGS.create(idStr);
+            else
+                throw UNKNOWN_BUILTIN_MAPPINGS.create(idStr);
+        }
+
+        context.getSource().sendFeedback(Component.literal("Mappings \"" + (custom ? "custom:" : "builtin:") + idStr + "\" copied to path: " + newPath.toAbsolutePath()));
     }
 
-    private static int importCustomShareCode(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
-        String shareCode = Minecraft.getInstance().keyboardHandler.getClipboard();
+    private static void importShareCode(@NonNull CommandContext<FabricClientCommandSource> context, @NonNull String shareCode) throws CommandSyntaxException {
         String decoded;
         try {
             decoded = ShareCodeDecoder.decode(shareCode.trim());
@@ -280,32 +272,17 @@ public final class NavMappingsCommand {
             LOGGER.error("Invalid share code: {}", shareCode, e);
             throw INVALID_SHARE_CODE.create(shareCode);
         }
+    }
+
+    private static int importCustomShareCode(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+        String shareCode = Minecraft.getInstance().keyboardHandler.getClipboard();
+        importShareCode(context, shareCode);
         return 1;
     }
 
     private static int importCustomShareCodeFromChat(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
         String shareCode = StringArgumentType.getString(context, "sharecode");
-        String decoded;
-        try {
-            decoded = ShareCodeDecoder.decode(shareCode.trim());
-
-            JsonObject jsonObject = new Gson().fromJson(decoded, JsonObject.class);
-            JsonObject meta = JsonParsingUtils.requireObject(jsonObject, "meta");
-            String idStr = JsonParsingUtils.requireString(meta, "id");
-
-            Path toCopyTo = PathConstants.getMappingsJSONPath().resolve(idStr + ".json");
-            try (FileWriter writer = new FileWriter(toCopyTo.toFile())) {
-                writer.write(new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject));
-            } catch (IOException e) {
-                LOGGER.error("Error while importing custom mappings", e);
-                throw FAILED_CUSTOM_MAPPINGS_IMPORT.create(idStr);
-            }
-
-            context.getSource().sendFeedback(Component.literal("Custom mappings sharecode imported successfully: " + idStr));
-        } catch (IllegalArgumentException | JsonParseException e) {
-            LOGGER.error("Invalid share code: {}", shareCode, e);
-            throw INVALID_SHARE_CODE.create(shareCode);
-        }
+        importShareCode(context, shareCode);
         return 1;
     }
 
