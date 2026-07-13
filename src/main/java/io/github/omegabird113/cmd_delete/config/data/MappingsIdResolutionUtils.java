@@ -1,7 +1,6 @@
 package io.github.omegabird113.cmd_delete.config.data;
 
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
-import io.github.omegabird113.cmd_delete.mappings.Os;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 
@@ -17,20 +16,6 @@ public final class MappingsIdResolutionUtils {
             case DEFAULT -> "";
         };
         return prefixText + id;
-    }
-
-    @Contract(pure = true)
-    public static @NonNull String resolveNamespacedId(MappingsState.@NonNull Type type, Os os) {
-        final String prefixText = switch (type) {
-            case CUSTOM -> "custom:";
-            case BUILTIN -> "builtin:";
-            case DEFAULT -> "";
-        };
-        final String osText = switch (os) {
-            case WINDOWS, LINUX -> "windows_linux";
-            case MAC -> "mac";
-        };
-        return prefixText + osText;
     }
 
     public static @NonNull String resolveNamespacedId(@NonNull MappingsState mappingState) {

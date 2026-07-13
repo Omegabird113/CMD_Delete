@@ -65,9 +65,9 @@ public final class NavMappingsManager {
         return true;
     }
 
-    public static void updateMappingsToBuiltIn(Os os) {
+    public static void updateMappingsToBuiltIn(String id) {
         currentMappingsState = ACTIVE_MAPPINGS_MANAGER.resolveMappings(
-                MappingsIdResolutionUtils.resolveNamespacedId(MappingsState.Type.BUILTIN, os)
+                MappingsIdResolutionUtils.resolveNamespacedId(MappingsState.Type.BUILTIN, id)
         );
         ACTIVE_MAPPINGS_MANAGER.trySaveMappings(
                 MappingsIdResolutionUtils.resolveNamespacedId(getMappingsState())

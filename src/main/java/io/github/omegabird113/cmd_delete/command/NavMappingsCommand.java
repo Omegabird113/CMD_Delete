@@ -26,7 +26,6 @@ import io.github.omegabird113.cmd_delete.config.sharecode.ShareCodeDecoder;
 import io.github.omegabird113.cmd_delete.config.sharecode.ShareCodeGenerator;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
-import io.github.omegabird113.cmd_delete.mappings.Os;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.Minecraft;
@@ -45,12 +44,8 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 public final class NavMappingsCommand {
-    private static final DynamicCommandExceptionType INVALID_OS = new DynamicCommandExceptionType(
-            os -> Component.literal("Unknown builtin navmappings OS: " + os)
-    );
     private static final DynamicCommandExceptionType UNKNOWN_CUSTOM_MAPPINGS = new DynamicCommandExceptionType(
             id -> Component.literal("Could not load custom navmappings: " + id)
     );
@@ -84,7 +79,7 @@ public final class NavMappingsCommand {
         dispatcher.register(literal("navmappings")
                 .then(literal("set")
                         .then(literal("builtin")
-                                .then(argument("os", StringArgumentType.word())
+                                .then(argument("id", StringArgumentType.word())
                                         .suggests(BUILTIN_SUGGESTIONS)
                                         .executes(NavMappingsCommand::setBuiltIn))
                         )
@@ -320,11 +315,10 @@ public final class NavMappingsCommand {
         return 1;
     }
 
-    private static int setBuiltIn(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
-        final String osName = StringArgumentType.getString(context, "os");
-        final Os os = resolveOs(osName);
-        NavMappingsManager.updateMappingsToBuiltIn(os);
-        context.getSource().sendFeedback(Component.literal("Set nav mappings to builtin:" + resolveOsId(os)));
+    private static int setBuiltIn(@NonNull CommandContext<FabricClientCommandSource> context) {
+        final String id = StringArgumentType.getString(context, "id");
+        NavMappingsManager.updateMappingsToBuiltIn(id);
+        context.getSource().sendFeedback(Component.literal("Set nav mappings to builtin: " + id));
         return 1;
     }
 
@@ -361,22 +355,6 @@ public final class NavMappingsCommand {
                 + " using mappings format version " + CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION;
         context.getSource().sendFeedback(Component.literal(about));
         return 1;
-    }
-
-    private static @NonNull Os resolveOs(@NonNull String osName) throws CommandSyntaxException {
-        osName = osName.toLowerCase(Locale.ROOT);
-        return switch (osName) {
-            case "mac" -> Os.MAC;
-            case "windows_linux" -> Os.WINDOWS;
-            default -> throw INVALID_OS.create(osName);
-        };
-    }
-
-    private static @NonNull String resolveOsId(@NonNull Os os) {
-        return switch (os) {
-            case MAC -> "mac";
-            case WINDOWS, LINUX -> "windows_linux";
-        };
     }
 
     @Contract(value = "_ -> new", pure = true)
