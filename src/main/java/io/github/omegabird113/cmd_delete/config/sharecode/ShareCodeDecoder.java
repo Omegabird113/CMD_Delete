@@ -12,7 +12,10 @@ import java.util.zip.GZIPInputStream;
 
 import static io.github.omegabird113.cmd_delete.config.sharecode.ShareCodeGenerator.BASE_58;
 
-public class ShareCodeDecoder {
+public final class ShareCodeDecoder {
+    private ShareCodeDecoder() {
+    }
+
     private static String decodeCoreShareCode(String input) throws IOException {
         try (ByteArrayInputStream bais = new ByteArrayInputStream(BASE_58.decode(input));
              GZIPInputStream gzip = new GZIPInputStream(bais)) {

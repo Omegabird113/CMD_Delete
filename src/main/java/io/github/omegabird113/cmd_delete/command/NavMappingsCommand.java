@@ -65,12 +65,10 @@ public final class NavMappingsCommand {
     );
 
     private static final SuggestionProvider<FabricClientCommandSource> BUILTIN_SUGGESTIONS =
-            (_, builder) ->
-                    SharedSuggestionProvider.suggest(List.of("windows_linux", "mac"), builder);
+            (_, builder) -> SharedSuggestionProvider.suggest(List.of("windows_linux", "mac"), builder);
 
     private static final SuggestionProvider<FabricClientCommandSource> CUSTOM_SUGGESTIONS =
-            (_, builder) ->
-                    SharedSuggestionProvider.suggest(MappingsJSONManager.getAvailableOptions(false), builder);
+            (_, builder) -> SharedSuggestionProvider.suggest(MappingsJSONManager.getAvailableOptions(false), builder);
 
     private static final Logger LOGGER = LoggingManager.getLogger(NavMappingsCommand.class);
 
