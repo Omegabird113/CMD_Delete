@@ -60,7 +60,7 @@ public final class NavMappingsCommand {
     );
 
     private static final SuggestionProvider<FabricClientCommandSource> BUILTIN_SUGGESTIONS =
-            (_, builder) -> SharedSuggestionProvider.suggest(List.of("windows_linux", "mac"), builder);
+            (_, builder) -> SharedSuggestionProvider.suggest(List.of("windows_linux", "mac", "emacs_windows_linux", "emacs_mac"), builder);
 
     private static final SuggestionProvider<FabricClientCommandSource> CUSTOM_SUGGESTIONS =
             (_, builder) -> SharedSuggestionProvider.suggest(MappingsJSONManager.getAvailableOptions(false), builder);
