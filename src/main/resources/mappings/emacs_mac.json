@@ -1,5 +1,6 @@
 {
   "fv": 4,
+  "strict": true,
   "meta": {
     "name": "Emacs (Mac)",
     "author": "$$cmd_delete$$",

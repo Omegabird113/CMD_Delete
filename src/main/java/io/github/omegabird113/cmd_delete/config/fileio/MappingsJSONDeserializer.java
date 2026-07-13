@@ -36,18 +36,24 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
             throw new JsonParseException("Expected a JSON object at root");
         final JsonObject jsonObject = json.getAsJsonObject();
 
+        final boolean strictMode = getOptionalBoolean(jsonObject, "strict");
+
         final int fv = requireInt(jsonObject, "fv");
         if (fv < CmdDeleteClient.MINIMUM_MAPPINGS_FORMAT_VERSION || fv > CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION)
             throw new JsonParseException("Invalid format version number: " + fv + ". The current format version is: " + CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION);
         if (fv != CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION)
-            LOGGER.warn("Old mappings version ({}) used by custom mappings. Please update to version {}", fv, CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION);
+            logWarn(
+                    "Old mappings version (" + fv + ") used by custom mappings. Please update to version " + CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION,
+                    strictMode,
+                    fv
+            );
 
         final String inherits = getStringElse(jsonObject, "inherits", "");
 
         final JsonObject actions = requireObject(jsonObject, "actions");
         final HashMap<KeyCombo, NavAction> localKeys = new HashMap<>();
         final HashMap<KeyCombo, NavAction> disabledKeys = new HashMap<>();
-        parseActions(actions, localKeys, disabledKeys, fv);
+        parseActions(actions, localKeys, disabledKeys, fv, strictMode);
 
         final MetadataContainer container = parseMeta(requireObject(jsonObject, "meta"));
         final FeatureFlags ff = parseFlags(jsonObject, fv, inherits);
@@ -55,11 +61,22 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
         return new MappingsRegistry(localKeys, (disabledKeys.isEmpty() ? null : disabledKeys), List.copyOf(container.systems()), ff, inherits, container.name(), container.author(), container.description(), container.version(), container.id());
     }
 
-    private void parseActions(@NonNull JsonObject actions, @NonNull HashMap<KeyCombo, NavAction> localKeys, @NonNull HashMap<KeyCombo, NavAction> disabledKeys, int fv) {
+    private void logWarn(String message, boolean strictMode, int fv) {
+        if (strictMode && fv == 4)
+            throw new JsonParseException(message);
+        else
+            LOGGER.warn(message);
+    }
+
+    private void parseActions(@NonNull JsonObject actions, @NonNull HashMap<KeyCombo, NavAction> localKeys, @NonNull HashMap<KeyCombo, NavAction> disabledKeys, int fv, boolean strictMode) {
         for (String actionName : actions.keySet()) {
             NavAction action = NAV_ACTION_MAP.get(actionName.trim().toUpperCase(Locale.ROOT));
             if (action == null || action == NavAction.NONE) {
-                LOGGER.warn("Invalid action specified by custom mappings: \"{}\". All key-combos registered in this action skipped...", actionName);
+                logWarn(
+                        "Invalid action specified by custom mappings: \"" + actionName + "\". All key-combos registered in this action skipped...",
+                        strictMode,
+                        fv
+                );
                 continue;
             }
 
@@ -81,7 +98,11 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
                 try {
                     keyCode = requireKeyCode(binding, "key");
                 } catch (JsonParseException e) {
-                    LOGGER.warn("Invalid key binding due to error: {}", e.getMessage());
+                    logWarn(
+                            "Invalid key binding due to error: " + e.getMessage(),
+                            strictMode,
+                            fv
+                    );
                     continue;
                 }
 
@@ -111,7 +132,11 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
 
                 for (KeyCombo key : keys) {
                     if (toAdd.containsKey(key))
-                        LOGGER.warn("Duplicate key binding in custom binding with action of \"{}\" and key \"{}\". 2nd registration skipped...", actionName, key);
+                        logWarn(
+                        "Duplicate key binding in custom binding with action of \"" + actionName + "\" and key \"" + key + "\". 2nd registration skipped...",
+                                strictMode,
+                                fv
+                        );
                     else
                         toAdd.put(key, action);
                 }

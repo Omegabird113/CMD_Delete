@@ -1,5 +1,6 @@
 {
   "fv": 4,
+  "strict": true,
   "meta": {
     "name": "Mac mappings",
     "author": "$$cmd_delete$$",
