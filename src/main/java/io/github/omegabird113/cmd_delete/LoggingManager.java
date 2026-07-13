@@ -13,9 +13,4 @@ public final class LoggingManager {
     public static Logger getLogger(@NonNull Class<?> clazz) {
         return LoggerFactory.getLogger(CmdDeleteClient.MODID + "/" + clazz.getSimpleName());
     }
-
-    @Contract(" -> new")
-    static Logger getInitializerLogger() {
-        return LoggerFactory.getLogger(CmdDeleteClient.MODID);
-    }
 }

@@ -20,14 +20,14 @@ public final class CmdDeleteClient implements ClientModInitializer {
             .orElse("<unknown>");
     public static final int CURRENT_MAPPINGS_FORMAT_VERSION = 4;
     public static final int MINIMUM_MAPPINGS_FORMAT_VERSION = 2;
-    public static final int SHARE_CODE_FORMAT_VERSION = 1;
-    private static final Logger LOGGER = LoggingManager.getInitializerLogger();
+    public static final int SHARECODE_FORMAT_VERSION = 1;
+    private static final Logger LOGGER = LoggingManager.getLogger(CmdDeleteClient.class);
 
     @Override
     public void onInitializeClient() {
         final long startTime = System.nanoTime();
 
-        LOGGER.info("Initializing client mod \"{}\" (version: {}, mappings format version: {}, minimum mappings compatible version: {})...", MODID, VERSION, CURRENT_MAPPINGS_FORMAT_VERSION, MINIMUM_MAPPINGS_FORMAT_VERSION);
+        LOGGER.info("Initializing client mod \"{}\" (version: {}, mappings format version: {}, minimum mappings compatible version: {}, sharecode encoding version: {})...", MODID, VERSION, CURRENT_MAPPINGS_FORMAT_VERSION, MINIMUM_MAPPINGS_FORMAT_VERSION, SHARECODE_FORMAT_VERSION);
         LOGGER.info("User appears to be running system: {}", Os.USING);
 
         final MixinEnvironment mixinEnv = MixinEnvironment.getCurrentEnvironment();

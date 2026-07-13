@@ -81,7 +81,7 @@ public final class ShareCodeGenerator {
 
     public static @NonNull String generate(@NonNull String namespacedId) {
         return "CDS:"
-                + "EV" + CmdDeleteClient.SHARE_CODE_FORMAT_VERSION + ":"
+                + "EV" + CmdDeleteClient.SHARECODE_FORMAT_VERSION + ":"
                 + generateCoreShareCode(namespacedId) + ":"
                 + genCRC32checksum(collapseWhitespace(namespacedId));
     }
