@@ -176,7 +176,8 @@
         "control": true
       },
       {
-        "key": "backspace"
+        "key": "backspace",
+        "altOption": false
       }
     ],
     "OVR_DEL_CHAR_RIGHT": [
