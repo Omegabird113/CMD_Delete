@@ -185,22 +185,26 @@ Custom mappings can:
 - Set certain boolean feature flags to control the mod's behavior.
 
 Note that:
-- The format version `fv` is currently `3` and your mappings should match that (Though old mappings of format version `2` are still supported in-game).
+- The format version `fv` is currently `4` and your mappings should match that (Though old mappings of format versions `2` and `3` are still supported in-game).
 - The `meta.id` field must exactly match the filename without the `.json` extension
 
 ### The /navmappings command
 CMD + Delete includes an in-game, client `/navmappings` command for checking, switching, importing, exporting, and debugging mappings without manually touching config files.
 
-Here are all the subcommands:
-- `/navmappings info`: displays info about the currently loaded mappings.
-- `/navmappings list`: displays a list of the namespaced IDs of the currently available mappings, which you could switch to.
-- `/navmappings set default`: switch to the default mappings behavior.
-- `/navmappings set builtin <non-namespaced id>`: switch a specific OS's builtin mappings JSON.
-- `/navmappings set custom <non-namespaced id>`: switch to one of your own custom mappings JSONs.
-- `/navmappings reload`: reload the currently active mappings.
-- `/navmappings export <type> <non-namespaced id> <absolute location>`: make a copy of a mappings JSON to another location on your system so you can copy it.
-- `/navmappings import <non-namespaced id> <absolute location>`: import a copy of a JSON you made from another location on your system into the custom JSONs folder for you to use as custom mappings.
-- `/navmappings debug`: a utility that provides dumps of information like info about CMD + Delete, a dump of the friendly keynames which CMD + Delete mappings JSONs support, or a raw dump of the internal loaded mappings' registry.
+| Command                                                                   | Description                                                                                                                                                                                                    |
+|:--------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `/navmappings info`                                                       | Displays info about the currently loaded mappings.                                                                                                                                                             |
+| `/navmappings list`                                                       | Displays a list of the namespaced IDs of the currently available mappings, which you could switch to.                                                                                                          |
+| `/navmappings set default`                                                | Switch to the default mappings behavior.                                                                                                                                                                       |
+| `/navmappings set builtin <non-namespaced id>`                            | Switch a specific OS's builtin mappings JSON.                                                                                                                                                                  |
+| `/navmappings set custom <non-namespaced id>`                             | Switch to one of your own custom mappings JSONs.                                                                                                                                                               |
+| `/navmappings reload`                                                     | Reload the currently active mappings.                                                                                                                                                                          |
+| `/navmappings export <type> file <non-namespaced id> <absolute location>` | Make a copy of a mappings JSON to another location on your system so you can copy it.                                                                                                                          |
+| `/navmappings export <type> sharecode <non-namespaced id>`                | Make a sharecode copy of a set of mappings and prints it to the chat & copies it to your clipboard.                                                                                                            |
+| `/navmappings import file <absolute location>`                            | Import a copy of a JSON you made from another location on your system into the custom JSONs folder for you to use as custom mappings.                                                                          |
+| `/navmappings import sharecode clipboard`                                 | Import a copy of a set of mappings from a sharecode you have copied to your clipboard.                                                                                                                         |
+| `/navmappings import sharecode chat <sharecode>`                          | Import a copy of a set of mappings from a sharecode you entered into the command.                                                                                                                              |
+| `/navmappings debug`                                                      | A utility that provides dumps of information like info about CMD + Delete, a dump of the friendly keynames which CMD + Delete mappings JSONs support, or a raw dump of the internal loaded mappings' registry. |
 
 ## Builtin Mappings' Shortcuts
 
@@ -226,3 +230,10 @@ By default, CMD + Delete will detect if you're using macOS, and if you are it'll
 | Select to end of text   | `cmd` + `shift` + `↓`    | `ctrl` + `shift` + `end`  |
 | Select up one line      | `shift` + `↑`            | `shift` + `↑`             |
 | Select down one line    | `shift` + `↓`            | `shift` + `↓`             |
+
+
+## Other Builtin Mappings
+
+CMD + Delete also now provides these other builtin mappings:
+- `builtin:emacs_windows_linux` the standard Windows/Linux shortcuts for text navigation in eMacs to the best replication I can make (they're not perfect).
+- `builtin:emacs_mac` the standard macOS Cooca shortcuts for text navigation in eMacs to the best replication I can make (they're not perfect).
