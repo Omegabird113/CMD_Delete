@@ -65,14 +65,18 @@ public final class NavMappingsManager {
         return true;
     }
 
-    public static void updateMappingsToBuiltIn(String id) {
+    public static boolean updateMappingsToBuiltIn(String id) {
+        MappingsState old = currentMappingsState;
         currentMappingsState = ACTIVE_MAPPINGS_MANAGER.resolveMappings(
                 MappingsIdResolutionUtils.resolveNamespacedId(MappingsState.Type.BUILTIN, id)
         );
+        if (old != null && old.equals(currentMappingsState))
+            return false;
         ACTIVE_MAPPINGS_MANAGER.trySaveMappings(
                 MappingsIdResolutionUtils.resolveNamespacedId(getMappingsState())
         );
         logMappings();
+        return true;
     }
 
     public static void updateMappingsToDefault() {

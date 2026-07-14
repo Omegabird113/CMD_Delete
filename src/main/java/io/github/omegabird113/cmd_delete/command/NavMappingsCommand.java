@@ -315,9 +315,10 @@ public final class NavMappingsCommand {
         return 1;
     }
 
-    private static int setBuiltIn(@NonNull CommandContext<FabricClientCommandSource> context) {
+    private static int setBuiltIn(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
         final String id = StringArgumentType.getString(context, "id");
-        NavMappingsManager.updateMappingsToBuiltIn(id);
+        if (!NavMappingsManager.updateMappingsToBuiltIn(id))
+            throw UNKNOWN_BUILTIN_MAPPINGS.create(id);
         context.getSource().sendFeedback(Component.literal("Set nav mappings to builtin: " + id));
         return 1;
     }
