@@ -15,25 +15,29 @@
     "NAV_LINE_LEFT": [
       {
         "key": "a",
-        "control": true
+        "control": true,
+        "shift": false
       }
     ],
     "NAV_LINE_RIGHT": [
       {
         "key": "e",
-        "control": true
+        "control": true,
+        "shift": false
       }
     ],
     "NAV_WORD_LEFT": [
       {
         "key": "b",
-        "altOption": true
+        "altOption": true,
+        "shift": false
       }
     ],
     "NAV_WORD_RIGHT": [
       {
         "key": "f",
-        "altOption": true
+        "altOption": true,
+        "shift": false
       }
     ],
     "SEL_LINE_LEFT": [
@@ -91,13 +95,15 @@
     "NAV_TEXT_START": [
       {
         "key": "comma",
-        "altOption": true
+        "altOption": true,
+        "shift": false
       }
     ],
     "NAV_TEXT_END": [
       {
         "key": "period",
-        "altOption": true
+        "altOption": true,
+        "shift": false
       }
     ],
     "SEL_TEXT_START": [
@@ -131,7 +137,9 @@
     "OVR_NAV_CHAR_LEFT": [
       {
         "key": "b",
-        "control": true
+        "control": true,
+        "shift": false,
+        "altOption": false
       },
       {
         "key": "left",
@@ -141,7 +149,9 @@
     "OVR_NAV_CHAR_RIGHT": [
       {
         "key": "f",
-        "control": true
+        "control": true,
+        "shift": false,
+        "altOption": false
       },
       {
         "key": "right",
@@ -152,7 +162,8 @@
       {
         "key": "b",
         "control": true,
-        "shift": true
+        "shift": true,
+        "altOption": false
       },
       {
         "key": "left",
@@ -163,7 +174,8 @@
       {
         "key": "f",
         "control": true,
-        "shift": true
+        "shift": true,
+        "altOption": false
       },
       {
         "key": "right",
@@ -173,17 +185,20 @@
     "OVR_DEL_CHAR_LEFT": [
       {
         "key": "h",
-        "control": true
+        "control": true,
+        "altOption": false
       },
       {
         "key": "backspace",
-        "altOption": false
+        "altOption": false,
+        "shift": false
       }
     ],
     "OVR_DEL_CHAR_RIGHT": [
       {
         "key": "d",
-        "control": true
+        "control": true,
+        "altOption": false
       },
       {
         "key": "delete"
@@ -192,7 +207,9 @@
     "OVR_NAV_TEXT_UP": [
       {
         "key": "p",
-        "control": true
+        "control": true,
+        "shift": false,
+        "altOption": false
       },
       {
         "key": "up",
@@ -202,7 +219,9 @@
     "OVR_NAV_TEXT_DOWN": [
       {
         "key": "n",
-        "control": true
+        "control": true,
+        "shift": false,
+        "altOption": false
       },
       {
         "key": "down",
@@ -212,25 +231,30 @@
     "OVR_COPY": [
       {
         "key": "w",
-        "altOption": true
+        "altOption": true,
+        "control": false
       }
     ],
     "OVR_CUT": [
       {
         "key": "w",
-        "control": true
+        "control": true,
+        "altOption": false
       }
     ],
     "OVR_PASTE": [
       {
         "key": "y",
-        "control": true
+        "control": true,
+        "altOption": false
       }
     ],
     "OVR_SELECT_ALL": [
       {
         "key": "a",
-        "superCommand": true
+        "superCommand": true,
+        "altOption": false,
+        "control": false
       }
     ]
   },
