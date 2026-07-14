@@ -6,6 +6,7 @@ import com.google.gson.JsonParseException;
 import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
+import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.NavMappings;
 import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.Contract;
@@ -28,7 +29,7 @@ public final class MappingsJSONManager {
     }
 
     private static @NonNull MappingsRegistry loadFromResourceMappingsDir(String id) throws IOException {
-        final Path path = PathConstants.getMappingsResourcePath().resolve(id + ".json");
+        final Path path = PathConstants.getPathOf(MappingsState.Type.BUILTIN, id);
 
         final Gson gson = new GsonBuilder()
                 .registerTypeAdapter(MappingsRegistry.class, new MappingsJSONDeserializer())
@@ -43,7 +44,8 @@ public final class MappingsJSONManager {
     }
 
     private static @NonNull MappingsRegistry loadFromCustomMappingsDir(String id) throws IOException {
-        final Path path = PathConstants.getMappingsJSONPath().resolve(id + ".json");
+        final Path path = PathConstants.getPathOf(MappingsState.Type.CUSTOM, id);
+
         if (!Files.exists(path))
             throw new FileNotFoundException("Custom mapping file not found at: " + path);
 
@@ -83,7 +85,7 @@ public final class MappingsJSONManager {
             final MappingsRegistry registry = custom ? loadFromCustomMappingsDir(id) : loadFromResourceMappingsDir(id);
             return Optional.of(registry);
         } catch (FileNotFoundException _) {
-            LOGGER.error("Could not access {} mapping file \"{}\" because it does not exist.", custom ? "custom" : "builtin", id);
+            LOGGER.error("Could not access {} mapping file \"{}\" (at \"{}\") because it does not exist.", custom ? "custom" : "builtin", id, PathConstants.getPathOf(custom ? MappingsState.Type.CUSTOM : MappingsState.Type.BUILTIN, id));
             return Optional.empty();
         } catch (IOException | JsonParseException e) {
             LOGGER.error("Could not access {} mapping file due to exception: {}", custom ? "custom" : "builtin", id, e);

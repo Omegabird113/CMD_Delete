@@ -216,7 +216,7 @@ public final class NavMappingsCommand {
         try {
             Files.createDirectories(newPath.getParent());
             if (custom) {
-                final Path oldPath = PathConstants.getMappingsJSONPath().resolve(idStr + ".json");
+                final Path oldPath = PathConstants.getPathOf(MappingsState.Type.CUSTOM, idStr);
                 if (!Files.isRegularFile(oldPath)) {
                     LOGGER.error("Error while reading custom mappings. File does not exist: {}", oldPath.toAbsolutePath());
                     throw UNKNOWN_CUSTOM_MAPPINGS.create(idStr);
@@ -252,7 +252,7 @@ public final class NavMappingsCommand {
             JsonObject meta = JsonParsingUtils.requireObject(jsonObject, "meta");
             String idStr = JsonParsingUtils.requireString(meta, "id");
 
-            Path toCopyTo = PathConstants.getMappingsJSONPath().resolve(idStr + ".json");
+            Path toCopyTo = PathConstants.getPathOf(MappingsState.Type.CUSTOM, idStr);
             try (FileWriter writer = new FileWriter(toCopyTo.toFile())) {
                 writer.write(new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject));
             } catch (IOException e) {
@@ -282,10 +282,10 @@ public final class NavMappingsCommand {
     private static int importCustom(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
         final String locationStr = StringArgumentType.getString(context, "location");
 
-        final Path configPath = PathConstants.getMappingsJSONPath();
-
         final Path oldPath = Path.of(locationStr);
-        final Path newPath = configPath.resolve(FilenameUtils.getBaseName(locationStr) + ".json");
+        final Path newPath = PathConstants.getPathOf(
+                MappingsState.Type.CUSTOM,
+                FilenameUtils.getBaseName(locationStr));
 
         if (!oldPath.isAbsolute()) {
             LOGGER.error("From path \"{}\" for custom import is not absolute", locationStr);

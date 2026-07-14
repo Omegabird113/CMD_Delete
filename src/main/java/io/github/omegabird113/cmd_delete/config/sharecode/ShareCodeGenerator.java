@@ -7,7 +7,6 @@ import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
-import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import org.apache.commons.codec.binary.Base58;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
@@ -15,7 +14,6 @@ import org.slf4j.Logger;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
 import java.util.zip.CRC32;
 import java.util.zip.GZIPOutputStream;
 
@@ -32,11 +30,11 @@ public final class ShareCodeGenerator {
     }
 
     private static @NonNull String collapseWhitespace(@NonNull String namespacedId) {
-        MappingsState.Type type = MappingsIdResolutionUtils.resolveType(namespacedId);
         String id = MappingsIdResolutionUtils.removeNamespaceFromId(namespacedId);
 
-        Path path = type == MappingsState.Type.CUSTOM ? PathConstants.getMappingsJSONPath() : PathConstants.getMappingsResourcePath();
-        File file = path.resolve(id + ".json").toFile();
+        File file = PathConstants.getPathOf(namespacedId)
+                .resolve(id + ".json")
+                .toFile();
 
         try {
             return collapseWhitespace(file);
@@ -58,11 +56,11 @@ public final class ShareCodeGenerator {
     }
 
     private static @NonNull String generateCoreShareCode(@NonNull String namespacedId) {
-        MappingsState.Type type = MappingsIdResolutionUtils.resolveType(namespacedId);
         String id = MappingsIdResolutionUtils.removeNamespaceFromId(namespacedId);
 
-        Path path = type == MappingsState.Type.CUSTOM ? PathConstants.getMappingsJSONPath() : PathConstants.getMappingsResourcePath();
-        File file = path.resolve(id + ".json").toFile();
+        File file = PathConstants.getPathOf(namespacedId)
+                .resolve(id + ".json")
+                .toFile();
 
         try {
             return compressAndBase58Encode(collapseWhitespace(file));
