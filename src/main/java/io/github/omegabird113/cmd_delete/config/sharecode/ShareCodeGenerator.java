@@ -33,7 +33,7 @@ public final class ShareCodeGenerator {
         String id = MappingsIdResolutionUtils.removeNamespaceFromId(namespacedId);
 
         File file = PathConstants.getPathOf(namespacedId)
-                .resolve(id + ".json")
+                .resolve(id)
                 .toFile();
 
         try {
@@ -59,7 +59,7 @@ public final class ShareCodeGenerator {
         String id = MappingsIdResolutionUtils.removeNamespaceFromId(namespacedId);
 
         File file = PathConstants.getPathOf(namespacedId)
-                .resolve(id + ".json")
+                .resolve(id)
                 .toFile();
 
         try {
