@@ -46,26 +46,26 @@ import java.util.Arrays;
 import java.util.List;
 
 public final class NavMappingsCommand {
-    private static final DynamicCommandExceptionType UNKNOWN_CUSTOM_MAPPINGS = new DynamicCommandExceptionType(
+    private static final @NonNull DynamicCommandExceptionType UNKNOWN_CUSTOM_MAPPINGS = new DynamicCommandExceptionType(
             id -> Component.literal("Could not load custom navmappings: " + id)
     );
-    private static final DynamicCommandExceptionType UNKNOWN_BUILTIN_MAPPINGS = new DynamicCommandExceptionType(
+    private static final @NonNull DynamicCommandExceptionType UNKNOWN_BUILTIN_MAPPINGS = new DynamicCommandExceptionType(
             id -> Component.literal("Could not load builtin navmappings: " + id)
     );
-    private static final DynamicCommandExceptionType FAILED_CUSTOM_MAPPINGS_IMPORT = new DynamicCommandExceptionType(
+    private static final @NonNull DynamicCommandExceptionType FAILED_CUSTOM_MAPPINGS_IMPORT = new DynamicCommandExceptionType(
             location -> Component.literal("Could not import custom navmappings from: " + location)
     );
-    private static final DynamicCommandExceptionType INVALID_SHARE_CODE = new DynamicCommandExceptionType(
+    private static final @NonNull DynamicCommandExceptionType INVALID_SHARE_CODE = new DynamicCommandExceptionType(
             shareCode -> Component.literal("Invalid share code: " + shareCode)
     );
 
-    private static final SuggestionProvider<FabricClientCommandSource> BUILTIN_SUGGESTIONS =
+    private static final @NonNull SuggestionProvider<FabricClientCommandSource> BUILTIN_SUGGESTIONS =
             (_, builder) -> SharedSuggestionProvider.suggest(List.of("windows_linux", "mac", "emacs_windows_linux", "emacs_mac"), builder);
 
-    private static final SuggestionProvider<FabricClientCommandSource> CUSTOM_SUGGESTIONS =
+    private static final @NonNull SuggestionProvider<FabricClientCommandSource> CUSTOM_SUGGESTIONS =
             (_, builder) -> SharedSuggestionProvider.suggest(MappingsJSONManager.getAvailableOptions(false), builder);
 
-    private static final Logger LOGGER = LoggingManager.getLogger(NavMappingsCommand.class);
+    private static final @NonNull Logger LOGGER = LoggingManager.getLogger(NavMappingsCommand.class);
 
     private NavMappingsCommand() {
     }
@@ -248,11 +248,11 @@ public final class NavMappingsCommand {
         try {
             decoded = ShareCodeDecoder.decode(shareCode.trim());
 
-            JsonObject jsonObject = new Gson().fromJson(decoded, JsonObject.class);
-            JsonObject meta = JsonParsingUtils.requireObject(jsonObject, "meta");
-            String idStr = JsonParsingUtils.requireString(meta, "id");
+            final JsonObject jsonObject = new Gson().fromJson(decoded, JsonObject.class);
+            final JsonObject meta = JsonParsingUtils.requireObject(jsonObject, "meta");
+            final String idStr = JsonParsingUtils.requireString(meta, "id");
 
-            Path toCopyTo = PathConstants.getPathOf(MappingsState.Type.CUSTOM, idStr);
+            final Path toCopyTo = PathConstants.getPathOf(MappingsState.Type.CUSTOM, idStr);
             try (FileWriter writer = new FileWriter(toCopyTo.toFile())) {
                 writer.write(new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject));
             } catch (IOException e) {
@@ -268,13 +268,13 @@ public final class NavMappingsCommand {
     }
 
     private static int importCustomShareCode(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
-        String shareCode = Minecraft.getInstance().keyboardHandler.getClipboard();
+        final String shareCode = Minecraft.getInstance().keyboardHandler.getClipboard();
         importShareCode(context, shareCode);
         return 1;
     }
 
     private static int importCustomShareCodeFromChat(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
-        String shareCode = StringArgumentType.getString(context, "sharecode");
+        final String shareCode = StringArgumentType.getString(context, "sharecode");
         importShareCode(context, shareCode);
         return 1;
     }

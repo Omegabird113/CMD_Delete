@@ -17,14 +17,14 @@ public final class JsonParsingUtils {
     }
 
     @Contract(pure = true)
-    public static String getStringElse(@NonNull JsonObject parent, String fieldName, String defaultValue) {
+    public static String getStringElse(@NonNull JsonObject parent, @NonNull String fieldName, @NonNull String defaultValue) {
         if (!parent.has(fieldName))
             return defaultValue;
         final String value = requireString(parent, fieldName).trim();
         return value.isEmpty() ? defaultValue : value;
     }
 
-    public static JsonObject requireObject(@NonNull JsonObject parent, String fieldName) {
+    public static JsonObject requireObject(@NonNull JsonObject parent, @NonNull String fieldName) {
         if (!parent.has(fieldName))
             throw new JsonParseException("Missing required field: " + fieldName);
 
@@ -35,7 +35,7 @@ public final class JsonParsingUtils {
         return element.getAsJsonObject();
     }
 
-    public static JsonArray requireArray(@NonNull JsonObject parent, String fieldName) {
+public static JsonArray requireArray(@NonNull JsonObject parent, @NonNull String fieldName) {
         if (!parent.has(fieldName))
             throw new JsonParseException("Missing required field: " + fieldName);
 
@@ -46,7 +46,7 @@ public final class JsonParsingUtils {
         return element.getAsJsonArray();
     }
 
-    public static String requireString(@NonNull JsonObject parent, String fieldName) {
+    public static String requireString(@NonNull JsonObject parent, @NonNull String fieldName) {
         if (!parent.has(fieldName))
             throw new JsonParseException("Missing required field: " + fieldName);
 
@@ -57,7 +57,7 @@ public final class JsonParsingUtils {
         return element.getAsString();
     }
 
-    public static boolean getOptionalBoolean(@NonNull JsonObject parent, String fieldName) {
+    public static boolean getOptionalBoolean(@NonNull JsonObject parent, @NonNull String fieldName) {
         if (!parent.has(fieldName))
             return false;
 
@@ -69,7 +69,7 @@ public final class JsonParsingUtils {
     }
 
     @Contract(pure = true)
-    public static @Nullable Boolean getNullableBoolean(@NonNull JsonObject parent, String fieldName) {
+    public static @Nullable Boolean getNullableBoolean(@NonNull JsonObject parent, @NonNull String fieldName) {
         if (!parent.has(fieldName))
             return null;
 
@@ -80,7 +80,7 @@ public final class JsonParsingUtils {
         return element.getAsBoolean();
     }
 
-    public static int requireInt(@NonNull JsonObject parent, String fieldName) {
+    public static int requireInt(@NonNull JsonObject parent, @NonNull String fieldName) {
         if (!parent.has(fieldName))
             throw new JsonParseException("Missing required field: " + fieldName);
 
@@ -96,7 +96,7 @@ public final class JsonParsingUtils {
         }
     }
 
-    public static int requireKeyCode(@NonNull JsonObject parent, String fieldName) throws JsonParseException {
+    public static int requireKeyCode(@NonNull JsonObject parent, @NonNull String fieldName) throws JsonParseException {
         final Map<String, Integer> keyMap = KeyCodeRegistry.getKeyMap();
 
         if (!parent.has(fieldName))

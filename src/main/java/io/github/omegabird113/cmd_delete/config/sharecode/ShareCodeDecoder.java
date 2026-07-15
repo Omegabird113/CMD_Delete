@@ -1,6 +1,7 @@
 package io.github.omegabird113.cmd_delete.config.sharecode;
 
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
+import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 
 import java.io.ByteArrayInputStream;
@@ -16,13 +17,15 @@ public final class ShareCodeDecoder {
     private ShareCodeDecoder() {
     }
 
-    private static String decodeCoreShareCode(String input) throws IOException {
+    @Contract("_ -> new")
+    private static @NonNull String decodeCoreShareCode(String input) throws IOException {
         try (ByteArrayInputStream bais = new ByteArrayInputStream(BASE_58.decode(input));
              GZIPInputStream gzip = new GZIPInputStream(bais)) {
             return new String(gzip.readAllBytes(), StandardCharsets.UTF_8);
         }
     }
 
+    @Contract("_ -> new")
     private static String @NonNull [] getShareCodeStringArray(@NonNull String shareCode) {
         String[] split = shareCode.split(":");
 

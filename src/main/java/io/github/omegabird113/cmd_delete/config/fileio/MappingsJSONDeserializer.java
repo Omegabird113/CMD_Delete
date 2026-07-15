@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 import static io.github.omegabird113.cmd_delete.config.fileio.JsonParsingUtils.*;
 
 final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistry> {
-    private static final Logger LOGGER = LoggingManager.getLogger(MappingsJSONManager.class);
+    private static final @NonNull Logger LOGGER = LoggingManager.getLogger(MappingsJSONManager.class);
     private static final @NonNull Map<String, Os> OS_MAP = Map.of(
             "windows", Os.WINDOWS,
             "mac", Os.MAC,
@@ -61,7 +61,7 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
         return new MappingsRegistry(localKeys, (disabledKeys.isEmpty() ? null : disabledKeys), List.copyOf(container.systems()), ff, inherits, container.name(), container.author(), container.description(), container.version(), container.id());
     }
 
-    private void logWarn(String message, boolean strictMode, int fv) {
+    private void logWarn(@NonNull String message, boolean strictMode, int fv) {
         if (strictMode && fv == 4)
             throw new JsonParseException(message);
         else
@@ -145,7 +145,7 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
     }
 
     @Contract("_, _, _ -> new")
-    private @NonNull FeatureFlags parseFlags(JsonObject root, int fv, String inherits) {
+    private @NonNull FeatureFlags parseFlags(@NonNull JsonObject root, int fv, @NonNull String inherits) {
         if (fv == 2)
             return new FeatureFlags(false, true);
         else {
@@ -166,7 +166,7 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
     }
 
     @Contract("_ -> new")
-    private @NonNull MetadataContainer parseMeta(JsonObject meta) {
+    private @NonNull MetadataContainer parseMeta(@NonNull JsonObject meta) {
         final String name = getStringElse(meta, "name", "Unnamed Custom Mappings");
         final String author = getStringElse(meta, "author", "unknown").replace("$$cmd_delete$$", "Omegabird113");
         final String description = getStringElse(meta, "description", "No description provided");
@@ -216,7 +216,7 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
         return systems;
     }
 
-    private record MetadataContainer(String name, String author, String version, String description, String id,
-                                     Set<Os> systems) {
+    private record MetadataContainer(@NonNull String name, @NonNull String author, @NonNull String version, @NonNull String description, @NonNull String id,
+                                     @NonNull Set<Os> systems) {
     }
 }

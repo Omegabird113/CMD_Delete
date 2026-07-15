@@ -10,7 +10,7 @@ public final class LoggingManager {
     }
 
     @Contract("_ -> new")
-    public static Logger getLogger(@NonNull Class<?> clazz) {
+    public static @NonNull Logger getLogger(@NonNull Class<?> clazz) {
         return LoggerFactory.getLogger(CmdDeleteClient.MODID + "/" + clazz.getSimpleName());
     }
 }

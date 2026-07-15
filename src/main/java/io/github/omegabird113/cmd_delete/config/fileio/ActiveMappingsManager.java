@@ -16,7 +16,7 @@ import static io.github.omegabird113.cmd_delete.config.data.MappingsIdResolution
 import static io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils.resolveType;
 
 public final class ActiveMappingsManager {
-    private static final Logger LOGGER = LoggingManager.getLogger(ActiveMappingsManager.class);
+    private static final @NonNull Logger LOGGER = LoggingManager.getLogger(ActiveMappingsManager.class);
 
     public @Nullable MappingsState tryResolveCustomMappings(@NonNull String id) {
         final Optional<NavMappings> mappings = MappingsJSONManager.tryLoadCustomMappings(id);
@@ -53,7 +53,7 @@ public final class ActiveMappingsManager {
         return mappingsState;
     }
 
-    void writeActiveMappings(String namespacedId) throws IOException {
+    void writeActiveMappings(@NonNull String namespacedId) throws IOException {
         Files.createDirectories(PathConstants.getActiveMappingsFilePath().getParent());
         Files.writeString(PathConstants.getActiveMappingsFilePath(), namespacedId);
     }
@@ -73,7 +73,7 @@ public final class ActiveMappingsManager {
         return resolveMappings(namespacedId);
     }
 
-    public void trySaveMappings(String namespacedId) {
+    public void trySaveMappings(@NonNull String namespacedId) {
         try {
             writeActiveMappings(namespacedId);
         } catch (IOException e) {

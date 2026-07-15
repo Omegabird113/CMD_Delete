@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import java.util.List;
 
 public final class NavMappingsManager {
-    private static final Logger LOGGER = LoggingManager.getLogger(NavMappingsManager.class);
+    private static final @NonNull Logger LOGGER = LoggingManager.getLogger(NavMappingsManager.class);
     private static final @NonNull ActiveMappingsManager ACTIVE_MAPPINGS_MANAGER = new ActiveMappingsManager();
     private static @Nullable MappingsState currentMappingsState;
 
@@ -39,8 +39,7 @@ public final class NavMappingsManager {
     }
 
     private static void logMappings() {
-        assert currentMappingsState != null;
-        LOGGER.info("Mappings id \"{}\" loaded with supported systems \"{}\" and Coverage of {}% with a registry size of {}. It supports the actions: {}", MappingsIdResolutionUtils.resolveNamespacedId(getMappingsState()), List.of(currentMappingsState.mappings().getMappingsSupportedSystems()), getCurrentMappings().getCoverage() * 100, currentMappingsState.mappings().registry().getSize(), currentMappingsState.mappings().getPossibleActions());
+        LOGGER.info("Mappings id \"{}\" loaded with supported systems \"{}\" and Coverage of {}% with a registry size of {}. It supports the actions: {}", MappingsIdResolutionUtils.resolveNamespacedId(getMappingsState()), List.of(getCurrentMappings().getMappingsSupportedSystems()), getCurrentMappings().getCoverage() * 100, getCurrentMappings().registry().getSize(), getCurrentMappings().getPossibleActions());
         LOGGER.info("The active mappings' info in \"/navmappings info\" will show as: \"{}\"", MappingsInfoCollectionUtils.getInfoFrom(getMappingsState(), false).replace("\n", " "));
         LOGGER.debug("Mappings state loaded: \"{}\"", currentMappingsState);
     }
@@ -54,7 +53,7 @@ public final class NavMappingsManager {
     }
 
     public static boolean updateMappingsToCustom(@NonNull String id) {
-        MappingsState mappingsState = ACTIVE_MAPPINGS_MANAGER.tryResolveCustomMappings(id);
+        final MappingsState mappingsState = ACTIVE_MAPPINGS_MANAGER.tryResolveCustomMappings(id);
         if (mappingsState == null)
             return false;
         currentMappingsState = mappingsState;
@@ -65,8 +64,8 @@ public final class NavMappingsManager {
         return true;
     }
 
-    public static boolean updateMappingsToBuiltIn(String id) {
-        MappingsState old = currentMappingsState;
+    public static boolean updateMappingsToBuiltIn(@NonNull String id) {
+        final MappingsState old = currentMappingsState;
         currentMappingsState = ACTIVE_MAPPINGS_MANAGER.resolveMappings(
                 MappingsIdResolutionUtils.resolveNamespacedId(MappingsState.Type.BUILTIN, id)
         );
