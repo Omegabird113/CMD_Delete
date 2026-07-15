@@ -187,6 +187,7 @@ Custom mappings can:
 Note that:
 - The format version `fv` is currently `4` and your mappings should match that (Though old mappings of format versions `2` and `3` are still supported in-game).
 - The `meta.id` field must exactly match the filename without the `.json` extension
+- In some places, you'll see a mappings id of `""` (empty string), that refers to the default mappings behavior of loading either `builtin:windows_linux` or `builtin:mac` depending on the user's OS. Note that `"inherits": ""` means a mappings JSON does not inherit anything, so it is impossible to inherit from the default behavior.
 
 ### The /navmappings command
 CMD + Delete includes an in-game, client `/navmappings` command for checking, switching, importing, exporting, and debugging mappings without manually touching config files.
