@@ -5,7 +5,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.LoggingManager;
-import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
 import org.apache.commons.codec.binary.Base58;
 import org.jetbrains.annotations.Contract;
@@ -30,12 +29,7 @@ public final class ShareCodeGenerator {
     }
 
     private static @NonNull String collapseWhitespace(@NonNull String namespacedId) {
-        String id = MappingsIdResolutionUtils.removeNamespaceFromId(namespacedId);
-
-        File file = PathConstants.getPathOf(namespacedId)
-                .resolve(id)
-                .toFile();
-
+        File file = PathConstants.getPathOf(namespacedId).toFile();
         try {
             return collapseWhitespace(file);
         } catch (IOException e) {
@@ -56,12 +50,7 @@ public final class ShareCodeGenerator {
     }
 
     private static @NonNull String generateCoreShareCode(@NonNull String namespacedId) {
-        String id = MappingsIdResolutionUtils.removeNamespaceFromId(namespacedId);
-
-        File file = PathConstants.getPathOf(namespacedId)
-                .resolve(id)
-                .toFile();
-
+        File file = PathConstants.getPathOf(namespacedId).toFile();
         try {
             return compressAndBase58Encode(collapseWhitespace(file));
         } catch (Exception e) {
