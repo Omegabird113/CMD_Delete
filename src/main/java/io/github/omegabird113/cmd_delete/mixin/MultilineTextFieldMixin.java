@@ -160,7 +160,7 @@ public abstract class MultilineTextFieldMixin {
                 this.selectCursor = 0;
             }
             case NONE -> {
-                if (!NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation() || event.isEscape() || event.key() == GLFW.GLFW_KEY_ENTER || event.key() == GLFW.GLFW_KEY_KP_ENTER)
+                if (!NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation() || keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER)
                     return;
             }
         }
