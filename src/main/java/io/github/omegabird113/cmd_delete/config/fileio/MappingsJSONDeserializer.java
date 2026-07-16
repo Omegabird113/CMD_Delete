@@ -55,7 +55,7 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
         final HashMap<KeyCombo, NavAction> disabledKeys = new HashMap<>();
         parseActions(actions, localKeys, disabledKeys, fv, strictMode);
 
-        final MetadataContainer container = parseMeta(requireObject(jsonObject, "meta"));
+        final MetadataContainer container = parseMeta(requireObject(jsonObject, "meta"), strictMode, fv);
         final FeatureFlags ff = parseFlags(jsonObject, fv, inherits);
 
         return new MappingsRegistry(localKeys, (disabledKeys.isEmpty() ? null : disabledKeys), List.copyOf(container.systems()), ff, inherits, container.name(), container.author(), container.description(), container.version(), container.id());
@@ -68,9 +68,19 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
             LOGGER.warn(message);
     }
 
+    private String trimAndCaseIfNotStrict(@NonNull String str, boolean upper, boolean strictMode, int fv) {
+        if (strictMode && fv == 4)
+            return str;
+
+        if (upper)
+            return str.trim().toUpperCase(Locale.ROOT);
+        else
+            return str.trim().toLowerCase(Locale.ROOT);
+    }
+
     private void parseActions(@NonNull JsonObject actions, @NonNull HashMap<KeyCombo, NavAction> localKeys, @NonNull HashMap<KeyCombo, NavAction> disabledKeys, int fv, boolean strictMode) {
         for (String actionName : actions.keySet()) {
-            NavAction action = NAV_ACTION_MAP.get(actionName.trim().toUpperCase(Locale.ROOT));
+            NavAction action = NAV_ACTION_MAP.get(trimAndCaseIfNotStrict(actionName, true, strictMode, fv));
             if (action == null || action == NavAction.NONE) {
                 logWarn(
                         "Invalid action specified by custom mappings: \"" + actionName + "\". All key-combos registered in this action skipped...",
@@ -165,8 +175,8 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
         }
     }
 
-    @Contract("_ -> new")
-    private @NonNull MetadataContainer parseMeta(@NonNull JsonObject meta) {
+    @Contract("_, _, _ -> new")
+    private @NonNull MetadataContainer parseMeta(@NonNull JsonObject meta, boolean strictMode, int fv) {
         final String name = getStringElse(meta, "name", "Unnamed Custom Mappings");
         final String author = getStringElse(meta, "author", "unknown").replace("$$cmd_delete$$", "Omegabird113");
         final String description = getStringElse(meta, "description", "No description provided");
@@ -174,7 +184,7 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
         final String id = requireString(meta, "id");
 
         final JsonArray systems = requireArray(meta, "systems");
-        final Set<Os> parsedSystems = parseSystems(systems);
+        final Set<Os> parsedSystems = parseSystems(systems, strictMode, fv);
         if (parsedSystems.isEmpty())
             throw new JsonParseException("No systems found");
         return new MetadataContainer(name, author, version, description, id, parsedSystems);
@@ -200,13 +210,13 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
         return results.toArray(KeyCombo[]::new);
     }
 
-    private @NonNull Set<Os> parseSystems(@NonNull JsonArray systemsArray) {
+    private @NonNull Set<Os> parseSystems(@NonNull JsonArray systemsArray, boolean strictMode, int fv) {
         final Set<Os> systems = new LinkedHashSet<>();
 
         for (JsonElement systemElement : systemsArray) {
             if (!systemElement.isJsonPrimitive() || !systemElement.getAsJsonPrimitive().isString())
                 throw new JsonParseException("Expected each entry in \"systems\" to be a string");
-            final String systemName = systemElement.getAsString().trim().toLowerCase(Locale.ROOT);
+            final String systemName = trimAndCaseIfNotStrict(systemElement.getAsString(), false, strictMode, fv);
             final Os os = OS_MAP.get(systemName);
             if (os == null)
                 throw new JsonParseException("Unknown system: " + systemName);
