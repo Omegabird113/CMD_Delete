@@ -38,7 +38,7 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
 
         final boolean strictMode = getOptionalBoolean(jsonObject, "strict");
 
-        final int fv = requireInt(jsonObject, "fv");
+        final int fv = requireInt(jsonObject, "fv", false, -1); // we don't know fv/strict yet
         if (fv < CmdDeleteClient.MINIMUM_MAPPINGS_FORMAT_VERSION || fv > CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION)
             throw new JsonParseException("Invalid format version number: " + fv + ". The current format version is: " + CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION);
         if (fv != CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION)
@@ -106,7 +106,7 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
 
                 final int keyCode;
                 try {
-                    keyCode = requireKeyCode(binding, "key");
+                    keyCode = requireKeyCode(binding, "key", strictMode, fv);
                 } catch (JsonParseException e) {
                     logWarn(
                             "Invalid key binding due to error: " + e.getMessage(),
