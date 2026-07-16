@@ -133,7 +133,7 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
                 for (KeyCombo key : keys) {
                     if (toAdd.containsKey(key))
                         logWarn(
-                        "Duplicate key binding in custom binding with action of \"" + actionName + "\" and key \"" + key + "\". 2nd registration skipped...",
+                                "Duplicate key binding in custom binding with action of \"" + actionName + "\" and key \"" + key + "\". 2nd registration skipped...",
                                 strictMode,
                                 fv
                         );
@@ -216,7 +216,8 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
         return systems;
     }
 
-    private record MetadataContainer(@NonNull String name, @NonNull String author, @NonNull String version, @NonNull String description, @NonNull String id,
+    private record MetadataContainer(@NonNull String name, @NonNull String author, @NonNull String version,
+                                     @NonNull String description, @NonNull String id,
                                      @NonNull Set<Os> systems) {
     }
 }

@@ -9,8 +9,7 @@ public record MappingsState(@NonNull NavMappings mappings, @NonNull Type type, @
             case CUSTOM -> "Custom";
             case BUILTIN -> "Builtin";
             case DEFAULT -> "Default";
-        }
-                + " mappings id \""
+        } + " mappings id \""
                 + id
                 + "\" (class: "
                 + mappings

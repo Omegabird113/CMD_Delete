@@ -16,10 +16,10 @@ import static io.github.omegabird113.cmd_delete.config.data.MappingsIdResolution
 import static io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils.resolveType;
 
 public final class ActiveMappingsManager {
+    private static final @NonNull Logger LOGGER = LoggingManager.getLogger(ActiveMappingsManager.class);
+
     private ActiveMappingsManager() {
     }
-
-    private static final @NonNull Logger LOGGER = LoggingManager.getLogger(ActiveMappingsManager.class);
 
     public static @Nullable MappingsState tryResolveCustomMappings(@NonNull String id) {
         final Optional<NavMappings> mappings = MappingsJSONManager.tryLoadCustomMappings(id);

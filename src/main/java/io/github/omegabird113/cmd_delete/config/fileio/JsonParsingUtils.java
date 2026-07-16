@@ -35,7 +35,7 @@ public final class JsonParsingUtils {
         return element.getAsJsonObject();
     }
 
-public static JsonArray requireArray(@NonNull JsonObject parent, @NonNull String fieldName) {
+    public static JsonArray requireArray(@NonNull JsonObject parent, @NonNull String fieldName) {
         if (!parent.has(fieldName))
             throw new JsonParseException("Missing required field: " + fieldName);
 
