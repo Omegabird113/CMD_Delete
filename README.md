@@ -53,6 +53,7 @@ By default, CMD + Delete will detect if you're using macOS, and if you are it'll
 CMD + Delete also now provides these other builtin mappings:
 - `builtin:emacs_windows_linux` the standard Windows/Linux shortcuts for text navigation in Emacs to the best replication I can make (they're not perfect).
 - `builtin:emacs_mac` the standard macOS Cocoa shortcuts for text navigation in Emacs to the best replication I can make (they're not perfect).
+- `builtin:readline` the standard shortcuts for text navigation in GNU Readline to the best replication I can make (they're not perfect).
 
 ## Custom Mappings
 

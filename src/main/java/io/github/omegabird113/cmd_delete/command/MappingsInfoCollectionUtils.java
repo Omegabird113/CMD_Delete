@@ -61,7 +61,8 @@ public final class MappingsInfoCollectionUtils {
                         "builtin:windows_linux",
                         "builtin:mac",
                         "builtin:emacs_windows_linux",
-                        "builtin:emacs_mac"
+                        "builtin:emacs_mac",
+                        "builtin:readline"
                 )
         );
         internal.addAll(MappingsJSONManager.getAvailableOptions(true));
