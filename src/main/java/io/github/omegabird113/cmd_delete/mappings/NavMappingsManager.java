@@ -14,7 +14,6 @@ import java.util.List;
 
 public final class NavMappingsManager {
     private static final @NonNull Logger LOGGER = LoggingManager.getLogger(NavMappingsManager.class);
-    private static final @NonNull ActiveMappingsManager ACTIVE_MAPPINGS_MANAGER = new ActiveMappingsManager();
     private static @Nullable MappingsState currentMappingsState;
 
     private NavMappingsManager() {
@@ -45,19 +44,19 @@ public final class NavMappingsManager {
     }
 
     public static void loadMappings() {
-        currentMappingsState = ACTIVE_MAPPINGS_MANAGER.tryGetMappings();
-        ACTIVE_MAPPINGS_MANAGER.trySaveMappings(
+        currentMappingsState = ActiveMappingsManager.tryGetMappings();
+        ActiveMappingsManager.trySaveMappings(
                 MappingsIdResolutionUtils.resolveNamespacedId(getMappingsState())
         );
         logMappings();
     }
 
     public static boolean updateMappingsToCustom(@NonNull String id) {
-        final MappingsState mappingsState = ACTIVE_MAPPINGS_MANAGER.tryResolveCustomMappings(id);
+        final MappingsState mappingsState = ActiveMappingsManager.tryResolveCustomMappings(id);
         if (mappingsState == null)
             return false;
         currentMappingsState = mappingsState;
-        ACTIVE_MAPPINGS_MANAGER.trySaveMappings(
+        ActiveMappingsManager.trySaveMappings(
                 MappingsIdResolutionUtils.resolveNamespacedId(getMappingsState())
         );
         logMappings();
@@ -66,12 +65,12 @@ public final class NavMappingsManager {
 
     public static boolean updateMappingsToBuiltIn(@NonNull String id) {
         final MappingsState old = currentMappingsState;
-        currentMappingsState = ACTIVE_MAPPINGS_MANAGER.resolveMappings(
+        currentMappingsState = ActiveMappingsManager.resolveMappings(
                 MappingsIdResolutionUtils.resolveNamespacedId(MappingsState.Type.BUILTIN, id)
         );
         if (old != null && old.equals(currentMappingsState))
             return false;
-        ACTIVE_MAPPINGS_MANAGER.trySaveMappings(
+        ActiveMappingsManager.trySaveMappings(
                 MappingsIdResolutionUtils.resolveNamespacedId(getMappingsState())
         );
         logMappings();
@@ -79,10 +78,10 @@ public final class NavMappingsManager {
     }
 
     public static void updateMappingsToDefault() {
-        currentMappingsState = ACTIVE_MAPPINGS_MANAGER.resolveMappings(
+        currentMappingsState = ActiveMappingsManager.resolveMappings(
                 MappingsIdResolutionUtils.resolveNamespacedId(MappingsState.Type.DEFAULT, "")
         );
-        ACTIVE_MAPPINGS_MANAGER.trySaveMappings(
+        ActiveMappingsManager.trySaveMappings(
                 MappingsIdResolutionUtils.resolveNamespacedId(getMappingsState())
         );
         logMappings();

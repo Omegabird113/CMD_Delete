@@ -16,14 +16,17 @@ import static io.github.omegabird113.cmd_delete.config.data.MappingsIdResolution
 import static io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils.resolveType;
 
 public final class ActiveMappingsManager {
+    private ActiveMappingsManager() {
+    }
+
     private static final @NonNull Logger LOGGER = LoggingManager.getLogger(ActiveMappingsManager.class);
 
-    public @Nullable MappingsState tryResolveCustomMappings(@NonNull String id) {
+    public static @Nullable MappingsState tryResolveCustomMappings(@NonNull String id) {
         final Optional<NavMappings> mappings = MappingsJSONManager.tryLoadCustomMappings(id);
         return mappings.map(navMappings -> new MappingsState(navMappings, MappingsState.Type.CUSTOM, id)).orElse(null);
     }
 
-    public @Nullable MappingsState tryResolveBuiltinMappings(@NonNull String id, MappingsState.@NonNull Type type) {
+    public static @Nullable MappingsState tryResolveBuiltinMappings(@NonNull String id, MappingsState.@NonNull Type type) {
         final Optional<NavMappings> mappings = MappingsJSONManager.tryLoadBuiltinMappings(id);
         if (mappings.isEmpty())
             return null;
@@ -32,14 +35,14 @@ public final class ActiveMappingsManager {
         return new MappingsState(mappings.get(), type, id);
     }
 
-    @NonNull String resolveDefaultMappingsNonNamespacedId() {
+    static @NonNull String resolveDefaultMappingsNonNamespacedId() {
         if (Os.USING == Os.MAC)
             return "mac";
         else
             return "windows_linux";
     }
 
-    public @Nullable MappingsState resolveMappings(@NonNull String namespacedId) {
+    public static @Nullable MappingsState resolveMappings(@NonNull String namespacedId) {
         final String id = removeNamespaceFromId(namespacedId);
         final MappingsState.Type type = resolveType(namespacedId);
         final MappingsState mappingsState = switch (type) {
@@ -53,17 +56,17 @@ public final class ActiveMappingsManager {
         return mappingsState;
     }
 
-    void writeActiveMappings(@NonNull String namespacedId) throws IOException {
+    static void writeActiveMappings(@NonNull String namespacedId) throws IOException {
         Files.createDirectories(PathConstants.getActiveMappingsFilePath().getParent());
         Files.writeString(PathConstants.getActiveMappingsFilePath(), namespacedId);
     }
 
-    @NonNull String readActiveMappings() throws IOException {
+    static @NonNull String readActiveMappings() throws IOException {
         return Files.readString(PathConstants.getActiveMappingsFilePath());
     }
 
     @Nullable
-    public MappingsState tryGetMappings() {
+    public static MappingsState tryGetMappings() {
         String namespacedId = "";
         try {
             namespacedId = readActiveMappings();
@@ -73,7 +76,7 @@ public final class ActiveMappingsManager {
         return resolveMappings(namespacedId);
     }
 
-    public void trySaveMappings(@NonNull String namespacedId) {
+    public static void trySaveMappings(@NonNull String namespacedId) {
         try {
             writeActiveMappings(namespacedId);
         } catch (IOException e) {
