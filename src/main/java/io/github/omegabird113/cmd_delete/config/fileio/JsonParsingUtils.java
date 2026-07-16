@@ -1,9 +1,10 @@
-package io.github.omegabird113.cmd_delete.config;
+package io.github.omegabird113.cmd_delete.config.fileio;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import io.github.omegabird113.cmd_delete.config.data.KeyCodeRegistry;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -11,19 +12,19 @@ import org.jspecify.annotations.Nullable;
 import java.util.Locale;
 import java.util.Map;
 
-final class JsonParsingUtils {
+public final class JsonParsingUtils {
     private JsonParsingUtils() {
     }
 
     @Contract(pure = true)
-    public static String getStringElse(@NonNull JsonObject parent, String fieldName, String defaultValue) {
+    public static String getStringElse(@NonNull JsonObject parent, @NonNull String fieldName, @NonNull String defaultValue) {
         if (!parent.has(fieldName))
             return defaultValue;
         final String value = requireString(parent, fieldName).trim();
         return value.isEmpty() ? defaultValue : value;
     }
 
-    public static JsonObject requireObject(@NonNull JsonObject parent, String fieldName) {
+    public static JsonObject requireObject(@NonNull JsonObject parent, @NonNull String fieldName) {
         if (!parent.has(fieldName))
             throw new JsonParseException("Missing required field: " + fieldName);
 
@@ -34,7 +35,7 @@ final class JsonParsingUtils {
         return element.getAsJsonObject();
     }
 
-    public static JsonArray requireArray(@NonNull JsonObject parent, String fieldName) {
+    public static JsonArray requireArray(@NonNull JsonObject parent, @NonNull String fieldName) {
         if (!parent.has(fieldName))
             throw new JsonParseException("Missing required field: " + fieldName);
 
@@ -45,7 +46,7 @@ final class JsonParsingUtils {
         return element.getAsJsonArray();
     }
 
-    public static String requireString(@NonNull JsonObject parent, String fieldName) {
+    public static String requireString(@NonNull JsonObject parent, @NonNull String fieldName) {
         if (!parent.has(fieldName))
             throw new JsonParseException("Missing required field: " + fieldName);
 
@@ -56,7 +57,7 @@ final class JsonParsingUtils {
         return element.getAsString();
     }
 
-    public static boolean getOptionalBoolean(@NonNull JsonObject parent, String fieldName) {
+    public static boolean getOptionalBoolean(@NonNull JsonObject parent, @NonNull String fieldName) {
         if (!parent.has(fieldName))
             return false;
 
@@ -68,7 +69,7 @@ final class JsonParsingUtils {
     }
 
     @Contract(pure = true)
-    public static @Nullable Boolean getNullableBoolean(@NonNull JsonObject parent, String fieldName) {
+    public static @Nullable Boolean getNullableBoolean(@NonNull JsonObject parent, @NonNull String fieldName) {
         if (!parent.has(fieldName))
             return null;
 
@@ -79,7 +80,7 @@ final class JsonParsingUtils {
         return element.getAsBoolean();
     }
 
-    public static int requireInt(@NonNull JsonObject parent, String fieldName) {
+    public static int requireInt(@NonNull JsonObject parent, @NonNull String fieldName, boolean strictMode, int fv) {
         if (!parent.has(fieldName))
             throw new JsonParseException("Missing required field: " + fieldName);
 
@@ -88,6 +89,11 @@ final class JsonParsingUtils {
             throw new JsonParseException("Expected \"" + fieldName + "\" to be a number");
 
         final String s = element.getAsString();
+
+        if (strictMode && fv == 4)
+            if (!s.matches("-?(0|[1-9]\\d*)"))
+                throw new JsonParseException("Expected \"" + fieldName + "\" to be an integer literal");
+
         try {
             return Integer.parseInt(s);
         } catch (NumberFormatException e) {
@@ -95,7 +101,7 @@ final class JsonParsingUtils {
         }
     }
 
-    public static int requireKeyCode(@NonNull JsonObject parent, String fieldName) throws JsonParseException {
+    public static int requireKeyCode(@NonNull JsonObject parent, @NonNull String fieldName, boolean strictMode, int fv) throws JsonParseException {
         final Map<String, Integer> keyMap = KeyCodeRegistry.getKeyMap();
 
         if (!parent.has(fieldName))
@@ -115,6 +121,11 @@ final class JsonParsingUtils {
                 return keyCode;
         } else
             try {
+                if (strictMode && fv == 4)
+                    if (!keyString.matches("-?(0|[1-9]\\d*)"))
+                        throw new JsonParseException(
+                                "Expected \"" + fieldName + "\" to be an integer literal");
+
                 return Integer.parseInt(keyString);
             } catch (NumberFormatException e) {
                 throw new JsonParseException("Expected \"" + fieldName + "\" to be a string or an integer");

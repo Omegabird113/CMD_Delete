@@ -1,6 +1,8 @@
-package io.github.omegabird113.cmd_delete.config;
+package io.github.omegabird113.cmd_delete.config.fileio;
 
 import io.github.omegabird113.cmd_delete.LoggingManager;
+import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
+import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
@@ -8,7 +10,7 @@ import org.slf4j.Logger;
 import java.nio.file.Path;
 
 public final class PathConstants {
-    private static final Logger LOGGER = LoggingManager.getLogger(PathConstants.class);
+    private static final @NonNull Logger LOGGER = LoggingManager.getLogger(PathConstants.class);
 
     private static @Nullable Path mappingsResourcePath;
     private static @Nullable Path activeMappingsFilePath;
@@ -47,5 +49,19 @@ public final class PathConstants {
         if (mappingsJSONPath == null)
             throw new IllegalStateException("Mappings JSON path has not been set");
         return mappingsJSONPath;
+    }
+
+    public static Path getPathOf(MappingsState.Type type, String id) {
+        Path path = (type == MappingsState.Type.CUSTOM)
+                ? getMappingsJSONPath()
+                : getMappingsResourcePath();
+        return path.resolve(id + ".json");
+    }
+
+    public static Path getPathOf(String namespacedId) {
+        return getPathOf(
+                MappingsIdResolutionUtils.resolveType(namespacedId),
+                MappingsIdResolutionUtils.removeNamespaceFromId(namespacedId)
+        );
     }
 }

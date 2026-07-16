@@ -1,9 +1,12 @@
-package io.github.omegabird113.cmd_delete.config;
+package io.github.omegabird113.cmd_delete.config.fileio;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import io.github.omegabird113.cmd_delete.LoggingManager;
+import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
+import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
+import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.NavMappings;
 import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.Contract;
@@ -20,13 +23,13 @@ import java.util.List;
 import java.util.Optional;
 
 public final class MappingsJSONManager {
-    private static final Logger LOGGER = LoggingManager.getLogger(MappingsJSONManager.class);
+    private static final @NonNull Logger LOGGER = LoggingManager.getLogger(MappingsJSONManager.class);
 
     private MappingsJSONManager() {
     }
 
-    private static @NonNull MappingsRegistry loadFromResourceMappingsDir(String id) throws IOException {
-        final Path path = PathConstants.getMappingsResourcePath().resolve(id + ".json");
+    private static @NonNull MappingsRegistry loadFromResourceMappingsDir(@NonNull String id) throws IOException {
+        final Path path = PathConstants.getPathOf(MappingsState.Type.BUILTIN, id);
 
         final Gson gson = new GsonBuilder()
                 .registerTypeAdapter(MappingsRegistry.class, new MappingsJSONDeserializer())
@@ -40,8 +43,9 @@ public final class MappingsJSONManager {
         }
     }
 
-    private static @NonNull MappingsRegistry loadFromCustomMappingsDir(String id) throws IOException {
-        final Path path = PathConstants.getMappingsJSONPath().resolve(id + ".json");
+    private static @NonNull MappingsRegistry loadFromCustomMappingsDir(@NonNull String id) throws IOException {
+        final Path path = PathConstants.getPathOf(MappingsState.Type.CUSTOM, id);
+
         if (!Files.exists(path))
             throw new FileNotFoundException("Custom mapping file not found at: " + path);
 
@@ -57,7 +61,7 @@ public final class MappingsJSONManager {
         }
     }
 
-    public static Optional<NavMappings> tryLoadCustomMappings(String id) {
+    public static @NonNull Optional<NavMappings> tryLoadCustomMappings(@NonNull String id) {
         final Optional<MappingsRegistry> registry = getRegistryFrom(true, id);
         if (registry.isPresent()) {
             try {
@@ -71,17 +75,17 @@ public final class MappingsJSONManager {
             return Optional.empty();
     }
 
-    public static Optional<NavMappings> tryLoadBuiltinMappings(String id) {
+    public static @NonNull Optional<NavMappings> tryLoadBuiltinMappings(@NonNull String id) {
         final Optional<MappingsRegistry> registry = getRegistryFrom(false, id);
         return registry.map(NavMappings::new);
     }
 
-    public static Optional<MappingsRegistry> getRegistryFrom(boolean custom, String id) {
+    public static @NonNull Optional<MappingsRegistry> getRegistryFrom(boolean custom, @NonNull String id) {
         try {
             final MappingsRegistry registry = custom ? loadFromCustomMappingsDir(id) : loadFromResourceMappingsDir(id);
             return Optional.of(registry);
         } catch (FileNotFoundException ignored) {
-            LOGGER.error("Could not access {} mapping file \"{}\" because it does not exist.", custom ? "custom" : "builtin", id);
+            LOGGER.error("Could not access {} mapping file \"{}\" (at \"{}\") because it does not exist.", custom ? "custom" : "builtin", id, PathConstants.getPathOf(custom ? MappingsState.Type.CUSTOM : MappingsState.Type.BUILTIN, id));
             return Optional.empty();
         } catch (IOException | JsonParseException e) {
             LOGGER.error("Could not access {} mapping file due to exception: {}", custom ? "custom" : "builtin", id, e);
@@ -89,7 +93,7 @@ public final class MappingsJSONManager {
         }
     }
 
-    private static @NonNull MappingsRegistry resolveInheritance(MappingsRegistry startRegistry) throws IOException {
+    private static @NonNull MappingsRegistry resolveInheritance(@NonNull MappingsRegistry startRegistry) throws IOException {
         final List<MappingsRegistry> registries = new ArrayList<>();
         final List<String> ids = new ArrayList<>();
         MappingsRegistry current = startRegistry;
@@ -104,7 +108,7 @@ public final class MappingsJSONManager {
                     LOGGER.info("Resolved inheritance of mappings \"{}\" with a chain of: {}", namespacePrefix + current.id(), String.join(" -> ", ids));
                 break;
             } else {
-                boolean inheritsCustom = current.inherits().startsWith("custom:");
+                final boolean inheritsCustom = current.inherits().startsWith("custom:");
                 final String idToGet = MappingsIdResolutionUtils.removeNamespaceFromId(current.inherits());
                 final Optional<MappingsRegistry> newRegistry = getRegistryFrom(inheritsCustom, idToGet);
                 namespacePrefix = inheritsCustom ? "custom:" : "builtin:";
@@ -122,7 +126,7 @@ public final class MappingsJSONManager {
     public static void tryMakeConfigFiles() {
         final File configDirectory = PathConstants.getMappingsJSONPath().toFile();
         if (!configDirectory.exists() || !configDirectory.isDirectory()) {
-            boolean s = configDirectory.mkdirs();
+            final boolean s = configDirectory.mkdirs();
             if (!s)
                 LOGGER.error("Could not create mappings config directory at: {}", configDirectory);
             else
@@ -131,7 +135,7 @@ public final class MappingsJSONManager {
         final File activeMappingsFile = PathConstants.getActiveMappingsFilePath().toFile();
         if (!activeMappingsFile.exists() || !activeMappingsFile.isFile()) {
             try {
-                boolean s = activeMappingsFile.createNewFile();
+                final boolean s = activeMappingsFile.createNewFile();
                 if (!s)
                     LOGGER.error("Could not create active mappings file at: {}", activeMappingsFile.getAbsolutePath());
                 else

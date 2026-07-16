@@ -1,10 +1,13 @@
-package io.github.omegabird113.cmd_delete.config;
+package io.github.omegabird113.cmd_delete.config.fileio;
 
 import com.google.gson.*;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
+import io.github.omegabird113.cmd_delete.config.data.FeatureFlags;
+import io.github.omegabird113.cmd_delete.config.data.KeyCombo;
+import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
@@ -15,10 +18,10 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static io.github.omegabird113.cmd_delete.config.JsonParsingUtils.*;
+import static io.github.omegabird113.cmd_delete.config.fileio.JsonParsingUtils.*;
 
-public final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistry> {
-    private static final Logger LOGGER = LoggingManager.getLogger(MappingsJSONManager.class);
+final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistry> {
+    private static final @NonNull Logger LOGGER = LoggingManager.getLogger(MappingsJSONManager.class);
     private static final @NonNull Map<String, Os> OS_MAP = Map.of(
             "windows", Os.WINDOWS,
             "mac", Os.MAC,
@@ -33,28 +36,65 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
             throw new JsonParseException("Expected a JSON object at root");
         final JsonObject jsonObject = json.getAsJsonObject();
 
-        final int fv = requireInt(jsonObject, "fv");
+        final boolean strictMode = getOptionalBoolean(jsonObject, "strict");
+
+        final int fv = requireInt(jsonObject, "fv", false, -1); // we don't know fv/strict yet
         if (fv < CmdDeleteClient.MINIMUM_MAPPINGS_FORMAT_VERSION || fv > CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION)
             throw new JsonParseException("Invalid format version number: " + fv + ". The current format version is: " + CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION);
         if (fv != CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION)
-            LOGGER.warn("Old mappings version ({}) used by custom mappings. Please update to version {}", fv, CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION);
+            logWarn(
+                    "Old mappings version (" + fv + ") used by custom mappings. Please update to version " + CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION,
+                    strictMode,
+                    fv
+            );
 
         final String inherits = getStringElse(jsonObject, "inherits", "");
 
         final JsonObject actions = requireObject(jsonObject, "actions");
+        final HashMap<KeyCombo, NavAction> localKeys = new HashMap<>();
+        final HashMap<KeyCombo, NavAction> disabledKeys = new HashMap<>();
+        parseActions(actions, localKeys, disabledKeys, fv, strictMode);
 
-        final Map<KeyCombo, NavAction> localKeys = new HashMap<>();
-        final Map<KeyCombo, NavAction> disabledKeys = new HashMap<>();
+        final MetadataContainer container = parseMeta(requireObject(jsonObject, "meta"), strictMode, fv);
+        final FeatureFlags ff = parseFlags(jsonObject, fv, inherits);
 
+        return new MappingsRegistry(localKeys, (disabledKeys.isEmpty() ? null : disabledKeys), List.copyOf(container.systems()), ff, inherits, container.name(), container.author(), container.description(), container.version(), container.id());
+    }
+
+    private void logWarn(@NonNull String message, boolean strictMode, int fv) {
+        if (strictMode && fv == 4)
+            throw new JsonParseException(message);
+        else
+            LOGGER.warn(message);
+    }
+
+    private String trimAndCaseIfNotStrict(@NonNull String str, boolean upper, boolean strictMode, int fv) {
+        if (strictMode && fv == 4)
+            return str;
+
+        if (upper)
+            return str.trim().toUpperCase(Locale.ROOT);
+        else
+            return str.trim().toLowerCase(Locale.ROOT);
+    }
+
+    private void parseActions(@NonNull JsonObject actions, @NonNull HashMap<KeyCombo, NavAction> localKeys, @NonNull HashMap<KeyCombo, NavAction> disabledKeys, int fv, boolean strictMode) {
         for (String actionName : actions.keySet()) {
-            NavAction action = NAV_ACTION_MAP.get(actionName.trim().toUpperCase(Locale.ROOT));
+            NavAction action = NAV_ACTION_MAP.get(trimAndCaseIfNotStrict(actionName, true, strictMode, fv));
             if (action == null || action == NavAction.NONE) {
-                LOGGER.warn("Invalid action specified by custom mappings: \"{}\". All key-combos registered in this action skipped...", actionName);
+                logWarn(
+                        "Invalid action specified by custom mappings: \"" + actionName + "\". All key-combos registered in this action skipped...",
+                        strictMode,
+                        fv
+                );
                 continue;
             }
 
             if (ActionOffsetUtils.isOverrideAction(action) && fv == 2)
                 throw new JsonParseException("Format version 2 file specified actions of fv 3: " + actionName);
+
+            if (ActionOffsetUtils.isOverrideEditAction(action) && fv < 4)
+                throw new JsonParseException("Format version 2 or 3 file specified actions of fv 4: " + actionName);
 
             final JsonArray bindings = requireArray(actions, actionName);
 
@@ -66,9 +106,13 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
 
                 final int keyCode;
                 try {
-                    keyCode = requireKeyCode(binding, "key");
+                    keyCode = requireKeyCode(binding, "key", strictMode, fv);
                 } catch (JsonParseException e) {
-                    LOGGER.warn("Invalid key binding due to error: {}", e.getMessage());
+                    logWarn(
+                            "Invalid key binding due to error: " + e.getMessage(),
+                            strictMode,
+                            fv
+                    );
                     continue;
                 }
 
@@ -98,20 +142,19 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
 
                 for (KeyCombo key : keys) {
                     if (toAdd.containsKey(key))
-                        LOGGER.warn("Duplicate key binding in custom binding with action of \"{}\" and key \"{}\". 2nd registration skipped...", actionName, key);
+                        logWarn(
+                                "Duplicate key binding in custom binding with action of \"" + actionName + "\" and key \"" + key + "\". 2nd registration skipped...",
+                                strictMode,
+                                fv
+                        );
                     else
                         toAdd.put(key, action);
                 }
             }
         }
-
-        final MetadataContainer container = parseMeta(requireObject(jsonObject, "meta"));
-        final FeatureFlags ff = parseFlags(jsonObject, fv, inherits);
-
-        return new MappingsRegistry(localKeys, (disabledKeys.isEmpty() ? null : disabledKeys), List.copyOf(container.systems()), ff, inherits, container.name(), container.author(), container.description(), container.version(), container.id());
     }
 
-    private @NonNull FeatureFlags parseFlags(JsonObject root, int fv, String inherits) {
+    private @NonNull FeatureFlags parseFlags(@NonNull JsonObject root, int fv, @NonNull String inherits) {
         if (fv == 2)
             return new FeatureFlags(false, true);
         else {
@@ -131,8 +174,8 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
         }
     }
 
-    @Contract("_ -> new")
-    private @NonNull MetadataContainer parseMeta(JsonObject meta) {
+    @Contract("_, _, _ -> new")
+    private @NonNull MetadataContainer parseMeta(@NonNull JsonObject meta, boolean strictMode, int fv) {
         final String name = getStringElse(meta, "name", "Unnamed Custom Mappings");
         final String author = getStringElse(meta, "author", "unknown").replace("$$cmd_delete$$", "Omegabird113");
         final String description = getStringElse(meta, "description", "No description provided");
@@ -140,7 +183,7 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
         final String id = requireString(meta, "id");
 
         final JsonArray systems = requireArray(meta, "systems");
-        final Set<Os> parsedSystems = parseSystems(systems);
+        final Set<Os> parsedSystems = parseSystems(systems, strictMode, fv);
         if (parsedSystems.isEmpty())
             throw new JsonParseException("No systems found");
         return new MetadataContainer(name, author, version, description, id, parsedSystems);
@@ -166,13 +209,13 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
         return results.toArray(KeyCombo[]::new);
     }
 
-    private @NonNull Set<Os> parseSystems(@NonNull JsonArray systemsArray) {
+    private @NonNull Set<Os> parseSystems(@NonNull JsonArray systemsArray, boolean strictMode, int fv) {
         final Set<Os> systems = new LinkedHashSet<>();
 
         for (JsonElement systemElement : systemsArray) {
             if (!systemElement.isJsonPrimitive() || !systemElement.getAsJsonPrimitive().isString())
                 throw new JsonParseException("Expected each entry in \"systems\" to be a string");
-            final String systemName = systemElement.getAsString().trim().toLowerCase(Locale.ROOT);
+            final String systemName = trimAndCaseIfNotStrict(systemElement.getAsString(), false, strictMode, fv);
             final Os os = OS_MAP.get(systemName);
             if (os == null)
                 throw new JsonParseException("Unknown system: " + systemName);
@@ -182,7 +225,8 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
         return systems;
     }
 
-    private record MetadataContainer(String name, String author, String version, String description, String id,
-                                     Set<Os> systems) {
+    private record MetadataContainer(@NonNull String name, @NonNull String author, @NonNull String version,
+                                     @NonNull String description, @NonNull String id,
+                                     @NonNull Set<Os> systems) {
     }
 }

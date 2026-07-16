@@ -4,8 +4,8 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Window;
 import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
-import io.github.omegabird113.cmd_delete.config.KeyCombo;
-import io.github.omegabird113.cmd_delete.config.MappingsRegistry;
+import io.github.omegabird113.cmd_delete.config.data.KeyCombo;
+import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import org.lwjgl.glfw.GLFW;
@@ -16,11 +16,14 @@ import static io.github.omegabird113.cmd_delete.actions.NavAction.NONE;
 
 public record NavMappings(@NonNull MappingsRegistry registry) {
     @Contract(pure = true)
-    public NavAction getAction(KeyCombo keyCombo) {
+    public NavAction getAction(@NonNull KeyCombo keyCombo) {
         final NavAction action = registry.get(keyCombo);
         if (action != null)
             if (ActionOffsetUtils.isOverrideAction(action))
-                return (registry.featureFlags().overrideVanillaNavigation() ? action : NONE);
+                if (registry.featureFlags().overrideVanillaNavigation())
+                    return action;
+                else
+                    return NONE;
             else
                 return action;
         return NONE;

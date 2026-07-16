@@ -1,6 +1,7 @@
 package io.github.omegabird113.cmd_delete.mappings;
 
 import org.jetbrains.annotations.Contract;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Locale;
 
@@ -9,10 +10,10 @@ public enum Os {
     LINUX,
     MAC;
 
-    public static final Os USING = getCurrent();
+    public static final @NonNull Os USING = getCurrent();
 
     @Contract(pure = true)
-    private static Os getCurrent() {
+    private static @NonNull Os getCurrent() {
         String os = System.getProperty("os.name").toLowerCase(Locale.ROOT);
         if (os.contains("mac"))
             return MAC;
