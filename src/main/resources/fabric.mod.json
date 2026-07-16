@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "cmd_delete",
-  "version": "1.3.1+mc26.1",
+  "version": "1.4.0-beta.1+mc26.1",
   "name": "CMD + Delete",
   "description": "A text navigation and editing shortcuts framework for Minecraft, allowing macOS users to experience native text editing behavior and everyone else to define their own custom shortcuts.",
   "authors": [
