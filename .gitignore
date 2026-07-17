@@ -2,6 +2,7 @@
 /.gradle/
 /build/
 /build/classes/java/main/
+/logs/
 .eclipse/
 .settings/
 .classpath
@@ -62,5 +63,3 @@ __MACOSX/
 Network Trash Folder
 Temporary Items
 .apdisk
-
-

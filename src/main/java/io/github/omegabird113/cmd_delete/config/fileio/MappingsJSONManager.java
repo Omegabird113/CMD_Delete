@@ -23,42 +23,35 @@ import java.util.List;
 import java.util.Optional;
 
 public final class MappingsJSONManager {
+    public static final Gson GSON = new GsonBuilder()
+            .registerTypeAdapter(MappingsRegistry.class, new MappingsJSONDeserializer())
+            .create();
     private static final @NonNull Logger LOGGER = LoggingManager.getLogger(MappingsJSONManager.class);
 
     private MappingsJSONManager() {
     }
 
-    private static @NonNull MappingsRegistry loadFromResourceMappingsDir(@NonNull String id) throws IOException {
-        final Path path = PathConstants.getPathOf(MappingsState.Type.BUILTIN, id);
+    private static @NonNull MappingsRegistry loadFromDir(MappingsState.@NonNull Type type, @NonNull String id) throws IOException {
+        final Path path = PathConstants.getPathOf(type, id);
+        final String typeStr = type == MappingsState.Type.CUSTOM ? "Custom" : "Builtin";
 
-        final Gson gson = new GsonBuilder()
-                .registerTypeAdapter(MappingsRegistry.class, new MappingsJSONDeserializer())
-                .create();
+        if (!Files.exists(path))
+            throw new FileNotFoundException(typeStr + " mapping file not found at: " + path);
 
         try (java.io.BufferedReader reader = Files.newBufferedReader(path)) {
-            final MappingsRegistry registry = gson.fromJson(reader, MappingsRegistry.class);
+            final MappingsRegistry registry = GSON.fromJson(reader, MappingsRegistry.class);
             if (!registry.id().equals(id))
-                throw new JsonParseException("Builtin mappings id \"" + registry.id() + "\" does not match filename \"" + id + "\"");
+                throw new JsonParseException(typeStr + " mappings id \"" + registry.id() + "\" does not match filename \"" + id + "\"");
             return registry;
         }
     }
 
+    private static @NonNull MappingsRegistry loadFromResourceMappingsDir(@NonNull String id) throws IOException {
+        return loadFromDir(MappingsState.Type.BUILTIN, id);
+    }
+
     private static @NonNull MappingsRegistry loadFromCustomMappingsDir(@NonNull String id) throws IOException {
-        final Path path = PathConstants.getPathOf(MappingsState.Type.CUSTOM, id);
-
-        if (!Files.exists(path))
-            throw new FileNotFoundException("Custom mapping file not found at: " + path);
-
-        final Gson gson = new GsonBuilder()
-                .registerTypeAdapter(MappingsRegistry.class, new MappingsJSONDeserializer())
-                .create();
-
-        try (java.io.BufferedReader reader = Files.newBufferedReader(path)) {
-            final MappingsRegistry registry = gson.fromJson(reader, MappingsRegistry.class);
-            if (!registry.id().equals(id))
-                throw new JsonParseException("Custom mappings id \"" + registry.id() + "\" does not match filename \"" + id + "\"");
-            return registry;
-        }
+        return loadFromDir(MappingsState.Type.CUSTOM, id);
     }
 
     public static @NonNull Optional<NavMappings> tryLoadCustomMappings(@NonNull String id) {

@@ -1,0 +1,28 @@
+{
+  "fv": 3,
+  "inherits": "builtin:mac",
+  "meta": {
+    "name": "Example custom mapping",
+    "author": "Omegabird113",
+    "description": "This example demonstrates inheritance, patching, and more! Though, these keybinds are made up and people wouldn't use these most likely...",
+    "version": "7777",
+    "id": "inherited",
+    "systems": [
+       "windows"
+    ]
+  },
+  "actions": {
+    "NAV_TEXT_START": [
+      {
+        "key": "up",
+        "superCommand": true,
+        "altOption": false,
+        "shift": false
+      },
+      {
+        "key": 29,
+        "altOption": false
+      }
+    ]
+  }
+}

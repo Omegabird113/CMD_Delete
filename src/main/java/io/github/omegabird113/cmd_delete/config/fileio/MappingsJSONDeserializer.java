@@ -38,7 +38,7 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
 
         final boolean strictMode = getOptionalBoolean(jsonObject, "strict");
 
-        final int fv = requireInt(jsonObject, "fv", false, -1); // we don't know fv/strict yet
+        final int fv = requireInt(jsonObject, "fv", true, 4); // we don't know fv/strict yet
         if (fv < CmdDeleteClient.MINIMUM_MAPPINGS_FORMAT_VERSION || fv > CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION)
             throw new JsonParseException("Invalid format version number: " + fv + ". The current format version is: " + CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION);
         if (fv != CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION)
@@ -80,7 +80,7 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
 
     private void parseActions(@NonNull JsonObject actions, @NonNull HashMap<KeyCombo, NavAction> localKeys, @NonNull HashMap<KeyCombo, NavAction> disabledKeys, int fv, boolean strictMode) {
         for (String actionName : actions.keySet()) {
-            NavAction action = NAV_ACTION_MAP.get(trimAndCaseIfNotStrict(actionName, true, strictMode, fv));
+            final NavAction action = NAV_ACTION_MAP.get(trimAndCaseIfNotStrict(actionName, true, strictMode, fv));
             if (action == null || action == NavAction.NONE) {
                 logWarn(
                         "Invalid action specified by custom mappings: \"" + actionName + "\". All key-combos registered in this action skipped...",
@@ -201,13 +201,16 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
         final boolean[] controlVals = hasControl ? new boolean[]{controlValue} : new boolean[]{false, true};
         final boolean[] superCommandVals = hasSuperCommand ? new boolean[]{superCommandValue} : new boolean[]{false, true};
 
-        final List<KeyCombo> results = new ArrayList<>();
+        final KeyCombo[] results = new KeyCombo[shiftVals.length * altOptionVals.length * controlVals.length * superCommandVals.length];
+        int i = 0;
         for (boolean s : shiftVals)
             for (boolean a : altOptionVals)
                 for (boolean c : controlVals)
-                    for (boolean sup : superCommandVals)
-                        results.add(new KeyCombo(key, s, a, c, sup));
-        return results.toArray(KeyCombo[]::new);
+                    for (boolean sup : superCommandVals) {
+                        results[i] = new KeyCombo(key, s, a, c, sup);
+                        i++;
+                    }
+        return results;
     }
 
     private @NonNull Set<Os> parseSystems(@NonNull JsonArray systemsArray, boolean strictMode, int fv) {
