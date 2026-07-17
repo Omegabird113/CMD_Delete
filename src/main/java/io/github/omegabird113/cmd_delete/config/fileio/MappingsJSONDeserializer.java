@@ -201,13 +201,16 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
         final boolean[] controlVals = hasControl ? new boolean[]{controlValue} : new boolean[]{false, true};
         final boolean[] superCommandVals = hasSuperCommand ? new boolean[]{superCommandValue} : new boolean[]{false, true};
 
-        final List<KeyCombo> results = new ArrayList<>();
+        final KeyCombo[] results = new KeyCombo[shiftVals.length * altOptionVals.length * controlVals.length * superCommandVals.length];
+        int i = 0;
         for (boolean s : shiftVals)
             for (boolean a : altOptionVals)
                 for (boolean c : controlVals)
-                    for (boolean sup : superCommandVals)
-                        results.add(new KeyCombo(key, s, a, c, sup));
-        return results.toArray(KeyCombo[]::new);
+                    for (boolean sup : superCommandVals) {
+                        results[i] = new KeyCombo(key, s, a, c, sup);
+                        i++;
+                    }
+        return results;
     }
 
     private @NonNull Set<Os> parseSystems(@NonNull JsonArray systemsArray, boolean strictMode, int fv) {
