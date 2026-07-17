@@ -52,7 +52,7 @@ public final class PathConstants {
     }
 
     public static Path getPathOf(MappingsState.Type type, String id) {
-        Path path = (type == MappingsState.Type.CUSTOM)
+        final Path path = (type == MappingsState.Type.CUSTOM)
                 ? getMappingsJSONPath()
                 : getMappingsResourcePath();
         return path.resolve(id + ".json");

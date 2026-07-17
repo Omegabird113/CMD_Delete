@@ -25,14 +25,14 @@ public final class ShareCodeGenerator {
     }
 
     private static @NonNull String collapseWhitespace(@NonNull File file) throws IOException {
-        try (Reader reader = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8)) {
-            JsonElement json = JsonParser.parseReader(reader);
+        try (final Reader reader = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8)) {
+            final JsonElement json = JsonParser.parseReader(reader);
             return MappingsJSONManager.GSON.toJson(json);
         }
     }
 
     private static @NonNull String collapseWhitespace(@NonNull String namespacedId) {
-        File file = PathConstants.getPathOf(namespacedId).toFile();
+        final File file = PathConstants.getPathOf(namespacedId).toFile();
         try {
             return collapseWhitespace(file);
         } catch (IOException e) {
@@ -43,7 +43,7 @@ public final class ShareCodeGenerator {
 
     @Contract("_ -> new")
     private static @NonNull String compressAndBase58Encode(@NonNull String contents) throws IOException {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
         try (GZIPOutputStream gzip = new GZIPOutputStream(byteArrayOutputStream)) {
             gzip.write(contents.getBytes(StandardCharsets.UTF_8));
@@ -53,7 +53,7 @@ public final class ShareCodeGenerator {
     }
 
     private static @NonNull String generateCoreShareCode(@NonNull String namespacedId) {
-        File file = PathConstants.getPathOf(namespacedId).toFile();
+        final File file = PathConstants.getPathOf(namespacedId).toFile();
         try {
             return compressAndBase58Encode(collapseWhitespace(file));
         } catch (Exception e) {
@@ -64,7 +64,7 @@ public final class ShareCodeGenerator {
 
     static long genCRC32checksum(@NonNull String contents) {
         byte[] bytes = contents.getBytes(StandardCharsets.UTF_8);
-        CRC32 crc32 = new CRC32();
+        final CRC32 crc32 = new CRC32();
         crc32.update(bytes, 0, bytes.length);
         return crc32.getValue();
     }
