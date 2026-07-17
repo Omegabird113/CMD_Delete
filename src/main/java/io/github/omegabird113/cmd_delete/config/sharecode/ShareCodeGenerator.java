@@ -1,10 +1,10 @@
 package io.github.omegabird113.cmd_delete.config.sharecode;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.LoggingManager;
+import io.github.omegabird113.cmd_delete.config.fileio.MappingsJSONManager;
 import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
 import org.apache.commons.codec.binary.Base58;
 import org.jetbrains.annotations.Contract;
@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.zip.CRC32;
 import java.util.zip.GZIPOutputStream;
 
@@ -23,9 +24,11 @@ public final class ShareCodeGenerator {
     private ShareCodeGenerator() {
     }
 
-    private static @NonNull String collapseWhitespace(@NonNull File file) throws FileNotFoundException {
-        JsonElement json = JsonParser.parseReader(new FileReader(file));
-        return new Gson().toJson(json);
+    private static @NonNull String collapseWhitespace(@NonNull File file) throws IOException {
+        try (Reader reader = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8)) {
+            JsonElement json = JsonParser.parseReader(reader);
+            return MappingsJSONManager.GSON.toJson(json);
+        }
     }
 
     private static @NonNull String collapseWhitespace(@NonNull String namespacedId) {

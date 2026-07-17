@@ -1,6 +1,5 @@
 package io.github.omegabird113.cmd_delete.command;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
@@ -248,7 +247,7 @@ public final class NavMappingsCommand {
         try {
             decoded = ShareCodeDecoder.decode(shareCode.trim());
 
-            final JsonObject jsonObject = new Gson().fromJson(decoded, JsonObject.class);
+            final JsonObject jsonObject = MappingsJSONManager.GSON.fromJson(decoded, JsonObject.class);
             final JsonObject meta = JsonParsingUtils.requireObject(jsonObject, "meta");
             final String idStr = JsonParsingUtils.requireString(meta, "id");
 

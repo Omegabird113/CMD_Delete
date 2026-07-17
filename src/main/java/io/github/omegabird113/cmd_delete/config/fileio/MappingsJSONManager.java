@@ -24,7 +24,7 @@ import java.util.Optional;
 
 public final class MappingsJSONManager {
     private static final @NonNull Logger LOGGER = LoggingManager.getLogger(MappingsJSONManager.class);
-    private static final Gson GSON = new GsonBuilder()
+    public static final Gson GSON = new GsonBuilder()
             .registerTypeAdapter(MappingsRegistry.class, new MappingsJSONDeserializer())
             .create();
 
