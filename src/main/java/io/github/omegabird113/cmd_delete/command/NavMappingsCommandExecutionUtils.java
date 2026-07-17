@@ -25,7 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
-import static io.github.omegabird113.cmd_delete.command.NavMappingsCommand.*;
+import static io.github.omegabird113.cmd_delete.command.NavMappingsCommand.LOGGER;
 
 class NavMappingsCommandExecutionUtils {
     static void exportShareCode(@NonNull CommandContext<FabricClientCommandSource> context, boolean custom) {

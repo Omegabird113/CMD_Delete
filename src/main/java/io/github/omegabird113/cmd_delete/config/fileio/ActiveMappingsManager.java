@@ -47,8 +47,7 @@ public final class ActiveMappingsManager {
         final MappingsState mappingsState = switch (type) {
             case CUSTOM -> tryResolveCustomMappings(id);
             case BUILTIN -> tryResolveBuiltinMappings(id, MappingsState.Type.BUILTIN);
-            case DEFAULT ->
-                    tryResolveBuiltinMappings(defaultMappingsId, MappingsState.Type.DEFAULT);
+            case DEFAULT -> tryResolveBuiltinMappings(defaultMappingsId, MappingsState.Type.DEFAULT);
         };
         if (mappingsState == null)
             return tryResolveBuiltinMappings(defaultMappingsId, MappingsState.Type.DEFAULT);
