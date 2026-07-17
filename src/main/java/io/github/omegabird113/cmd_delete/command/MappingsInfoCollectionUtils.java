@@ -53,7 +53,7 @@ public final class MappingsInfoCollectionUtils {
     }
 
     @Contract(pure = true)
-    static String[] getMappingsList() {
+    public static String[] getMappingsList() {
         final List<String> internal = new ArrayList<>(
                 List.of(
                         "default",

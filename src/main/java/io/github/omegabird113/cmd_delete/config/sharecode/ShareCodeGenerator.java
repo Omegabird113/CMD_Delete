@@ -27,7 +27,7 @@ public final class ShareCodeGenerator {
     private ShareCodeGenerator() {
     }
 
-    private static @NonNull String collapseWhitespace(@NonNull File file) throws IOException {
+    public static @NonNull String collapseWhitespace(@NonNull File file) throws IOException {
         try (final Reader reader = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8)) {
             final JsonElement json = JsonParser.parseReader(reader);
             return MappingsJSONManager.GSON.toJson(json);

@@ -27,6 +27,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.14.0'
 
     implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
 }
 
 processResources {
@@ -87,4 +89,8 @@ publishing {
         // The repositories here will be used for publishing your artifact, not for
         // retrieving dependencies.
     }
+}
+
+test {
+    useJUnitPlatform()
 }
