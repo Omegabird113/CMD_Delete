@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 public class TestLoader {
@@ -32,12 +33,12 @@ public class TestLoader {
         Assertions.assertDoesNotThrow(() -> {
             PathConstants.init(
                     tempDir,
-                    Path.of(CmdDeleteClient.class.getResource("/mappings").toURI())
+                    Path.of(Objects.requireNonNull(CmdDeleteClient.class.getResource("/mappings")).toURI())
             );
 
             LOGGER.info("Temp directory is {}", tempDir.toString());
 
-            try (Stream<Path> fis = Files.walk(Path.of(TestLoader.class.getResource("/test_mappings").toURI()))) {
+            try (Stream<Path> fis = Files.walk(Path.of(Objects.requireNonNull(TestLoader.class.getResource("/test_mappings")).toURI()))) {
                 fis.filter(Files::isRegularFile).forEach((path) -> {
                     try {
                         Files.copy(path, tempDir.resolve("config/cmd_delete/mappings").resolve(path.getFileName()), StandardCopyOption.REPLACE_EXISTING);
