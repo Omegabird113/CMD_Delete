@@ -36,6 +36,10 @@ public final class MappingsIdResolutionUtils {
 
     @Contract(pure = true)
     public static @NonNull String removeNamespaceFromId(@NonNull String namespacedId) {
-        return namespacedId.replaceFirst("custom:|builtin:", "");
+        if (namespacedId.startsWith("custom:"))
+            return namespacedId.substring("custom:".length());
+        if (namespacedId.startsWith("builtin:"))
+            return namespacedId.substring("builtin:".length());
+        return namespacedId;
     }
 }
