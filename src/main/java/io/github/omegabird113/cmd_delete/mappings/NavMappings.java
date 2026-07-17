@@ -19,26 +19,25 @@ public record NavMappings(@NonNull MappingsRegistry registry) {
     @Contract(pure = true)
     public NavAction getAction(@NonNull KeyCombo keyCombo) {
         final NavAction action = registry.get(keyCombo);
-        if (action != null)
-            if (ActionOffsetUtils.isOverrideAction(action))
-                if (registry.featureFlags().overrideVanillaNavigation())
-                    return action;
-                else
-                    return NONE;
-            else
-                return action;
-        return NONE;
+        if (action == null)
+            return NONE;
+
+        if (ActionOffsetUtils.isOverrideAction(action)
+                && !registry.featureFlags().overrideVanillaNavigation())
+            return NONE;
+
+        return action;
     }
 
     @Contract(pure = true)
     public NavAction getAction(@NonNull KeyEvent event, @NonNull Window window) {
         final int key = event.key();
         final boolean shift = event.hasShiftDown();
-        final boolean alt = event.hasAltDown();
+        final boolean altOption = event.hasAltDown();
         final boolean control = event.hasControlDown();
-        final boolean windows = InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_SUPER) || InputConstants.isKeyDown(window, GLFW.GLFW_KEY_RIGHT_SUPER);
+        final boolean superCommand = InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_SUPER) || InputConstants.isKeyDown(window, GLFW.GLFW_KEY_RIGHT_SUPER);
 
-        final KeyCombo keyCombo = new KeyCombo(key, shift, alt, control, windows);
+        final KeyCombo keyCombo = new KeyCombo(key, shift, altOption, control, superCommand);
         return getAction(keyCombo);
     }
 
@@ -59,11 +58,10 @@ public record NavMappings(@NonNull MappingsRegistry registry) {
 
     @Contract(pure = true)
     public float getCoverage() {
-        final int total = Arrays.stream(NavAction.values())
+        final long total = Arrays.stream(NavAction.values())
                 .filter(action -> action != NONE)
-                .toArray(NavAction[]::new)
-                .length;
-        final int support = this.getPossibleActions().length;
+                .count();
+        final int support = getPossibleActions().length;
         return ((float) support) / total;
     }
 }
