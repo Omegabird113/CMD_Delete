@@ -30,29 +30,28 @@ public final class ActiveMappingsManager {
         final Optional<NavMappings> mappings = MappingsJSONManager.tryLoadBuiltinMappings(id);
         if (mappings.isEmpty())
             return null;
-        if (type == MappingsState.Type.DEFAULT)
-            id = "";
-        return new MappingsState(mappings.get(), type, id);
+        final String idToGet = type == MappingsState.Type.DEFAULT ? "" : id;
+        return new MappingsState(mappings.get(), type, idToGet);
     }
 
     static @NonNull String resolveDefaultMappingsNonNamespacedId() {
-        if (Os.USING == Os.MAC)
-            return "mac";
-        else
-            return "windows_linux";
+        return (Os.USING == Os.MAC)
+                ? "mac"
+                : "windows_linux";
     }
 
     public static @Nullable MappingsState resolveMappings(@NonNull String namespacedId) {
         final String id = removeNamespaceFromId(namespacedId);
         final MappingsState.Type type = resolveType(namespacedId);
+        final String defaultMappingsId = resolveDefaultMappingsNonNamespacedId();
         final MappingsState mappingsState = switch (type) {
             case CUSTOM -> tryResolveCustomMappings(id);
-            case BUILTIN -> tryResolveBuiltinMappings(removeNamespaceFromId(id), MappingsState.Type.BUILTIN);
+            case BUILTIN -> tryResolveBuiltinMappings(id, MappingsState.Type.BUILTIN);
             case DEFAULT ->
-                    tryResolveBuiltinMappings(resolveDefaultMappingsNonNamespacedId(), MappingsState.Type.DEFAULT);
+                    tryResolveBuiltinMappings(defaultMappingsId, MappingsState.Type.DEFAULT);
         };
         if (mappingsState == null)
-            return tryResolveBuiltinMappings(resolveDefaultMappingsNonNamespacedId(), MappingsState.Type.DEFAULT);
+            return tryResolveBuiltinMappings(defaultMappingsId, MappingsState.Type.DEFAULT);
         return mappingsState;
     }
 
@@ -71,7 +70,7 @@ public final class ActiveMappingsManager {
         try {
             namespacedId = readActiveMappings();
         } catch (IOException e) {
-            LOGGER.error("Error while loading active mappings from file: {}", e.getMessage());
+            LOGGER.error("Error while loading active mappings from file: ", e);
         }
         return resolveMappings(namespacedId);
     }
