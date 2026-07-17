@@ -31,27 +31,27 @@ public final class MappingsJSONManager {
     private MappingsJSONManager() {
     }
 
-    private static @NonNull MappingsRegistry loadFromDir(@NonNull Path path, @NonNull String id) throws IOException {
+    private static @NonNull MappingsRegistry loadFromDir(MappingsState.@NonNull Type type, @NonNull String id) throws IOException {
+        final Path path = PathConstants.getPathOf(type, id);
+        final String typeStr = type == MappingsState.Type.CUSTOM ? "Custom" : "Builtin";
+
+        if (!Files.exists(path))
+            throw new FileNotFoundException(typeStr + " mapping file not found at: " + path);
+
         try (java.io.BufferedReader reader = Files.newBufferedReader(path)) {
             final MappingsRegistry registry = GSON.fromJson(reader, MappingsRegistry.class);
             if (!registry.id().equals(id))
-                throw new JsonParseException("Custom mappings id \"" + registry.id() + "\" does not match filename \"" + id + "\"");
+                throw new JsonParseException(typeStr + " mappings id \"" + registry.id() + "\" does not match filename \"" + id + "\"");
             return registry;
         }
     }
 
     private static @NonNull MappingsRegistry loadFromResourceMappingsDir(@NonNull String id) throws IOException {
-        final Path path = PathConstants.getPathOf(MappingsState.Type.BUILTIN, id);
-        if (!Files.exists(path))
-            throw new FileNotFoundException("Builtin mapping file not found at: " + path);
-        return loadFromDir(path, id);
+        return loadFromDir(MappingsState.Type.BUILTIN, id);
     }
 
     private static @NonNull MappingsRegistry loadFromCustomMappingsDir(@NonNull String id) throws IOException {
-        final Path path = PathConstants.getPathOf(MappingsState.Type.CUSTOM, id);
-        if (!Files.exists(path))
-            throw new FileNotFoundException("Custom mapping file not found at: " + path);
-        return loadFromDir(path, id);
+        return loadFromDir(MappingsState.Type.CUSTOM, id);
     }
 
     public static @NonNull Optional<NavMappings> tryLoadCustomMappings(@NonNull String id) {
