@@ -57,11 +57,11 @@ public class TestLoader {
     }
 
     @Test
-    void allMappingsLoadTest() {
+    void allBuiltinMappingsLoadTest() {
         NavMappingsManager.loadMappings();
         MappingsState lastState = NavMappingsManager.getMappingsState();
         for (final String namespacedId : MappingsInfoCollectionUtils.getMappingsList()) {
-            if (namespacedId.equals("default"))
+            if (namespacedId.equals("default") || namespacedId.startsWith("custom:"))
                 continue;
             final String id = MappingsIdResolutionUtils.removeNamespaceFromId(namespacedId);
             final MappingsState.Type type = id.isEmpty() ? MappingsState.Type.DEFAULT : MappingsIdResolutionUtils.resolveType(namespacedId);
