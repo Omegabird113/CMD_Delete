@@ -90,7 +90,7 @@ public final class MappingsJSONManager {
         final List<MappingsRegistry> registries = new ArrayList<>();
         final List<String> ids = new ArrayList<>();
         MappingsRegistry current = startRegistry;
-        String namespacePrefix = "custom:";
+        String namespacePrefix = MappingsState.Type.CUSTOM.prefix;
         while (true) {
             registries.add(current);
             ids.add(namespacePrefix + current.id());
@@ -101,10 +101,10 @@ public final class MappingsJSONManager {
                     LOGGER.info("Resolved inheritance of mappings \"{}\" with a chain of: {}", namespacePrefix + current.id(), String.join(" -> ", ids));
                 break;
             } else {
-                final boolean inheritsCustom = current.inherits().startsWith("custom:");
+                final boolean inheritsCustom = current.inherits().startsWith(MappingsState.Type.CUSTOM.prefix);
                 final String idToGet = MappingsIdResolutionUtils.removeNamespaceFromId(current.inherits());
                 final Optional<MappingsRegistry> newRegistry = getRegistryFrom(inheritsCustom, idToGet);
-                namespacePrefix = inheritsCustom ? "custom:" : "builtin:";
+                namespacePrefix = inheritsCustom ? MappingsState.Type.CUSTOM.prefix : MappingsState.Type.BUILTIN.prefix;
                 if (newRegistry.isEmpty())
                     throw new IOException("Failed to resolve inheritance of " + (inheritsCustom ? "custom" : "builtin") + " mappings \"" + idToGet + "\" by mappings \"" + current.id() + "\" because the inherited registry couldn't load.");
                 if (ids.contains(namespacePrefix + newRegistry.get().id()))
@@ -155,7 +155,7 @@ public final class MappingsJSONManager {
 
         for (File file : files)
             if (file.getName().endsWith(".json"))
-                options.add((namespacedIds ? "custom:" : "") + FilenameUtils.removeExtension(file.getName()));
+                options.add((namespacedIds ? MappingsState.Type.CUSTOM.prefix : "") + FilenameUtils.removeExtension(file.getName()));
 
         return options;
     }

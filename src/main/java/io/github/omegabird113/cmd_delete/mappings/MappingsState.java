@@ -17,6 +17,14 @@ public record MappingsState(@NonNull NavMappings mappings, @NonNull Type type, @
     }
 
     public enum Type {
-        CUSTOM, BUILTIN, DEFAULT
+        CUSTOM("custom:"),
+        BUILTIN("builtin:"),
+        DEFAULT("");
+
+        public final String prefix;
+
+        Type(String name) {
+            this.prefix = name;
+        }
     }
 }

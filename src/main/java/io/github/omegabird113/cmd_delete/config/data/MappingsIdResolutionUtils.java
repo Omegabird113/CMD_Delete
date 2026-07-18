@@ -11,8 +11,8 @@ public final class MappingsIdResolutionUtils {
     @Contract(pure = true)
     public static @NonNull String resolveNamespacedId(MappingsState.@NonNull Type type, String id) {
         return switch (type) {
-            case CUSTOM -> "custom:";
-            case BUILTIN -> "builtin:";
+            case CUSTOM -> MappingsState.Type.CUSTOM.prefix;
+            case BUILTIN -> MappingsState.Type.BUILTIN.prefix;
             case DEFAULT -> "";
         } + id;
     }
@@ -23,19 +23,19 @@ public final class MappingsIdResolutionUtils {
 
     @Contract(pure = true)
     public static MappingsState.Type resolveType(@NonNull String namespacedId) {
-        if (namespacedId.startsWith("custom:"))
+        if (namespacedId.startsWith(MappingsState.Type.CUSTOM.prefix))
             return MappingsState.Type.CUSTOM;
-        if (namespacedId.startsWith("builtin:"))
+        if (namespacedId.startsWith(MappingsState.Type.BUILTIN.prefix))
             return MappingsState.Type.BUILTIN;
         return MappingsState.Type.DEFAULT;
     }
 
     @Contract(pure = true)
     public static @NonNull String removeNamespaceFromId(@NonNull String namespacedId) {
-        if (namespacedId.startsWith("custom:"))
-            return namespacedId.substring("custom:".length());
-        if (namespacedId.startsWith("builtin:"))
-            return namespacedId.substring("builtin:".length());
+        if (namespacedId.startsWith(MappingsState.Type.CUSTOM.prefix))
+            return namespacedId.substring(MappingsState.Type.CUSTOM.prefix.length());
+        if (namespacedId.startsWith(MappingsState.Type.BUILTIN.prefix))
+            return namespacedId.substring(MappingsState.Type.BUILTIN.prefix.length());
         return namespacedId;
     }
 }
