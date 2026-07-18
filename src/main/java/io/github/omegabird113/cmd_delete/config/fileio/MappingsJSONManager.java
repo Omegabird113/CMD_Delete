@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 public final class MappingsJSONManager {
-    public static final Gson GSON = new GsonBuilder()
+    public static final @NonNull Gson GSON = new GsonBuilder()
             .registerTypeAdapter(MappingsRegistry.class, new MappingsJSONDeserializer())
             .create();
     private static final @NonNull Logger LOGGER = LoggingManager.getLogger(MappingsJSONManager.class);

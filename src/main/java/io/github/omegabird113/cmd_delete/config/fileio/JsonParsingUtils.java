@@ -17,14 +17,14 @@ public final class JsonParsingUtils {
     }
 
     @Contract(pure = true)
-    public static String getStringElse(@NonNull JsonObject parent, @NonNull String fieldName, @NonNull String defaultValue) {
+    public static @NonNull String getStringElse(@NonNull JsonObject parent, @NonNull String fieldName, @NonNull String defaultValue) {
         if (!parent.has(fieldName))
             return defaultValue;
         final String value = requireString(parent, fieldName).trim();
         return value.isEmpty() ? defaultValue : value;
     }
 
-    public static JsonObject requireObject(@NonNull JsonObject parent, @NonNull String fieldName) {
+    public static @NonNull JsonObject requireObject(@NonNull JsonObject parent, @NonNull String fieldName) {
         if (!parent.has(fieldName))
             throw new JsonParseException("Missing required field: " + fieldName);
 
@@ -35,7 +35,7 @@ public final class JsonParsingUtils {
         return element.getAsJsonObject();
     }
 
-    public static JsonArray requireArray(@NonNull JsonObject parent, @NonNull String fieldName) {
+    public static @NonNull JsonArray requireArray(@NonNull JsonObject parent, @NonNull String fieldName) {
         if (!parent.has(fieldName))
             throw new JsonParseException("Missing required field: " + fieldName);
 
@@ -46,7 +46,7 @@ public final class JsonParsingUtils {
         return element.getAsJsonArray();
     }
 
-    public static String requireString(@NonNull JsonObject parent, @NonNull String fieldName) {
+    public static @NonNull String requireString(@NonNull JsonObject parent, @NonNull String fieldName) {
         if (!parent.has(fieldName))
             throw new JsonParseException("Missing required field: " + fieldName);
 
@@ -57,6 +57,7 @@ public final class JsonParsingUtils {
         return element.getAsString();
     }
 
+    @Contract(pure = true)
     public static boolean getOptionalBoolean(@NonNull JsonObject parent, @NonNull String fieldName) {
         if (!parent.has(fieldName))
             return false;

@@ -37,12 +37,12 @@ final class CommandCreationUtils {
     }
 
     @Contract(value = "_ -> new", pure = true)
-    static @NonNull LiteralArgumentBuilder<FabricClientCommandSource> literal(String name) {
+    static @NonNull LiteralArgumentBuilder<FabricClientCommandSource> literal(@NonNull String name) {
         return LiteralArgumentBuilder.literal(name);
     }
 
     @Contract(value = "_, _ -> new", pure = true)
-    static <T> @NonNull RequiredArgumentBuilder<FabricClientCommandSource, T> argument(String name, ArgumentType<T> type) {
+    static <T> @NonNull RequiredArgumentBuilder<FabricClientCommandSource, T> argument(@NonNull String name, @NonNull ArgumentType<T> type) {
         return RequiredArgumentBuilder.argument(name, type);
     }
 }

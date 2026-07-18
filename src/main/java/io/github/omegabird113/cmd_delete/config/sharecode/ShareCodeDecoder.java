@@ -18,7 +18,7 @@ public final class ShareCodeDecoder {
     }
 
     @Contract("_ -> new")
-    private static @NonNull String decodeCoreShareCode(String input) throws IOException {
+    private static @NonNull String decodeCoreShareCode(@NonNull String input) throws IOException {
         try (final ByteArrayInputStream bais = new ByteArrayInputStream(BASE_58.decode(input));
              final GZIPInputStream gzip = new GZIPInputStream(bais)) {
             return new String(gzip.readAllBytes(), StandardCharsets.UTF_8);
@@ -38,7 +38,7 @@ public final class ShareCodeDecoder {
         return split;
     }
 
-    public static String decode(String shareCode) {
+    public static @NonNull String decode(@NonNull String shareCode) {
         final String[] split = getShareCodeStringArray(shareCode);
 
         String coreDecoded;

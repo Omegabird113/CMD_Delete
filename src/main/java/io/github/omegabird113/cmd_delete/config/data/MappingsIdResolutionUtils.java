@@ -14,6 +14,7 @@ public final class MappingsIdResolutionUtils {
         return mappingsType.prefix + id;
     }
 
+    @Contract(pure = true)
     public static @NonNull String resolveNamespacedId(@NonNull MappingsState mappingState) {
         return resolveNamespacedId(mappingState.type(), mappingState.id());
     }

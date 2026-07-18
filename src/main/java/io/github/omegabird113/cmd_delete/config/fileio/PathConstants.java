@@ -51,14 +51,14 @@ public final class PathConstants {
         return mappingsJSONPath;
     }
 
-    public static Path getPathOf(MappingsType mappingsType, String id) {
+    public static @NonNull Path getPathOf(@NonNull MappingsType mappingsType, @NonNull String id) {
         final Path path = (mappingsType == MappingsType.CUSTOM)
                 ? getMappingsJSONPath()
                 : getMappingsResourcePath();
         return path.resolve(id + ".json");
     }
 
-    public static Path getPathOf(String namespacedId) {
+    public static @NonNull Path getPathOf(@NonNull String namespacedId) {
         return getPathOf(
                 MappingsIdResolutionUtils.resolveType(namespacedId),
                 MappingsIdResolutionUtils.removeNamespaceFromId(namespacedId)

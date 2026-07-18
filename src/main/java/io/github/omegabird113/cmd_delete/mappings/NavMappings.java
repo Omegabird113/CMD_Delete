@@ -17,20 +17,20 @@ import static io.github.omegabird113.cmd_delete.actions.NavAction.NONE;
 
 public record NavMappings(@NonNull MappingsRegistry registry) {
     @Contract(pure = true)
-    public NavAction getAction(@NonNull KeyCombo keyCombo) {
+    public @NonNull NavAction getAction(@NonNull KeyCombo keyCombo) {
         final NavAction action = registry.get(keyCombo);
         if (action == null)
             return NONE;
 
         if (ActionOffsetUtils.isOverrideAction(action)
-                && !registry.featureFlags().overrideVanillaNavigation())
+                && Boolean.FALSE.equals(registry.featureFlags().overrideVanillaNavigation()))
             return NONE;
 
         return action;
     }
 
     @Contract(pure = true)
-    public NavAction getAction(@NonNull KeyEvent event, @NonNull Window window) {
+    public @NonNull NavAction getAction(@NonNull KeyEvent event, @NonNull Window window) {
         final int key = event.key();
         final boolean shift = event.hasShiftDown();
         final boolean altOption = event.hasAltDown();
@@ -42,7 +42,7 @@ public record NavMappings(@NonNull MappingsRegistry registry) {
     }
 
     @Contract(pure = true)
-    public NavAction @NonNull [] getPossibleActions() {
+    public @NonNull NavAction @NonNull [] getPossibleActions() {
         return Arrays.stream(registry.getValues())
                 .filter(action -> action != NONE)
                 .distinct()
@@ -50,7 +50,7 @@ public record NavMappings(@NonNull MappingsRegistry registry) {
     }
 
     @Contract(pure = true)
-    public Os @NonNull [] getMappingsSupportedSystems() {
+    public @NonNull Os @NonNull [] getMappingsSupportedSystems() {
         return registry.systems().stream()
                 .distinct()
                 .toArray(Os[]::new);

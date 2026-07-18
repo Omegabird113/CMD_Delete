@@ -1,13 +1,15 @@
 package io.github.omegabird113.cmd_delete.mappings;
 
+import org.jspecify.annotations.NonNull;
+
 public enum MappingsType {
     CUSTOM("custom:"),
     BUILTIN("builtin:"),
     DEFAULT("");
 
-    public final String prefix;
+    public final @NonNull String prefix;
 
-    MappingsType(String name) {
+    MappingsType(@NonNull String name) {
         this.prefix = name;
     }
 }

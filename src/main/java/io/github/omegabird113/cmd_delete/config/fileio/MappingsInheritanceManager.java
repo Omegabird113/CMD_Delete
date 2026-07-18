@@ -16,7 +16,7 @@ public final class MappingsInheritanceManager {
     }
 
     @Contract("_ -> new")
-    public static @NonNull MappingsRegistry merge(@NonNull List<MappingsRegistry> toMerge) {
+    public static @NonNull MappingsRegistry merge(@NonNull List<@NonNull MappingsRegistry> toMerge) {
         final MappingsRegistry first = toMerge.getFirst();
         final Map<KeyCombo, NavAction> firstMap = first.internalRegistry();
         final Map<KeyCombo, NavAction> localRegistry = new HashMap<>(firstMap);

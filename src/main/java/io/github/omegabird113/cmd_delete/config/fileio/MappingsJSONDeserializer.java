@@ -78,7 +78,7 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
             return str.trim().toLowerCase(Locale.ROOT);
     }
 
-    private void parseActions(@NonNull JsonObject actions, @NonNull HashMap<KeyCombo, NavAction> localKeys, @NonNull HashMap<KeyCombo, NavAction> disabledKeys, int fv, boolean strictMode) {
+    private void parseActions(@NonNull JsonObject actions, @NonNull HashMap<@NonNull KeyCombo, @NonNull NavAction> localKeys, @NonNull HashMap<@NonNull KeyCombo, @NonNull NavAction> disabledKeys, int fv, boolean strictMode) {
         for (String actionName : actions.keySet()) {
             final NavAction action = NAV_ACTION_MAP.get(trimAndCaseIfNotStrict(actionName, true, strictMode, fv));
             if (action == null || action == NavAction.NONE) {
