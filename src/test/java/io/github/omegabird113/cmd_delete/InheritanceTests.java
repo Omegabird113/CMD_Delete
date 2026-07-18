@@ -48,7 +48,7 @@ public class InheritanceTests {
 
     @Test
     void inheritanceMergeTest() {
-        final int n = TestRandomnessUtils.RANDOM.nextInt(3000, 8001);
+        final int n = TestRandomnessUtils.RANDOM.nextInt(9000, 15001);
         final MappingsRegistry[] mappingsRegistries = new MappingsRegistry[n];
         for (int i = 0; i < n; i++)
             mappingsRegistries[i] = TestRandomnessUtils.genRandomRegistry();
