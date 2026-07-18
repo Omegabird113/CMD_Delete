@@ -7,7 +7,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
-import io.github.omegabird113.cmd_delete.config.data.KeyCodeRegistry;
+import io.github.omegabird113.cmd_delete.config.data.KeyNameRegistry;
 import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
 import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
@@ -132,7 +132,7 @@ public final class NavMappingsCommand {
     }
 
     private static int dumpKeyMap(@NonNull CommandContext<FabricClientCommandSource> context) {
-        context.getSource().sendFeedback(Component.literal("KeyMap dump:\n" + KeyCodeRegistry.getDumpString()));
+        context.getSource().sendFeedback(Component.literal("KeyMap dump:\n" + KeyNameRegistry.getDumpString()));
         return 1;
     }
 

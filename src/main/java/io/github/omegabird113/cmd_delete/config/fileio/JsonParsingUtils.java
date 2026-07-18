@@ -4,7 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import io.github.omegabird113.cmd_delete.config.data.KeyCodeRegistry;
+import io.github.omegabird113.cmd_delete.config.data.KeyNameRegistry;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -102,7 +102,7 @@ public final class JsonParsingUtils {
     }
 
     public static int requireKeyCode(@NonNull JsonObject parent, @NonNull String fieldName, boolean strictMode, int fv) throws JsonParseException {
-        final Map<String, Integer> keyMap = KeyCodeRegistry.getKeyMap();
+        final Map<String, Integer> keyMap = KeyNameRegistry.getKeyMap();
 
         if (!parent.has(fieldName))
             throw new JsonParseException("Missing required field: " + fieldName);

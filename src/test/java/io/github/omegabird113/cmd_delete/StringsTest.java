@@ -1,7 +1,7 @@
 package io.github.omegabird113.cmd_delete;
 
 import io.github.omegabird113.cmd_delete.command.MappingsInfoCollectionUtils;
-import io.github.omegabird113.cmd_delete.config.data.KeyCodeRegistry;
+import io.github.omegabird113.cmd_delete.config.data.KeyNameRegistry;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -23,7 +23,7 @@ public class StringsTest {
         NavMappingsManager.loadMappings();
         Assertions.assertDoesNotThrow(() -> {
             final String[] strings = new String[]{
-                    KeyCodeRegistry.getDumpString(),
+                    KeyNameRegistry.getDumpString(),
                     NavMappingsManager.getCurrentMappingsRegistry().toString(),
                     NavMappingsManager.getMappingsState().toString(),
                     MappingsInfoCollectionUtils.getInfoFrom(NavMappingsManager.getMappingsState(), true),
