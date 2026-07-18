@@ -51,22 +51,10 @@ public final class NavMappingsManager {
         logMappings();
     }
 
-    public static boolean updateMappingsToCustom(@NonNull String id) {
-        final MappingsState mappingsState = ActiveMappingsManager.tryResolveCustomMappings(id);
-        if (mappingsState == null)
-            return false;
-        currentMappingsState = mappingsState;
-        ActiveMappingsManager.trySaveMappings(
-                MappingsIdResolutionUtils.resolveNamespacedId(getMappingsState())
-        );
-        logMappings();
-        return true;
-    }
-
-    public static boolean updateMappingsToBuiltIn(@NonNull String id) {
+    private static boolean updateMappingsTo(@NonNull MappingsType type, @NonNull String id) {
         final MappingsState old = currentMappingsState;
         currentMappingsState = ActiveMappingsManager.resolveMappings(
-                MappingsIdResolutionUtils.resolveNamespacedId(MappingsType.BUILTIN, id)
+                MappingsIdResolutionUtils.resolveNamespacedId(type, id)
         );
         if (old != null && old.equals(currentMappingsState))
             return false;
@@ -77,13 +65,17 @@ public final class NavMappingsManager {
         return true;
     }
 
+    public static boolean updateMappingsToCustom(@NonNull String id) {
+        return updateMappingsTo(MappingsType.CUSTOM, id);
+    }
+
+    public static boolean updateMappingsToBuiltIn(@NonNull String id) {
+        return updateMappingsTo(MappingsType.BUILTIN, id);
+    }
+
     public static void updateMappingsToDefault() {
-        currentMappingsState = ActiveMappingsManager.resolveMappings(
-                MappingsIdResolutionUtils.resolveNamespacedId(MappingsType.DEFAULT, "")
-        );
-        ActiveMappingsManager.trySaveMappings(
-                MappingsIdResolutionUtils.resolveNamespacedId(getMappingsState())
-        );
-        logMappings();
+        boolean success = updateMappingsTo(MappingsType.DEFAULT, "");
+        if (!success)
+            throw new IllegalStateException("Failed to load default mappings");
     }
 }
