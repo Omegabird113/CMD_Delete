@@ -30,7 +30,7 @@ public final class MappingsInfoCollectionUtils {
                 .map(Os::name)
                 .toArray(String[]::new);
 
-        switch (mappingsState.mappingsType()) {
+        switch (mappingsState.type()) {
             case CUSTOM -> {
                 displayName = "\"" + mappingsState.mappings().registry().name() + "\"";
                 description = mappingsState.mappings().registry().description();

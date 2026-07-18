@@ -11,15 +11,11 @@ public final class MappingsIdResolutionUtils {
 
     @Contract(pure = true)
     public static @NonNull String resolveNamespacedId(@NonNull MappingsType mappingsType, String id) {
-        return switch (mappingsType) {
-            case CUSTOM -> MappingsType.CUSTOM.prefix;
-            case BUILTIN -> MappingsType.BUILTIN.prefix;
-            case DEFAULT -> "";
-        } + id;
+        return mappingsType.prefix + id;
     }
 
     public static @NonNull String resolveNamespacedId(@NonNull MappingsState mappingState) {
-        return resolveNamespacedId(mappingState.mappingsType(), mappingState.id());
+        return resolveNamespacedId(mappingState.type(), mappingState.id());
     }
 
     @Contract(pure = true)
