@@ -4,7 +4,10 @@ import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.command.MappingsInfoCollectionUtils;
 import io.github.omegabird113.cmd_delete.command.NavMappingsCommand;
-import io.github.omegabird113.cmd_delete.config.data.*;
+import io.github.omegabird113.cmd_delete.config.data.FeatureFlags;
+import io.github.omegabird113.cmd_delete.config.data.KeyCodeRegistry;
+import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
+import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
 import io.github.omegabird113.cmd_delete.config.fileio.MappingsInheritanceManager;
 import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
 import io.github.omegabird113.cmd_delete.config.sharecode.ShareCodeDecoder;
@@ -12,7 +15,9 @@ import io.github.omegabird113.cmd_delete.config.sharecode.ShareCodeGenerator;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import org.jspecify.annotations.NonNull;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.slf4j.Logger;
 
@@ -20,7 +25,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 public class TestLoader {

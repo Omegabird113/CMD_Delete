@@ -8,7 +8,9 @@
     "version": "2.1.0",
     "id": "sample",
     "systems": [
-      "mac", "windows", "linux"
+      "mac",
+      "windows",
+      "linux"
     ]
   },
   "actions": {
