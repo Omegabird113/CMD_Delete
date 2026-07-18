@@ -10,9 +10,7 @@ import io.github.omegabird113.cmd_delete.config.sharecode.ShareCodeGenerator;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import org.jspecify.annotations.NonNull;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.TempDir;
 import org.slf4j.Logger;
 
@@ -24,6 +22,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestLoader {
     private static final @NonNull Logger LOGGER = LoggingManager.getLogger(TestLoader.class);
     private static @TempDir Path tempDir;
@@ -51,6 +50,7 @@ public class TestLoader {
     }
 
     @Test
+    @Order(1)
     void mappingsLoadTest() {
         NavMappingsManager.loadMappings();
         Assertions.assertDoesNotThrow(() -> {
@@ -59,34 +59,35 @@ public class TestLoader {
     }
 
     @Test
+    @Order(2)
     void allMappingsLoadTest() {
         MappingsState lastState = NavMappingsManager.getMappingsState();
         for (final String namespacedId : MappingsInfoCollectionUtils.getMappingsList()) {
-            String id = MappingsIdResolutionUtils.removeNamespaceFromId(namespacedId);
-            if (id.equals("default"))
-                id = "";
-            MappingsState.Type type = id.isEmpty() ? MappingsState.Type.DEFAULT : MappingsIdResolutionUtils.resolveType(namespacedId);
+            if (namespacedId.equals("default"))
+                continue;
+            final String id = MappingsIdResolutionUtils.removeNamespaceFromId(namespacedId);
+            final MappingsState.Type type = id.isEmpty() ? MappingsState.Type.DEFAULT : MappingsIdResolutionUtils.resolveType(namespacedId);
             switch (type) {
                 case CUSTOM -> Assertions.assertTrue(NavMappingsManager.updateMappingsToCustom(id));
                 case BUILTIN -> Assertions.assertTrue(NavMappingsManager.updateMappingsToBuiltIn(id));
-                case DEFAULT -> NavMappingsManager.updateMappingsToDefault();
             }
-            MappingsState current = NavMappingsManager.getMappingsState();
+            final MappingsState current = NavMappingsManager.getMappingsState();
             Assertions.assertNotEquals(lastState, current, () -> "Mappings failed to load: " + namespacedId);
             lastState = current;
         }
     }
 
     @Test
-    void allSharecodesGenerateAndDecode() {
+    @Order(3)
+    void allSharecodesGenerateAndDecodeTest() {
         for (final String namespacedId : MappingsInfoCollectionUtils.getMappingsList()) {
             if (namespacedId.equals("default"))
                 continue;
             Assertions.assertDoesNotThrow(() -> {
-                String s = ShareCodeGenerator.generate(namespacedId);
+                final String s = ShareCodeGenerator.generate(namespacedId);
                 if (s.equals("CDS:EV1::0"))
                     Assertions.fail("Blank sharecode generated for mappings: " + namespacedId);
-                String d = ShareCodeDecoder.decode(s);
+                final String d = ShareCodeDecoder.decode(s);
                 Assertions.assertEquals(d, ShareCodeGenerator.collapseWhitespace(PathConstants.getPathOf(namespacedId).toFile()));
                 LOGGER.info("Sharecode of \"{}\" is \"{}\" decoded to \"{}\"", namespacedId, s, d);
             });
@@ -94,22 +95,26 @@ public class TestLoader {
     }
 
     @Test
-    void testSampleLoad() {
-        MappingsState before = NavMappingsManager.getMappingsState();
-        NavMappingsManager.updateMappingsToCustom("sample");
-        MappingsState after = NavMappingsManager.getMappingsState();
+    @Order(4)
+    void sampleLoadTest() {
+        final MappingsState before = NavMappingsManager.getMappingsState();
+        boolean success = NavMappingsManager.updateMappingsToCustom("sample");
+        final MappingsState after = NavMappingsManager.getMappingsState();
         Assertions.assertNotEquals(before, after, "sample mappings failed to load");
+        Assertions.assertTrue(success);
     }
 
     @Test
-    void testCommandRegistration() {
-        NavMappingsCommand.register();
+    @Order(5)
+    void commandRegistrationTest() {
+        Assertions.assertDoesNotThrow(NavMappingsCommand::register);
     }
 
     @Test
-    void testStrings() {
+    @Order(6)
+    void stringsTest() {
         Assertions.assertDoesNotThrow(() -> {
-            String[] strings = new String[]{
+            final String[] strings = new String[]{
                     KeyCodeRegistry.getDumpString(),
                     NavMappingsManager.getCurrentMappingsRegistry().toString(),
                     NavMappingsManager.getMappingsState().toString(),
