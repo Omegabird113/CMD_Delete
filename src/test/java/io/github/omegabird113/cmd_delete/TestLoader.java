@@ -118,7 +118,10 @@ public class TestLoader {
             };
             Assertions.assertAll(
                     Arrays.stream(strings)
-                            .map(s -> () -> Assertions.assertFalse(s.isEmpty()))
+                            .map(s -> () -> {
+                                LOGGER.info("Testing string: {}", s);
+                                Assertions.assertFalse(s.isEmpty());
+                            })
             );
         });
     }
