@@ -8,11 +8,8 @@ import io.github.omegabird113.cmd_delete.mappings.Os;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.zip.GZIPOutputStream;
 
 public class TestRandomnessUtils {
     static final @NonNull Random RANDOM = new Random();
@@ -93,16 +90,5 @@ public class TestRandomnessUtils {
         final String version = "" + RANDOM.nextLong(0, Long.MAX_VALUE);
 
         return new MappingsRegistry(enabled, disabled, systems, ff, inherits, name, author, description, version, id);
-    }
-
-    static @NonNull String gzipAndBase64Encode(@NonNull String contents) throws IOException {
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        final Base64.Encoder encoder = Base64.getEncoder();
-
-        try (GZIPOutputStream gzip = new GZIPOutputStream(byteArrayOutputStream)) {
-            gzip.write(contents.getBytes(StandardCharsets.UTF_8));
-        }
-
-        return new String(encoder.encode(byteArrayOutputStream.toByteArray()), StandardCharsets.UTF_8);
     }
 }
