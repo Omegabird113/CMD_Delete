@@ -22,7 +22,6 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestLoader {
     private static final @NonNull Logger LOGGER = LoggingManager.getLogger(TestLoader.class);
     private static @TempDir Path tempDir;
@@ -50,7 +49,6 @@ public class TestLoader {
     }
 
     @Test
-    @Order(1)
     void mappingsLoadTest() {
         NavMappingsManager.loadMappings();
         Assertions.assertDoesNotThrow(() -> {
@@ -59,8 +57,8 @@ public class TestLoader {
     }
 
     @Test
-    @Order(2)
     void allMappingsLoadTest() {
+        NavMappingsManager.loadMappings();
         MappingsState lastState = NavMappingsManager.getMappingsState();
         for (final String namespacedId : MappingsInfoCollectionUtils.getMappingsList()) {
             if (namespacedId.equals("default"))
@@ -78,7 +76,6 @@ public class TestLoader {
     }
 
     @Test
-    @Order(3)
     void allSharecodesGenerateAndDecodeTest() {
         for (final String namespacedId : MappingsInfoCollectionUtils.getMappingsList()) {
             if (namespacedId.equals("default"))
@@ -95,8 +92,8 @@ public class TestLoader {
     }
 
     @Test
-    @Order(4)
     void sampleLoadTest() {
+        NavMappingsManager.loadMappings();
         final MappingsState before = NavMappingsManager.getMappingsState();
         boolean success = NavMappingsManager.updateMappingsToCustom("sample");
         final MappingsState after = NavMappingsManager.getMappingsState();
@@ -105,14 +102,13 @@ public class TestLoader {
     }
 
     @Test
-    @Order(5)
     void commandRegistrationTest() {
         Assertions.assertDoesNotThrow(NavMappingsCommand::register);
     }
 
     @Test
-    @Order(6)
     void stringsTest() {
+        NavMappingsManager.loadMappings();
         Assertions.assertDoesNotThrow(() -> {
             final String[] strings = new String[]{
                     KeyCodeRegistry.getDumpString(),
