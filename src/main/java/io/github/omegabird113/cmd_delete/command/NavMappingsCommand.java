@@ -12,6 +12,7 @@ import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
 import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
+import io.github.omegabird113.cmd_delete.mappings.MappingsType;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
@@ -172,7 +173,7 @@ public final class NavMappingsCommand {
 
         final Path oldPath = Path.of(locationStr);
         final Path newPath = PathConstants.getPathOf(
-                MappingsState.Type.CUSTOM,
+                MappingsType.CUSTOM,
                 FilenameUtils.getBaseName(locationStr));
 
         if (!oldPath.isAbsolute()) {

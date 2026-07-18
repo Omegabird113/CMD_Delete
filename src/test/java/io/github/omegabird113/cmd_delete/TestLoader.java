@@ -13,6 +13,7 @@ import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
 import io.github.omegabird113.cmd_delete.config.sharecode.ShareCodeDecoder;
 import io.github.omegabird113.cmd_delete.config.sharecode.ShareCodeGenerator;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
+import io.github.omegabird113.cmd_delete.mappings.MappingsType;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.Assertions;
@@ -72,8 +73,8 @@ public class TestLoader {
             if (namespacedId.equals("default") || namespacedId.startsWith("custom:"))
                 continue;
             final String id = MappingsIdResolutionUtils.removeNamespaceFromId(namespacedId);
-            final MappingsState.Type type = id.isEmpty() ? MappingsState.Type.DEFAULT : MappingsIdResolutionUtils.resolveType(namespacedId);
-            switch (type) {
+            final MappingsType mappingsType = id.isEmpty() ? MappingsType.DEFAULT : MappingsIdResolutionUtils.resolveType(namespacedId);
+            switch (mappingsType) {
                 case CUSTOM -> Assertions.assertTrue(NavMappingsManager.updateMappingsToCustom(id));
                 case BUILTIN -> Assertions.assertTrue(NavMappingsManager.updateMappingsToBuiltIn(id));
             }

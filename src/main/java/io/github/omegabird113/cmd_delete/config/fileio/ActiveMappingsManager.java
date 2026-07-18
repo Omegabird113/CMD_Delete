@@ -2,6 +2,7 @@ package io.github.omegabird113.cmd_delete.config.fileio;
 
 import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
+import io.github.omegabird113.cmd_delete.mappings.MappingsType;
 import io.github.omegabird113.cmd_delete.mappings.NavMappings;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 import org.jspecify.annotations.NonNull;
@@ -23,15 +24,15 @@ public final class ActiveMappingsManager {
 
     public static @Nullable MappingsState tryResolveCustomMappings(@NonNull String id) {
         final Optional<NavMappings> mappings = MappingsJSONManager.tryLoadCustomMappings(id);
-        return mappings.map(navMappings -> new MappingsState(navMappings, MappingsState.Type.CUSTOM, id)).orElse(null);
+        return mappings.map(navMappings -> new MappingsState(navMappings, MappingsType.CUSTOM, id)).orElse(null);
     }
 
-    public static @Nullable MappingsState tryResolveBuiltinMappings(@NonNull String id, MappingsState.@NonNull Type type) {
+    public static @Nullable MappingsState tryResolveBuiltinMappings(@NonNull String id, @NonNull MappingsType mappingsType) {
         final Optional<NavMappings> mappings = MappingsJSONManager.tryLoadBuiltinMappings(id);
         if (mappings.isEmpty())
             return null;
-        final String idToGet = type == MappingsState.Type.DEFAULT ? "" : id;
-        return new MappingsState(mappings.get(), type, idToGet);
+        final String idToGet = mappingsType == MappingsType.DEFAULT ? "" : id;
+        return new MappingsState(mappings.get(), mappingsType, idToGet);
     }
 
     static @NonNull String resolveDefaultMappingsNonNamespacedId() {
@@ -42,15 +43,15 @@ public final class ActiveMappingsManager {
 
     public static @Nullable MappingsState resolveMappings(@NonNull String namespacedId) {
         final String id = removeNamespaceFromId(namespacedId);
-        final MappingsState.Type type = resolveType(namespacedId);
+        final MappingsType mappingsType = resolveType(namespacedId);
         final String defaultMappingsId = resolveDefaultMappingsNonNamespacedId();
-        final MappingsState mappingsState = switch (type) {
+        final MappingsState mappingsState = switch (mappingsType) {
             case CUSTOM -> tryResolveCustomMappings(id);
-            case BUILTIN -> tryResolveBuiltinMappings(id, MappingsState.Type.BUILTIN);
-            case DEFAULT -> tryResolveBuiltinMappings(defaultMappingsId, MappingsState.Type.DEFAULT);
+            case BUILTIN -> tryResolveBuiltinMappings(id, MappingsType.BUILTIN);
+            case DEFAULT -> tryResolveBuiltinMappings(defaultMappingsId, MappingsType.DEFAULT);
         };
         if (mappingsState == null)
-            return tryResolveBuiltinMappings(defaultMappingsId, MappingsState.Type.DEFAULT);
+            return tryResolveBuiltinMappings(defaultMappingsId, MappingsType.DEFAULT);
         return mappingsState;
     }
 

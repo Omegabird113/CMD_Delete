@@ -66,7 +66,7 @@ public final class NavMappingsManager {
     public static boolean updateMappingsToBuiltIn(@NonNull String id) {
         final MappingsState old = currentMappingsState;
         currentMappingsState = ActiveMappingsManager.resolveMappings(
-                MappingsIdResolutionUtils.resolveNamespacedId(MappingsState.Type.BUILTIN, id)
+                MappingsIdResolutionUtils.resolveNamespacedId(MappingsType.BUILTIN, id)
         );
         if (old != null && old.equals(currentMappingsState))
             return false;
@@ -79,7 +79,7 @@ public final class NavMappingsManager {
 
     public static void updateMappingsToDefault() {
         currentMappingsState = ActiveMappingsManager.resolveMappings(
-                MappingsIdResolutionUtils.resolveNamespacedId(MappingsState.Type.DEFAULT, "")
+                MappingsIdResolutionUtils.resolveNamespacedId(MappingsType.DEFAULT, "")
         );
         ActiveMappingsManager.trySaveMappings(
                 MappingsIdResolutionUtils.resolveNamespacedId(getMappingsState())

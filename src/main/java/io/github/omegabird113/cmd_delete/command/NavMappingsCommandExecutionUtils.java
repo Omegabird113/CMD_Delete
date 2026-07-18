@@ -12,7 +12,7 @@ import io.github.omegabird113.cmd_delete.config.fileio.MappingsJSONManager;
 import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
 import io.github.omegabird113.cmd_delete.config.sharecode.ShareCodeDecoder;
 import io.github.omegabird113.cmd_delete.config.sharecode.ShareCodeGenerator;
-import io.github.omegabird113.cmd_delete.mappings.MappingsState;
+import io.github.omegabird113.cmd_delete.mappings.MappingsType;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -31,7 +31,7 @@ class NavMappingsCommandExecutionUtils {
     static void exportShareCode(@NonNull CommandContext<FabricClientCommandSource> context, boolean custom) {
         final String idStr = StringArgumentType.getString(context, "id");
 
-        final String namespacedId = MappingsIdResolutionUtils.resolveNamespacedId(custom ? MappingsState.Type.CUSTOM : MappingsState.Type.BUILTIN, idStr);
+        final String namespacedId = MappingsIdResolutionUtils.resolveNamespacedId(custom ? MappingsType.CUSTOM : MappingsType.BUILTIN, idStr);
         final String shareCode = ShareCodeGenerator.generate(namespacedId);
 
         Minecraft.getInstance().keyboardHandler.setClipboard(shareCode);
@@ -54,7 +54,7 @@ class NavMappingsCommandExecutionUtils {
         try {
             Files.createDirectories(newPath.getParent());
             if (custom) {
-                final Path oldPath = PathConstants.getPathOf(MappingsState.Type.CUSTOM, idStr);
+                final Path oldPath = PathConstants.getPathOf(MappingsType.CUSTOM, idStr);
                 if (!Files.isRegularFile(oldPath)) {
                     LOGGER.error("Error while reading custom mappings. File does not exist: {}", oldPath.toAbsolutePath());
                     throw CommandCreationUtils.UNKNOWN_CUSTOM_MAPPINGS.create(idStr);
@@ -90,7 +90,7 @@ class NavMappingsCommandExecutionUtils {
             final JsonObject meta = JsonParsingUtils.requireObject(jsonObject, "meta");
             final String idStr = JsonParsingUtils.requireString(meta, "id");
 
-            final Path toCopyTo = PathConstants.getPathOf(MappingsState.Type.CUSTOM, idStr);
+            final Path toCopyTo = PathConstants.getPathOf(MappingsType.CUSTOM, idStr);
             try (FileWriter writer = new FileWriter(toCopyTo.toFile())) {
                 writer.write(new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject));
             } catch (IOException e) {

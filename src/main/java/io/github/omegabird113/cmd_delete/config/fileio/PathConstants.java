@@ -2,7 +2,7 @@ package io.github.omegabird113.cmd_delete.config.fileio;
 
 import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
-import io.github.omegabird113.cmd_delete.mappings.MappingsState;
+import io.github.omegabird113.cmd_delete.mappings.MappingsType;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
@@ -51,8 +51,8 @@ public final class PathConstants {
         return mappingsJSONPath;
     }
 
-    public static Path getPathOf(MappingsState.Type type, String id) {
-        final Path path = (type == MappingsState.Type.CUSTOM)
+    public static Path getPathOf(MappingsType mappingsType, String id) {
+        final Path path = (mappingsType == MappingsType.CUSTOM)
                 ? getMappingsJSONPath()
                 : getMappingsResourcePath();
         return path.resolve(id + ".json");
