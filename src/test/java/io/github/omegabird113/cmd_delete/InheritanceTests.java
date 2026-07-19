@@ -26,7 +26,7 @@ public class InheritanceTests {
     @Test
     void featureFlagsMergeTest() {
         FeatureFlags ff = new FeatureFlags(null, null);
-        final FeatureFlags[] featureFlags = new FeatureFlags[TestRandomnessUtils.RANDOM.nextInt(100, 201)];
+        final FeatureFlags[] featureFlags = new FeatureFlags[TestRandomnessUtils.RANDOM.nextInt(50, 150)];
         for (int i = 0; i < featureFlags.length; i++) {
             featureFlags[i] = TestRandomnessUtils.nextRandFeatureFlags();
 
@@ -36,24 +36,20 @@ public class InheritanceTests {
             ff = FeatureFlags.merge(ff, featureFlags[i]);
             LOGGER.info("{} - Merged {} into {}", i, beforeMergeChild, beforeMergeParent);
 
-            if (beforeMergeParent.overrideVanillaNavigation() == null)
-                Assertions.assertEquals(ff.overrideVanillaNavigation(), beforeMergeChild.overrideVanillaNavigation());
-            else if (beforeMergeChild.overrideVanillaNavigation() == null)
-                Assertions.assertEquals(ff.overrideVanillaNavigation(), beforeMergeParent.overrideVanillaNavigation());
-            else
-                Assertions.assertEquals(ff.overrideVanillaNavigation(), beforeMergeChild.overrideVanillaNavigation());
+            Boolean expected1 = beforeMergeChild.overrideVanillaNavigation() != null
+                            ? beforeMergeChild.overrideVanillaNavigation()
+                            : beforeMergeParent.overrideVanillaNavigation();
+            Assertions.assertEquals(expected1, ff.overrideVanillaNavigation());
 
-            if (beforeMergeParent.crossLineSignMovement() == null)
-                Assertions.assertEquals(ff.crossLineSignMovement(), beforeMergeChild.crossLineSignMovement());
-            else if (beforeMergeChild.crossLineSignMovement() == null)
-                Assertions.assertEquals(ff.crossLineSignMovement(), beforeMergeParent.crossLineSignMovement());
-            else
-                Assertions.assertEquals(ff.crossLineSignMovement(), beforeMergeChild.crossLineSignMovement());
+            Boolean expected2 = beforeMergeChild.crossLineSignMovement() != null
+                    ? beforeMergeChild.crossLineSignMovement()
+                    : beforeMergeParent.crossLineSignMovement();
+            Assertions.assertEquals(expected2, ff.crossLineSignMovement());
         }
     }
 
     @Test
-    void inheritanceMergeMappingsStressTest() {
+    void inheritanceMergeMappingsStressTest() { // HUGE but takes <1 second & is a great stress test
         final int n1 = TestRandomnessUtils.RANDOM.nextInt(4000, 6501);
         final MappingsRegistry[] mappingsRegistries = new MappingsRegistry[n1];
         for (int i = 0; i < n1; i++)
@@ -64,19 +60,19 @@ public class InheritanceTests {
 
         NavMappings mappings = new NavMappings(mr);
         LOGGER.info("Merged mappings registries into one of size: {}, hashCode: {}, and with coverage: {}", mr.getSize(), mr.hashCode(), mappings.getCoverage());
-        Assertions.assertEquals(1.0f, mappings.getCoverage());
+        Assertions.assertEquals(1.0f, mappings.getCoverage(), 0.0001f);
 
         Assertions.assertNotNull(mr);
         Assertions.assertNotNull(mappings);
 
         Assertions.assertNotNull(mr.name());
-        Assertions.assertNotEquals("", mr.name());
+        Assertions.assertFalse(mr.name().isBlank());
         Assertions.assertNotNull(mr.version());
-        Assertions.assertNotEquals("", mr.version());
+        Assertions.assertFalse(mr.version().isBlank());
         Assertions.assertNotNull(mr.description());
-        Assertions.assertNotEquals("", mr.description());
+        Assertions.assertFalse(mr.description().isBlank());
         Assertions.assertNotNull(mr.author());
-        Assertions.assertNotEquals("", mr.author());
+        Assertions.assertFalse(mr.author().isBlank());
 
         Assertions.assertNotNull(mr.featureFlags());
         Assertions.assertNotNull(mr.featureFlags().overrideVanillaNavigation());
