@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class TestRandomnessUtils {
-    static final @NonNull Random RANDOM = new Random();
+    static final @NonNull Random RANDOM = new Random(288923614);
 
     private static @Nullable Boolean nextRandNullableBoolean() {
         int choose = RANDOM.nextInt(0, 3);
