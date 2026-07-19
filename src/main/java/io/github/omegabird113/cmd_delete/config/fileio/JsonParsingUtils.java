@@ -81,7 +81,7 @@ public final class JsonParsingUtils {
         return element.getAsBoolean();
     }
 
-    public static int requireInt(@NonNull JsonObject parent, @NonNull String fieldName, boolean strictMode, int fv) {
+    public static int requireInt(@NonNull JsonObject parent, @NonNull String fieldName, boolean strictMode) {
         if (!parent.has(fieldName))
             throw new JsonParseException("Missing required field: " + fieldName);
 
@@ -91,7 +91,7 @@ public final class JsonParsingUtils {
 
         final String s = element.getAsString();
 
-        if (strictMode && fv == 4)
+        if (strictMode)
             if (!s.matches("-?(0|[1-9]\\d*)"))
                 throw new JsonParseException("Expected \"" + fieldName + "\" to be an integer literal");
 
@@ -102,7 +102,7 @@ public final class JsonParsingUtils {
         }
     }
 
-    public static int requireKeyCode(@NonNull JsonObject parent, @NonNull String fieldName, boolean strictMode, int fv) throws JsonParseException {
+    public static int requireKeyCode(@NonNull JsonObject parent, @NonNull String fieldName, boolean strictMode) throws JsonParseException {
         final Map<String, Integer> keyMap = KeyNameRegistry.getKeyMap();
 
         if (!parent.has(fieldName))
@@ -122,7 +122,7 @@ public final class JsonParsingUtils {
                 return keyCode;
         } else
             try {
-                if (strictMode && fv == 4)
+                if (strictMode)
                     if (!keyString.matches("-?(0|[1-9]\\d*)"))
                         throw new JsonParseException(
                                 "Expected \"" + fieldName + "\" to be an integer literal");
