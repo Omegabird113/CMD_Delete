@@ -208,7 +208,7 @@ public final class NavMappingsCommand {
         final String id = StringArgumentType.getString(context, "id");
         if (!NavMappingsManager.updateMappingsToBuiltIn(id))
             throw UNKNOWN_BUILTIN_MAPPINGS.create(id);
-        context.getSource().sendFeedback(Component.literal("Set nav mappings to builtin: " + id));
+        context.getSource().sendFeedback(Component.literal("Set navmappings to builtin:" + id));
         return 1;
     }
 
@@ -216,13 +216,13 @@ public final class NavMappingsCommand {
         final String id = StringArgumentType.getString(context, "id");
         if (!NavMappingsManager.updateMappingsToCustom(id))
             throw UNKNOWN_CUSTOM_MAPPINGS.create(id);
-        context.getSource().sendFeedback(Component.literal("Set nav mappings to custom:" + id));
+        context.getSource().sendFeedback(Component.literal("Set navmappings to custom:" + id));
         return 1;
     }
 
     private static int setDefault(@NonNull CommandContext<FabricClientCommandSource> context) {
         NavMappingsManager.updateMappingsToDefault();
-        context.getSource().sendFeedback(Component.literal("Set nav mappings to default"));
+        context.getSource().sendFeedback(Component.literal("Set navmappings to default"));
         return 1;
     }
 

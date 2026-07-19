@@ -33,15 +33,14 @@ public final class MappingsJSONManager {
 
     private static @NonNull MappingsRegistry loadFromDir(@NonNull MappingsType mappingsType, @NonNull String id) throws IOException {
         final Path path = PathConstants.getPathOf(mappingsType, id);
-        final String typeStr = mappingsType == MappingsType.CUSTOM ? "Custom" : "Builtin";
 
         if (!Files.exists(path))
-            throw new FileNotFoundException(typeStr + " mapping file not found at: " + path);
+            throw new FileNotFoundException(mappingsType.commonName + " mapping file not found at: " + path);
 
         try (java.io.BufferedReader reader = Files.newBufferedReader(path)) {
             final MappingsRegistry registry = GSON.fromJson(reader, MappingsRegistry.class);
             if (!registry.id().equals(id))
-                throw new JsonParseException(typeStr + " mappings id \"" + registry.id() + "\" does not match filename \"" + id + "\"");
+                throw new JsonParseException(mappingsType.commonName + " mappings id \"" + registry.id() + "\" does not match filename \"" + id + "\"");
             return registry;
         }
     }
@@ -61,7 +60,7 @@ public final class MappingsJSONManager {
                 final MappingsRegistry resolved = resolveInheritance(registry.get());
                 return Optional.of(new NavMappings(resolved));
             } catch (IOException e) {
-                LOGGER.error("Failed to resolve custom mappings inheritance for \"{}\"", id, e);
+                LOGGER.error("Failed to resolve {} mappings inheritance for \"{}\"", MappingsType.CUSTOM.commonName, id, e);
                 return Optional.empty();
             }
         } else
@@ -78,10 +77,10 @@ public final class MappingsJSONManager {
             final MappingsRegistry registry = custom ? loadFromCustomMappingsDir(id) : loadFromResourceMappingsDir(id);
             return Optional.of(registry);
         } catch (FileNotFoundException _) {
-            LOGGER.error("Could not access {} mapping file \"{}\" (at \"{}\") because it does not exist.", custom ? "custom" : "builtin", id, PathConstants.getPathOf(custom ? MappingsType.CUSTOM : MappingsType.BUILTIN, id));
+            LOGGER.error("Could not access {} mapping file \"{}\" (at \"{}\") because it does not exist.", custom ? MappingsType.CUSTOM.commonName : MappingsType.BUILTIN.commonName, id, PathConstants.getPathOf(custom ? MappingsType.CUSTOM : MappingsType.BUILTIN, id));
             return Optional.empty();
         } catch (IOException | JsonParseException e) {
-            LOGGER.error("Could not access {} mapping file due to exception: {}", custom ? "custom" : "builtin", id, e);
+            LOGGER.error("Could not access {} mapping file due to exception: {}", custom ? MappingsType.CUSTOM.commonName : MappingsType.BUILTIN.commonName, id, e);
             return Optional.empty();
         }
     }
@@ -106,9 +105,9 @@ public final class MappingsJSONManager {
                 final Optional<MappingsRegistry> newRegistry = getRegistryFrom(inheritsCustom, idToGet);
                 namespacePrefix = inheritsCustom ? MappingsType.CUSTOM.prefix : MappingsType.BUILTIN.prefix;
                 if (newRegistry.isEmpty())
-                    throw new IOException("Failed to resolve inheritance of " + (inheritsCustom ? "custom" : "builtin") + " mappings \"" + idToGet + "\" by mappings \"" + current.id() + "\" because the inherited registry couldn't load.");
+                    throw new IOException("Failed to resolve inheritance of " + (inheritsCustom ? MappingsType.CUSTOM.commonName : MappingsType.BUILTIN.commonName) + " mappings \"" + idToGet + "\" by mappings \"" + current.id() + "\" because the inherited registry couldn't load.");
                 if (ids.contains(namespacePrefix + newRegistry.get().id()))
-                    throw new IOException("Duplicate inheritance of " + (inheritsCustom ? "custom" : "builtin") + " mappings \"" + idToGet + "\" by mappings \"" + current.id() + "\" in chain of: " + String.join(" -> ", ids));
+                    throw new IOException("Duplicate inheritance of " + (inheritsCustom ? MappingsType.CUSTOM.commonName : MappingsType.BUILTIN.commonName) + " mappings \"" + idToGet + "\" by mappings \"" + current.id() + "\" in chain of: " + String.join(" -> ", ids));
                 current = newRegistry.get();
             }
         }
