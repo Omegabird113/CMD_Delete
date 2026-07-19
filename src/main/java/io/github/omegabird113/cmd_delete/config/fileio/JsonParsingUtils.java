@@ -27,33 +27,27 @@ public final class JsonParsingUtils {
     public static @NonNull JsonObject requireObject(@NonNull JsonObject parent, @NonNull String fieldName) {
         if (!parent.has(fieldName))
             throw new JsonParseException("Missing required field: " + fieldName);
-
         final JsonElement element = parent.get(fieldName);
         if (!element.isJsonObject())
             throw new JsonParseException("Expected \"" + fieldName + "\" to be an object");
-
         return element.getAsJsonObject();
     }
 
     public static @NonNull JsonArray requireArray(@NonNull JsonObject parent, @NonNull String fieldName) {
         if (!parent.has(fieldName))
             throw new JsonParseException("Missing required field: " + fieldName);
-
         final JsonElement element = parent.get(fieldName);
         if (!element.isJsonArray())
             throw new JsonParseException("Expected \"" + fieldName + "\" to be an array");
-
         return element.getAsJsonArray();
     }
 
     public static @NonNull String requireString(@NonNull JsonObject parent, @NonNull String fieldName) {
         if (!parent.has(fieldName))
             throw new JsonParseException("Missing required field: " + fieldName);
-
         final JsonElement element = parent.get(fieldName);
         if (!element.isJsonPrimitive() || !element.getAsJsonPrimitive().isString())
             throw new JsonParseException("Expected \"" + fieldName + "\" to be a string");
-
         return element.getAsString();
     }
 
@@ -61,11 +55,9 @@ public final class JsonParsingUtils {
     public static boolean getOptionalBoolean(@NonNull JsonObject parent, @NonNull String fieldName) {
         if (!parent.has(fieldName))
             return false;
-
         final JsonElement element = parent.get(fieldName);
         if (!element.isJsonPrimitive() || !element.getAsJsonPrimitive().isBoolean())
             throw new JsonParseException("Expected \"" + fieldName + "\" to be a boolean");
-
         return element.getAsBoolean();
     }
 
@@ -73,11 +65,9 @@ public final class JsonParsingUtils {
     public static @Nullable Boolean getNullableBoolean(@NonNull JsonObject parent, @NonNull String fieldName) {
         if (!parent.has(fieldName))
             return null;
-
         final JsonElement element = parent.get(fieldName);
         if (!element.isJsonPrimitive() || !element.getAsJsonPrimitive().isBoolean())
             return null;
-
         return element.getAsBoolean();
     }
 

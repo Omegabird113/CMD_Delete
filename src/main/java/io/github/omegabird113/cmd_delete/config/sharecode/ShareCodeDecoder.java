@@ -35,6 +35,7 @@ public final class ShareCodeDecoder {
             throw new IllegalArgumentException("Invalid share code (Not CDS pre-fixed): " + shareCode);
         if (!Objects.equals(split[1].toUpperCase(Locale.ROOT), "EV" + CmdDeleteClient.SHARECODE_FORMAT_VERSION))
             throw new IllegalArgumentException("Invalid share code (Incorrect format version): " + shareCode);
+
         return split;
     }
 

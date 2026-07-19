@@ -1,13 +1,14 @@
 package io.github.omegabird113.cmd_delete;
 
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 
 import java.util.concurrent.TimeUnit;
 
 public class LoadTimer {
-    private static final Logger LOGGER = LoggingManager.getLogger(LoadTimer.class);
+    private static final @NonNull Logger LOGGER = LoggingManager.getLogger(LoadTimer.class);
 
-    static void time(Runnable toTime, String name, boolean detailed) {
+    static void time(@NonNull Runnable toTime, @NonNull String name, boolean detailed) {
         final long startTime = System.nanoTime();
         toTime.run();
         final long endTime = System.nanoTime();

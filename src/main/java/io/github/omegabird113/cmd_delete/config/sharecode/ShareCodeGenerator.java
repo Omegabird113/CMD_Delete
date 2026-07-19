@@ -47,11 +47,9 @@ public final class ShareCodeGenerator {
     @Contract("_ -> new")
     private static @NonNull String compressAndBase58Encode(@NonNull String contents) throws IOException {
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-
         try (GZIPOutputStream gzip = new GZIPOutputStream(byteArrayOutputStream)) {
             gzip.write(contents.getBytes(StandardCharsets.UTF_8));
         }
-
         return new String(BASE_58.encode(byteArrayOutputStream.toByteArray()), StandardCharsets.UTF_8);
     }
 

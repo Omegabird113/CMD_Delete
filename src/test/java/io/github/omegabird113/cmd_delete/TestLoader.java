@@ -35,9 +35,7 @@ public class TestLoader {
                     Path.of(Objects.requireNonNull(CmdDeleteClient.class.getResource("/mappings")).toURI())
             );
             initialized = true;
-
             LOGGER.info("Temp directory is {}", tempDir);
-
             try (Stream<Path> fis = Files.walk(Path.of(Objects.requireNonNull(TestLoader.class.getResource("/test_mappings")).toURI()))) {
                 fis.filter(Files::isRegularFile).forEach((path) -> {
                     try {
@@ -53,8 +51,6 @@ public class TestLoader {
     @AfterAll
     static void afterAll() {
         try {
-
-
             Files.deleteIfExists(tempDir);
         } catch (IOException e) {
             throw new RuntimeException(e);

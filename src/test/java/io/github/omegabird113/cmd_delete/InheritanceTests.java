@@ -37,8 +37,8 @@ public class InheritanceTests {
             LOGGER.info("{} - Merged {} into {}", i, beforeMergeChild, beforeMergeParent);
 
             Boolean expected1 = beforeMergeChild.overrideVanillaNavigation() != null
-                            ? beforeMergeChild.overrideVanillaNavigation()
-                            : beforeMergeParent.overrideVanillaNavigation();
+                    ? beforeMergeChild.overrideVanillaNavigation()
+                    : beforeMergeParent.overrideVanillaNavigation();
             Assertions.assertEquals(expected1, ff.overrideVanillaNavigation());
 
             Boolean expected2 = beforeMergeChild.crossLineSignMovement() != null

@@ -125,7 +125,7 @@ public final class MappingsJSONManager {
                 LOGGER.info("Created mappings config directory at: {}", configDirectory.getAbsolutePath());
         }
         final File activeMappingsFile = PathConstants.getActiveMappingsFilePath().toFile();
-        if (!activeMappingsFile.exists() || !activeMappingsFile.isFile()) {
+        if (!activeMappingsFile.exists() || !activeMappingsFile.isFile())
             try {
                 final boolean s = activeMappingsFile.createNewFile();
                 if (!s)
@@ -135,7 +135,6 @@ public final class MappingsJSONManager {
             } catch (IOException e) {
                 LOGGER.error("Could not create active mappings file at: {}", activeMappingsFile.getAbsolutePath(), e);
             }
-        }
     }
 
     @Contract(pure = true)

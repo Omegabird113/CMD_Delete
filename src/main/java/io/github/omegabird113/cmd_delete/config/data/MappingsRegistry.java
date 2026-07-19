@@ -33,7 +33,7 @@ public record MappingsRegistry(
         return internalRegistry.get(key);
     }
 
-    public @NonNull NavAction @NonNull[] getValues() {
+    public @NonNull NavAction @NonNull [] getValues() {
         return internalRegistry.values().toArray(NavAction[]::new);
     }
 

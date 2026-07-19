@@ -14,7 +14,7 @@ import java.util.*;
 public class TestRandomnessUtils {
     static final @NonNull Random RANDOM = new Random(288923614);
 
-    private static @Nullable Boolean nextRandNullableBoolean() {
+    static @Nullable Boolean nextRandNullableBoolean() {
         int choose = RANDOM.nextInt(0, 3);
         if (choose == 0)
             return null;
@@ -25,13 +25,13 @@ public class TestRandomnessUtils {
         return null;
     }
 
-    static FeatureFlags nextRandFeatureFlags() {
+    static @NonNull FeatureFlags nextRandFeatureFlags() {
         final Boolean overrideVanillaNavigation = nextRandNullableBoolean();
         final Boolean crossLineSignMovement = nextRandNullableBoolean();
         return new FeatureFlags(overrideVanillaNavigation, crossLineSignMovement);
     }
 
-    public static KeyCombo genRandomKeyCombo() {
+    static @NonNull KeyCombo genRandomKeyCombo() {
         final boolean shift = RANDOM.nextBoolean();
         final boolean ctrl = RANDOM.nextBoolean();
         final boolean altOption = RANDOM.nextBoolean();
@@ -40,13 +40,13 @@ public class TestRandomnessUtils {
         return new KeyCombo(key, shift, altOption, ctrl, superCommand);
     }
 
-    private static String genRandomString(int length) {
+    static @NonNull String genRandomString(int length) {
         final byte[] strBytes = new byte[length];
         RANDOM.nextBytes(strBytes);
         return new String(strBytes, StandardCharsets.UTF_8);
     }
 
-    private static List<Os> genSystems() {
+    static @NonNull List<@NonNull Os> genSystems() {
         final boolean windows = RANDOM.nextBoolean();
         final boolean linux = RANDOM.nextBoolean();
         final boolean mac = RANDOM.nextBoolean();
@@ -60,7 +60,7 @@ public class TestRandomnessUtils {
         return systems;
     }
 
-    static MappingsRegistry genRandomRegistry() {
+    static @NonNull MappingsRegistry genRandomRegistry() {
         final Map<KeyCombo, NavAction> enabled = new HashMap<>();
         final Map<KeyCombo, NavAction> disabled = new HashMap<>();
         final NavAction[] NavActions = Arrays.stream(NavAction.values()).toArray(NavAction[]::new);
