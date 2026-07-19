@@ -31,7 +31,7 @@ public class TestRandomnessUtils {
         return new FeatureFlags(overrideVanillaNavigation, crossLineSignMovement);
     }
 
-    private static KeyCombo genRandomKeyCombo() {
+    public static KeyCombo genRandomKeyCombo() {
         final boolean shift = RANDOM.nextBoolean();
         final boolean ctrl = RANDOM.nextBoolean();
         final boolean altOption = RANDOM.nextBoolean();
