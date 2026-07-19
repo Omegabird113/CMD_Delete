@@ -50,16 +50,14 @@ public class InheritanceTests {
 
             if (beforeMergeParent.overrideVanillaNavigation() == null)
                 Assertions.assertEquals(ff.overrideVanillaNavigation(), beforeMergeChild.overrideVanillaNavigation());
+            else if (beforeMergeChild.overrideVanillaNavigation() == null)
+                Assertions.assertEquals(ff.overrideVanillaNavigation(), beforeMergeParent.overrideVanillaNavigation());
             else
-                if (beforeMergeChild.overrideVanillaNavigation() == null)
-                    Assertions.assertEquals(ff.overrideVanillaNavigation(), beforeMergeParent.overrideVanillaNavigation());
-                else
-                    Assertions.assertEquals(ff.overrideVanillaNavigation(), beforeMergeChild.overrideVanillaNavigation());
+                Assertions.assertEquals(ff.overrideVanillaNavigation(), beforeMergeChild.overrideVanillaNavigation());
 
             if (beforeMergeParent.crossLineSignMovement() == null)
                 Assertions.assertEquals(ff.crossLineSignMovement(), beforeMergeChild.crossLineSignMovement());
-            else
-            if (beforeMergeChild.crossLineSignMovement() == null)
+            else if (beforeMergeChild.crossLineSignMovement() == null)
                 Assertions.assertEquals(ff.crossLineSignMovement(), beforeMergeParent.crossLineSignMovement());
             else
                 Assertions.assertEquals(ff.crossLineSignMovement(), beforeMergeChild.crossLineSignMovement());
@@ -72,8 +70,10 @@ public class InheritanceTests {
         final MappingsRegistry[] mappingsRegistries = new MappingsRegistry[n];
         for (int i = 0; i < n; i++)
             mappingsRegistries[i] = TestRandomnessUtils.genRandomRegistry();
+
         LOGGER.info("Generated to-merge list of {} mappings registries", n);
         final MappingsRegistry mr = MappingsInheritanceManager.merge(List.of(mappingsRegistries));
+
         LOGGER.info("Merged registries. Generating base64-encoded gzip-ed string...");
         String encodedMrStr = "";
         try {
