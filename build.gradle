@@ -25,6 +25,7 @@ dependencies {
     implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     implementation 'com.google.code.gson:gson:2.14.0'
+    implementation 'commons-codec:commons-codec:1.22.0'
 
     implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
