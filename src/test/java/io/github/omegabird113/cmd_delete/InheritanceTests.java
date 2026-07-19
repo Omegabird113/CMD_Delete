@@ -41,8 +41,28 @@ public class InheritanceTests {
         final FeatureFlags[] featureFlags = new FeatureFlags[TestRandomnessUtils.RANDOM.nextInt(100, 201)];
         for (int i = 0; i < featureFlags.length; i++) {
             featureFlags[i] = TestRandomnessUtils.nextRandFeatureFlags();
+
+            FeatureFlags beforeMergeParent = ff;
+            FeatureFlags beforeMergeChild = featureFlags[i];
+
             ff = FeatureFlags.merge(ff, featureFlags[i]);
-            LOGGER.info("{} - Merged {} into {}", i, featureFlags[i], ff);
+            LOGGER.info("{} - Merged {} into {}", i, beforeMergeChild, beforeMergeParent);
+
+            if (beforeMergeParent.overrideVanillaNavigation() == null)
+                Assertions.assertEquals(ff.overrideVanillaNavigation(), beforeMergeChild.overrideVanillaNavigation());
+            else
+                if (beforeMergeChild.overrideVanillaNavigation() == null)
+                    Assertions.assertEquals(ff.overrideVanillaNavigation(), beforeMergeParent.overrideVanillaNavigation());
+                else
+                    Assertions.assertEquals(ff.overrideVanillaNavigation(), beforeMergeChild.overrideVanillaNavigation());
+
+            if (beforeMergeParent.crossLineSignMovement() == null)
+                Assertions.assertEquals(ff.crossLineSignMovement(), beforeMergeChild.crossLineSignMovement());
+            else
+            if (beforeMergeChild.crossLineSignMovement() == null)
+                Assertions.assertEquals(ff.crossLineSignMovement(), beforeMergeParent.crossLineSignMovement());
+            else
+                Assertions.assertEquals(ff.crossLineSignMovement(), beforeMergeChild.crossLineSignMovement());
         }
     }
 
@@ -62,5 +82,21 @@ public class InheritanceTests {
             Assertions.fail(e);
         }
         LOGGER.info("Merged mappings registries into: \"{}\"", encodedMrStr);
+
+        Assertions.assertNotNull(mr);
+
+        Assertions.assertNotNull(mr.name());
+        Assertions.assertNotEquals("", mr.name());
+        Assertions.assertNotNull(mr.version());
+        Assertions.assertNotEquals("", mr.version());
+        Assertions.assertNotNull(mr.description());
+        Assertions.assertNotEquals("", mr.description());
+        Assertions.assertNotNull(mr.author());
+        Assertions.assertNotEquals("", mr.author());
+
+        Assertions.assertNotNull(mr.featureFlags());
+        Assertions.assertNotNull(mr.featureFlags().overrideVanillaNavigation());
+        Assertions.assertNotNull(mr.featureFlags().crossLineSignMovement());
+        Assertions.assertNotNull(mr.systems());
     }
 }
