@@ -36,7 +36,7 @@ public class TestRandomnessUtils {
         final boolean ctrl = RANDOM.nextBoolean();
         final boolean altOption = RANDOM.nextBoolean();
         final boolean superCommand = RANDOM.nextBoolean();
-        final int key = RANDOM.nextInt(0, 8096);
+        final int key = RANDOM.nextInt(0, 16384);
         return new KeyCombo(key, shift, altOption, ctrl, superCommand);
     }
 
