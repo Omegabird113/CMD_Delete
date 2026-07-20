@@ -12,10 +12,9 @@ public class LoadTimer {
         final long startTime = System.nanoTime();
         toTime.run();
         final long endTime = System.nanoTime();
-        if (detailed) {
-            final double duration = (endTime - startTime) / 1000000.0f;
-            LOGGER.debug("Timed {}. Took {} ms", name, duration);
-        } else {
+        final double detailedDuration = (endTime - startTime) / 1000000.0f;
+        LOGGER.debug("Timed {}. Took exactly {} ms", name, detailedDuration);
+        if (!detailed) {
             final long duration = TimeUnit.NANOSECONDS.toMillis(endTime - startTime);
             LOGGER.info("Timed {}. Took {} ms", name, duration);
         }
