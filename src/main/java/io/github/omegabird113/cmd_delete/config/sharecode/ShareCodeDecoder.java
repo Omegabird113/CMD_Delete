@@ -18,16 +18,16 @@ public final class ShareCodeDecoder {
     }
 
     @Contract("_ -> new")
-    private static @NonNull String decodeCoreShareCode(String input) throws IOException {
-        try (ByteArrayInputStream bais = new ByteArrayInputStream(BASE_58.decode(input));
-             GZIPInputStream gzip = new GZIPInputStream(bais)) {
+    private static @NonNull String decodeCoreShareCode(@NonNull String input) throws IOException {
+        try (final ByteArrayInputStream bais = new ByteArrayInputStream(BASE_58.decode(input));
+             final GZIPInputStream gzip = new GZIPInputStream(bais)) {
             return new String(gzip.readAllBytes(), StandardCharsets.UTF_8);
         }
     }
 
     @Contract("_ -> new")
     private static String @NonNull [] getShareCodeStringArray(@NonNull String shareCode) {
-        String[] split = shareCode.split(":");
+        final String[] split = shareCode.split(":");
 
         if (split.length != 4)
             throw new IllegalArgumentException("Invalid share code (Wrong length): " + shareCode);
@@ -35,11 +35,12 @@ public final class ShareCodeDecoder {
             throw new IllegalArgumentException("Invalid share code (Not CDS pre-fixed): " + shareCode);
         if (!Objects.equals(split[1].toUpperCase(Locale.ROOT), "EV" + CmdDeleteClient.SHARECODE_FORMAT_VERSION))
             throw new IllegalArgumentException("Invalid share code (Incorrect format version): " + shareCode);
+
         return split;
     }
 
-    public static String decode(String shareCode) {
-        String[] split = getShareCodeStringArray(shareCode);
+    public static @NonNull String decode(@NonNull String shareCode) {
+        final String[] split = getShareCodeStringArray(shareCode);
 
         String coreDecoded;
         try {
@@ -48,7 +49,7 @@ public final class ShareCodeDecoder {
             throw new IllegalArgumentException("Invalid share code (Failed to decode core): " + shareCode, e);
         }
 
-        long actualChecksum = ShareCodeGenerator.genCRC32checksum(coreDecoded);
+        final long actualChecksum = ShareCodeGenerator.genCRC32checksum(coreDecoded);
         long expectedChecksum;
         try {
             expectedChecksum = Long.parseLong(split[3]);

@@ -6,7 +6,7 @@ import java.util.Map;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-public final class KeyCodeRegistry {
+public final class KeyNameRegistry {
     private static final Map<@NonNull String, @NonNull Integer> KEY_MAP = Map.<String, Integer>ofEntries(
             Map.entry("left", GLFW_KEY_LEFT),
             Map.entry("right", GLFW_KEY_RIGHT),
@@ -130,7 +130,7 @@ public final class KeyCodeRegistry {
             Map.entry("scroll_lock", GLFW_KEY_SCROLL_LOCK)
     );
 
-    private KeyCodeRegistry() {
+    private KeyNameRegistry() {
     }
 
     public static @NonNull Map<@NonNull String, @NonNull Integer> getKeyMap() {

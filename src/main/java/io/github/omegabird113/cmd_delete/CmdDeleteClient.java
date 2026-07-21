@@ -11,11 +11,11 @@ import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.MixinEnvironment;
 
 import java.nio.file.Path;
-import java.util.concurrent.TimeUnit;
 
 public final class CmdDeleteClient implements ClientModInitializer {
     public static final @NonNull String MODID = "cmd_delete";
-    public static final @NonNull String VERSION = FabricLoader.getInstance().getModContainer(MODID)
+    public static final @NonNull FabricLoader LOADER = FabricLoader.getInstance();
+    public static final @NonNull String VERSION = LOADER.getModContainer(MODID)
             .map(container -> container.getMetadata().getVersion().getFriendlyString())
             .orElse("<unknown>");
     public static final int CURRENT_MAPPINGS_FORMAT_VERSION = 4;
@@ -25,40 +25,24 @@ public final class CmdDeleteClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        final long startTime = System.nanoTime();
+        LoadTimer.time(() -> {
+            LoadTimer.time(() -> {
+                LOGGER.info("Initializing client mod \"{}\" (version: {}, mappings format version: {}, minimum mappings compatible version: {}, sharecode encoding version: {})...", MODID, VERSION, CURRENT_MAPPINGS_FORMAT_VERSION, MINIMUM_MAPPINGS_FORMAT_VERSION, SHARECODE_FORMAT_VERSION);
+                LOGGER.info("User appears to be running system: {}", Os.USING);
 
-        LOGGER.info("Initializing client mod \"{}\" (version: {}, mappings format version: {}, minimum mappings compatible version: {}, sharecode encoding version: {})...", MODID, VERSION, CURRENT_MAPPINGS_FORMAT_VERSION, MINIMUM_MAPPINGS_FORMAT_VERSION, SHARECODE_FORMAT_VERSION);
-        LOGGER.info("User appears to be running system: {}", Os.USING);
+                final MixinEnvironment mixinEnv = MixinEnvironment.getCurrentEnvironment();
+                LOGGER.debug("Mixin version {} with obfuscation \"{}\" and compatability level \"{}\" in phase \"{}\" on side \"{}\"", mixinEnv.getVersion(), mixinEnv.getObfuscationContext(), MixinEnvironment.getCompatibilityLevel(), mixinEnv.getPhase(), mixinEnv.getSide());
+            }, "initial logging", true);
 
-        final MixinEnvironment mixinEnv = MixinEnvironment.getCurrentEnvironment();
-        LOGGER.debug("Mixin version {} with obfuscation \"{}\" and compatability level \"{}\" in phase \"{}\" on side \"{}\"", mixinEnv.getVersion(), mixinEnv.getObfuscationContext(), MixinEnvironment.getCompatibilityLevel(), mixinEnv.getPhase(), mixinEnv.getSide());
-        final long startLogTime = System.nanoTime();
+            LoadTimer.time(() -> {
+                final Path gameDir = LOADER.getGameDir();
+                final Path resourceMappingsDir = LOADER.getModContainer(CmdDeleteClient.MODID)
+                        .orElseThrow().findPath("mappings/").orElseThrow();
+                PathConstants.init(gameDir, resourceMappingsDir);
+            }, "path initialization", true);
 
-        final Path gameDir = FabricLoader.getInstance().getGameDir();
-        final Path resourceMappingsDir = FabricLoader.getInstance().getModContainer(CmdDeleteClient.MODID)
-                .orElseThrow().findPath("mappings/").orElseThrow();
-        PathConstants.init(gameDir, resourceMappingsDir);
-
-        final long fileInitTime = System.nanoTime();
-
-        NavMappingsManager.loadMappings();
-        final long loadMappingsTime = System.nanoTime();
-
-        NavMappingsCommand.register();
-        final long registerTime = System.nanoTime();
-
-        final long startLogTakenNanos = startLogTime - startTime;
-        final double startLogTakenMillis = startLogTakenNanos / 1000000.0;
-        final long fileInitTakenNanos = fileInitTime - startLogTime;
-        final double fileInitTakenMillis = fileInitTakenNanos / 1000000.0;
-        final long loadMappingsTakenNanos = loadMappingsTime - fileInitTime;
-        final double loadMappingsTakenMillis = loadMappingsTakenNanos / 1000000.0;
-        final long registerTakenNanos = registerTime - loadMappingsTime;
-        final double registerTakenMillis = registerTakenNanos / 1000000.0;
-        final long totalTakenNanos = registerTime - startTime;
-        final long totalTakenMillis = TimeUnit.NANOSECONDS.toMillis(totalTakenNanos);
-
-        LOGGER.info("Finished initializing after a total of {} milliseconds", totalTakenMillis);
-        LOGGER.debug("Startup/mixin: {}ms, File init: {}ms, Mappings load: {}ms, /navmappings register: {}ms, Total: {}ms", startLogTakenMillis, fileInitTakenMillis, loadMappingsTakenMillis, registerTakenMillis, totalTakenMillis);
+            LoadTimer.time(NavMappingsManager::loadMappings, "loading mappings", true);
+            LoadTimer.time(NavMappingsCommand::register, "registering /navmappings", true);
+        }, "full load", false);
     }
 }

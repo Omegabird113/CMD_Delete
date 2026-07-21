@@ -36,16 +36,16 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
             throw new JsonParseException("Expected a JSON object at root");
         final JsonObject jsonObject = json.getAsJsonObject();
 
-        final boolean strictMode = getOptionalBoolean(jsonObject, "strict");
+        final boolean strictModeVal = getOptionalBoolean(jsonObject, "strict");
 
-        final int fv = requireInt(jsonObject, "fv", false, -1); // we don't know fv/strict yet
+        final int fv = requireInt(jsonObject, "fv", true); // we don't know fv/strict yet
+        final boolean strictMode = strictModeVal && fv >= 4;
         if (fv < CmdDeleteClient.MINIMUM_MAPPINGS_FORMAT_VERSION || fv > CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION)
             throw new JsonParseException("Invalid format version number: " + fv + ". The current format version is: " + CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION);
         if (fv != CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION)
             logWarn(
                     "Old mappings version (" + fv + ") used by custom mappings. Please update to version " + CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION,
-                    strictMode,
-                    fv
+                    false
             );
 
         final String inherits = getStringElse(jsonObject, "inherits", "");
@@ -55,21 +55,21 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
         final HashMap<KeyCombo, NavAction> disabledKeys = new HashMap<>();
         parseActions(actions, localKeys, disabledKeys, fv, strictMode);
 
-        final MetadataContainer container = parseMeta(requireObject(jsonObject, "meta"), strictMode, fv);
+        final MetadataContainer container = parseMeta(requireObject(jsonObject, "meta"), strictMode);
         final FeatureFlags ff = parseFlags(jsonObject, fv, inherits);
 
         return new MappingsRegistry(localKeys, (disabledKeys.isEmpty() ? null : disabledKeys), List.copyOf(container.systems()), ff, inherits, container.name(), container.author(), container.description(), container.version(), container.id());
     }
 
-    private void logWarn(@NonNull String message, boolean strictMode, int fv) {
-        if (strictMode && fv == 4)
+    private void logWarn(@NonNull String message, boolean strictMode) {
+        if (strictMode)
             throw new JsonParseException(message);
         else
             LOGGER.warn(message);
     }
 
-    private String trimAndCaseIfNotStrict(@NonNull String str, boolean upper, boolean strictMode, int fv) {
-        if (strictMode && fv == 4)
+    private String trimAndCaseIfNotStrict(@NonNull String str, boolean upper, boolean strictMode) {
+        if (strictMode)
             return str;
 
         if (upper)
@@ -78,14 +78,13 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
             return str.trim().toLowerCase(Locale.ROOT);
     }
 
-    private void parseActions(@NonNull JsonObject actions, @NonNull HashMap<KeyCombo, NavAction> localKeys, @NonNull HashMap<KeyCombo, NavAction> disabledKeys, int fv, boolean strictMode) {
+    private void parseActions(@NonNull JsonObject actions, @NonNull HashMap<@NonNull KeyCombo, @NonNull NavAction> localKeys, @NonNull HashMap<@NonNull KeyCombo, @NonNull NavAction> disabledKeys, int fv, boolean strictMode) {
         for (String actionName : actions.keySet()) {
-            NavAction action = NAV_ACTION_MAP.get(trimAndCaseIfNotStrict(actionName, true, strictMode, fv));
+            final NavAction action = NAV_ACTION_MAP.get(trimAndCaseIfNotStrict(actionName, true, strictMode));
             if (action == null || action == NavAction.NONE) {
                 logWarn(
                         "Invalid action specified by custom mappings: \"" + actionName + "\". All key-combos registered in this action skipped...",
-                        strictMode,
-                        fv
+                        strictMode
                 );
                 continue;
             }
@@ -106,12 +105,11 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
 
                 final int keyCode;
                 try {
-                    keyCode = requireKeyCode(binding, "key", strictMode, fv);
+                    keyCode = requireKeyCode(binding, "key", strictMode);
                 } catch (JsonParseException e) {
                     logWarn(
                             "Invalid key binding due to error: " + e.getMessage(),
-                            strictMode,
-                            fv
+                            strictMode
                     );
                     continue;
                 }
@@ -144,8 +142,7 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
                     if (toAdd.containsKey(key))
                         logWarn(
                                 "Duplicate key binding in custom binding with action of \"" + actionName + "\" and key \"" + key + "\". 2nd registration skipped...",
-                                strictMode,
-                                fv
+                                strictMode
                         );
                     else
                         toAdd.put(key, action);
@@ -174,8 +171,8 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
         }
     }
 
-    @Contract("_, _, _ -> new")
-    private @NonNull MetadataContainer parseMeta(@NonNull JsonObject meta, boolean strictMode, int fv) {
+    @Contract("_, _ -> new")
+    private @NonNull MetadataContainer parseMeta(@NonNull JsonObject meta, boolean strictMode) {
         final String name = getStringElse(meta, "name", "Unnamed Custom Mappings");
         final String author = getStringElse(meta, "author", "unknown").replace("$$cmd_delete$$", "Omegabird113");
         final String description = getStringElse(meta, "description", "No description provided");
@@ -183,7 +180,7 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
         final String id = requireString(meta, "id");
 
         final JsonArray systems = requireArray(meta, "systems");
-        final Set<Os> parsedSystems = parseSystems(systems, strictMode, fv);
+        final Set<Os> parsedSystems = parseSystems(systems, strictMode);
         if (parsedSystems.isEmpty())
             throw new JsonParseException("No systems found");
         return new MetadataContainer(name, author, version, description, id, parsedSystems);
@@ -200,22 +197,25 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
         final boolean[] controlVals = hasControl ? new boolean[]{controlValue} : new boolean[]{false, true};
         final boolean[] superCommandVals = hasSuperCommand ? new boolean[]{superCommandValue} : new boolean[]{false, true};
 
-        final List<KeyCombo> results = new ArrayList<>();
+        final KeyCombo[] results = new KeyCombo[shiftVals.length * altOptionVals.length * controlVals.length * superCommandVals.length];
+        int i = 0;
         for (boolean s : shiftVals)
             for (boolean a : altOptionVals)
                 for (boolean c : controlVals)
-                    for (boolean sup : superCommandVals)
-                        results.add(new KeyCombo(key, s, a, c, sup));
-        return results.toArray(KeyCombo[]::new);
+                    for (boolean sup : superCommandVals) {
+                        results[i] = new KeyCombo(key, s, a, c, sup);
+                        i++;
+                    }
+        return results;
     }
 
-    private @NonNull Set<Os> parseSystems(@NonNull JsonArray systemsArray, boolean strictMode, int fv) {
+    private @NonNull Set<Os> parseSystems(@NonNull JsonArray systemsArray, boolean strictMode) {
         final Set<Os> systems = new LinkedHashSet<>();
 
         for (JsonElement systemElement : systemsArray) {
             if (!systemElement.isJsonPrimitive() || !systemElement.getAsJsonPrimitive().isString())
                 throw new JsonParseException("Expected each entry in \"systems\" to be a string");
-            final String systemName = trimAndCaseIfNotStrict(systemElement.getAsString(), false, strictMode, fv);
+            final String systemName = trimAndCaseIfNotStrict(systemElement.getAsString(), false, strictMode);
             final Os os = OS_MAP.get(systemName);
             if (os == null)
                 throw new JsonParseException("Unknown system: " + systemName);
