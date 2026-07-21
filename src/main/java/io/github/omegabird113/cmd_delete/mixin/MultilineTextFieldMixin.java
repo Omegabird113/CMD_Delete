@@ -8,7 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.MultilineTextField;
 import net.minecraft.client.gui.components.Whence;
 import net.minecraft.client.input.KeyEvent;
-import org.lwjgl.glfw.GLFW;
+import org.lwjgl.sdl.SDLScancode;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -62,7 +62,7 @@ public abstract class MultilineTextFieldMixin {
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideMultilineNavigation(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
-        NavAction action = NavMappingsManager.getCurrentMappings().getAction(event, Minecraft.getInstance().getWindow());
+        final NavAction action = NavMappingsManager.getCurrentMappings().getAction(event);
         int direction = ActionOffsetUtils.getOffset(action);
 
         switch (action) {
@@ -161,7 +161,7 @@ public abstract class MultilineTextFieldMixin {
                 this.selectCursor = 0;
             }
             case NONE -> {
-                if (!NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation() || event.isEscape() || event.key() == GLFW.GLFW_KEY_ENTER || event.key() == GLFW.GLFW_KEY_KP_ENTER)
+                if (!NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation() || event.isEscape() || event.key() == SDLScancode.SDL_SCANCODE_RETURN || event.key() == SDLScancode.SDL_SCANCODE_KP_ENTER)
                     return;
             }
         }
