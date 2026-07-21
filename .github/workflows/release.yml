@@ -123,7 +123,9 @@ jobs:
           changelog-file: changelog.md
           java: 25
           game-versions: |
-            26.3-snapshot.4
+            >=26.1 <=26.3-snapshot.3
+            >=26.1-pre.1 <=26.1
+            >=26.1-rc.1 <=26.1
           loaders: |
             fabric
             quilt
