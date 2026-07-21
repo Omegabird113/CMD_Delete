@@ -114,8 +114,6 @@ jobs:
         with:
           modrinth-id: xrOWVab9
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-          curseforge-id: 1455987
-          curseforge-token: ${{ secrets.CF_API_TOKEN }}
           files: ${{ steps.jar.outputs.path }}
           name: ${{ inputs.release_title }}
           version: ${{ steps.props.outputs.version }}
@@ -123,7 +121,7 @@ jobs:
           changelog-file: changelog.md
           java: 25
           game-versions: |
-            26.3-snapshot.4
+            >=26.3-snapshot.4 <=26.3-snapshot.5
           loaders: |
             fabric
             quilt
