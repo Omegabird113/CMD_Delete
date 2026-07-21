@@ -23,17 +23,14 @@ dependencies {
     // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
 
-    implementation 'com.google.code.gson:gson:2.14.0'
-    implementation 'commons-codec:commons-codec:1.22.0'
     mappings loom.officialMojangMappings()
+
+    modImplementation 'com.google.code.gson:gson:2.14.0'
+    modImplementation 'commons-codec:commons-codec:1.22.0'
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
     testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
-    modImplementation 'com.google.code.gson:gson:2.14.0'
     modImplementation "org.jspecify:jspecify:1.0.0"
-    modImplementation 'commons-codec:commons-codec:1.22.0'
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 }
 
