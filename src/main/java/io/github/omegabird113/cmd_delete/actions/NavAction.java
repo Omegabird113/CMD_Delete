@@ -54,7 +54,7 @@ public enum NavAction {
     }
 
     @Contract(pure = true)
-    public boolean isOverrideEdi() {
+    public boolean isOverrideEdit() {
         return switch (this) {
             case OVR_COPY, OVR_CUT, OVR_PASTE, OVR_SELECT_ALL -> true;
             default -> false;

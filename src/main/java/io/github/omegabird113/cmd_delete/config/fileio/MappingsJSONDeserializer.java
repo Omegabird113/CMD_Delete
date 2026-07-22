@@ -91,7 +91,7 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
             if (action.override && fv == 2)
                 throw new JsonParseException("Format version 2 file specified actions of fv 3: " + actionName);
 
-            if (action.isOverrideEdi() && fv < 4)
+            if (action.isOverrideEdit() && fv < 4)
                 throw new JsonParseException("Format version 2 or 3 file specified actions of fv 4: " + actionName);
 
             final JsonArray bindings = requireArray(actions, actionName);
