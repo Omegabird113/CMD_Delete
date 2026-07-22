@@ -1,6 +1,7 @@
 package io.github.omegabird113.cmd_delete.actions;
 
 import org.jetbrains.annotations.Contract;
+import org.jspecify.annotations.NonNull;
 
 import static io.github.omegabird113.cmd_delete.actions.NavActionOffset.*;
 
@@ -10,8 +11,8 @@ public enum NavAction {
     NAV_WORD_LEFT(LEFT, Type.MOVE, false),
     NAV_WORD_RIGHT(RIGHT, Type.MOVE, false),
     SEL_LINE_LEFT(LEFT, Type.SELECT, false),
-    SEL_LINE_RIGHT(RIGHT, Type.SELECT,false),
-    SEL_WORD_LEFT(LEFT, Type.SELECT,false),
+    SEL_LINE_RIGHT(RIGHT, Type.SELECT, false),
+    SEL_WORD_LEFT(LEFT, Type.SELECT, false),
     SEL_WORD_RIGHT(RIGHT, Type.SELECT, false),
     DEL_LINE_LEFT(LEFT, Type.DELETE, false),
     DEL_LINE_RIGHT(RIGHT, Type.DELETE, false),
@@ -37,11 +38,11 @@ public enum NavAction {
     OVR_SELECT_ALL(INVALID, Type.EDIT, true),
     NONE(INVALID, Type.NONE, false);
 
-    public final NavActionOffset offset;
-    public final Type type;
+    public final @NonNull NavActionOffset offset;
+    public final @NonNull Type type;
     public final boolean override;
 
-    NavAction(NavActionOffset offset, Type type, boolean override) {
+    NavAction(@NonNull NavActionOffset offset, @NonNull Type type, boolean override) {
         this.offset = offset;
         this.override = override;
         this.type = type;

@@ -1,7 +1,7 @@
 package io.github.omegabird113.cmd_delete;
 
-import io.github.omegabird113.cmd_delete.actions.NavActionOffset;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
+import io.github.omegabird113.cmd_delete.actions.NavActionOffset;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

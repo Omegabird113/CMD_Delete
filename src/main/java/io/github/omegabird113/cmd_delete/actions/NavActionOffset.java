@@ -20,5 +20,4 @@ public enum NavActionOffset {
     public static int get(@NonNull NavAction action) {
         return action.offset.value;
     }
-
 }

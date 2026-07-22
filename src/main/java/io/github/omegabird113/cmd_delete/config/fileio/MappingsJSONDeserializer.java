@@ -29,6 +29,13 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
     private static final @NonNull Map<@NonNull String, @NonNull NavAction> NAV_ACTION_MAP = Arrays.stream(NavAction.values())
             .collect(Collectors.toUnmodifiableMap(NavAction::name, Function.identity()));
 
+    static void logWarn(@NonNull String message, boolean strictMode) {
+        if (strictMode)
+            throw new JsonParseException(message);
+        else
+            LOGGER.warn(message);
+    }
+
     @Override
     public @NonNull MappingsRegistry deserialize(@NonNull JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         if (!json.isJsonObject())
@@ -58,13 +65,6 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
         final FeatureFlags ff = parseFlags(jsonObject, fv, inherits);
 
         return new MappingsRegistry(localKeys, (disabledKeys.isEmpty() ? null : disabledKeys), List.copyOf(container.systems()), ff, inherits, container.name(), container.author(), container.description(), container.version(), container.id());
-    }
-
-    static void logWarn(@NonNull String message, boolean strictMode) {
-        if (strictMode)
-            throw new JsonParseException(message);
-        else
-            LOGGER.warn(message);
     }
 
     private String trimAndCaseIfNotStrict(@NonNull String str, boolean upper, boolean strictMode) {
