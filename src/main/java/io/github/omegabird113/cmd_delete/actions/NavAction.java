@@ -1,5 +1,7 @@
 package io.github.omegabird113.cmd_delete.actions;
 
+import org.jetbrains.annotations.Contract;
+
 import static io.github.omegabird113.cmd_delete.actions.NavActionOffset.*;
 
 public enum NavAction {
@@ -43,6 +45,19 @@ public enum NavAction {
         this.offset = offset;
         this.override = override;
         this.type = type;
+    }
+
+    @Contract(pure = true)
+    public boolean isMove() {
+        return this.type == Type.MOVE;
+    }
+
+    @Contract(pure = true)
+    public boolean isOverrideEdi() {
+        return switch (this) {
+            case OVR_COPY, OVR_CUT, OVR_PASTE, OVR_SELECT_ALL -> true;
+            default -> false;
+        };
     }
 
     public enum Type {

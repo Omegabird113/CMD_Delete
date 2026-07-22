@@ -2,7 +2,6 @@ package io.github.omegabird113.cmd_delete.mixin;
 
 import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.actions.NavActionOffset;
-import io.github.omegabird113.cmd_delete.actions.NavActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import net.minecraft.client.Minecraft;
@@ -66,7 +65,7 @@ public abstract class SignEditScreenMixin {
         final boolean shift = event.hasShiftDown();
 
         // Reset selection if player moves w/o shift
-        if (!shift && (event.isUp() || event.isDown() || event.isLeft() || event.isRight() || NavActionOffsetUtils.isMoveAction(action)))
+        if (!shift && (event.isUp() || event.isDown() || event.isLeft() || event.isRight() || action.isMove()))
             this.cmd_delete$clearMultilineSelection();
 
         if (action == NavAction.NONE && !shift && (event.isLeft() || event.isRight())) {
@@ -78,7 +77,7 @@ public abstract class SignEditScreenMixin {
             }
         }
 
-        final int direction = NavActionOffsetUtils.getOffset(action);
+        final int direction = NavActionOffset.get(action);
 
         switch (action) {
             case SEL_TEXT_UP, SEL_TEXT_DOWN -> {

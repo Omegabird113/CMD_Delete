@@ -1,7 +1,6 @@
 package io.github.omegabird113.cmd_delete;
 
 import io.github.omegabird113.cmd_delete.actions.NavActionOffset;
-import io.github.omegabird113.cmd_delete.actions.NavActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -28,7 +27,7 @@ public class OffsetsTest {
                 NavAction.OVR_SELECT_ALL
         );
         for (NavAction action : NavAction.values()) {
-            final int offset = NavActionOffsetUtils.getOffset(action);
+            final int offset = NavActionOffset.get(action);
 
             if (action.name().contains("LEFT") && offset != NavActionOffset.LEFT.value)
                 Assertions.fail("LEFT offset not produced by action: " + action.name());
@@ -43,10 +42,10 @@ public class OffsetsTest {
 
             LOGGER.info("Tested offset ({}) of: {}", offset, action.name());
 
-            boolean isOvr = NavActionOffsetUtils.isOverrideAction(action);
+            boolean isOvr = action.override;
             Assertions.assertEquals(isOvr, action.name().contains("OVR"));
 
-            boolean isMove = NavActionOffsetUtils.isMoveAction(action);
+            boolean isMove = action.isMove();
             Assertions.assertEquals(isMove, action.name().contains("NAV"));
         }
     }
