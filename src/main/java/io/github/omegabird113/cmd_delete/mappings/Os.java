@@ -11,6 +11,7 @@ public enum Os {
     MAC;
 
     public static final @NonNull Os USING = getCurrent();
+    public static final boolean IS_USING_MAC = Os.USING == Os.MAC;
 
     @Contract(pure = true)
     private static @NonNull Os getCurrent() {

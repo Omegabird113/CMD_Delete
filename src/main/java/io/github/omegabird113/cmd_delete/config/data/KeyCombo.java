@@ -4,23 +4,18 @@ import io.github.omegabird113.cmd_delete.mappings.Os;
 import org.jspecify.annotations.NonNull;
 
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public record KeyCombo(int key, boolean shift, boolean altOption, boolean control,
                        boolean superCommand) {
-    private static final @NonNull Map<String, Integer> KEY_MAP = KeyNameRegistry.getKeyMap();
-    private static final @NonNull Map<Integer, String> REVERSED_KEY_MAP = KEY_MAP.entrySet().stream().collect(
-            Collectors.toUnmodifiableMap(Map.Entry::getValue, Map.Entry::getKey));
-    private static final boolean IS_MAC = Os.USING == Os.MAC;
-
     @Override
     public @NonNull String toString() {
+        final Map<Integer, String> reversedKeyMap = KeyNameRegistry.getReverseKeyMap();
         return "<" +
                 (control ? "ctrl+" : "")
-                + (superCommand ? (IS_MAC ? "cmd+" : "sup+") : "")
-                + (altOption ? (IS_MAC ? "opt+" : "alt+") : "")
+                + (superCommand ? (Os.IS_USING_MAC ? "cmd+" : "sup+") : "")
+                + (altOption ? (Os.IS_USING_MAC ? "opt+" : "alt+") : "")
                 + (shift ? "shift+" : "")
-                + (REVERSED_KEY_MAP.get(key) != null ? REVERSED_KEY_MAP.get(key) : key)
+                + (reversedKeyMap.get(key).describeConstable().orElse(Integer.toString(key)))
                 + ">";
     }
 }
