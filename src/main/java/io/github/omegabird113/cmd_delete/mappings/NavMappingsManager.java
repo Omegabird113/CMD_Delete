@@ -11,6 +11,7 @@ import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.List;
+import java.util.Optional;
 
 public final class NavMappingsManager {
     private static final @NonNull Logger LOGGER = LoggingManager.getLogger(NavMappingsManager.class);
@@ -23,6 +24,10 @@ public final class NavMappingsManager {
         if (currentMappingsState == null)
             throw new IllegalStateException("No current mappings state has been set, but the mappings were accessed");
         return currentMappingsState;
+    }
+
+    public static @NonNull Optional<MappingsState> getOptionalMappingsState() {
+        return Optional.ofNullable(currentMappingsState);
     }
 
     public static @NonNull NavMappings getCurrentMappings() {

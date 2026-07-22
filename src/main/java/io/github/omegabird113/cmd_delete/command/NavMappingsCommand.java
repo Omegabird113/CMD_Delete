@@ -5,7 +5,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
-import io.github.omegabird113.cmd_delete.CrashUtil;
+import io.github.omegabird113.cmd_delete.CrashUtils;
 import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.data.KeyNameRegistry;
@@ -222,7 +222,7 @@ public final class NavMappingsCommand {
     }
 
     private static int setDefault(@NonNull CommandContext<FabricClientCommandSource> context) {
-        CrashUtil.crashMinecraftOnFailure(NavMappingsManager::updateMappingsToDefault);
+        CrashUtils.crashMinecraftOnFailure(NavMappingsManager::updateMappingsToDefault);
         context.getSource().sendFeedback(Component.literal("Set navmappings to default"));
         return 1;
     }
