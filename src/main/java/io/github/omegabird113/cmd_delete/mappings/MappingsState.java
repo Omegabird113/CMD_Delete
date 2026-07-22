@@ -15,5 +15,4 @@ public record MappingsState(@NonNull NavMappings mappings, @NonNull MappingsType
                 + mappings.registry()
                 + "\"";
     }
-
 }
