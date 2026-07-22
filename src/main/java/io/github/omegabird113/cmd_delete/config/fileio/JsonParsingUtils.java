@@ -105,6 +105,11 @@ public final class JsonParsingUtils {
         final String keyString = element.getAsString().toLowerCase(Locale.ROOT).trim();
 
         if (element.getAsJsonPrimitive().isString()) {
+            if (keyString.equals("f25"))
+                MappingsJSONDeserializer.logWarn(
+                        "The deprecated friendly keyname \"f25\" was used. This keyname will not exist in fv5",
+                        strictMode
+                );
             final Integer keyCode = keyMap.get(keyString);
             if (keyCode == null)
                 throw new JsonParseException("Unknown key \"" + keyString + "\".");

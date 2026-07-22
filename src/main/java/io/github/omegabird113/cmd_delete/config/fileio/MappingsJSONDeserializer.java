@@ -61,7 +61,7 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
         return new MappingsRegistry(localKeys, (disabledKeys.isEmpty() ? null : disabledKeys), List.copyOf(container.systems()), ff, inherits, container.name(), container.author(), container.description(), container.version(), container.id());
     }
 
-    private void logWarn(@NonNull String message, boolean strictMode) {
+    static void logWarn(@NonNull String message, boolean strictMode) {
         if (strictMode)
             throw new JsonParseException(message);
         else
