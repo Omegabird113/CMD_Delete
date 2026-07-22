@@ -1,6 +1,7 @@
 package io.github.omegabird113.cmd_delete.mixin;
 
 import io.github.omegabird113.cmd_delete.LoggingManager;
+import io.github.omegabird113.cmd_delete.actions.ActionOffset;
 import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
@@ -70,7 +71,7 @@ public abstract class SignEditScreenMixin {
 
         if (action == NavAction.NONE && !shift && (event.isLeft() || event.isRight())) {
             // If line changed, we handled it, else continue
-            final int sideDirection = event.isLeft() ? ActionOffsetUtils.OFFSET_LEFT : ActionOffsetUtils.OFFSET_RIGHT;
+            final int sideDirection = event.isLeft() ? ActionOffset.LEFT.value : ActionOffset.RIGHT.value;
             if (this.cmd_delete$tryMoveToNextLineByCharacter(sideDirection)) {
                 cir.setReturnValue(true);
                 return;
@@ -81,7 +82,7 @@ public abstract class SignEditScreenMixin {
 
         switch (action) {
             case SEL_TEXT_UP, SEL_TEXT_DOWN -> {
-                if (NavMappingsManager.getCurrentFeatureFlags().crossLineSignMovement())
+                if (Boolean.TRUE.equals(NavMappingsManager.getCurrentFeatureFlags().crossLineSignMovement()))
                     this.cmd_delete$selectVertical(direction);
                 else
                     return;
@@ -120,7 +121,7 @@ public abstract class SignEditScreenMixin {
             }
             case OVR_NAV_TEXT_UP, OVR_NAV_TEXT_DOWN -> {
                 this.cmd_delete$clearMultilineSelection();
-                if (NavMappingsManager.getCurrentFeatureFlags().crossLineSignMovement())
+                if (Boolean.TRUE.equals(NavMappingsManager.getCurrentFeatureFlags().crossLineSignMovement()))
                     this.line = (this.line + direction) & 3;
                 else
                     this.line = Math.clamp(this.messages.length - 1, 0, this.line + direction);
@@ -131,7 +132,7 @@ public abstract class SignEditScreenMixin {
             case OVR_PASTE -> this.signField.paste();
             case OVR_SELECT_ALL -> this.signField.selectAll();
             case NONE -> {
-                if (!NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation() || event.isEscape() || event.key() == GLFW.GLFW_KEY_ENTER || event.key() == GLFW.GLFW_KEY_KP_ENTER)
+                if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation()) || event.isEscape() || event.key() == GLFW.GLFW_KEY_ENTER || event.key() == GLFW.GLFW_KEY_KP_ENTER)
                     return;
             }
         }
@@ -161,14 +162,14 @@ public abstract class SignEditScreenMixin {
 
     @Unique
     private void cmd_delete$moveToNextCharacterLineIfNeeded(int direction) {
-        if (!NavMappingsManager.getCurrentFeatureFlags().crossLineSignMovement())
+        if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().crossLineSignMovement()))
             return;
-        if (direction == ActionOffsetUtils.OFFSET_LEFT
+        if (direction == ActionOffset.LEFT.value
                 && this.signField.getCursorPos() == 0
                 && this.line > 0) {
             this.line--;
             this.signField.setCursorToEnd(false);
-        } else if (direction == ActionOffsetUtils.OFFSET_RIGHT
+        } else if (direction == ActionOffset.RIGHT.value
                 && this.signField.getCursorPos() == this.cmd_delete$currentLineMessage().length()
                 && this.line < this.messages.length - 1) {
             this.line++;
@@ -209,7 +210,7 @@ public abstract class SignEditScreenMixin {
 
     @Unique
     private boolean cmd_delete$tryMoveToNextLineByCharacter(int direction) {
-        if (!NavMappingsManager.getCurrentFeatureFlags().crossLineSignMovement())
+        if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().crossLineSignMovement()))
             return false;
         final int oldLine = this.line;
         this.cmd_delete$moveToNextCharacterLineIfNeeded(direction);
@@ -230,13 +231,13 @@ public abstract class SignEditScreenMixin {
 
     @Unique
     private void cmd_delete$moveToNextWordLineIfNeeded(int direction) {
-        if (!NavMappingsManager.getCurrentFeatureFlags().crossLineSignMovement())
+        if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().crossLineSignMovement()))
             return;
         final int nextLine = this.cmd_delete$getNextWordLine(direction);
-        if (direction == ActionOffsetUtils.OFFSET_LEFT && this.signField.getCursorPos() == 0 && nextLine != this.line) {
+        if (direction == ActionOffset.LEFT.value && this.signField.getCursorPos() == 0 && nextLine != this.line) {
             this.line = nextLine;
             this.signField.setCursorToEnd(false);
-        } else if (direction == ActionOffsetUtils.OFFSET_RIGHT && this.signField.getCursorPos() == this.cmd_delete$currentLineMessage().length() && nextLine != this.line) {
+        } else if (direction == ActionOffset.RIGHT.value && this.signField.getCursorPos() == this.cmd_delete$currentLineMessage().length() && nextLine != this.line) {
             this.line = nextLine;
             this.signField.setCursorToStart(false);
         }
@@ -250,7 +251,7 @@ public abstract class SignEditScreenMixin {
 
     @Unique
     private void cmd_delete$moveToLineEdge(int direction, boolean extendSelection) {
-        if (direction == ActionOffsetUtils.OFFSET_LEFT)
+        if (direction == ActionOffset.LEFT.value)
             this.signField.setCursorToStart(extendSelection);
         else
             this.signField.setCursorToEnd(extendSelection);
@@ -274,7 +275,7 @@ public abstract class SignEditScreenMixin {
 
     @Unique
     private void cmd_delete$moveToTextEdge(int direction, boolean extendSelection) {
-        if (direction == ActionOffsetUtils.OFFSET_UP) {
+        if (direction == ActionOffset.UP.value) {
             this.line = 0;
             this.signField.setCursorToStart(extendSelection);
         } else {
@@ -302,7 +303,7 @@ public abstract class SignEditScreenMixin {
 
     @Unique
     private int cmd_delete$getNextWordLine(int direction) {
-        if (!NavMappingsManager.getCurrentFeatureFlags().crossLineSignMovement())
+        if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().crossLineSignMovement()))
             return this.line;
         for (int nextLine = this.line + direction; nextLine >= 0 && nextLine < this.messages.length; nextLine += direction)
             if (!this.messages[nextLine].isEmpty())

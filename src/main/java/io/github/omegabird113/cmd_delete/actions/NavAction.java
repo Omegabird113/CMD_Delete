@@ -1,35 +1,51 @@
 package io.github.omegabird113.cmd_delete.actions;
 
+import static io.github.omegabird113.cmd_delete.actions.ActionOffset.*;
+
 public enum NavAction {
-    NAV_LINE_LEFT,
-    NAV_LINE_RIGHT,
-    NAV_WORD_LEFT,
-    NAV_WORD_RIGHT,
-    SEL_LINE_LEFT,
-    SEL_LINE_RIGHT,
-    SEL_WORD_LEFT,
-    SEL_WORD_RIGHT,
-    DEL_LINE_LEFT,
-    DEL_LINE_RIGHT,
-    DEL_WORD_LEFT,
-    DEL_WORD_RIGHT,
-    NAV_TEXT_START,
-    NAV_TEXT_END,
-    SEL_TEXT_START,
-    SEL_TEXT_END,
-    SEL_TEXT_UP,
-    SEL_TEXT_DOWN,
-    OVR_NAV_CHAR_LEFT,
-    OVR_NAV_CHAR_RIGHT,
-    OVR_SEL_CHAR_LEFT,
-    OVR_SEL_CHAR_RIGHT,
-    OVR_DEL_CHAR_LEFT,
-    OVR_DEL_CHAR_RIGHT,
-    OVR_NAV_TEXT_UP,
-    OVR_NAV_TEXT_DOWN,
-    OVR_COPY,
-    OVR_CUT,
-    OVR_PASTE,
-    OVR_SELECT_ALL,
-    NONE
+    NAV_LINE_LEFT(LEFT, Type.MOVE, false),
+    NAV_LINE_RIGHT(RIGHT, Type.MOVE, false),
+    NAV_WORD_LEFT(LEFT, Type.MOVE, false),
+    NAV_WORD_RIGHT(RIGHT, Type.MOVE, false),
+    SEL_LINE_LEFT(LEFT, Type.SELECT, false),
+    SEL_LINE_RIGHT(RIGHT, Type.SELECT,false),
+    SEL_WORD_LEFT(LEFT, Type.SELECT,false),
+    SEL_WORD_RIGHT(RIGHT, Type.SELECT, false),
+    DEL_LINE_LEFT(LEFT, Type.DELETE, false),
+    DEL_LINE_RIGHT(RIGHT, Type.DELETE, false),
+    DEL_WORD_LEFT(LEFT, Type.DELETE, false),
+    DEL_WORD_RIGHT(RIGHT, Type.DELETE, false),
+    NAV_TEXT_START(UP, Type.MOVE, false),
+    NAV_TEXT_END(DOWN, Type.MOVE, false),
+    SEL_TEXT_START(UP, Type.SELECT, false),
+    SEL_TEXT_END(DOWN, Type.SELECT, false),
+    SEL_TEXT_UP(UP, Type.SELECT, false),
+    SEL_TEXT_DOWN(DOWN, Type.SELECT, false),
+    OVR_NAV_CHAR_LEFT(LEFT, Type.MOVE, true),
+    OVR_NAV_CHAR_RIGHT(RIGHT, Type.MOVE, true),
+    OVR_SEL_CHAR_LEFT(LEFT, Type.SELECT, true),
+    OVR_SEL_CHAR_RIGHT(RIGHT, Type.SELECT, true),
+    OVR_DEL_CHAR_LEFT(LEFT, Type.DELETE, true),
+    OVR_DEL_CHAR_RIGHT(RIGHT, Type.DELETE, true),
+    OVR_NAV_TEXT_UP(UP, Type.MOVE, true),
+    OVR_NAV_TEXT_DOWN(DOWN, Type.MOVE, true),
+    OVR_COPY(INVALID, Type.EDIT, true),
+    OVR_CUT(INVALID, Type.EDIT, true),
+    OVR_PASTE(INVALID, Type.EDIT, true),
+    OVR_SELECT_ALL(INVALID, Type.EDIT, true),
+    NONE(INVALID, Type.NONE, false);
+
+    public final ActionOffset offset;
+    public final Type type;
+    public final boolean override;
+
+    NavAction(ActionOffset offset, Type type, boolean override) {
+        this.offset = offset;
+        this.override = override;
+        this.type = type;
+    }
+
+    public enum Type {
+        MOVE, SELECT, DELETE, EDIT, NONE
+    }
 }

@@ -1,5 +1,6 @@
 package io.github.omegabird113.cmd_delete;
 
+import io.github.omegabird113.cmd_delete.actions.ActionOffset;
 import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import org.junit.jupiter.api.Assertions;
@@ -29,13 +30,13 @@ public class OffsetsTest {
         for (NavAction action : NavAction.values()) {
             final int offset = ActionOffsetUtils.getOffset(action);
 
-            if (action.name().contains("LEFT") && offset != ActionOffsetUtils.OFFSET_LEFT)
+            if (action.name().contains("LEFT") && offset != ActionOffset.LEFT.value)
                 Assertions.fail("LEFT offset not produced by action: " + action.name());
-            if (action.name().contains("RIGHT") && offset != ActionOffsetUtils.OFFSET_RIGHT)
+            if (action.name().contains("RIGHT") && offset != ActionOffset.RIGHT.value)
                 Assertions.fail("RIGHT offset not produced by action: " + action.name());
-            if (action.name().contains("UP") && offset != ActionOffsetUtils.OFFSET_UP)
+            if (action.name().contains("UP") && offset != ActionOffset.UP.value)
                 Assertions.fail("UP offset not produced by action: " + action.name());
-            if (action.name().contains("DOWN") && offset != ActionOffsetUtils.OFFSET_DOWN)
+            if (action.name().contains("DOWN") && offset != ActionOffset.DOWN.value)
                 Assertions.fail("DOWN offset not produced by action: " + action.name());
             if (!allowedInvalidOffsets.contains(action) && offset == 0)
                 Assertions.fail("INVALID offset not produced by action: " + action.name());
