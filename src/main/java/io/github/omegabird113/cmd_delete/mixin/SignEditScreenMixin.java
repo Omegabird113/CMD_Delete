@@ -1,8 +1,8 @@
 package io.github.omegabird113.cmd_delete.mixin;
 
 import io.github.omegabird113.cmd_delete.LoggingManager;
-import io.github.omegabird113.cmd_delete.actions.ActionOffset;
-import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
+import io.github.omegabird113.cmd_delete.actions.NavActionOffset;
+import io.github.omegabird113.cmd_delete.actions.NavActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import net.minecraft.client.Minecraft;
@@ -66,19 +66,19 @@ public abstract class SignEditScreenMixin {
         final boolean shift = event.hasShiftDown();
 
         // Reset selection if player moves w/o shift
-        if (!shift && (event.isUp() || event.isDown() || event.isLeft() || event.isRight() || ActionOffsetUtils.isMoveAction(action)))
+        if (!shift && (event.isUp() || event.isDown() || event.isLeft() || event.isRight() || NavActionOffsetUtils.isMoveAction(action)))
             this.cmd_delete$clearMultilineSelection();
 
         if (action == NavAction.NONE && !shift && (event.isLeft() || event.isRight())) {
             // If line changed, we handled it, else continue
-            final int sideDirection = event.isLeft() ? ActionOffset.LEFT.value : ActionOffset.RIGHT.value;
+            final int sideDirection = event.isLeft() ? NavActionOffset.LEFT.value : NavActionOffset.RIGHT.value;
             if (this.cmd_delete$tryMoveToNextLineByCharacter(sideDirection)) {
                 cir.setReturnValue(true);
                 return;
             }
         }
 
-        final int direction = ActionOffsetUtils.getOffset(action);
+        final int direction = NavActionOffsetUtils.getOffset(action);
 
         switch (action) {
             case SEL_TEXT_UP, SEL_TEXT_DOWN -> {
@@ -164,12 +164,12 @@ public abstract class SignEditScreenMixin {
     private void cmd_delete$moveToNextCharacterLineIfNeeded(int direction) {
         if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().crossLineSignMovement()))
             return;
-        if (direction == ActionOffset.LEFT.value
+        if (direction == NavActionOffset.LEFT.value
                 && this.signField.getCursorPos() == 0
                 && this.line > 0) {
             this.line--;
             this.signField.setCursorToEnd(false);
-        } else if (direction == ActionOffset.RIGHT.value
+        } else if (direction == NavActionOffset.RIGHT.value
                 && this.signField.getCursorPos() == this.cmd_delete$currentLineMessage().length()
                 && this.line < this.messages.length - 1) {
             this.line++;
@@ -234,10 +234,10 @@ public abstract class SignEditScreenMixin {
         if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().crossLineSignMovement()))
             return;
         final int nextLine = this.cmd_delete$getNextWordLine(direction);
-        if (direction == ActionOffset.LEFT.value && this.signField.getCursorPos() == 0 && nextLine != this.line) {
+        if (direction == NavActionOffset.LEFT.value && this.signField.getCursorPos() == 0 && nextLine != this.line) {
             this.line = nextLine;
             this.signField.setCursorToEnd(false);
-        } else if (direction == ActionOffset.RIGHT.value && this.signField.getCursorPos() == this.cmd_delete$currentLineMessage().length() && nextLine != this.line) {
+        } else if (direction == NavActionOffset.RIGHT.value && this.signField.getCursorPos() == this.cmd_delete$currentLineMessage().length() && nextLine != this.line) {
             this.line = nextLine;
             this.signField.setCursorToStart(false);
         }
@@ -251,7 +251,7 @@ public abstract class SignEditScreenMixin {
 
     @Unique
     private void cmd_delete$moveToLineEdge(int direction, boolean extendSelection) {
-        if (direction == ActionOffset.LEFT.value)
+        if (direction == NavActionOffset.LEFT.value)
             this.signField.setCursorToStart(extendSelection);
         else
             this.signField.setCursorToEnd(extendSelection);
@@ -275,7 +275,7 @@ public abstract class SignEditScreenMixin {
 
     @Unique
     private void cmd_delete$moveToTextEdge(int direction, boolean extendSelection) {
-        if (direction == ActionOffset.UP.value) {
+        if (direction == NavActionOffset.UP.value) {
             this.line = 0;
             this.signField.setCursorToStart(extendSelection);
         } else {

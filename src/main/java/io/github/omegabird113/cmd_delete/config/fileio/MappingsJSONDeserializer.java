@@ -3,7 +3,7 @@ package io.github.omegabird113.cmd_delete.config.fileio;
 import com.google.gson.*;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.LoggingManager;
-import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
+import io.github.omegabird113.cmd_delete.actions.NavActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.data.FeatureFlags;
 import io.github.omegabird113.cmd_delete.config.data.KeyCombo;
@@ -89,10 +89,10 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
                 continue;
             }
 
-            if (ActionOffsetUtils.isOverrideAction(action) && fv == 2)
+            if (NavActionOffsetUtils.isOverrideAction(action) && fv == 2)
                 throw new JsonParseException("Format version 2 file specified actions of fv 3: " + actionName);
 
-            if (ActionOffsetUtils.isOverrideEditAction(action) && fv < 4)
+            if (NavActionOffsetUtils.isOverrideEditAction(action) && fv < 4)
                 throw new JsonParseException("Format version 2 or 3 file specified actions of fv 4: " + actionName);
 
             final JsonArray bindings = requireArray(actions, actionName);

@@ -1,6 +1,6 @@
 package io.github.omegabird113.cmd_delete;
 
-import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
+import io.github.omegabird113.cmd_delete.actions.NavActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.data.FeatureFlags;
 import io.github.omegabird113.cmd_delete.config.data.KeyCombo;
@@ -85,11 +85,11 @@ public class InheritanceTests {
             KeyCombo rkey = TestRandomnessUtils.genRandomKeyCombo();
             NavAction na = mappings.getAction(rkey);
             Assertions.assertNotNull(na);
-            if (!ActionOffsetUtils.isOverrideAction(Objects.requireNonNullElse(mr.get(rkey), NavAction.NONE)) || mr.featureFlags().overrideVanillaNavigation())
+            if (!NavActionOffsetUtils.isOverrideAction(Objects.requireNonNullElse(mr.get(rkey), NavAction.NONE)) || mr.featureFlags().overrideVanillaNavigation())
                 Assertions.assertEquals(
                         Objects.requireNonNullElse(mr.get(rkey), NavAction.NONE),
                         na,
-                        "Expected key " + mr.get(rkey) + " was not provided, instead " + na.name() + ", for " + rkey + " which " + (ActionOffsetUtils.isOverrideAction(na) ? "is" : "is not") + " an override action with override mode " + mr.featureFlags().overrideVanillaNavigation()
+                        "Expected key " + mr.get(rkey) + " was not provided, instead " + na.name() + ", for " + rkey + " which " + (NavActionOffsetUtils.isOverrideAction(na) ? "is" : "is not") + " an override action with override mode " + mr.featureFlags().overrideVanillaNavigation()
                 );
             else
                 Assertions.assertEquals(NavAction.NONE, na);

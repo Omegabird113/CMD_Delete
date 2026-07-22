@@ -1,7 +1,7 @@
 package io.github.omegabird113.cmd_delete.mixin;
 
 import io.github.omegabird113.cmd_delete.LoggingManager;
-import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
+import io.github.omegabird113.cmd_delete.actions.NavActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import net.minecraft.client.Minecraft;
@@ -63,7 +63,7 @@ public abstract class MultilineTextFieldMixin {
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideMultilineNavigation(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
         NavAction action = NavMappingsManager.getCurrentMappings().getAction(event, Minecraft.getInstance().getWindow());
-        int direction = ActionOffsetUtils.getOffset(action);
+        int direction = NavActionOffsetUtils.getOffset(action);
 
         switch (action) {
             case DEL_LINE_LEFT, DEL_LINE_RIGHT -> {

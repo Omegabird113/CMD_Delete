@@ -3,8 +3,8 @@ package io.github.omegabird113.cmd_delete.actions;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 
-public final class ActionOffsetUtils {
-    private ActionOffsetUtils() {
+public final class NavActionOffsetUtils {
+    private NavActionOffsetUtils() {
     }
 
     @Contract(pure = true)

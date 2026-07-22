@@ -2,7 +2,7 @@ package io.github.omegabird113.cmd_delete.mappings;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Window;
-import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
+import io.github.omegabird113.cmd_delete.actions.NavActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.data.KeyCombo;
 import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
@@ -22,7 +22,7 @@ public record NavMappings(@NonNull MappingsRegistry registry) {
         if (action == null)
             return NONE;
 
-        if (ActionOffsetUtils.isOverrideAction(action)
+        if (NavActionOffsetUtils.isOverrideAction(action)
                 && Boolean.FALSE.equals(registry.featureFlags().overrideVanillaNavigation()))
             return NONE;
 

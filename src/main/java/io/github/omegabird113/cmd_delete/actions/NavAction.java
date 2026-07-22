@@ -1,6 +1,6 @@
 package io.github.omegabird113.cmd_delete.actions;
 
-import static io.github.omegabird113.cmd_delete.actions.ActionOffset.*;
+import static io.github.omegabird113.cmd_delete.actions.NavActionOffset.*;
 
 public enum NavAction {
     NAV_LINE_LEFT(LEFT, Type.MOVE, false),
@@ -35,11 +35,11 @@ public enum NavAction {
     OVR_SELECT_ALL(INVALID, Type.EDIT, true),
     NONE(INVALID, Type.NONE, false);
 
-    public final ActionOffset offset;
+    public final NavActionOffset offset;
     public final Type type;
     public final boolean override;
 
-    NavAction(ActionOffset offset, Type type, boolean override) {
+    NavAction(NavActionOffset offset, Type type, boolean override) {
         this.offset = offset;
         this.override = override;
         this.type = type;

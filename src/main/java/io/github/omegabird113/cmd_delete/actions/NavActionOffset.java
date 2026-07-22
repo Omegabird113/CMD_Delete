@@ -1,6 +1,6 @@
 package io.github.omegabird113.cmd_delete.actions;
 
-public enum ActionOffset {
+public enum NavActionOffset {
     LEFT(-1),
     RIGHT(1),
     UP(-1),
@@ -9,7 +9,7 @@ public enum ActionOffset {
 
     public final int value;
 
-    ActionOffset(int value) {
+    NavActionOffset(int value) {
         this.value = value;
     }
 }
