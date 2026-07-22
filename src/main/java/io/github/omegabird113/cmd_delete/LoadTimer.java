@@ -3,9 +3,10 @@ package io.github.omegabird113.cmd_delete;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 
-import java.util.concurrent.TimeUnit;
+final class LoadTimer {
+    private LoadTimer() {
+    }
 
-public class LoadTimer {
     private static final @NonNull Logger LOGGER = LoggingManager.getLogger(LoadTimer.class);
 
     static void time(@NonNull Runnable toTime, @NonNull String name, boolean detailed) {
@@ -13,9 +14,9 @@ public class LoadTimer {
         toTime.run();
         final long endTime = System.nanoTime();
         final double detailedDuration = (endTime - startTime) / 1000000.0f;
-        LOGGER.debug("Timed {}. Took exactly {} ms", name, detailedDuration);
+        LOGGER.debug("Timed \"{}\". Took exactly {} ms", name, detailedDuration);
         if (!detailed) {
-            final long duration = TimeUnit.NANOSECONDS.toMillis(endTime - startTime);
+            final long duration = Math.round(detailedDuration);
             LOGGER.info("Timed {}. Took {} ms", name, duration);
         }
     }
