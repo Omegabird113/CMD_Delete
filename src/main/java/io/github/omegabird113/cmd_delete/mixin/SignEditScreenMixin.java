@@ -77,7 +77,7 @@ public abstract class SignEditScreenMixin {
             }
         }
 
-        final int direction = NavActionOffset.get(action);
+        final int direction = action.offset.value;
 
         switch (action) {
             case SEL_TEXT_UP, SEL_TEXT_DOWN -> {

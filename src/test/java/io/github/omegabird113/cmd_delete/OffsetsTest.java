@@ -27,7 +27,7 @@ public class OffsetsTest {
                 NavAction.OVR_SELECT_ALL
         );
         for (NavAction action : NavAction.values()) {
-            final int offset = NavActionOffset.get(action);
+            final int offset = action.offset.value;
 
             if (action.name().contains("LEFT") && offset != NavActionOffset.LEFT.value)
                 Assertions.fail("LEFT offset not produced by action: " + action.name());
