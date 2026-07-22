@@ -15,7 +15,7 @@ public record KeyCombo(int key, boolean shift, boolean altOption, boolean contro
                 + (superCommand ? (Os.IS_USING_MAC ? "cmd+" : "sup+") : "")
                 + (altOption ? (Os.IS_USING_MAC ? "opt+" : "alt+") : "")
                 + (shift ? "shift+" : "")
-                + (reversedKeyMap.get(key).describeConstable().orElse(Integer.toString(key)))
+                + (reversedKeyMap.getOrDefault(key, Integer.toString(key)))
                 + ">";
     }
 }
