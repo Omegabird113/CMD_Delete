@@ -57,11 +57,11 @@ public record NavMappings(@NonNull MappingsRegistry registry) {
     }
 
     @Contract(pure = true)
-    public float getCoverage() {
+    public double getCoverage() {
         final long total = Arrays.stream(NavAction.values())
                 .filter(action -> action != NONE)
                 .count();
         final int support = getPossibleActions().length;
-        return ((float) support) / total;
+        return ((double) support) / total;
     }
 }
