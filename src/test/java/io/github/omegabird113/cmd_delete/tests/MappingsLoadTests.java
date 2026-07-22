@@ -52,4 +52,13 @@ public class MappingsLoadTests {
         Assertions.assertNotEquals(before, after, "sample mappings failed to load");
         Assertions.assertTrue(success);
     }
+
+    @Test
+    @Order(4)
+    void switchToDefaultMappingsTest() {
+        final MappingsState before = NavMappingsManager.getMappingsState();
+        Assertions.assertDoesNotThrow(NavMappingsManager::updateMappingsToDefault);
+        final MappingsState after = NavMappingsManager.getMappingsState();
+        Assertions.assertNotEquals(before, after, "Default mappings failed to load");
+    }
 }
