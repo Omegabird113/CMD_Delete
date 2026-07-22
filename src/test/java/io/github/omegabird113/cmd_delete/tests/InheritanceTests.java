@@ -1,5 +1,8 @@
-package io.github.omegabird113.cmd_delete;
+package io.github.omegabird113.cmd_delete.tests;
 
+import io.github.omegabird113.cmd_delete.LoggingManager;
+import io.github.omegabird113.cmd_delete.TestLoader;
+import io.github.omegabird113.cmd_delete.TestRandomnessUtils;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.data.FeatureFlags;
 import io.github.omegabird113.cmd_delete.config.data.KeyCombo;

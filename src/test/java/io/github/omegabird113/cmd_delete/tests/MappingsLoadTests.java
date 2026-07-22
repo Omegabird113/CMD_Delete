@@ -1,5 +1,6 @@
-package io.github.omegabird113.cmd_delete;
+package io.github.omegabird113.cmd_delete.tests;
 
+import io.github.omegabird113.cmd_delete.TestLoader;
 import io.github.omegabird113.cmd_delete.command.MappingsInfoCollectionUtils;
 import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;

@@ -34,7 +34,6 @@ public class TestLoader {
                     tempDir,
                     Path.of(Objects.requireNonNull(CmdDeleteClient.class.getResource("/mappings")).toURI())
             );
-            initialized = true;
             LOGGER.info("Temp directory is {}", tempDir);
             try (Stream<Path> fis = Files.walk(Path.of(Objects.requireNonNull(TestLoader.class.getResource("/test_mappings")).toURI()))) {
                 fis.filter(Files::isRegularFile).forEach((path) -> {
@@ -46,6 +45,7 @@ public class TestLoader {
                 });
             }
         });
+        initialized = true;
     }
 
     @AfterAll
