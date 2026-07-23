@@ -57,7 +57,7 @@ public abstract class BookEditScreenMixin {
     private void cmd_delete$onKeyPressed(int i, int j, int k,
                                          CallbackInfoReturnable<Boolean> cir) {
 
-        NavAction action = NavMappingsManager.getCurrentMappings().getAction(i, Minecraft.getInstance().getWindow());
+        NavAction action = NavMappingsManager.getCurrentMappings().getAction(i, Minecraft.getInstance().window);
         int direction = NavActionManager.getDirection(action);
         boolean changedText = false;
 

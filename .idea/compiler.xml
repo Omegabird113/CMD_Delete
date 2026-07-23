@@ -4,9 +4,9 @@
     <bytecodeTargetLevel target="1.8" />
   </component>
   <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_STRING" value="&quot;-AoutRefMapFile=$PROJECT_DIR$/build/classes/java/main/cmd_delete-refmap.json&quot; -AdefaultObfuscationEnv=named:intermediary &quot;-AoutMapFileNamedIntermediary=$PROJECT_DIR$/build/loom-cache/mixin-map-1.16.5-1.16.5-v2.0.tiny&quot; -AinMapFileNamedIntermediary=$USER_HOME$/.gradle/caches/fabric-loom/mappings/net.minecraft.mappings-1.16.5.tiny.tiny" />
+    <option name="ADDITIONAL_OPTIONS_STRING" value="&quot;-AoutRefMapFile=$PROJECT_DIR$/build/classes/java/main/cmd_delete-refmap.json&quot; -AdefaultObfuscationEnv=named:intermediary &quot;-AoutMapFileNamedIntermediary=$PROJECT_DIR$/build/loom-cache/mixin-map-1.14.4-1.14.4-v2.0.tiny&quot; -AinMapFileNamedIntermediary=$USER_HOME$/.gradle/caches/fabric-loom/mappings/net.minecraft.mappings-1.14.4.tiny.tiny" />
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="io.github.omegabird113.CMD_Delete.test" options="&quot;-AoutRefMapFile=$PROJECT_DIR$/build/classes/java/test/cmd_delete-refmap.json&quot; -AdefaultObfuscationEnv=named:intermediary &quot;-AoutMapFileNamedIntermediary=$PROJECT_DIR$/build/loom-cache/mixin-map-1.16.5-1.16.5-v2.1.tiny&quot; -AinMapFileNamedIntermediary=$USER_HOME$/.gradle/caches/fabric-loom/mappings/net.minecraft.mappings-1.16.5.tiny.tiny" />
+      <module name="io.github.omegabird113.CMD_Delete.test" options="&quot;-AoutRefMapFile=$PROJECT_DIR$/build/classes/java/test/cmd_delete-refmap.json&quot; -AdefaultObfuscationEnv=named:intermediary &quot;-AoutMapFileNamedIntermediary=$PROJECT_DIR$/build/loom-cache/mixin-map-1.14.4-1.14.4-v2.1.tiny&quot; -AinMapFileNamedIntermediary=$USER_HOME$/.gradle/caches/fabric-loom/mappings/net.minecraft.mappings-1.14.4.tiny.tiny" />
     </option>
   </component>
 </project>

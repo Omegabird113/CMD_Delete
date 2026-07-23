@@ -1,6 +1,6 @@
 package io.github.omegabird113.cmd_delete.mixin;
 
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.actions.NavActionManager;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
@@ -48,7 +48,7 @@ public abstract class SignEditScreenMixin {
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideSignEditNavigation(int i, int j, int k, CallbackInfoReturnable<Boolean> cir) {
-        NavAction action = NavMappingsManager.getCurrentMappings().getAction(i, Minecraft.getInstance().getWindow());
+        NavAction action = NavMappingsManager.getCurrentMappings().getAction(i, Minecraft.getInstance().window);
 
         boolean shift = Screen.hasShiftDown();
 
@@ -153,7 +153,7 @@ public abstract class SignEditScreenMixin {
 
 
     // Draw selected lines other than the cursor's line
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;disableColorLogicOp()V", remap = false, shift = At.Shift.AFTER))
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/blockentity/BlockEntityRenderDispatcher;render(Lnet/minecraft/world/level/block/entity/BlockEntity;DDDF)V", shift = At.Shift.AFTER))
     private void cmd_delete$renderMultilineSelection(int i, int j, float f, CallbackInfo ci) {
         if (this.cmd_delete$hasNoMultilineSelection()) {
             return;
@@ -162,9 +162,14 @@ public abstract class SignEditScreenMixin {
         int textLineHeight = 10;
         int yOffset = this.sign.messages.length * textLineHeight / 2;
 
-        RenderSystem.disableTexture();
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
+        GlStateManager.disableTexture();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFuncSeparate(
+                GlStateManager.SourceFactor.SRC_ALPHA,
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+                GlStateManager.SourceFactor.ONE,
+                GlStateManager.DestFactor.ZERO
+        );
 
         for (int workingLine = 0; workingLine < this.sign.messages.length; workingLine++) {
             if (workingLine == this.line || !this.cmd_delete$lineHasSelection(workingLine)) {
@@ -184,7 +189,7 @@ public abstract class SignEditScreenMixin {
             Screen.fill(Math.min(x1, x2), y, Math.max(x1, x2), y + textLineHeight, -16776961);
         }
 
-        RenderSystem.disableColorLogicOp();
+        GlStateManager.disableColorLogicOp();
     }
 
     @Unique

@@ -109,5 +109,5 @@ jobs:
           changelog-file: changelog_body.md
           java: 8
           game-versions: |
-            >=1.15 <1.16
+            >=1.14.4 <1.15
           loaders: fabric

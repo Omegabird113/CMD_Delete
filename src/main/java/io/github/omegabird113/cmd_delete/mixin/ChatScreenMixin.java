@@ -20,8 +20,8 @@ public abstract class ChatScreenMixin {
     protected EditBox input;
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
-    private void cmd_delete$handleLocalCommand(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        if (keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER) {
+    private void cmd_delete$handleLocalCommand(int i, int j, int k, CallbackInfoReturnable<Boolean> cir) {
+        if (i == GLFW.GLFW_KEY_ENTER || i == GLFW.GLFW_KEY_KP_ENTER) {
             String text = this.input.getValue();
             
             if (text != null && text.startsWith("/")) {

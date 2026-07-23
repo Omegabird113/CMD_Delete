@@ -23,21 +23,21 @@ public abstract class EditBoxMixin {
     public abstract void deleteChars(int i);
 
     @Shadow
-    public abstract void moveCursorTo(int pos);
+    public abstract void moveCursorTo(int i);
 
     @Shadow
     public abstract String getValue();
 
     @Shadow
-    public abstract int getWordPosition(int dir);
+    public abstract int getWordPosition(int i);
 
     @Shadow
     public abstract int getCursorPosition();
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
-    private void cmd_delete$overrideDelete(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+    private void cmd_delete$overrideDelete(int i, int j, int k, CallbackInfoReturnable<Boolean> cir) {
         NavAction action = NavMappingsManager.getCurrentMappings()
-                .getAction(keyCode, Minecraft.getInstance().getWindow());
+                .getAction(i, Minecraft.getInstance().window);
         int direction = NavActionManager.getDirection(action);
 
         switch (action) {
