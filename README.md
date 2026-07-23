@@ -17,7 +17,7 @@ This mod also functions as a fully configurable text editing/navigation shortcut
 
 > [!Note]
 >
-> CMD + Delete is a **Fabric mod** which also supports Quilt for Minecraft 1.16 to the latest version.
+> CMD + Delete is a **Fabric mod** which also supports Quilt for Minecraft 1.14.4 to the latest version.
 > 
 > It also supports Forge 1.20.1 and NeoForge 1.21.1, but **only with [Sinytra Connector](https://modrinth.com/mod/connector)**.
 
