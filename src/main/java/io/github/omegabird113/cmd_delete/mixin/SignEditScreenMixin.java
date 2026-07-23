@@ -73,14 +73,14 @@ public abstract class SignEditScreenMixin {
 
         if (action == NavAction.NONE && !shift && (event.isLeft() || event.isRight())) {
             // If line changed, we handled it, else continue
-            final int sideDirection = event.isLeft() ? NavActionOffset.LEFT.value : NavActionOffset.RIGHT.value;
+            final int sideDirection = event.isLeft() ? NavActionOffset.LEFT.value() : NavActionOffset.RIGHT.value();
             if (this.cmd_delete$tryMoveToNextLineByCharacter(sideDirection)) {
                 cir.setReturnValue(true);
                 return;
             }
         }
 
-        final int direction = action != null ? action.offset.value : NavActionOffset.INVALID.value;
+        final int direction = action != null ? action.offset().value() : NavActionOffset.INVALID.value();
 
         switch (action) {
             case SEL_TEXT_UP, SEL_TEXT_DOWN -> {
@@ -169,12 +169,12 @@ public abstract class SignEditScreenMixin {
     private void cmd_delete$moveToNextCharacterLineIfNeeded(int direction) {
         if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().crossLineSignMovement()))
             return;
-        if (direction == NavActionOffset.LEFT.value
+        if (direction == NavActionOffset.LEFT.value()
                 && this.signField.getCursorPos() == 0
                 && this.line > 0) {
             this.line--;
             this.signField.setCursorToEnd(false);
-        } else if (direction == NavActionOffset.RIGHT.value
+        } else if (direction == NavActionOffset.RIGHT.value()
                 && this.signField.getCursorPos() == this.cmd_delete$currentLineMessage().length()
                 && this.line < this.messages.length - 1) {
             this.line++;
@@ -239,10 +239,10 @@ public abstract class SignEditScreenMixin {
         if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().crossLineSignMovement()))
             return;
         final int nextLine = this.cmd_delete$getNextWordLine(direction);
-        if (direction == NavActionOffset.LEFT.value && this.signField.getCursorPos() == 0 && nextLine != this.line) {
+        if (direction == NavActionOffset.LEFT.value() && this.signField.getCursorPos() == 0 && nextLine != this.line) {
             this.line = nextLine;
             this.signField.setCursorToEnd(false);
-        } else if (direction == NavActionOffset.RIGHT.value && this.signField.getCursorPos() == this.cmd_delete$currentLineMessage().length() && nextLine != this.line) {
+        } else if (direction == NavActionOffset.RIGHT.value() && this.signField.getCursorPos() == this.cmd_delete$currentLineMessage().length() && nextLine != this.line) {
             this.line = nextLine;
             this.signField.setCursorToStart(false);
         }
@@ -256,7 +256,7 @@ public abstract class SignEditScreenMixin {
 
     @Unique
     private void cmd_delete$moveToLineEdge(int direction, boolean extendSelection) {
-        if (direction == NavActionOffset.LEFT.value)
+        if (direction == NavActionOffset.LEFT.value())
             this.signField.setCursorToStart(extendSelection);
         else
             this.signField.setCursorToEnd(extendSelection);
@@ -280,7 +280,7 @@ public abstract class SignEditScreenMixin {
 
     @Unique
     private void cmd_delete$moveToTextEdge(int direction, boolean extendSelection) {
-        if (direction == NavActionOffset.UP.value) {
+        if (direction == NavActionOffset.UP.value()) {
             this.line = 0;
             this.signField.setCursorToStart(extendSelection);
         } else {

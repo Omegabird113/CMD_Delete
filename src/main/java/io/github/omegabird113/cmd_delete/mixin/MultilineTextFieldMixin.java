@@ -64,7 +64,7 @@ public abstract class MultilineTextFieldMixin {
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideMultilineNavigation(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
         final NavAction action = CrashUtils.crashMinecraftOnFailure(() -> NavMappingsManager.getCurrentMappings().getAction(event, Minecraft.getInstance().getWindow()));
-        int direction = action != null ? action.offset.value : NavActionOffset.INVALID.value;
+        int direction = action != null ? action.offset().value() : NavActionOffset.INVALID.value();
 
         switch (action) {
             case DEL_LINE_LEFT, DEL_LINE_RIGHT -> {

@@ -87,11 +87,11 @@ public class InheritanceTests {
             KeyCombo rkey = TestRandomnessUtils.genRandomKeyCombo();
             NavAction na = mappings.getAction(rkey);
             Assertions.assertNotNull(na);
-            if (!Objects.requireNonNullElse(mr.get(rkey), NavAction.NONE).override || mr.featureFlags().overrideVanillaNavigation())
+            if (!Objects.requireNonNullElse(mr.get(rkey), NavAction.NONE).overrideMode() || mr.featureFlags().overrideVanillaNavigation())
                 Assertions.assertEquals(
                         Objects.requireNonNullElse(mr.get(rkey), NavAction.NONE),
                         na,
-                        "Expected key " + mr.get(rkey) + " was not provided, instead " + na.name() + ", for " + rkey + " which " + (na.override ? "is" : "is not") + " an override action with override mode " + mr.featureFlags().overrideVanillaNavigation()
+                        "Expected key " + mr.get(rkey) + " was not provided, instead " + na.name() + ", for " + rkey + " which " + (na.overrideMode() ? "is" : "is not") + " an override action with override mode " + mr.featureFlags().overrideVanillaNavigation()
                 );
             else
                 Assertions.assertEquals(NavAction.NONE, na);

@@ -29,22 +29,22 @@ public class OffsetsTest {
                 NavAction.OVR_SELECT_ALL
         );
         for (NavAction action : NavAction.values()) {
-            final int offset = action.offset.value;
+            final int offset = action.offset().value();
 
-            if (action.name().contains("LEFT") && offset != NavActionOffset.LEFT.value)
+            if (action.name().contains("LEFT") && offset != NavActionOffset.LEFT.value())
                 Assertions.fail("LEFT offset not produced by action: " + action.name());
-            if (action.name().contains("RIGHT") && offset != NavActionOffset.RIGHT.value)
+            if (action.name().contains("RIGHT") && offset != NavActionOffset.RIGHT.value())
                 Assertions.fail("RIGHT offset not produced by action: " + action.name());
-            if (action.name().contains("UP") && offset != NavActionOffset.UP.value)
+            if (action.name().contains("UP") && offset != NavActionOffset.UP.value())
                 Assertions.fail("UP offset not produced by action: " + action.name());
-            if (action.name().contains("DOWN") && offset != NavActionOffset.DOWN.value)
+            if (action.name().contains("DOWN") && offset != NavActionOffset.DOWN.value())
                 Assertions.fail("DOWN offset not produced by action: " + action.name());
             if (!allowedInvalidOffsets.contains(action) && offset == 0)
                 Assertions.fail("INVALID offset not produced by action: " + action.name());
 
             LOGGER.info("Tested offset ({}) of: {}", offset, action.name());
 
-            boolean isOvr = action.override;
+            boolean isOvr = action.overrideMode();
             Assertions.assertEquals(isOvr, action.name().contains("OVR"));
 
             boolean isMove = action.isMove();

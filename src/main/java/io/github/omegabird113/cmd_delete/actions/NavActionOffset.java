@@ -7,9 +7,13 @@ public enum NavActionOffset {
     DOWN(1),
     INVALID(0);
 
-    public final int value;
+    private final int value;
 
     NavActionOffset(int value) {
         this.value = value;
+    }
+
+    public int value() {
+        return value;
     }
 }

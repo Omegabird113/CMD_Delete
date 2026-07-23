@@ -21,7 +21,7 @@ public record NavMappings(@NonNull MappingsRegistry registry) {
         if (action == null)
             return NONE;
 
-        if (action.override && Boolean.FALSE.equals(registry.featureFlags().overrideVanillaNavigation()))
+        if (action.overrideMode() && Boolean.FALSE.equals(registry.featureFlags().overrideVanillaNavigation()))
             return NONE;
 
         return action;
