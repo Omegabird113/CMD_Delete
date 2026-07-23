@@ -27,6 +27,9 @@ public abstract class EditBoxMixin extends AbstractWidget {
         LOGGER.debug("EditBoxMixin loaded");
     }
 
+    @Shadow
+    private boolean isEditable;
+
     public EditBoxMixin(int x, int y, int width, int height, Component message) {
         super(x, y, width, height, message);
     }
@@ -60,9 +63,6 @@ public abstract class EditBoxMixin extends AbstractWidget {
 
     @Shadow
     public abstract void insertText(String input);
-
-    @Shadow
-    private boolean isEditable;
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideDelete(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {

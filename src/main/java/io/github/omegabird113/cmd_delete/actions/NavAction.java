@@ -43,6 +43,10 @@ public enum NavAction {
 
     private static final Logger LOGGER = LoggingManager.getLogger(NavAction.class);
 
+    static {
+        LOGGER.debug("NavAction enum loaded. Detailed dump:\n{}", NavAction.getDetailedActionDump());
+    }
+
     private final @NonNull NavActionOffset offset;
     private final @NonNull Type type;
     private final @NonNull Scope scope;
@@ -53,10 +57,6 @@ public enum NavAction {
         this.overrideMode = overrideMode;
         this.type = type;
         this.scope = scope;
-    }
-
-    static {
-        LOGGER.debug("NavAction enum loaded. Detailed dump:\n{}", NavAction.getDetailedActionDump());
     }
 
     public static String getDetailedActionDump() {
