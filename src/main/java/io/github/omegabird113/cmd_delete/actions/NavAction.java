@@ -77,10 +77,13 @@ public enum NavAction {
         }
 
         StringBuilder dump = new StringBuilder();
-        for (String[] row : table) {
+        for (int i = 0; i < table.length; i++) {
+            final String[] row = table[i];
             dump.append(
                     String.format(Locale.ROOT, "%-18s %-7s %-11s %-7s %-3s", row[0], row[1], row[2], row[3], row[4])
-            ).append("\n");
+            );
+            if (i != table.length - 1)
+                dump.append("\n");
         }
         return dump.toString();
     }
