@@ -6,6 +6,7 @@ import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import io.github.omegabird113.cmd_delete.mappings.Os;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.Minecraft;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.MixinEnvironment;
@@ -44,5 +45,10 @@ public final class CmdDeleteClient implements ClientModInitializer {
             LoadTimer.time(NavMappingsManager::loadMappings, "loading mappings", true);
             LoadTimer.time(NavMappingsCommand::register, "registering /navmappings", true);
         }, "full load", false);
+
+        if (Boolean.getBoolean("ci.stopMinecraftAfterLoad")) {
+            Minecraft.getInstance().stop();
+            System.exit(0);
+        }
     }
 }
