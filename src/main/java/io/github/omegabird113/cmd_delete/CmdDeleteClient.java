@@ -3,9 +3,9 @@ package io.github.omegabird113.cmd_delete;
 import io.github.omegabird113.cmd_delete.command.NavMappingsCommand;
 import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
-import io.github.omegabird113.cmd_delete.utils.Os;
 import io.github.omegabird113.cmd_delete.utils.LoadTimer;
 import io.github.omegabird113.cmd_delete.utils.LoggingManager;
+import io.github.omegabird113.cmd_delete.utils.Os;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
@@ -22,10 +22,10 @@ public final class CmdDeleteClient implements ClientModInitializer {
     public static final @NonNull String VERSION = LOADER.getModContainer(MODID)
             .map(container -> container.getMetadata().getVersion().getFriendlyString())
             .orElse("<unknown>");
+    public static final @NotNull String ISSUE_TRACKER_URL_STRING = "https://github.com/Omegabird113/CMD_Delete/issues";
     public static final int CURRENT_MAPPINGS_FORMAT_VERSION = 4;
     public static final int MINIMUM_MAPPINGS_FORMAT_VERSION = 2;
     public static final int SHARECODE_FORMAT_VERSION = 1;
-    public static final @NotNull String ISSUE_TRACKER_URL_STRING = "https://github.com/Omegabird113/CMD_Delete/issues";
     private static final @NonNull Logger LOGGER = LoggingManager.getLogger(CmdDeleteClient.class);
 
     @Override

@@ -1,6 +1,5 @@
 package io.github.omegabird113.cmd_delete.tests;
 
-import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import io.github.omegabird113.cmd_delete.TestLoader;
 import io.github.omegabird113.cmd_delete.TestRandomnessUtils;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
@@ -9,6 +8,7 @@ import io.github.omegabird113.cmd_delete.config.data.KeyCombo;
 import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
 import io.github.omegabird113.cmd_delete.config.fileio.MappingsInheritanceManager;
 import io.github.omegabird113.cmd_delete.mappings.NavMappings;
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

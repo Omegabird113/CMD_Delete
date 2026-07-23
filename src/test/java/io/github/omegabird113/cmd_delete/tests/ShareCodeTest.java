@@ -1,11 +1,11 @@
 package io.github.omegabird113.cmd_delete.tests;
 
-import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import io.github.omegabird113.cmd_delete.TestLoader;
 import io.github.omegabird113.cmd_delete.command.MappingsInfoCollectionUtils;
 import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
 import io.github.omegabird113.cmd_delete.config.sharecode.ShareCodeDecoder;
 import io.github.omegabird113.cmd_delete.config.sharecode.ShareCodeGenerator;
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

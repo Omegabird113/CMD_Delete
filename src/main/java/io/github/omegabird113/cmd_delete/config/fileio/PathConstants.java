@@ -1,8 +1,8 @@
 package io.github.omegabird113.cmd_delete.config.fileio;
 
-import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.mappings.MappingsType;
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
