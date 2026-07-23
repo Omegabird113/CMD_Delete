@@ -13,7 +13,7 @@ final class LoadTimer {
         final long startTime = System.nanoTime();
         toTime.run();
         final long endTime = System.nanoTime();
-        final double detailedDuration = (endTime - startTime) / 1000000.0f;
+        final double detailedDuration = (endTime - startTime) / 1000000.0;
         LOGGER.debug("Timed \"{}\". Took exactly {} ms", name, detailedDuration);
         if (!detailed) {
             final long duration = Math.round(detailedDuration);
