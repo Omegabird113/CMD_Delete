@@ -1,7 +1,11 @@
 package io.github.omegabird113.cmd_delete.actions;
 
+import io.github.omegabird113.cmd_delete.LoggingManager;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
+import org.slf4j.Logger;
+
+import java.util.Locale;
 
 @SuppressWarnings("unused")
 public enum NavAction {
@@ -37,6 +41,8 @@ public enum NavAction {
     OVR_SELECT_ALL(NavActionOffset.INVALID, Type.EDIT, Scope.TEXT, true),
     NONE(NavActionOffset.INVALID, Type.NONE, Scope.NONE, false);
 
+    private static final Logger LOGGER = LoggingManager.getLogger(NavAction.class);
+
     private final @NonNull NavActionOffset offset;
     private final @NonNull Type type;
     private final @NonNull Scope scope;
@@ -47,6 +53,36 @@ public enum NavAction {
         this.overrideMode = overrideMode;
         this.type = type;
         this.scope = scope;
+    }
+
+    static {
+        LOGGER.debug("NavAction enum loaded. Detailed dump:\n{}", NavAction.getDetailedActionDump());
+    }
+
+    public static String getDetailedActionDump() {
+        final NavAction[] actions = values();
+
+        final String[][] table = new String[actions.length + 1][5];
+        table[0] = new String[]{"Action", "Type", "Scope", "Offset", "Override"};
+
+        for (int i = 0; i < actions.length; i++) {
+            final String actionStr = actions[i].name();
+            final String typeStr = actions[i].type().name();
+            final String scopeStr = actions[i].scope().name();
+            final String offsetStr = actions[i].offset().name();
+            final String overrideStr = actions[i].overrideMode() ? "yes" : "no";
+
+            final String[] entry = new String[]{actionStr, typeStr, scopeStr, offsetStr, overrideStr};
+            table[i + 1] = entry;
+        }
+
+        StringBuilder dump = new StringBuilder();
+        for (String[] row : table) {
+            dump.append(
+                    String.format(Locale.ROOT, "%-18s %-7s %-11s %-7s %-3s", row[0], row[1], row[2], row[3], row[4])
+            ).append("\n");
+        }
+        return dump.toString();
     }
 
     @Contract(pure = true)
