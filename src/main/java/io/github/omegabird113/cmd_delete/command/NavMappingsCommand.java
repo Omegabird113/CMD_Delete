@@ -248,9 +248,15 @@ public final class NavMappingsCommand {
     }
 
     private static int printCmdDeleteAbout(@NonNull CommandContext<FabricClientCommandSource> context) {
-        final String about = "CMD + Delete (modid: " + CmdDeleteClient.MODID
-                + ") by Omegabird113 v" + CmdDeleteClient.VERSION
-                + " using mappings format version " + CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION;
+        final String about = String.format(
+                "CMD + Delete (modid:%s) by Omegabird113 v%s using mappings format version %s (minimum of %s) and sharecode encoding version %s. You can report issues at %s.",
+                CmdDeleteClient.MODID,
+                CmdDeleteClient.VERSION,
+                CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION,
+                CmdDeleteClient.MINIMUM_MAPPINGS_FORMAT_VERSION,
+                CmdDeleteClient.SHARECODE_FORMAT_VERSION,
+                CmdDeleteClient.ISSUE_TRACKER_URL_STRING
+        );
         context.getSource().sendFeedback(Component.literal(about));
         return 1;
     }

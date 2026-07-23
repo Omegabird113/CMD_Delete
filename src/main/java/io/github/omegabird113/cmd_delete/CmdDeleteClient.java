@@ -7,6 +7,7 @@ import io.github.omegabird113.cmd_delete.mappings.Os;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
+import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.MixinEnvironment;
@@ -22,13 +23,14 @@ public final class CmdDeleteClient implements ClientModInitializer {
     public static final int CURRENT_MAPPINGS_FORMAT_VERSION = 4;
     public static final int MINIMUM_MAPPINGS_FORMAT_VERSION = 2;
     public static final int SHARECODE_FORMAT_VERSION = 1;
+    public static final @NotNull String ISSUE_TRACKER_URL_STRING = "https://github.com/Omegabird113/CMD_Delete/issues";
     private static final @NonNull Logger LOGGER = LoggingManager.getLogger(CmdDeleteClient.class);
 
     @Override
     public void onInitializeClient() {
         LoadTimer.time(() -> {
             LoadTimer.time(() -> {
-                LOGGER.info("Initializing client mod \"{}\" (version: {}, mappings format version: {}, minimum mappings compatible version: {}, sharecode encoding version: {})...", MODID, VERSION, CURRENT_MAPPINGS_FORMAT_VERSION, MINIMUM_MAPPINGS_FORMAT_VERSION, SHARECODE_FORMAT_VERSION);
+                LOGGER.info("Initializing client mod \"{}\" (version: {}, mappings format version: {}, minimum mappings compatible version: {}, sharecode encoding version: {})... You can report any issues at {}.", MODID, VERSION, CURRENT_MAPPINGS_FORMAT_VERSION, MINIMUM_MAPPINGS_FORMAT_VERSION, SHARECODE_FORMAT_VERSION, ISSUE_TRACKER_URL_STRING);
                 LOGGER.info("User appears to be running system: {}", Os.USING);
 
                 final MixinEnvironment mixinEnv = MixinEnvironment.getCurrentEnvironment();
