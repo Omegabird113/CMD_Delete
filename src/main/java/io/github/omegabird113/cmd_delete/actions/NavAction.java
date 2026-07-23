@@ -1,6 +1,6 @@
 package io.github.omegabird113.cmd_delete.actions;
 
-import io.github.omegabird113.cmd_delete.LoggingManager;
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;

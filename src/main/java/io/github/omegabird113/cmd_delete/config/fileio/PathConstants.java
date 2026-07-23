@@ -1,6 +1,6 @@
 package io.github.omegabird113.cmd_delete.config.fileio;
 
-import io.github.omegabird113.cmd_delete.LoggingManager;
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.mappings.MappingsType;
 import org.jspecify.annotations.NonNull;

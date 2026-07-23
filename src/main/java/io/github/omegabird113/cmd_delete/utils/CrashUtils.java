@@ -1,5 +1,6 @@
-package io.github.omegabird113.cmd_delete;
+package io.github.omegabird113.cmd_delete.utils;
 
+import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import net.minecraft.CrashReport;
 import net.minecraft.client.Minecraft;

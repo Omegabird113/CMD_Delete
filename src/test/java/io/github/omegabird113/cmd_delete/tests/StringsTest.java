@@ -1,6 +1,6 @@
 package io.github.omegabird113.cmd_delete.tests;
 
-import io.github.omegabird113.cmd_delete.LoggingManager;
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import io.github.omegabird113.cmd_delete.TestLoader;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.command.MappingsInfoCollectionUtils;

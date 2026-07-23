@@ -1,6 +1,6 @@
 package io.github.omegabird113.cmd_delete.mappings;
 
-import io.github.omegabird113.cmd_delete.LoggingManager;
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import io.github.omegabird113.cmd_delete.command.MappingsInfoCollectionUtils;
 import io.github.omegabird113.cmd_delete.config.data.FeatureFlags;
 import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;

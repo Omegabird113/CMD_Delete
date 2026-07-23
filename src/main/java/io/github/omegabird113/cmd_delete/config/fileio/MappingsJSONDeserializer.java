@@ -2,7 +2,7 @@ package io.github.omegabird113.cmd_delete.config.fileio;
 
 import com.google.gson.*;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
-import io.github.omegabird113.cmd_delete.LoggingManager;
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.data.FeatureFlags;
 import io.github.omegabird113.cmd_delete.config.data.KeyCombo;

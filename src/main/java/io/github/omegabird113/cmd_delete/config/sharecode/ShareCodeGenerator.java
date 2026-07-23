@@ -3,7 +3,7 @@ package io.github.omegabird113.cmd_delete.config.sharecode;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
-import io.github.omegabird113.cmd_delete.LoggingManager;
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import io.github.omegabird113.cmd_delete.config.fileio.MappingsJSONManager;
 import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
 import org.apache.commons.codec.binary.Base58;

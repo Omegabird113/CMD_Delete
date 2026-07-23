@@ -1,7 +1,7 @@
 package io.github.omegabird113.cmd_delete.mixin;
 
-import io.github.omegabird113.cmd_delete.CrashUtils;
-import io.github.omegabird113.cmd_delete.LoggingManager;
+import io.github.omegabird113.cmd_delete.utils.CrashUtils;
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import net.minecraft.client.Minecraft;

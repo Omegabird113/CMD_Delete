@@ -4,6 +4,8 @@ import io.github.omegabird113.cmd_delete.command.NavMappingsCommand;
 import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import io.github.omegabird113.cmd_delete.mappings.Os;
+import io.github.omegabird113.cmd_delete.utils.LoadTimer;
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
