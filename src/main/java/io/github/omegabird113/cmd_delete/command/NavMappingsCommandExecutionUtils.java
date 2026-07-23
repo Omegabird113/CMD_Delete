@@ -27,7 +27,10 @@ import java.nio.file.StandardCopyOption;
 
 import static io.github.omegabird113.cmd_delete.command.NavMappingsCommand.LOGGER;
 
-class NavMappingsCommandExecutionUtils {
+final class NavMappingsCommandExecutionUtils {
+    private NavMappingsCommandExecutionUtils() {
+    }
+
     static void exportShareCode(@NonNull CommandContext<FabricClientCommandSource> context, boolean custom) {
         final String idStr = StringArgumentType.getString(context, "id");
 
