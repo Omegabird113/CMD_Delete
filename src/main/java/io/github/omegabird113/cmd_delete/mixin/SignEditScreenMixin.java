@@ -25,6 +25,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Objects;
+
 @Mixin(value = AbstractSignEditScreen.class, priority = 2000)
 public abstract class SignEditScreenMixin {
     @Unique
@@ -66,7 +68,7 @@ public abstract class SignEditScreenMixin {
         final boolean shift = event.hasShiftDown();
 
         // Reset selection if player moves w/o shift
-        if (!shift && (event.isUp() || event.isDown() || event.isLeft() || event.isRight() || action.isMove()))
+        if (!shift && (event.isUp() || event.isDown() || event.isLeft() || event.isRight() || Objects.requireNonNull(action).isMove()))
             this.cmd_delete$clearMultilineSelection();
 
         if (action == NavAction.NONE && !shift && (event.isLeft() || event.isRight())) {
@@ -78,7 +80,7 @@ public abstract class SignEditScreenMixin {
             }
         }
 
-        final int direction = action.offset.value;
+        final int direction = action != null ? action.offset.value : NavActionOffset.INVALID.value;
 
         switch (action) {
             case SEL_TEXT_UP, SEL_TEXT_DOWN -> {
@@ -134,6 +136,9 @@ public abstract class SignEditScreenMixin {
             case NONE -> {
                 if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation()) || event.isEscape() || event.key() == GLFW.GLFW_KEY_ENTER || event.key() == GLFW.GLFW_KEY_KP_ENTER)
                     return;
+            }
+            case null -> {
+                return;
             }
         }
 

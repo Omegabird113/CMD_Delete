@@ -4,6 +4,7 @@ import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import net.minecraft.CrashReport;
 import net.minecraft.client.Minecraft;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.Arrays;
@@ -15,25 +16,24 @@ public final class CrashUtils {
     private CrashUtils() {
     }
 
-    public static <T> T crashMinecraftOnFailure(@NonNull Supplier<T> supplier) {
-        T toReturn = null;
+    public static <T> @Nullable T crashMinecraftOnFailure(@NonNull Supplier<T> supplier) {
         try {
-            toReturn = supplier.get();
-        } catch (RuntimeException e) {
+            return supplier.get();
+        } catch (Exception e) {
             crashMinecraft(e);
+            return null;
         }
-        return toReturn;
     }
 
     public static void crashMinecraftOnFailure(@NonNull Runnable runnable) {
         try {
             runnable.run();
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             crashMinecraft(e);
         }
     }
 
-    public static void crashMinecraft(@NonNull Exception e) {
+    public static void crashMinecraft(@NonNull Throwable e) {
         LOGGER.error("A fatal error occurred and CMD + Delete must initiate a game crash...\nThe mappings state is:\n{}\nand the exception that occurred is:\n\t{}",
                 NavMappingsManager.getOptionalMappingsState().orElse(null),
                 String.join("\n\t", Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).toArray(String[]::new))
