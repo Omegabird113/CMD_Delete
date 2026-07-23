@@ -5,8 +5,10 @@ import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.input.KeyEvent;
+import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,12 +19,16 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = EditBox.class, priority = 2000)
-public abstract class EditBoxMixin {
+public abstract class EditBoxMixin extends AbstractWidget {
     @Unique
     private static final Logger LOGGER = LoggingManager.getLogger(EditBoxMixin.class);
 
     static {
         LOGGER.debug("EditBoxMixin loaded");
+    }
+
+    public EditBoxMixin(int x, int y, int width, int height, Component message) {
+        super(x, y, width, height, message);
     }
 
     @Shadow
@@ -55,8 +61,14 @@ public abstract class EditBoxMixin {
     @Shadow
     public abstract void insertText(String input);
 
+    @Shadow
+    private boolean isEditable;
+
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideDelete(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
+        if (!isEditable || !this.isFocused() || !this.isActive()) // If field can't be edited, don't even try to find an action for it
+            return;
+
         final NavAction action = CrashUtils.crashMinecraftOnFailure(() -> NavMappingsManager.getCurrentMappings().getAction(event, Minecraft.getInstance().getWindow()));
 
         switch (action) {
