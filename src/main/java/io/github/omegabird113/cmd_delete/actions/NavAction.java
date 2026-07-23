@@ -5,16 +5,16 @@ import org.jspecify.annotations.NonNull;
 
 @SuppressWarnings("unused")
 public enum NavAction {
-    NAV_LINE_LEFT(NavActionOffset.LEFT, Type.MOVE, Scope.LINE, false),
-    NAV_LINE_RIGHT(NavActionOffset.RIGHT, Type.MOVE, Scope.LINE, false),
+    NAV_LINE_LEFT(NavActionOffset.LEFT, Type.MOVE, Scope.WITHIN_LINE, false),
+    NAV_LINE_RIGHT(NavActionOffset.RIGHT, Type.MOVE, Scope.WITHIN_LINE, false),
     NAV_WORD_LEFT(NavActionOffset.LEFT, Type.MOVE, Scope.WORD, false),
     NAV_WORD_RIGHT(NavActionOffset.RIGHT, Type.MOVE, Scope.WORD, false),
-    SEL_LINE_LEFT(NavActionOffset.LEFT, Type.SELECT, Scope.LINE, false),
-    SEL_LINE_RIGHT(NavActionOffset.RIGHT, Type.SELECT, Scope.LINE, false),
+    SEL_LINE_LEFT(NavActionOffset.LEFT, Type.SELECT, Scope.WITHIN_LINE, false),
+    SEL_LINE_RIGHT(NavActionOffset.RIGHT, Type.SELECT, Scope.WITHIN_LINE, false),
     SEL_WORD_LEFT(NavActionOffset.LEFT, Type.SELECT, Scope.WORD, false),
     SEL_WORD_RIGHT(NavActionOffset.RIGHT, Type.SELECT, Scope.WORD, false),
-    DEL_LINE_LEFT(NavActionOffset.LEFT, Type.DELETE, Scope.LINE, false),
-    DEL_LINE_RIGHT(NavActionOffset.RIGHT, Type.DELETE, Scope.LINE, false),
+    DEL_LINE_LEFT(NavActionOffset.LEFT, Type.DELETE, Scope.WITHIN_LINE, false),
+    DEL_LINE_RIGHT(NavActionOffset.RIGHT, Type.DELETE, Scope.WITHIN_LINE, false),
     DEL_WORD_LEFT(NavActionOffset.LEFT, Type.DELETE, Scope.WORD, false),
     DEL_WORD_RIGHT(NavActionOffset.RIGHT, Type.DELETE, Scope.WORD, false),
     NAV_TEXT_START(NavActionOffset.UP, Type.MOVE, Scope.TEXT, false),
@@ -36,7 +36,6 @@ public enum NavAction {
     OVR_PASTE(NavActionOffset.INVALID, Type.EDIT, Scope.TEXT, true),
     OVR_SELECT_ALL(NavActionOffset.INVALID, Type.EDIT, Scope.TEXT, true),
     NONE(NavActionOffset.INVALID, Type.NONE, Scope.NONE, false);
-    //NOTE: SEL_TEXT_UP, SEL_TEXT_DOWN, OVR_NAV_TEXT_UP, and OVR_NAV_TEXT_DOWN were misnamed at the time of their creation due to them working on lines, but compatibility doesn't allow for renaming until FV5.
 
     private final @NonNull NavActionOffset offset;
     private final @NonNull Type type;
@@ -86,6 +85,11 @@ public enum NavAction {
     }
 
     @Contract(pure = true)
+    public boolean isWithinLine() {
+        return this.scope == Scope.WITHIN_LINE;
+    }
+
+    @Contract(pure = true)
     public boolean isLine() {
         return this.scope == Scope.LINE;
     }
@@ -116,6 +120,6 @@ public enum NavAction {
     }
 
     public enum Scope {
-        NONE, CHAR, WORD, LINE, TEXT
+        NONE, CHAR, WORD, WITHIN_LINE, LINE, TEXT
     }
 }
