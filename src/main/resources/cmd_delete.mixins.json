@@ -8,7 +8,8 @@
     "BookEditScreenMixin",
     "ChatScreenMixin",
     "EditBoxMixin",
-    "SignEditScreenMixin"
+    "SignEditScreenMixin",
+    "TextFieldHelperAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -20,8 +20,8 @@
     "cmd_delete.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.10.0",
-    "fabric": ">=0.13.0",
-    "minecraft": ">=1.16 <1.16.5"
+    "fabricloader": ">=0.9.0",
+    "fabric": ">=0.4.0",
+    "minecraft": ">=1.15 <1.16"
   }
 }
