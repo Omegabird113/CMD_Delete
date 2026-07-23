@@ -3,7 +3,7 @@ package io.github.omegabird113.cmd_delete;
 import io.github.omegabird113.cmd_delete.command.NavMappingsCommand;
 import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
-import io.github.omegabird113.cmd_delete.mappings.Os;
+import io.github.omegabird113.cmd_delete.utils.Os;
 import io.github.omegabird113.cmd_delete.utils.LoadTimer;
 import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import net.fabricmc.api.ClientModInitializer;

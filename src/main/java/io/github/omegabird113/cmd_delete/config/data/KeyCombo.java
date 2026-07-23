@@ -1,6 +1,6 @@
 package io.github.omegabird113.cmd_delete.config.data;
 
-import io.github.omegabird113.cmd_delete.mappings.Os;
+import io.github.omegabird113.cmd_delete.utils.Os;
 import org.jspecify.annotations.NonNull;
 
 public record KeyCombo(int key, boolean shift, boolean altOption, boolean control,

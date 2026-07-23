@@ -1,4 +1,4 @@
-package io.github.omegabird113.cmd_delete.mappings;
+package io.github.omegabird113.cmd_delete.utils;
 
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;

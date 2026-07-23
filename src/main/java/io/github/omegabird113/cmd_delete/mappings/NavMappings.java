@@ -5,6 +5,7 @@ import com.mojang.blaze3d.platform.Window;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.data.KeyCombo;
 import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
+import io.github.omegabird113.cmd_delete.utils.Os;
 import net.minecraft.client.input.KeyEvent;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
