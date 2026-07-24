@@ -31,7 +31,7 @@ public final class MappingsJSONManager {
     private MappingsJSONManager() {
     }
 
-    private static @NonNull MappingsRegistry loadFromDir(@NonNull MappingsType mappingsType, @NonNull String id) throws IOException {
+    public static @NonNull MappingsRegistry loadFromDir(@NonNull MappingsType mappingsType, @NonNull String id) throws IOException {
         final Path path = PathConstants.getPathOf(mappingsType, id);
 
         if (!Files.exists(path))
@@ -43,14 +43,6 @@ public final class MappingsJSONManager {
                 throw new JsonParseException(mappingsType.commonName() + " mappings id \"" + registry.id() + "\" does not match filename \"" + id + "\"");
             return registry;
         }
-    }
-
-    private static @NonNull MappingsRegistry loadFromResourceMappingsDir(@NonNull String id) throws IOException {
-        return loadFromDir(MappingsType.BUILTIN, id);
-    }
-
-    private static @NonNull MappingsRegistry loadFromCustomMappingsDir(@NonNull String id) throws IOException {
-        return loadFromDir(MappingsType.CUSTOM, id);
     }
 
     public static @NonNull Optional<NavMappings> tryLoadCustomMappings(@NonNull String id) {
@@ -75,7 +67,7 @@ public final class MappingsJSONManager {
     public static @NonNull Optional<MappingsRegistry> getRegistryFrom(boolean custom, @NonNull String id) {
         String typeCName = MappingsType.fromIfCustom(custom).commonName();
         try {
-            final MappingsRegistry registry = custom ? loadFromCustomMappingsDir(id) : loadFromResourceMappingsDir(id);
+            final MappingsRegistry registry = loadFromDir(MappingsType.fromIfCustom(custom), id);
             return Optional.of(registry);
         } catch (FileNotFoundException _) {
             LOGGER.error("Could not access {} mapping file \"{}\" (at \"{}\") because it does not exist.", typeCName, id, PathConstants.getPathOf(MappingsType.fromIfCustom(custom), id));
@@ -86,7 +78,7 @@ public final class MappingsJSONManager {
         }
     }
 
-    private static @NonNull MappingsRegistry resolveInheritance(@NonNull MappingsRegistry startRegistry) throws IOException {
+    public static @NonNull MappingsRegistry resolveInheritance(@NonNull MappingsRegistry startRegistry) throws IOException {
         final List<MappingsRegistry> registries = new ArrayList<>();
         final List<String> ids = new ArrayList<>();
         MappingsRegistry current = startRegistry;

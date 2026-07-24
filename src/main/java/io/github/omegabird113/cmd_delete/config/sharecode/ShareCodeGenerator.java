@@ -34,7 +34,7 @@ public final class ShareCodeGenerator {
         }
     }
 
-    private static @NonNull String collapseWhitespace(@NonNull String namespacedId) {
+    public static @NonNull String collapseWhitespace(@NonNull String namespacedId) {
         final File file = PathConstants.getPathOf(namespacedId).toFile();
         try {
             return collapseWhitespace(file);
@@ -45,7 +45,7 @@ public final class ShareCodeGenerator {
     }
 
     @Contract("_ -> new")
-    private static @NonNull String compressAndBase58Encode(@NonNull String contents) throws IOException {
+    public static @NonNull String compressAndBase58Encode(@NonNull String contents) throws IOException {
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         try (GZIPOutputStream gzip = new GZIPOutputStream(byteArrayOutputStream)) {
             gzip.write(contents.getBytes(StandardCharsets.UTF_8));
@@ -53,7 +53,7 @@ public final class ShareCodeGenerator {
         return new String(BASE_58.encode(byteArrayOutputStream.toByteArray()), StandardCharsets.UTF_8);
     }
 
-    private static @NonNull String generateCoreShareCode(@NonNull String namespacedId) {
+    public static @NonNull String generateCoreShareCode(@NonNull String namespacedId) {
         final File file = PathConstants.getPathOf(namespacedId).toFile();
         try {
             return compressAndBase58Encode(collapseWhitespace(file));
@@ -63,7 +63,7 @@ public final class ShareCodeGenerator {
         }
     }
 
-    static long genCRC32checksum(@NonNull String contents) {
+    public static long genCRC32checksum(@NonNull String contents) {
         byte[] bytes = contents.getBytes(StandardCharsets.UTF_8);
         final CRC32 crc32 = new CRC32();
         crc32.update(bytes, 0, bytes.length);

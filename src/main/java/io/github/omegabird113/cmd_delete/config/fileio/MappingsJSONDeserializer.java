@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 import static io.github.omegabird113.cmd_delete.config.fileio.JsonParsingUtils.*;
 
-final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistry> {
+public final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistry> {
     private static final @NonNull Logger LOGGER = LoggingManager.getLogger(MappingsJSONManager.class);
     private static final @NonNull Map<String, Os> OS_MAP = Map.of(
             "windows", Os.WINDOWS,

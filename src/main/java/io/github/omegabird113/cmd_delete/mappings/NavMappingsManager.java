@@ -56,7 +56,7 @@ public final class NavMappingsManager {
         logMappings();
     }
 
-    private static boolean updateMappingsTo(@NonNull MappingsType type, @NonNull String id) {
+    public static boolean updateMappingsTo(@NonNull MappingsType type, @NonNull String id) {
         final MappingsState old = currentMappingsState;
         currentMappingsState = ActiveMappingsManager.resolveMappings(
                 MappingsIdResolutionUtils.resolveNamespacedId(type, id)
