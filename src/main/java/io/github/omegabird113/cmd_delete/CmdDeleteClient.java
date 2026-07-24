@@ -18,14 +18,14 @@ import java.nio.file.Path;
 
 public final class CmdDeleteClient implements ClientModInitializer {
     public static final @NonNull String MODID = "cmd_delete";
-    public static final @NonNull FabricLoader LOADER = FabricLoader.getInstance();
-    public static final @NonNull String VERSION = LOADER.getModContainer(MODID)
-            .map(container -> container.getMetadata().getVersion().getFriendlyString())
-            .orElse("<unknown>");
     public static final @NotNull String ISSUE_TRACKER_URL_STRING = "https://github.com/Omegabird113/CMD_Delete/issues";
     public static final int CURRENT_MAPPINGS_FORMAT_VERSION = 4;
     public static final int MINIMUM_MAPPINGS_FORMAT_VERSION = 2;
     public static final int SHARECODE_FORMAT_VERSION = 1;
+    private static final @NonNull FabricLoader LOADER = FabricLoader.getInstance();
+    public static final @NonNull String VERSION = LOADER.getModContainer(MODID)
+            .map(container -> container.getMetadata().getVersion().getFriendlyString())
+            .orElse("<unknown>");
     private static final @NonNull Logger LOGGER = LoggingManager.getLogger(CmdDeleteClient.class);
 
     @Override
