@@ -1,6 +1,5 @@
 package io.github.omegabird113.cmd_delete.mixin;
 
-import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import io.github.omegabird113.cmd_delete.utils.CrashUtils;
@@ -8,11 +7,12 @@ import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
+import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -67,7 +67,9 @@ public abstract class EditBoxMixin extends AbstractWidget {
 
         final NavAction action = CrashUtils.crashMinecraftOnFailure(() -> NavMappingsManager.getCurrentMappings()
                 .getAction(keyCode, Minecraft.getInstance().getWindow()));
-        int direction = ActionOffsetUtils.getOffset(action);
+        if (action == null)
+            return;
+        int direction = action.offset().value();
         switch (action) {
             case DEL_LINE_LEFT -> this.deleteCharsToPos(0);
             case DEL_LINE_RIGHT -> this.deleteCharsToPos(this.getValue().length());
@@ -112,9 +114,6 @@ public abstract class EditBoxMixin extends AbstractWidget {
             case NONE -> {
                 if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation()) || keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER)
                     return;
-            }
-            case null -> {
-                return;
             }
         }
 
