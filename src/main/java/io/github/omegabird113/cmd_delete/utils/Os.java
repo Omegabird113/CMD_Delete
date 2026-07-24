@@ -14,12 +14,12 @@ public enum Os {
     public static final boolean IS_USING_MAC = USING == MAC;
 
     @Contract(pure = true)
-    private static @NonNull Os getCurrent() {
+    public static @NonNull Os getCurrent() {
         return Os.get(System.getProperty("os.name").toLowerCase(Locale.ROOT));
     }
 
     @Contract("_ -> new")
-    private static @NonNull Os get(@NonNull String osName) {
+    public static @NonNull Os get(@NonNull String osName) {
         if (osName.contains("mac"))
             return MAC;
         else if (osName.contains("win"))

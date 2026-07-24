@@ -9,7 +9,6 @@ import io.github.omegabird113.cmd_delete.utils.Os;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.MixinEnvironment;
@@ -18,7 +17,7 @@ import java.nio.file.Path;
 
 public final class CmdDeleteClient implements ClientModInitializer {
     public static final @NonNull String MODID = "cmd_delete";
-    public static final @NotNull String ISSUE_TRACKER_URL_STRING = "https://github.com/Omegabird113/CMD_Delete/issues";
+    public static final @NonNull String ISSUE_TRACKER_URL_STRING = "https://github.com/Omegabird113/CMD_Delete/issues";
     public static final int CURRENT_MAPPINGS_FORMAT_VERSION = 4;
     public static final int MINIMUM_MAPPINGS_FORMAT_VERSION = 2;
     public static final int SHARECODE_FORMAT_VERSION = 1;
