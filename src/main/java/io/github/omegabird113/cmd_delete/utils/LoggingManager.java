@@ -1,5 +1,6 @@
-package io.github.omegabird113.cmd_delete;
+package io.github.omegabird113.cmd_delete.utils;
 
+import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;

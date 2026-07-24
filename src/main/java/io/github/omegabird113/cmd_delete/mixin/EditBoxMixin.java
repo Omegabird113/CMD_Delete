@@ -1,11 +1,14 @@
 package io.github.omegabird113.cmd_delete.mixin;
 
-import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
+import io.github.omegabird113.cmd_delete.utils.CrashUtils;
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.input.KeyEvent;
+import net.minecraft.network.chat.Component;
 import org.lwjgl.sdl.SDLScancode;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,12 +19,16 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = EditBox.class, priority = 2000)
-public abstract class EditBoxMixin {
+public abstract class EditBoxMixin extends AbstractWidget {
     @Unique
     private static final Logger LOGGER = LoggingManager.getLogger(EditBoxMixin.class);
 
     static {
         LOGGER.debug("EditBoxMixin loaded");
+    }
+
+    public EditBoxMixin(int x, int y, int width, int height, Component message) {
+        super(x, y, width, height, message);
     }
 
     @Shadow
@@ -56,7 +63,10 @@ public abstract class EditBoxMixin {
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideDelete(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
-        final NavAction action = NavMappingsManager.getCurrentMappings().getAction(event);
+        if (!this.isFocused() || !this.isActive()) // If field isn't focused/active, don't even try to find an action for it
+            return;
+
+        final NavAction action = CrashUtils.crashMinecraftOnFailure(() -> NavMappingsManager.getCurrentMappings().getAction(event, Minecraft.getInstance().getWindow()));
 
         switch (action) {
             case DEL_LINE_LEFT -> this.deleteCharsToPos(0);
@@ -101,8 +111,11 @@ public abstract class EditBoxMixin {
                 return;
             }
             case NONE -> {
-                if (!NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation() || event.isEscape() || event.key() == SDLScancode.SDL_SCANCODE_RETURN || event.key() == SDLScancode.SDL_SCANCODE_KP_ENTER)
+                if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation()) || event.isEscape() || event.key() == SDLScancode.SDL_SCANCODE_RETURN || event.key() == SDLScancode.SDL_SCANCODE_KP_ENTER)
                     return;
+            }
+            case null -> {
+                return;
             }
         }
 

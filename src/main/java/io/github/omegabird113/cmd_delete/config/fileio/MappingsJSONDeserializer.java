@@ -2,13 +2,12 @@ package io.github.omegabird113.cmd_delete.config.fileio;
 
 import com.google.gson.*;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
-import io.github.omegabird113.cmd_delete.LoggingManager;
-import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.data.FeatureFlags;
 import io.github.omegabird113.cmd_delete.config.data.KeyCombo;
 import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
-import io.github.omegabird113.cmd_delete.mappings.Os;
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
+import io.github.omegabird113.cmd_delete.utils.Os;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
@@ -20,7 +19,7 @@ import java.util.stream.Collectors;
 
 import static io.github.omegabird113.cmd_delete.config.fileio.JsonParsingUtils.*;
 
-final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistry> {
+public final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistry> {
     private static final @NonNull Logger LOGGER = LoggingManager.getLogger(MappingsJSONManager.class);
     private static final @NonNull Map<String, Os> OS_MAP = Map.of(
             "windows", Os.WINDOWS,
@@ -29,6 +28,13 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
     );
     private static final @NonNull Map<@NonNull String, @NonNull NavAction> NAV_ACTION_MAP = Arrays.stream(NavAction.values())
             .collect(Collectors.toUnmodifiableMap(NavAction::name, Function.identity()));
+
+    static void logWarn(@NonNull String message, boolean strictMode) {
+        if (strictMode)
+            throw new JsonParseException(message);
+        else
+            LOGGER.warn(message);
+    }
 
     @Override
     public @NonNull MappingsRegistry deserialize(@NonNull JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
@@ -61,13 +67,6 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
         return new MappingsRegistry(localKeys, (disabledKeys.isEmpty() ? null : disabledKeys), List.copyOf(container.systems()), ff, inherits, container.name(), container.author(), container.description(), container.version(), container.id());
     }
 
-    private void logWarn(@NonNull String message, boolean strictMode) {
-        if (strictMode)
-            throw new JsonParseException(message);
-        else
-            LOGGER.warn(message);
-    }
-
     private String trimAndCaseIfNotStrict(@NonNull String str, boolean upper, boolean strictMode) {
         if (strictMode)
             return str;
@@ -89,10 +88,10 @@ final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistr
                 continue;
             }
 
-            if (ActionOffsetUtils.isOverrideAction(action) && fv == 2)
+            if (action.overrideMode() && fv == 2)
                 throw new JsonParseException("Format version 2 file specified actions of fv 3: " + actionName);
 
-            if (ActionOffsetUtils.isOverrideEditAction(action) && fv < 4)
+            if (action.isOverrideEdit() && fv < 4)
                 throw new JsonParseException("Format version 2 or 3 file specified actions of fv 4: " + actionName);
 
             final JsonArray bindings = requireArray(actions, actionName);

@@ -5,7 +5,6 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
-import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.data.KeyNameRegistry;
 import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
@@ -14,6 +13,8 @@ import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.MappingsType;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
+import io.github.omegabird113.cmd_delete.utils.CrashUtils;
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.Minecraft;
@@ -64,6 +65,7 @@ public final class NavMappingsCommand {
                 .then(literal("debug")
                         .then(literal("aboutCmdDelete").executes(NavMappingsCommand::printCmdDeleteAbout))
                         .then(literal("dumpActions").executes(NavMappingsCommand::dumpActions))
+                        .then(literal("dumpDetailedActions").executes(NavMappingsCommand::dumpDetailedActions))
                         .then(literal("dumpFeatureFlags").executes(NavMappingsCommand::dumpFeatureFlags))
                         .then(literal("dumpRegistry").executes(NavMappingsCommand::dumpRegistry))
                         .then(literal("dumpKeymap").executes(NavMappingsCommand::dumpKeyMap))
@@ -123,6 +125,12 @@ public final class NavMappingsCommand {
     private static int dumpActions(@NonNull CommandContext<FabricClientCommandSource> context) {
         final String actionsDump = String.join(", ", Arrays.stream(NavAction.values()).map(NavAction::name).toArray(String[]::new));
         context.getSource().sendFeedback(Component.literal("Actions dump:\n" + actionsDump));
+        return 1;
+    }
+
+    private static int dumpDetailedActions(@NonNull CommandContext<FabricClientCommandSource> context) {
+        final String actionsDump = NavAction.getDetailedActionDump();
+        context.getSource().sendFeedback(Component.literal("Detailed actions dump:\n" + actionsDump));
         return 1;
     }
 
@@ -221,7 +229,7 @@ public final class NavMappingsCommand {
     }
 
     private static int setDefault(@NonNull CommandContext<FabricClientCommandSource> context) {
-        NavMappingsManager.updateMappingsToDefault();
+        CrashUtils.crashMinecraftOnFailure(NavMappingsManager::updateMappingsToDefault);
         context.getSource().sendFeedback(Component.literal("Set navmappings to default"));
         return 1;
     }
@@ -240,9 +248,15 @@ public final class NavMappingsCommand {
     }
 
     private static int printCmdDeleteAbout(@NonNull CommandContext<FabricClientCommandSource> context) {
-        final String about = "CMD + Delete (modid: " + CmdDeleteClient.MODID
-                + ") by Omegabird113 v" + CmdDeleteClient.VERSION
-                + " using mappings format version " + CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION;
+        final String about = String.format(
+                "CMD + Delete (modid:%s) by Omegabird113 v%s using mappings format version %s (minimum of %s) and sharecode encoding version %s. You can report issues at %s.",
+                CmdDeleteClient.MODID,
+                CmdDeleteClient.VERSION,
+                CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION,
+                CmdDeleteClient.MINIMUM_MAPPINGS_FORMAT_VERSION,
+                CmdDeleteClient.SHARECODE_FORMAT_VERSION,
+                CmdDeleteClient.ISSUE_TRACKER_URL_STRING
+        );
         context.getSource().sendFeedback(Component.literal(about));
         return 1;
     }

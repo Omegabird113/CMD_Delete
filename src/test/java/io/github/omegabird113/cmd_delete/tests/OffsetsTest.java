@@ -1,7 +1,9 @@
-package io.github.omegabird113.cmd_delete;
+package io.github.omegabird113.cmd_delete.tests;
 
-import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
+import io.github.omegabird113.cmd_delete.TestLoader;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
+import io.github.omegabird113.cmd_delete.actions.NavActionOffset;
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -27,25 +29,25 @@ public class OffsetsTest {
                 NavAction.OVR_SELECT_ALL
         );
         for (NavAction action : NavAction.values()) {
-            final int offset = ActionOffsetUtils.getOffset(action);
+            final int offset = action.offset().value();
 
-            if (action.name().contains("LEFT") && offset != ActionOffsetUtils.OFFSET_LEFT)
+            if (action.name().contains("LEFT") && offset != NavActionOffset.LEFT.value())
                 Assertions.fail("LEFT offset not produced by action: " + action.name());
-            if (action.name().contains("RIGHT") && offset != ActionOffsetUtils.OFFSET_RIGHT)
+            if (action.name().contains("RIGHT") && offset != NavActionOffset.RIGHT.value())
                 Assertions.fail("RIGHT offset not produced by action: " + action.name());
-            if (action.name().contains("UP") && offset != ActionOffsetUtils.OFFSET_UP)
+            if (action.name().contains("UP") && offset != NavActionOffset.UP.value())
                 Assertions.fail("UP offset not produced by action: " + action.name());
-            if (action.name().contains("DOWN") && offset != ActionOffsetUtils.OFFSET_DOWN)
+            if (action.name().contains("DOWN") && offset != NavActionOffset.DOWN.value())
                 Assertions.fail("DOWN offset not produced by action: " + action.name());
             if (!allowedInvalidOffsets.contains(action) && offset == 0)
                 Assertions.fail("INVALID offset not produced by action: " + action.name());
 
             LOGGER.info("Tested offset ({}) of: {}", offset, action.name());
 
-            boolean isOvr = ActionOffsetUtils.isOverrideAction(action);
+            boolean isOvr = action.overrideMode();
             Assertions.assertEquals(isOvr, action.name().contains("OVR"));
 
-            boolean isMove = ActionOffsetUtils.isMoveAction(action);
+            boolean isMove = action.isMove();
             Assertions.assertEquals(isMove, action.name().contains("NAV"));
         }
     }

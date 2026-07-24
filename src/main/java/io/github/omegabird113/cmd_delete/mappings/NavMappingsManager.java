@@ -1,16 +1,17 @@
 package io.github.omegabird113.cmd_delete.mappings;
 
-import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.command.MappingsInfoCollectionUtils;
 import io.github.omegabird113.cmd_delete.config.data.FeatureFlags;
 import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
 import io.github.omegabird113.cmd_delete.config.fileio.ActiveMappingsManager;
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.List;
+import java.util.Optional;
 
 public final class NavMappingsManager {
     private static final @NonNull Logger LOGGER = LoggingManager.getLogger(NavMappingsManager.class);
@@ -23,6 +24,10 @@ public final class NavMappingsManager {
         if (currentMappingsState == null)
             throw new IllegalStateException("No current mappings state has been set, but the mappings were accessed");
         return currentMappingsState;
+    }
+
+    public static @NonNull Optional<MappingsState> getOptionalMappingsState() {
+        return Optional.ofNullable(currentMappingsState);
     }
 
     public static @NonNull NavMappings getCurrentMappings() {
@@ -51,7 +56,7 @@ public final class NavMappingsManager {
         logMappings();
     }
 
-    private static boolean updateMappingsTo(@NonNull MappingsType type, @NonNull String id) {
+    public static boolean updateMappingsTo(@NonNull MappingsType type, @NonNull String id) {
         final MappingsState old = currentMappingsState;
         currentMappingsState = ActiveMappingsManager.resolveMappings(
                 MappingsIdResolutionUtils.resolveNamespacedId(type, id)

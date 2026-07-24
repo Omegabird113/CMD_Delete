@@ -1,5 +1,6 @@
-package io.github.omegabird113.cmd_delete;
+package io.github.omegabird113.cmd_delete.tests;
 
+import io.github.omegabird113.cmd_delete.TestLoader;
 import io.github.omegabird113.cmd_delete.command.NavMappingsCommand;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

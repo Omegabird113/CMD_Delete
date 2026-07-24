@@ -95,3 +95,15 @@ publishing {
 test {
     useJUnitPlatform()
 }
+
+loom {
+    runs {
+        ciClient {
+            client()
+
+            vmArg "-Dci.stopMinecraftAfterLoad=true"
+
+        }
+    }
+}
+

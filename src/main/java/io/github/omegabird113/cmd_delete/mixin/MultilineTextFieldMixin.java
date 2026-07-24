@@ -1,9 +1,10 @@
 package io.github.omegabird113.cmd_delete.mixin;
 
-import io.github.omegabird113.cmd_delete.LoggingManager;
-import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
+import io.github.omegabird113.cmd_delete.actions.NavActionOffset;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
+import io.github.omegabird113.cmd_delete.utils.CrashUtils;
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.MultilineTextField;
 import net.minecraft.client.gui.components.Whence;
@@ -62,8 +63,8 @@ public abstract class MultilineTextFieldMixin {
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideMultilineNavigation(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
-        final NavAction action = NavMappingsManager.getCurrentMappings().getAction(event);
-        int direction = ActionOffsetUtils.getOffset(action);
+        final NavAction action = CrashUtils.crashMinecraftOnFailure(() -> NavMappingsManager.getCurrentMappings().getAction(event));
+        int direction = action != null ? action.offset().value() : NavActionOffset.INVALID.value();
 
         switch (action) {
             case DEL_LINE_LEFT, DEL_LINE_RIGHT -> {
@@ -161,8 +162,11 @@ public abstract class MultilineTextFieldMixin {
                 this.selectCursor = 0;
             }
             case NONE -> {
-                if (!NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation() || event.isEscape() || event.key() == SDLScancode.SDL_SCANCODE_RETURN || event.key() == SDLScancode.SDL_SCANCODE_KP_ENTER)
+                if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation()) || event.isEscape() || event.key() == SDLScancode.SDL_SCANCODE_RETURN || event.key() == SDLScancode.SDL_SCANCODE_KP_ENTER)
                     return;
+            }
+            case null -> {
+                return;
             }
         }
 

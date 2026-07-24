@@ -3,6 +3,7 @@ package io.github.omegabird113.cmd_delete.config.data;
 import org.jspecify.annotations.NonNull;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.lwjgl.sdl.SDLScancode.*;
 
@@ -129,11 +130,18 @@ public final class KeyNameRegistry {
             Map.entry("scroll_lock", SDL_SCANCODE_SCROLLLOCK)
     );
 
+    private static final @NonNull Map<Integer, String> REVERSED_KEY_MAP = KEY_MAP.entrySet().stream().collect(
+            Collectors.toUnmodifiableMap(Map.Entry::getValue, Map.Entry::getKey));
+
     private KeyNameRegistry() {
     }
 
     public static @NonNull Map<@NonNull String, @NonNull Integer> getKeyMap() {
         return KEY_MAP;
+    }
+
+    public static @NonNull Map<@NonNull Integer, @NonNull String> getReverseKeyMap() {
+        return REVERSED_KEY_MAP;
     }
 
     public static @NonNull String getDumpString() {

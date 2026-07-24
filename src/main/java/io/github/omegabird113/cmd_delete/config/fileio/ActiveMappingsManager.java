@@ -1,10 +1,10 @@
 package io.github.omegabird113.cmd_delete.config.fileio;
 
-import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.MappingsType;
 import io.github.omegabird113.cmd_delete.mappings.NavMappings;
-import io.github.omegabird113.cmd_delete.mappings.Os;
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
+import io.github.omegabird113.cmd_delete.utils.Os;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
@@ -35,7 +35,7 @@ public final class ActiveMappingsManager {
         return new MappingsState(mappings.get(), mappingsType, idToGet);
     }
 
-    static @NonNull String resolveDefaultMappingsNonNamespacedId() {
+    public static @NonNull String resolveDefaultMappingsNonNamespacedId() {
         return (Os.USING == Os.MAC)
                 ? "mac"
                 : "windows_linux";
@@ -55,12 +55,12 @@ public final class ActiveMappingsManager {
         return mappingsState;
     }
 
-    static void writeActiveMappings(@NonNull String namespacedId) throws IOException {
+    public static void writeActiveMappings(@NonNull String namespacedId) throws IOException {
         Files.createDirectories(PathConstants.getActiveMappingsFilePath().getParent());
         Files.writeString(PathConstants.getActiveMappingsFilePath(), namespacedId);
     }
 
-    static @NonNull String readActiveMappings() throws IOException {
+    public static @NonNull String readActiveMappings() throws IOException {
         return Files.readString(PathConstants.getActiveMappingsFilePath());
     }
 

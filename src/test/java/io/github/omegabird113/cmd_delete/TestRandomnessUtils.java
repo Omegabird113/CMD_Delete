@@ -4,7 +4,7 @@ import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.data.FeatureFlags;
 import io.github.omegabird113.cmd_delete.config.data.KeyCombo;
 import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
-import io.github.omegabird113.cmd_delete.mappings.Os;
+import io.github.omegabird113.cmd_delete.utils.Os;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -12,9 +12,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class TestRandomnessUtils {
-    static final @NonNull Random RANDOM = new Random(288923614);
+    public static final @NonNull Random RANDOM = new Random(288923614);
 
-    static @Nullable Boolean nextRandNullableBoolean() {
+    public static @Nullable Boolean nextRandNullableBoolean() {
         int choose = RANDOM.nextInt(0, 3);
         if (choose == 0)
             return null;
@@ -25,13 +25,13 @@ public class TestRandomnessUtils {
         return null;
     }
 
-    static @NonNull FeatureFlags nextRandFeatureFlags() {
+    public static @NonNull FeatureFlags nextRandFeatureFlags() {
         final Boolean overrideVanillaNavigation = nextRandNullableBoolean();
         final Boolean crossLineSignMovement = nextRandNullableBoolean();
         return new FeatureFlags(overrideVanillaNavigation, crossLineSignMovement);
     }
 
-    static @NonNull KeyCombo genRandomKeyCombo() {
+    public static @NonNull KeyCombo genRandomKeyCombo() {
         final boolean shift = RANDOM.nextBoolean();
         final boolean ctrl = RANDOM.nextBoolean();
         final boolean altOption = RANDOM.nextBoolean();
@@ -60,7 +60,7 @@ public class TestRandomnessUtils {
         return systems;
     }
 
-    static @NonNull MappingsRegistry genRandomRegistry() {
+    public static @NonNull MappingsRegistry genRandomRegistry() {
         final Map<KeyCombo, NavAction> enabled = new HashMap<>();
         final Map<KeyCombo, NavAction> disabled = new HashMap<>();
         final NavAction[] NavActions = Arrays.stream(NavAction.values()).toArray(NavAction[]::new);
