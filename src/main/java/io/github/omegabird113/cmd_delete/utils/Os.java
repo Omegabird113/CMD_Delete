@@ -15,10 +15,14 @@ public enum Os {
 
     @Contract(pure = true)
     private static @NonNull Os getCurrent() {
-        String os = System.getProperty("os.name").toLowerCase(Locale.ROOT);
-        if (os.contains("mac"))
+        return Os.get(System.getProperty("os.name").toLowerCase(Locale.ROOT));
+    }
+
+    @Contract("_ -> new")
+    private static @NonNull Os get(@NonNull String osName) {
+        if (osName.contains("mac"))
             return MAC;
-        else if (os.contains("win"))
+        else if (osName.contains("win"))
             return WINDOWS;
         else
             return LINUX;
