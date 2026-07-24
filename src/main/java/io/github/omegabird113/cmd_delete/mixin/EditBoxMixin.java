@@ -66,7 +66,7 @@ public abstract class EditBoxMixin extends AbstractWidget {
         if (!this.isFocused() || !this.isActive()) // If field isn't focused/active, don't even try to find an action for it
             return;
 
-        final NavAction action = CrashUtils.crashMinecraftOnFailure(() -> NavMappingsManager.getCurrentMappings().getAction(event, Minecraft.getInstance().getWindow()));
+        final NavAction action = CrashUtils.crashMinecraftOnFailure(() -> NavMappingsManager.getCurrentMappings().getAction(event));
 
         switch (action) {
             case DEL_LINE_LEFT -> this.deleteCharsToPos(0);
