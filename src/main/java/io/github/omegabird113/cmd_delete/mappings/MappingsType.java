@@ -18,7 +18,12 @@ public enum MappingsType {
     public @NonNull String prefix() {
         return prefix;
     }
+
     public @NonNull String commonName() {
         return commonName;
+    }
+
+    public static @NonNull MappingsType fromIfCustom(boolean custom) {
+        return custom ? MappingsType.CUSTOM : MappingsType.DEFAULT;
     }
 }

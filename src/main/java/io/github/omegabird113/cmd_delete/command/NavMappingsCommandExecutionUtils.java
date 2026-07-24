@@ -34,7 +34,7 @@ final class NavMappingsCommandExecutionUtils {
     static void exportShareCode(@NonNull CommandContext<FabricClientCommandSource> context, boolean custom) {
         final String idStr = StringArgumentType.getString(context, "id");
 
-        final String namespacedId = MappingsIdResolutionUtils.resolveNamespacedId(custom ? MappingsType.CUSTOM : MappingsType.BUILTIN, idStr);
+        final String namespacedId = MappingsIdResolutionUtils.resolveNamespacedId(MappingsType.fromIfCustom(custom), idStr);
         final String shareCode = ShareCodeGenerator.generate(namespacedId);
 
         Minecraft.getInstance().keyboardHandler.setClipboard(shareCode);
@@ -46,7 +46,7 @@ final class NavMappingsCommandExecutionUtils {
         final String locationStr = StringArgumentType.getString(context, "location");
 
         final Path newPath = Path.of(locationStr);
-        String typeCName = custom ? MappingsType.CUSTOM.commonName() : MappingsType.BUILTIN.commonName();
+        String typeCName = MappingsType.fromIfCustom(custom).commonName();
         if (!newPath.isAbsolute()) {
             LOGGER.error("New path \"{}\" for {} copy is not absolute", locationStr, typeCName);
             if (custom)

@@ -73,12 +73,12 @@ public final class MappingsJSONManager {
     }
 
     public static @NonNull Optional<MappingsRegistry> getRegistryFrom(boolean custom, @NonNull String id) {
-        String typeCName = custom ? MappingsType.CUSTOM.commonName() : MappingsType.BUILTIN.commonName();
+        String typeCName = MappingsType.fromIfCustom(custom).commonName();
         try {
             final MappingsRegistry registry = custom ? loadFromCustomMappingsDir(id) : loadFromResourceMappingsDir(id);
             return Optional.of(registry);
         } catch (FileNotFoundException _) {
-            LOGGER.error("Could not access {} mapping file \"{}\" (at \"{}\") because it does not exist.", typeCName, id, PathConstants.getPathOf(custom ? MappingsType.CUSTOM : MappingsType.BUILTIN, id));
+            LOGGER.error("Could not access {} mapping file \"{}\" (at \"{}\") because it does not exist.", typeCName, id, PathConstants.getPathOf(MappingsType.fromIfCustom(custom), id));
             return Optional.empty();
         } catch (IOException | JsonParseException e) {
             LOGGER.error("Could not access {} mapping file due to exception: {}", typeCName, id, e);
@@ -104,11 +104,11 @@ public final class MappingsJSONManager {
                 final boolean inheritsCustom = current.inherits().startsWith(MappingsType.CUSTOM.prefix());
                 final String idToGet = MappingsIdResolutionUtils.removeNamespaceFromId(current.inherits());
                 final Optional<MappingsRegistry> newRegistry = getRegistryFrom(inheritsCustom, idToGet);
-                namespacePrefix = inheritsCustom ? MappingsType.CUSTOM.prefix() : MappingsType.BUILTIN.prefix();
+                namespacePrefix = MappingsType.fromIfCustom(inheritsCustom).prefix();
                 if (newRegistry.isEmpty())
-                    throw new IOException("Failed to resolve inheritance of " + (inheritsCustom ? MappingsType.CUSTOM.commonName() : MappingsType.BUILTIN.commonName()) + " mappings \"" + idToGet + "\" by mappings \"" + current.id() + "\" because the inherited registry couldn't load.");
+                    throw new IOException("Failed to resolve inheritance of " + MappingsType.fromIfCustom(inheritsCustom).commonName() + " mappings \"" + idToGet + "\" by mappings \"" + current.id() + "\" because the inherited registry couldn't load.");
                 if (ids.contains(namespacePrefix + newRegistry.get().id()))
-                    throw new IOException("Duplicate inheritance of " + (inheritsCustom ? MappingsType.CUSTOM.commonName() : MappingsType.BUILTIN.commonName()) + " mappings \"" + idToGet + "\" by mappings \"" + current.id() + "\" in chain of: " + String.join(" -> ", ids));
+                    throw new IOException("Duplicate inheritance of " + MappingsType.fromIfCustom(inheritsCustom).commonName() + " mappings \"" + idToGet + "\" by mappings \"" + current.id() + "\" in chain of: " + String.join(" -> ", ids));
                 current = newRegistry.get();
             }
         }
