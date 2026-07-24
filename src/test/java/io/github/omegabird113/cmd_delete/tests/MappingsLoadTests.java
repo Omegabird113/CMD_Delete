@@ -29,7 +29,7 @@ public class MappingsLoadTests {
     void allBuiltinMappingsLoadTest() {
         MappingsState lastState = NavMappingsManager.getMappingsState();
         for (final String namespacedId : MappingsInfoCollectionUtils.getMappingsList()) {
-            if (namespacedId.equals("default") || namespacedId.startsWith(MappingsType.CUSTOM.prefix))
+            if (namespacedId.equals("default") || namespacedId.startsWith(MappingsType.CUSTOM.prefix()))
                 continue;
             final String id = MappingsIdResolutionUtils.removeNamespaceFromId(namespacedId);
             final MappingsType mappingsType = id.isEmpty() ? MappingsType.DEFAULT : MappingsIdResolutionUtils.resolveType(namespacedId);

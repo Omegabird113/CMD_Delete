@@ -46,8 +46,9 @@ final class NavMappingsCommandExecutionUtils {
         final String locationStr = StringArgumentType.getString(context, "location");
 
         final Path newPath = Path.of(locationStr);
+        String typeCName = custom ? MappingsType.CUSTOM.commonName() : MappingsType.BUILTIN.commonName();
         if (!newPath.isAbsolute()) {
-            LOGGER.error("New path \"{}\" for {} copy is not absolute", locationStr, custom ? MappingsType.CUSTOM.commonName : MappingsType.BUILTIN.commonName);
+            LOGGER.error("New path \"{}\" for {} copy is not absolute", locationStr, typeCName);
             if (custom)
                 throw CommandCreationUtils.UNKNOWN_CUSTOM_MAPPINGS.create(idStr);
             else
@@ -74,14 +75,14 @@ final class NavMappingsCommandExecutionUtils {
                 }
             }
         } catch (IOException e) {
-            LOGGER.error("Error while {} mappings exporting ", custom ? MappingsType.CUSTOM.commonName : MappingsType.BUILTIN.commonName, e);
+            LOGGER.error("Error while {} mappings exporting ", typeCName, e);
             if (custom)
                 throw CommandCreationUtils.UNKNOWN_CUSTOM_MAPPINGS.create(idStr);
             else
                 throw CommandCreationUtils.UNKNOWN_BUILTIN_MAPPINGS.create(idStr);
         }
 
-        context.getSource().sendFeedback(Component.literal("Mappings \"" + (custom ? MappingsType.CUSTOM.commonName : MappingsType.BUILTIN.commonName) + idStr + "\" copied to path: " + newPath.toAbsolutePath()));
+        context.getSource().sendFeedback(Component.literal("Mappings \"" + (typeCName) + idStr + "\" copied to path: " + newPath.toAbsolutePath()));
     }
 
     static void importShareCode(@NonNull CommandContext<FabricClientCommandSource> context, @NonNull String shareCode) throws CommandSyntaxException {
