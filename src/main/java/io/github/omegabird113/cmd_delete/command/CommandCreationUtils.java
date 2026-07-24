@@ -14,35 +14,35 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
-final class CommandCreationUtils {
-    static final @NonNull DynamicCommandExceptionType UNKNOWN_CUSTOM_MAPPINGS = new DynamicCommandExceptionType(
+public final class CommandCreationUtils {
+    public static final @NonNull DynamicCommandExceptionType UNKNOWN_CUSTOM_MAPPINGS = new DynamicCommandExceptionType(
             id -> Component.literal("Could not load custom navmappings: " + id)
     );
-    static final @NonNull DynamicCommandExceptionType UNKNOWN_BUILTIN_MAPPINGS = new DynamicCommandExceptionType(
+    public static final @NonNull DynamicCommandExceptionType UNKNOWN_BUILTIN_MAPPINGS = new DynamicCommandExceptionType(
             id -> Component.literal("Could not load builtin navmappings: " + id)
     );
-    static final @NonNull DynamicCommandExceptionType FAILED_CUSTOM_MAPPINGS_IMPORT = new DynamicCommandExceptionType(
+    public static final @NonNull DynamicCommandExceptionType FAILED_CUSTOM_MAPPINGS_IMPORT = new DynamicCommandExceptionType(
             location -> Component.literal("Could not import custom navmappings from: " + location)
     );
-    static final @NonNull DynamicCommandExceptionType INVALID_SHARE_CODE = new DynamicCommandExceptionType(
+    public static final @NonNull DynamicCommandExceptionType INVALID_SHARE_CODE = new DynamicCommandExceptionType(
             shareCode -> Component.literal("Invalid share code: " + shareCode)
     );
 
-    static final @NonNull SuggestionProvider<FabricClientCommandSource> BUILTIN_SUGGESTIONS =
+    public static final @NonNull SuggestionProvider<FabricClientCommandSource> BUILTIN_SUGGESTIONS =
             (context, builder) -> SharedSuggestionProvider.suggest(List.of("windows_linux", "mac", "emacs_windows_linux", "emacs_mac", "readline"), builder);
-    static final @NonNull SuggestionProvider<FabricClientCommandSource> CUSTOM_SUGGESTIONS =
+    public static final @NonNull SuggestionProvider<FabricClientCommandSource> CUSTOM_SUGGESTIONS =
             (context, builder) -> SharedSuggestionProvider.suggest(MappingsJSONManager.getAvailableOptions(false), builder);
 
     private CommandCreationUtils() {
     }
 
     @Contract(value = "_ -> new", pure = true)
-    static @NonNull LiteralArgumentBuilder<FabricClientCommandSource> literal(@NonNull String name) {
+    public static @NonNull LiteralArgumentBuilder<FabricClientCommandSource> literal(@NonNull String name) {
         return LiteralArgumentBuilder.literal(name);
     }
 
     @Contract(value = "_, _ -> new", pure = true)
-    static <T> @NonNull RequiredArgumentBuilder<FabricClientCommandSource, T> argument(@NonNull String name, @NonNull ArgumentType<T> type) {
+    public static <T> @NonNull RequiredArgumentBuilder<FabricClientCommandSource, T> argument(@NonNull String name, @NonNull ArgumentType<T> type) {
         return RequiredArgumentBuilder.argument(name, type);
     }
 }

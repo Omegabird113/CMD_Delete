@@ -28,7 +28,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Read gradle.properties
         id: props
@@ -48,7 +48,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build
-        run: ./gradlew clean build --stacktrace
+        run: ./gradlew clean build --stacktrace --no-daemon
 
       - name: Locate built JAR
         id: jar
@@ -128,3 +128,4 @@ jobs:
             fabric
             quilt
             neoforge
+          environment: client

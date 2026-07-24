@@ -27,11 +27,14 @@ import java.nio.file.StandardCopyOption;
 
 import static io.github.omegabird113.cmd_delete.command.NavMappingsCommand.LOGGER;
 
-class NavMappingsCommandExecutionUtils {
+final class NavMappingsCommandExecutionUtils {
+    private NavMappingsCommandExecutionUtils() {
+    }
+
     static void exportShareCode(@NonNull CommandContext<FabricClientCommandSource> context, boolean custom) {
         final String idStr = StringArgumentType.getString(context, "id");
 
-        final String namespacedId = MappingsIdResolutionUtils.resolveNamespacedId(custom ? MappingsType.CUSTOM : MappingsType.BUILTIN, idStr);
+        final String namespacedId = MappingsIdResolutionUtils.resolveNamespacedId(MappingsType.fromIfCustom(custom), idStr);
         final String shareCode = ShareCodeGenerator.generate(namespacedId);
 
         Minecraft.getInstance().keyboardHandler.setClipboard(shareCode);
@@ -43,8 +46,9 @@ class NavMappingsCommandExecutionUtils {
         final String locationStr = StringArgumentType.getString(context, "location");
 
         final Path newPath = Path.of(locationStr);
+        String typeCName = MappingsType.fromIfCustom(custom).commonName();
         if (!newPath.isAbsolute()) {
-            LOGGER.error("New path \"{}\" for {} copy is not absolute", locationStr, custom ? MappingsType.CUSTOM.commonName : MappingsType.BUILTIN.commonName);
+            LOGGER.error("New path \"{}\" for {} copy is not absolute", locationStr, typeCName);
             if (custom)
                 throw CommandCreationUtils.UNKNOWN_CUSTOM_MAPPINGS.create(idStr);
             else
@@ -71,14 +75,14 @@ class NavMappingsCommandExecutionUtils {
                 }
             }
         } catch (IOException e) {
-            LOGGER.error("Error while {} mappings exporting ", custom ? MappingsType.CUSTOM.commonName : MappingsType.BUILTIN.commonName, e);
+            LOGGER.error("Error while {} mappings exporting ", typeCName, e);
             if (custom)
                 throw CommandCreationUtils.UNKNOWN_CUSTOM_MAPPINGS.create(idStr);
             else
                 throw CommandCreationUtils.UNKNOWN_BUILTIN_MAPPINGS.create(idStr);
         }
 
-        context.getSource().sendFeedback(Component.literal("Mappings \"" + (custom ? MappingsType.CUSTOM.commonName : MappingsType.BUILTIN.commonName) + idStr + "\" copied to path: " + newPath.toAbsolutePath()));
+        context.getSource().sendFeedback(Component.literal("Mappings \"" + (typeCName) + idStr + "\" copied to path: " + newPath.toAbsolutePath()));
     }
 
     static void importShareCode(@NonNull CommandContext<FabricClientCommandSource> context, @NonNull String shareCode) throws CommandSyntaxException {

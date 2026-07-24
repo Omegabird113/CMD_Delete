@@ -1,5 +1,6 @@
-package io.github.omegabird113.cmd_delete;
+package io.github.omegabird113.cmd_delete.tests;
 
+import io.github.omegabird113.cmd_delete.TestLoader;
 import io.github.omegabird113.cmd_delete.command.MappingsInfoCollectionUtils;
 import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
@@ -28,7 +29,7 @@ public class MappingsLoadTests {
     void allBuiltinMappingsLoadTest() {
         MappingsState lastState = NavMappingsManager.getMappingsState();
         for (final String namespacedId : MappingsInfoCollectionUtils.getMappingsList()) {
-            if (namespacedId.equals("default") || namespacedId.startsWith("custom:"))
+            if (namespacedId.equals("default") || namespacedId.startsWith(MappingsType.CUSTOM.prefix()))
                 continue;
             final String id = MappingsIdResolutionUtils.removeNamespaceFromId(namespacedId);
             final MappingsType mappingsType = id.isEmpty() ? MappingsType.DEFAULT : MappingsIdResolutionUtils.resolveType(namespacedId);
@@ -50,5 +51,14 @@ public class MappingsLoadTests {
         final MappingsState after = NavMappingsManager.getMappingsState();
         Assertions.assertNotEquals(before, after, "sample mappings failed to load");
         Assertions.assertTrue(success);
+    }
+
+    @Test
+    @Order(4)
+    void switchToDefaultMappingsTest() {
+        final MappingsState before = NavMappingsManager.getMappingsState();
+        Assertions.assertDoesNotThrow(NavMappingsManager::updateMappingsToDefault);
+        final MappingsState after = NavMappingsManager.getMappingsState();
+        Assertions.assertNotEquals(before, after, "Default mappings failed to load");
     }
 }

@@ -3,7 +3,7 @@ package io.github.omegabird113.cmd_delete.command;
 import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.config.fileio.MappingsJSONManager;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
-import io.github.omegabird113.cmd_delete.mappings.Os;
+import io.github.omegabird113.cmd_delete.utils.Os;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 
@@ -18,7 +18,7 @@ public final class MappingsInfoCollectionUtils {
 
     @Contract(pure = true)
     public static @NonNull String getInfoFrom(@NonNull MappingsState mappingsState, boolean includeDescription) {
-        final float coverage = mappingsState.mappings().getCoverage();
+        final double coverage = mappingsState.mappings().getCoverage();
 
         String displayName = "";
         String description = "";

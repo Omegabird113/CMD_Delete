@@ -7,11 +7,23 @@ public enum MappingsType {
     BUILTIN("builtin:", "Builtin"),
     DEFAULT("", "Default");
 
-    public final @NonNull String prefix;
-    public final @NonNull String commonName;
+    private final @NonNull String prefix;
+    private final @NonNull String commonName;
 
     MappingsType(@NonNull String prefix, @NonNull String commonName) {
         this.prefix = prefix;
         this.commonName = commonName;
+    }
+
+    public static @NonNull MappingsType fromIfCustom(boolean custom) {
+        return custom ? MappingsType.CUSTOM : MappingsType.DEFAULT;
+    }
+
+    public @NonNull String prefix() {
+        return prefix;
+    }
+
+    public @NonNull String commonName() {
+        return commonName;
     }
 }
