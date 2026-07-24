@@ -27,9 +27,6 @@ public abstract class EditBoxMixin extends AbstractWidget {
         LOGGER.debug("EditBoxMixin loaded");
     }
 
-    @Shadow
-    private boolean isEditable;
-
     public EditBoxMixin(int x, int y, int width, int height, Component message) {
         super(x, y, width, height, message);
     }
@@ -66,7 +63,7 @@ public abstract class EditBoxMixin extends AbstractWidget {
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideDelete(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
-        if (!isEditable || !this.isFocused() || !this.isActive()) // If field can't be edited, don't even try to find an action for it
+        if (!this.isFocused() || !this.isActive()) // If field isn't focused/active, don't even try to find an action for it
             return;
 
         final NavAction action = CrashUtils.crashMinecraftOnFailure(() -> NavMappingsManager.getCurrentMappings().getAction(event, Minecraft.getInstance().getWindow()));
