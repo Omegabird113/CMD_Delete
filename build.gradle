@@ -15,8 +15,18 @@ configurations {
     shadeOnly
 }
 
+configurations.all {
+    resolutionStrategy {
+        force 'commons-codec:commons-codec:1.22.0'
+    }
+}
+
 sourceSets {
     main {
+        compileClasspath += configurations.shadeOnly
+        runtimeClasspath += configurations.shadeOnly
+    }
+    test {
         compileClasspath += configurations.shadeOnly
         runtimeClasspath += configurations.shadeOnly
     }
@@ -31,18 +41,18 @@ repositories {
 }
 
 dependencies {
-    // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-
-    implementation include('com.google.code.gson:gson:2.14.0')
-    shadeOnly 'commons-codec:commons-codec:1.22.0'
     mappings loom.officialMojangMappings()
 
-    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    implementation include('com.google.code.gson:gson:2.14.0')
+    implementation include('org.jspecify:jspecify:1.0.0')
+
+    shadeOnly 'commons-codec:commons-codec:1.22.0'
 
     testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
-    modImplementation include("org.jspecify:jspecify:1.0.0")
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 }
 
 processResources {
@@ -84,7 +94,12 @@ java {
 tasks.shadowJar {
     configurations = [project.configurations.shadeOnly]
     relocate 'org.apache.commons.codec', 'io.github.omegabird113.cmd_delete.libs.commons.codec'
-    archiveClassifier.set('')
+    archiveClassifier.set('dev-shadow')
+}
+
+tasks.remapJar {
+    dependsOn tasks.shadowJar
+    inputFile.set(tasks.shadowJar.archiveFile)
 }
 
 tasks.jar {
@@ -94,11 +109,6 @@ tasks.jar {
     }
 }
 
-tasks.build {
-    dependsOn tasks.shadowJar
-}
-
-// configure the maven publication
 publishing {
     publications {
         create("mavenJava", MavenPublication) {
