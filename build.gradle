@@ -20,6 +20,10 @@ sourceSets {
         compileClasspath += configurations.shadeOnly
         runtimeClasspath += configurations.shadeOnly
     }
+    test {
+        compileClasspath += configurations.shadeOnly
+        runtimeClasspath += configurations.shadeOnly
+    }
 }
 
 repositories {
