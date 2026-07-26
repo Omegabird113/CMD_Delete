@@ -28,8 +28,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+
+import static io.github.omegabird113.cmd_delete.command.CommandCreationUtils.*;
 
 public final class NavMappingsCommand {
     static final @NonNull Logger LOGGER = LoggingManager.getLogger(NavMappingsCommand.class);
