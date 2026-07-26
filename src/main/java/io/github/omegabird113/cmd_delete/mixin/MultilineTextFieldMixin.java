@@ -65,6 +65,9 @@ public abstract class MultilineTextFieldMixin {
         final NavAction action = CrashUtils.crashMinecraftOnFailure(() -> NavMappingsManager.getCurrentMappings().getAction(keyCode, Minecraft.getInstance().getWindow()));
         int direction = action != null ? action.offset().value() : NavActionOffset.INVALID.value();
 
+        if (action == null)
+            return;
+
         switch (action) {
             case DEL_LINE_LEFT, DEL_LINE_RIGHT -> {
                 this.setSelecting(true);
@@ -163,9 +166,6 @@ public abstract class MultilineTextFieldMixin {
             case NONE -> {
                 if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation()) || keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER)
                     return;
-            }
-            case null -> {
-                return;
             }
         }
 

@@ -87,6 +87,9 @@ public abstract class SignEditScreenMixin {
 
         final int direction = action != null ? action.offset().value() : NavActionOffset.INVALID.value();
 
+        if (action == null)
+            return;
+
         switch (action) {
             case SEL_TEXT_UP, SEL_TEXT_DOWN -> {
                 if (Boolean.TRUE.equals(NavMappingsManager.getCurrentFeatureFlags().crossLineSignMovement()))
@@ -141,9 +144,6 @@ public abstract class SignEditScreenMixin {
             case NONE -> {
                 if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation()) || keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER)
                     return;
-            }
-            case null -> {
-                return;
             }
         }
 

@@ -124,15 +124,18 @@ public abstract class EditBoxMixin extends AbstractWidget {
             case OVR_CUT -> {
                 Minecraft.getInstance().keyboardHandler.setClipboard(this.getHighlighted());
                 if (this.isEditable())
-                    this.deleteCharsToPos(this.getHighlighted().length());
+                    this.deleteChars(this.getHighlighted().length());
             }
             case OVR_PASTE -> {
                 if (this.isEditable())
                     this.insertText(Minecraft.getInstance().keyboardHandler.getClipboard());
             }
             case OVR_SELECT_ALL -> {
-                this.moveCursorTo(0, false);
-                this.moveCursorTo(this.getValue().length(), true);
+                this.moveCursorTo(0);
+                boolean old = this.shiftPressed;
+                this.shiftPressed = true;
+                this.moveCursorTo(this.getValue().length());
+                this.shiftPressed = old;
             }
             case SEL_TEXT_UP, SEL_TEXT_DOWN, OVR_NAV_TEXT_UP, OVR_NAV_TEXT_DOWN -> {
                 return;

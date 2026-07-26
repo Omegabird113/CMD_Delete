@@ -40,6 +40,7 @@ public final class CrashUtils {
                 String.join("\n\t", Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).toArray(String[]::new))
         );
         Minecraft minecraft = Minecraft.getInstance();
-        minecraft.emergencySaveAndCrash(CrashReport.forThrowable(e, "CMD + Delete encountered an irrecoverable exception. Please report this at: " + CmdDeleteClient.ISSUE_TRACKER_URL_STRING));
+        minecraft.emergencySave();
+        Minecraft.crash(CrashReport.forThrowable(e, "CMD + Delete encountered an irrecoverable exception. Please report this at: " + CmdDeleteClient.ISSUE_TRACKER_URL_STRING));
     }
 }
