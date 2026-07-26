@@ -2,23 +2,14 @@ package io.github.omegabird113.cmd_delete.mappings;
 
 import org.jspecify.annotations.NonNull;
 
-public record MappingsState(@NonNull NavMappings mappings, @NonNull Type type, @NonNull String id) {
+public record MappingsState(@NonNull NavMappings mappings, @NonNull MappingsType type, @NonNull String id) {
     @Override
     public @NonNull String toString() {
-        return switch (type) {
-            case CUSTOM -> "Custom";
-            case BUILTIN -> "Builtin";
-            case DEFAULT -> "Default";
-        }
+        return type.commonName()
                 + " mappings id \""
                 + id
-                + "\" (class: "
-                + mappings
-                + ") with registry:\n"
-                + mappings.registry();
-    }
-
-    public enum Type {
-        CUSTOM, BUILTIN, DEFAULT
+                + " with registry:\n\""
+                + mappings.registry()
+                + "\"";
     }
 }

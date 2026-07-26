@@ -1,11 +1,14 @@
 package io.github.omegabird113.cmd_delete.mixin;
 
-import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
+import io.github.omegabird113.cmd_delete.utils.CrashUtils;
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.input.KeyEvent;
+import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,12 +19,16 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = EditBox.class, priority = 2000)
-public abstract class EditBoxMixin {
+public abstract class EditBoxMixin extends AbstractWidget {
     @Unique
     private static final Logger LOGGER = LoggingManager.getLogger(EditBoxMixin.class);
 
     static {
         LOGGER.debug("EditBoxMixin loaded");
+    }
+
+    public EditBoxMixin(int x, int y, int width, int height, Component message) {
+        super(x, y, width, height, message);
     }
 
     @Shadow
@@ -40,7 +47,7 @@ public abstract class EditBoxMixin {
     public abstract int getWordPosition(int dir);
 
     @Shadow
-    public abstract void moveCursor(int dir, boolean extendSelection);
+    public abstract void moveCursor(int dir, boolean hasShiftDown);
 
     @Shadow
     public abstract void deleteChars(int dir);
@@ -48,9 +55,18 @@ public abstract class EditBoxMixin {
     @Shadow
     protected abstract boolean isEditable();
 
+    @Shadow
+    public abstract String getHighlighted();
+
+    @Shadow
+    public abstract void insertText(String input);
+
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideDelete(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
-        NavAction action = NavMappingsManager.getCurrentMappings().getAction(event, Minecraft.getInstance().getWindow());
+        if (!this.isFocused() || !this.isActive()) // If field isn't focused/active, don't even try to find an action for it
+            return;
+
+        final NavAction action = CrashUtils.crashMinecraftOnFailure(() -> NavMappingsManager.getCurrentMappings().getAction(event, Minecraft.getInstance().getWindow()));
 
         switch (action) {
             case DEL_LINE_LEFT -> this.deleteCharsToPos(0);
@@ -77,12 +93,29 @@ public abstract class EditBoxMixin {
                 if (this.isEditable())
                     this.deleteChars(1);
             }
+            case OVR_COPY -> Minecraft.getInstance().keyboardHandler.setClipboard(this.getHighlighted());
+            case OVR_CUT -> {
+                Minecraft.getInstance().keyboardHandler.setClipboard(this.getHighlighted());
+                if (this.isEditable())
+                    this.deleteCharsToPos(this.getHighlighted().length());
+            }
+            case OVR_PASTE -> {
+                if (this.isEditable())
+                    this.insertText(Minecraft.getInstance().keyboardHandler.getClipboard());
+            }
+            case OVR_SELECT_ALL -> {
+                this.moveCursorTo(0, false);
+                this.moveCursorTo(this.getValue().length(), true);
+            }
             case SEL_TEXT_UP, SEL_TEXT_DOWN, OVR_NAV_TEXT_UP, OVR_NAV_TEXT_DOWN -> {
                 return;
             }
             case NONE -> {
-                if (!NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation() || event.isEscape() || event.key() == GLFW.GLFW_KEY_ENTER)
+                if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation()) || event.isEscape() || event.key() == GLFW.GLFW_KEY_ENTER || event.key() == GLFW.GLFW_KEY_KP_ENTER)
                     return;
+            }
+            case null -> {
+                return;
             }
         }
 

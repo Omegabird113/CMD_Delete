@@ -1,5 +1,6 @@
 {
-  "fv": 3,
+  "fv": 4,
+  "strict": true,
   "meta": {
     "name": "Mac mappings",
     "author": "$$cmd_delete$$",
@@ -214,10 +215,34 @@
         "altOption": false,
         "shift": false
       }
+    ],
+    "OVR_COPY": [
+      {
+        "key": "c",
+        "superCommand": true
+      }
+    ],
+    "OVR_CUT": [
+      {
+        "key": "x",
+        "superCommand": true
+      }
+    ],
+    "OVR_PASTE": [
+      {
+        "key": "v",
+        "superCommand": true
+      }
+    ],
+    "OVR_SELECT_ALL": [
+      {
+        "key": "a",
+        "superCommand": true
+      }
     ]
   },
   "flags": {
-    "overrideVanillaNavigation": false,
+    "overrideVanillaNavigation": true,
     "crossLineSignMovement": true
   }
 }
