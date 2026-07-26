@@ -2,10 +2,10 @@ package io.github.omegabird113.cmd_delete.mappings;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Window;
-import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
-import io.github.omegabird113.cmd_delete.config.KeyCombo;
-import io.github.omegabird113.cmd_delete.config.MappingsRegistry;
+import io.github.omegabird113.cmd_delete.config.data.KeyCombo;
+import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
+import io.github.omegabird113.cmd_delete.utils.Os;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import org.lwjgl.glfw.GLFW;
@@ -16,29 +16,30 @@ import static io.github.omegabird113.cmd_delete.actions.NavAction.NONE;
 
 public record NavMappings(@NonNull MappingsRegistry registry) {
     @Contract(pure = true)
-    public NavAction getAction(KeyCombo keyCombo) {
+    public @NonNull NavAction getAction(@NonNull KeyCombo keyCombo) {
         final NavAction action = registry.get(keyCombo);
-        if (action != null)
-            if (ActionOffsetUtils.isOverrideAction(action))
-                return (registry.featureFlags().overrideVanillaNavigation() ? action : NONE);
-            else
-                return action;
-        return NONE;
+        if (action == null)
+            return NONE;
+
+        if (action.overrideMode() && Boolean.FALSE.equals(registry.featureFlags().overrideVanillaNavigation()))
+            return NONE;
+
+        return action;
     }
 
     @Contract(pure = true)
-    public NavAction getAction(int key, Window window) {
+    public @NonNull NavAction getAction(int key, Window window) {
         final boolean shift = InputConstants.isKeyDown(window.getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT) || InputConstants.isKeyDown(window.getWindow(), GLFW.GLFW_KEY_RIGHT_SHIFT);
-        final boolean alt = InputConstants.isKeyDown(window.getWindow(), GLFW.GLFW_KEY_LEFT_ALT) || InputConstants.isKeyDown(window.getWindow(), GLFW.GLFW_KEY_RIGHT_ALT);
+        final boolean altOption = InputConstants.isKeyDown(window.getWindow(), GLFW.GLFW_KEY_LEFT_ALT) || InputConstants.isKeyDown(window.getWindow(), GLFW.GLFW_KEY_RIGHT_ALT);
         final boolean control = InputConstants.isKeyDown(window.getWindow(), GLFW.GLFW_KEY_LEFT_CONTROL) || InputConstants.isKeyDown(window.getWindow(), GLFW.GLFW_KEY_RIGHT_CONTROL);
-        final boolean windows = InputConstants.isKeyDown(window.getWindow(), GLFW.GLFW_KEY_LEFT_SUPER) || InputConstants.isKeyDown(window.getWindow(), GLFW.GLFW_KEY_RIGHT_SUPER);
+        final boolean superCommand = InputConstants.isKeyDown(window.getWindow(), GLFW.GLFW_KEY_LEFT_SUPER) || InputConstants.isKeyDown(window.getWindow(), GLFW.GLFW_KEY_RIGHT_SUPER);
 
-        final KeyCombo keyCombo = new KeyCombo(key, shift, alt, control, windows);
+        final KeyCombo keyCombo = new KeyCombo(key, shift, altOption, control, superCommand);
         return getAction(keyCombo);
     }
 
     @Contract(pure = true)
-    public NavAction @NonNull [] getPossibleActions() {
+    public @NonNull NavAction @NonNull [] getPossibleActions() {
         return Arrays.stream(registry.getValues())
                 .filter(action -> action != NONE)
                 .distinct()
@@ -46,19 +47,18 @@ public record NavMappings(@NonNull MappingsRegistry registry) {
     }
 
     @Contract(pure = true)
-    public Os @NonNull [] getMappingsSupportedSystems() {
+    public @NonNull Os @NonNull [] getMappingsSupportedSystems() {
         return registry.systems().stream()
                 .distinct()
                 .toArray(Os[]::new);
     }
 
     @Contract(pure = true)
-    public float getCoverage() {
-        final int total = Arrays.stream(NavAction.values())
+    public double getCoverage() {
+        final long total = Arrays.stream(NavAction.values())
                 .filter(action -> action != NONE)
-                .toArray(NavAction[]::new)
-                .length;
-        final int support = this.getPossibleActions().length;
-        return ((float) support) / total;
+                .count();
+        final int support = getPossibleActions().length;
+        return ((double) support) / total;
     }
 }

@@ -1,19 +1,35 @@
 package io.github.omegabird113.cmd_delete.mixin;
 
-import io.github.omegabird113.cmd_delete.actions.ActionOffsetUtils;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
+import io.github.omegabird113.cmd_delete.utils.CrashUtils;
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
+import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = EditBox.class, priority = 2000)
-public abstract class EditBoxMixin {
+public abstract class EditBoxMixin extends AbstractWidget {
+    @Unique
+    private static final Logger LOGGER = LoggingManager.getLogger(EditBoxMixin.class);
+
+    static {
+        LOGGER.debug("EditBoxMixin loaded");
+    }
+
+    public EditBoxMixin(int x, int y, int width, int height, Component message) {
+        super(x, y, width, height, message);
+    }
+
     @Shadow
     private boolean shiftPressed;
 
@@ -41,11 +57,22 @@ public abstract class EditBoxMixin {
     @Shadow
     private int cursorPos;
 
+    @Shadow
+    public abstract String getHighlighted();
+
+    @Shadow
+    public abstract void insertText(String input);
+
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideDelete(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        NavAction action = NavMappingsManager.getCurrentMappings()
-                .getAction(keyCode, Minecraft.getInstance().getWindow());
-        int direction = ActionOffsetUtils.getOffset(action);
+        if (!this.isFocused() || !this.isActive()) // If field isn't focused/active, don't even try to find an action for it
+            return;
+
+        final NavAction action = CrashUtils.crashMinecraftOnFailure(() -> NavMappingsManager.getCurrentMappings()
+                .getAction(keyCode, Minecraft.getInstance().getWindow()));
+        if (action == null)
+            return;
+        int direction = action.offset().value();
         switch (action) {
             case DEL_LINE_LEFT -> {
                 int cursor = this.getCursorPosition();
@@ -93,11 +120,25 @@ public abstract class EditBoxMixin {
                 if (this.isEditable())
                     this.deleteChars(1);
             }
+            case OVR_COPY -> Minecraft.getInstance().keyboardHandler.setClipboard(this.getHighlighted());
+            case OVR_CUT -> {
+                Minecraft.getInstance().keyboardHandler.setClipboard(this.getHighlighted());
+                if (this.isEditable())
+                    this.deleteCharsToPos(this.getHighlighted().length());
+            }
+            case OVR_PASTE -> {
+                if (this.isEditable())
+                    this.insertText(Minecraft.getInstance().keyboardHandler.getClipboard());
+            }
+            case OVR_SELECT_ALL -> {
+                this.moveCursorTo(0, false);
+                this.moveCursorTo(this.getValue().length(), true);
+            }
             case SEL_TEXT_UP, SEL_TEXT_DOWN, OVR_NAV_TEXT_UP, OVR_NAV_TEXT_DOWN -> {
                 return;
             }
             case NONE -> {
-                if (!NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation() || keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER)
+                if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation()) || keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER)
                     return;
             }
         }

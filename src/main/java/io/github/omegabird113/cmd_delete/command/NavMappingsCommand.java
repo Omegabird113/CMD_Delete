@@ -1,62 +1,38 @@
 package io.github.omegabird113.cmd_delete.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
-import com.mojang.brigadier.suggestion.SuggestionProvider;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
-import io.github.omegabird113.cmd_delete.LoggingManager;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
-import io.github.omegabird113.cmd_delete.config.*;
+import io.github.omegabird113.cmd_delete.config.data.KeyNameRegistry;
+import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
+import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
+import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
+import io.github.omegabird113.cmd_delete.mappings.MappingsType;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
-import io.github.omegabird113.cmd_delete.mappings.Os;
+import io.github.omegabird113.cmd_delete.utils.CrashUtils;
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import org.apache.commons.io.FilenameUtils;
-import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+
+import static io.github.omegabird113.cmd_delete.command.CommandCreationUtils.*;
 
 public final class NavMappingsCommand {
-    private static final DynamicCommandExceptionType INVALID_OS = new DynamicCommandExceptionType(
-            os -> Component.literal("Unknown builtin navmappings OS: " + os)
-    );
-    private static final DynamicCommandExceptionType UNKNOWN_CUSTOM_MAPPINGS = new DynamicCommandExceptionType(
-            id -> Component.literal("Could not load custom navmappings: " + id)
-    );
-    private static final DynamicCommandExceptionType UNKNOWN_BUILTIN_MAPPINGS = new DynamicCommandExceptionType(
-            id -> Component.literal("Could not load builtin navmappings: " + id)
-    );
-    private static final DynamicCommandExceptionType FAILED_CUSTOM_MAPPINGS_IMPORT = new DynamicCommandExceptionType(
-            location -> Component.literal("Could not import custom navmappings from: " + location)
-    );
-
-    private static final SuggestionProvider<FabricClientCommandSource> BUILTIN_SUGGESTIONS =
-            (source, builder) ->
-                    SharedSuggestionProvider.suggest(List.of("windows_linux", "mac"), builder);
-
-    private static final SuggestionProvider<FabricClientCommandSource> CUSTOM_SUGGESTIONS =
-            (source, builder) ->
-                    SharedSuggestionProvider.suggest(MappingsJSONManager.getAvailableOptions(false), builder);
-
-    private static final Logger LOGGER = LoggingManager.getLogger(NavMappingsCommand.class);
+    static final @NonNull Logger LOGGER = LoggingManager.getLogger(NavMappingsCommand.class);
 
     private NavMappingsCommand() {
     }
@@ -64,23 +40,24 @@ public final class NavMappingsCommand {
     public static void register() {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, context) -> register(dispatcher));
         LOGGER.info("Registered client command \"/navmappings\" through Fabric API");
-        ClientCommandRegistrationCallback.EVENT.register((dispatcher, context) -> register(dispatcher));
-        LOGGER.info("Registered client \"/navmappings\" command through Fabric API");
     }
 
     private static void register(@NonNull CommandDispatcher<FabricClientCommandSource> dispatcher) {
         dispatcher.register(literal("navmappings")
                 .then(literal("set")
                         .then(literal("builtin")
-                                .then(argument("os", StringArgumentType.word())
+                                .then(argument("id", StringArgumentType.word())
                                         .suggests(BUILTIN_SUGGESTIONS)
-                                        .executes(NavMappingsCommand::setBuiltIn)))
+                                        .executes(NavMappingsCommand::setBuiltIn))
+                        )
                         .then(literal("custom")
                                 .then(argument("id", StringArgumentType.word())
                                         .suggests(CUSTOM_SUGGESTIONS)
-                                        .executes(NavMappingsCommand::setCustom)))
+                                        .executes(NavMappingsCommand::setCustom))
+                        )
                         .then(literal("default")
-                                .executes(NavMappingsCommand::setDefault))
+                                .executes(NavMappingsCommand::setDefault)
+                        )
                 )
                 .then(literal("info").executes(NavMappingsCommand::printMappingsInfo))
                 .then(literal("list").executes(NavMappingsCommand::printMappingsList))
@@ -88,24 +65,54 @@ public final class NavMappingsCommand {
                 .then(literal("debug")
                         .then(literal("aboutCmdDelete").executes(NavMappingsCommand::printCmdDeleteAbout))
                         .then(literal("dumpActions").executes(NavMappingsCommand::dumpActions))
+                        .then(literal("dumpDetailedActions").executes(NavMappingsCommand::dumpDetailedActions))
                         .then(literal("dumpFeatureFlags").executes(NavMappingsCommand::dumpFeatureFlags))
                         .then(literal("dumpRegistry").executes(NavMappingsCommand::dumpRegistry))
                         .then(literal("dumpKeymap").executes(NavMappingsCommand::dumpKeyMap))
                 )
                 .then(literal("export")
                         .then(literal("builtin")
-                                .then(argument("id", StringArgumentType.word())
-                                        .suggests(BUILTIN_SUGGESTIONS)
-                                        .then(argument("location", StringArgumentType.greedyString()).executes(NavMappingsCommand::exportBuiltin)))
+                                .then(literal("file")
+                                        .then(argument("id", StringArgumentType.word())
+                                                .suggests(BUILTIN_SUGGESTIONS)
+                                                .then(argument("location", StringArgumentType.greedyString()).executes(NavMappingsCommand::exportBuiltin)))
+                                )
+                                .then(literal("sharecode")
+                                        .then(argument("id", StringArgumentType.word())
+                                                .suggests(BUILTIN_SUGGESTIONS)
+                                                .executes(NavMappingsCommand::exportBuiltinShareCode))
+                                )
                         )
                         .then(literal("custom")
-                                .then(argument("id", StringArgumentType.word())
-                                        .suggests(CUSTOM_SUGGESTIONS)
-                                        .then(argument("location", StringArgumentType.greedyString()).executes(NavMappingsCommand::exportCustom)))
+                                .then(literal("file")
+                                        .then(argument("id", StringArgumentType.word())
+                                                .suggests(CUSTOM_SUGGESTIONS)
+                                                .then(argument("location", StringArgumentType.greedyString()).executes(NavMappingsCommand::exportCustom))
+                                        )
+                                )
+                                .then(literal("sharecode")
+                                        .then(argument("id", StringArgumentType.word())
+                                                .suggests(CUSTOM_SUGGESTIONS)
+                                                .executes(NavMappingsCommand::exportCustomShareCode)
+                                        )
+                                )
                         )
                 )
                 .then(literal("import")
-                        .then(argument("location", StringArgumentType.greedyString()).executes(NavMappingsCommand::importCustom)))
+                        .then(literal("file")
+                                .then(argument("location", StringArgumentType.greedyString())
+                                        .executes(NavMappingsCommand::importCustom)
+                                )
+                        )
+                        .then(literal("sharecode")
+                                .then(literal("clipboard")
+                                        .executes(NavMappingsCommand::importCustomShareCode)
+                                )
+                                .then(literal("chat")
+                                        .then(argument("sharecode", StringArgumentType.greedyString()).executes(NavMappingsCommand::importCustomShareCodeFromChat))
+                                )
+                        )
+                )
         );
     }
 
@@ -121,81 +128,61 @@ public final class NavMappingsCommand {
         return 1;
     }
 
+    private static int dumpDetailedActions(@NonNull CommandContext<FabricClientCommandSource> context) {
+        final String actionsDump = NavAction.getDetailedActionDump();
+        context.getSource().sendFeedback(Component.literal("Detailed actions dump:\n" + actionsDump));
+        return 1;
+    }
+
     private static int dumpFeatureFlags(@NonNull CommandContext<FabricClientCommandSource> context) {
         context.getSource().sendFeedback(Component.literal("Feature flags dump:\noverrideVanillaNavigation - default false\ncrossLineSignMovement - default true"));
         return 1;
     }
 
     private static int dumpKeyMap(@NonNull CommandContext<FabricClientCommandSource> context) {
-        context.getSource().sendFeedback(Component.literal("KeyMap dump:\n" + KeyCodeRegistry.getDumpString()));
+        context.getSource().sendFeedback(Component.literal("KeyMap dump:\n" + KeyNameRegistry.getDumpString()));
         return 1;
     }
 
-    private static int exportCustom(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
-        final String idStr = StringArgumentType.getString(context, "id");
-        final String locationStr = StringArgumentType.getString(context, "location");
+    private static int exportCustomShareCode(@NonNull CommandContext<FabricClientCommandSource> context) {
+        NavMappingsCommandExecutionUtils.exportShareCode(context, true);
+        return 1;
+    }
 
-        final Path configPath = PathConstants.getMappingsJSONPath();
-        final Path oldPath = configPath.resolve(idStr + ".json");
-
-        final Path newPath = Path.of(locationStr);
-        if (!newPath.isAbsolute()) {
-            LOGGER.error("New path \"{}\" for custom copy is not absolute", locationStr);
-            throw UNKNOWN_CUSTOM_MAPPINGS.create(idStr);
-        }
-
-        if (!oldPath.toFile().exists() || !oldPath.toFile().isFile()) {
-            LOGGER.error("Error while reading custom mappings. File does not exist: {}", oldPath.toAbsolutePath());
-            throw UNKNOWN_CUSTOM_MAPPINGS.create(idStr);
-        }
-
-        try {
-            Files.createDirectories(newPath.getParent());
-            Files.copy(oldPath, newPath, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            LOGGER.error("Error while copying custom mappings", e);
-            throw UNKNOWN_CUSTOM_MAPPINGS.create(idStr);
-        }
-
-        context.getSource().sendFeedback(Component.literal("Mappings \"custom:" + idStr + "\" copied to path: " + newPath.toAbsolutePath()));
+    private static int exportBuiltinShareCode(@NonNull CommandContext<FabricClientCommandSource> context) {
+        NavMappingsCommandExecutionUtils.exportShareCode(context, false);
         return 1;
     }
 
     private static int exportBuiltin(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
-        final String idStr = StringArgumentType.getString(context, "id");
-        final String locationStr = StringArgumentType.getString(context, "location");
+        NavMappingsCommandExecutionUtils.exportMappings(context, false);
+        return 1;
+    }
 
-        final Path newPath = Path.of(locationStr);
-        if (!newPath.isAbsolute()) {
-            LOGGER.error("New path \"{}\" for builtin copy is not absolute", locationStr);
-            throw UNKNOWN_BUILTIN_MAPPINGS.create(idStr);
-        }
+    private static int exportCustom(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+        NavMappingsCommandExecutionUtils.exportMappings(context, true);
+        return 1;
+    }
 
-        final String resourceSubPathStr = "/mappings/" + idStr + ".json";
+    private static int importCustomShareCode(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+        final String shareCode = Minecraft.getInstance().keyboardHandler.getClipboard();
+        NavMappingsCommandExecutionUtils.importShareCode(context, shareCode);
+        return 1;
+    }
 
-        try (InputStream resourceStream = NavMappingsCommand.class.getResourceAsStream(resourceSubPathStr)) {
-            if (resourceStream == null) {
-                LOGGER.error("Builtin mappings do not exist: {}", resourceSubPathStr);
-                throw UNKNOWN_BUILTIN_MAPPINGS.create(idStr);
-            }
-            Files.createDirectories(newPath.getParent());
-            Files.copy(resourceStream, newPath, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            LOGGER.error("Error while exporting builtin mappings", e);
-            throw UNKNOWN_BUILTIN_MAPPINGS.create(idStr);
-        }
-
-        context.getSource().sendFeedback(Component.literal("Mappings \"builtin:" + idStr + "\" copied to path: " + newPath.toAbsolutePath()));
+    private static int importCustomShareCodeFromChat(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+        final String shareCode = StringArgumentType.getString(context, "sharecode");
+        NavMappingsCommandExecutionUtils.importShareCode(context, shareCode);
         return 1;
     }
 
     private static int importCustom(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
         final String locationStr = StringArgumentType.getString(context, "location");
 
-        final Path configPath = PathConstants.getMappingsJSONPath();
-
         final Path oldPath = Path.of(locationStr);
-        final Path newPath = configPath.resolve(FilenameUtils.getBaseName(locationStr) + ".json");
+        final Path newPath = PathConstants.getPathOf(
+                MappingsType.CUSTOM,
+                FilenameUtils.getBaseName(locationStr));
 
         if (!oldPath.isAbsolute()) {
             LOGGER.error("From path \"{}\" for custom import is not absolute", locationStr);
@@ -215,7 +202,7 @@ public final class NavMappingsCommand {
             throw FAILED_CUSTOM_MAPPINGS_IMPORT.create(locationStr);
         }
 
-        context.getSource().sendFeedback(Component.literal("Mappings from " + locationStr + " copied to path now available as \"custom:" + FilenameUtils.getBaseName(locationStr) + "\""));
+        context.getSource().sendFeedback(Component.literal("Custom mappings from " + locationStr + " copied to path now available as \"custom:" + FilenameUtils.getBaseName(locationStr) + "\""));
         return 1;
     }
 
@@ -226,10 +213,10 @@ public final class NavMappingsCommand {
     }
 
     private static int setBuiltIn(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
-        final String osName = StringArgumentType.getString(context, "os");
-        final Os os = resolveOs(osName);
-        NavMappingsManager.updateMappingsToBuiltIn(os);
-        context.getSource().sendFeedback(Component.literal("Set nav mappings to builtin:" + resolveOsId(os)));
+        final String id = StringArgumentType.getString(context, "id");
+        if (!NavMappingsManager.updateMappingsToBuiltIn(id))
+            throw UNKNOWN_BUILTIN_MAPPINGS.create(id);
+        context.getSource().sendFeedback(Component.literal("Set navmappings to builtin:" + id));
         return 1;
     }
 
@@ -237,13 +224,13 @@ public final class NavMappingsCommand {
         final String id = StringArgumentType.getString(context, "id");
         if (!NavMappingsManager.updateMappingsToCustom(id))
             throw UNKNOWN_CUSTOM_MAPPINGS.create(id);
-        context.getSource().sendFeedback(Component.literal("Set nav mappings to custom:" + id));
+        context.getSource().sendFeedback(Component.literal("Set navmappings to custom:" + id));
         return 1;
     }
 
     private static int setDefault(@NonNull CommandContext<FabricClientCommandSource> context) {
-        NavMappingsManager.updateMappingsToDefault();
-        context.getSource().sendFeedback(Component.literal("Set nav mappings to default"));
+        CrashUtils.crashMinecraftOnFailure(NavMappingsManager::updateMappingsToDefault);
+        context.getSource().sendFeedback(Component.literal("Set navmappings to default"));
         return 1;
     }
 
@@ -261,36 +248,16 @@ public final class NavMappingsCommand {
     }
 
     private static int printCmdDeleteAbout(@NonNull CommandContext<FabricClientCommandSource> context) {
-        final String about = "CMD + Delete (modid: " + CmdDeleteClient.MODID
-                + ") by Omegabird113 v" + CmdDeleteClient.VERSION
-                + " using mappings format version " + CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION;
+        final String about = String.format(
+                "CMD + Delete (modid:%s) by Omegabird113 v%s using mappings format version %s (minimum of %s) and sharecode encoding version %s. You can report issues at %s.",
+                CmdDeleteClient.MODID,
+                CmdDeleteClient.VERSION,
+                CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION,
+                CmdDeleteClient.MINIMUM_MAPPINGS_FORMAT_VERSION,
+                CmdDeleteClient.SHARECODE_FORMAT_VERSION,
+                CmdDeleteClient.ISSUE_TRACKER_URL_STRING
+        );
         context.getSource().sendFeedback(Component.literal(about));
         return 1;
-    }
-
-    private static @NonNull Os resolveOs(@NonNull String osName) throws CommandSyntaxException {
-        osName = osName.toLowerCase(Locale.ROOT);
-        return switch (osName) {
-            case "mac" -> Os.MAC;
-            case "windows_linux" -> Os.WINDOWS;
-            default -> throw INVALID_OS.create(osName);
-        };
-    }
-
-    private static @NonNull String resolveOsId(@NonNull Os os) {
-        return switch (os) {
-            case MAC -> "mac";
-            case WINDOWS, LINUX -> "windows_linux";
-        };
-    }
-
-    @Contract(value = "_ -> new", pure = true)
-    private static @NonNull LiteralArgumentBuilder<FabricClientCommandSource> literal(String name) {
-        return LiteralArgumentBuilder.literal(name);
-    }
-
-    @Contract(value = "_, _ -> new", pure = true)
-    private static <T> @NonNull RequiredArgumentBuilder<FabricClientCommandSource, T> argument(String name, ArgumentType<T> type) {
-        return RequiredArgumentBuilder.argument(name, type);
     }
 }
