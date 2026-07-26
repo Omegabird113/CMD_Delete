@@ -30,7 +30,7 @@ public class ShareCodeTest {
                 if (s.equals("CDS:EV1::0"))
                     Assertions.fail("Blank sharecode generated for mappings: " + namespacedId);
                 final String d = ShareCodeDecoder.decode(s);
-                Assertions.assertEquals(d, ShareCodeGenerator.collapseWhitespace(PathConstants.getPathOf(namespacedId).toFile()));
+                Assertions.assertEquals(d, ShareCodeGenerator.collapseWhitespace(PathConstants.getPathOf(namespacedId)));
                 LOGGER.info("Sharecode of \"{}\" is \"{}\" decoded to \"{}\"", namespacedId, s, d);
             });
         }

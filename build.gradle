@@ -1,5 +1,6 @@
 plugins {
     id 'fabric-loom' version '1.14.10'
+    id 'com.gradleup.shadow' version '9.6.1'
     id 'maven-publish'
 }
 
@@ -10,6 +11,16 @@ base {
     archivesName = project.archives_base_name
 }
 
+configurations {
+    shadeOnly
+}
+
+sourceSets {
+    main {
+        compileClasspath += configurations.shadeOnly
+        runtimeClasspath += configurations.shadeOnly
+    }
+}
 
 repositories {
     // Add repositories to retrieve artifacts from in here.
@@ -23,14 +34,14 @@ dependencies {
     // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
 
+    implementation include('com.google.code.gson:gson:2.14.0')
+    shadeOnly 'commons-codec:commons-codec:1.22.0'
     mappings loom.officialMojangMappings()
 
-    modImplementation 'com.google.code.gson:gson:2.14.0'
-    modImplementation 'commons-codec:commons-codec:1.22.0'
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
-    modImplementation "org.jspecify:jspecify:1.0.0"
+    modImplementation include("org.jspecify:jspecify:1.0.0")
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 }
 
@@ -70,10 +81,21 @@ java {
     withSourcesJar()
 }
 
-jar {
+tasks.shadowJar {
+    configurations = [project.configurations.shadeOnly]
+    relocate 'org.apache.commons.codec', 'io.github.omegabird113.cmd_delete.libs.commons.codec'
+    archiveClassifier.set('')
+}
+
+tasks.jar {
+    archiveClassifier.set('dev')
     from("LICENSE") {
         rename { "${it}_${project.archives_base_name}" }
     }
+}
+
+tasks.build {
+    dependsOn tasks.shadowJar
 }
 
 // configure the maven publication

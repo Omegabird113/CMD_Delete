@@ -12,11 +12,11 @@ import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.zip.CRC32;
 import java.util.zip.GZIPOutputStream;
 
@@ -27,19 +27,19 @@ public final class ShareCodeGenerator {
     private ShareCodeGenerator() {
     }
 
-    public static @NonNull String collapseWhitespace(@NonNull File file) throws IOException {
-        try (final Reader reader = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8)) {
+    public static @NonNull String collapseWhitespace(@NonNull Path path) throws IOException {
+        try (final Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
             final JsonElement json = JsonParser.parseReader(reader);
             return MappingsJSONManager.GSON.toJson(json);
         }
     }
 
     public static @NonNull String collapseWhitespace(@NonNull String namespacedId) {
-        final File file = PathConstants.getPathOf(namespacedId).toFile();
+        final Path path = PathConstants.getPathOf(namespacedId);
         try {
-            return collapseWhitespace(file);
+            return collapseWhitespace(path);
         } catch (IOException e) {
-            LOGGER.error("Error while removing whitespace of {}: {}", file, e);
+            LOGGER.error("Error while removing whitespace of {}: {}", path, e);
             return "";
         }
     }
@@ -54,9 +54,9 @@ public final class ShareCodeGenerator {
     }
 
     public static @NonNull String generateCoreShareCode(@NonNull String namespacedId) {
-        final File file = PathConstants.getPathOf(namespacedId).toFile();
+        final Path path = PathConstants.getPathOf(namespacedId);
         try {
-            return compressAndBase58Encode(collapseWhitespace(file));
+            return compressAndBase58Encode(collapseWhitespace(path));
         } catch (Exception e) {
             LOGGER.error("Error while generating share code for namespaced id mappings: {}", namespacedId, e);
             return "";
