@@ -43,7 +43,7 @@ public final class CrashUtils {
             Minecraft minecraft = Minecraft.getInstance();
             minecraft.emergencySaveAndCrash(CrashReport.forThrowable(e, "CMD + Delete encountered an irrecoverable exception. Please report this at: " + CmdDeleteClient.ISSUE_TRACKER_URL_STRING));
         } else {
-            LOGGER.error("A fatal error occurred and CMD + Delete was forced not to initiate a game crash by the \"cmd_delete.forcePreventMinecraftCrashes\" jvm arguement...");
+            LOGGER.error("A fatal error occurred and CMD + Delete was forced not to initiate a game crash by the \"cmd_delete.forcePreventMinecraftCrashes\" JVM argument...");
         }
     }
 }
