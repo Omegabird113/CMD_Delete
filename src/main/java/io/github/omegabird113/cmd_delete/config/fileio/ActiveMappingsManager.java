@@ -45,14 +45,11 @@ public final class ActiveMappingsManager {
         final String id = removeNamespaceFromId(namespacedId);
         final MappingsType mappingsType = resolveType(namespacedId);
         final String defaultMappingsId = resolveDefaultMappingsNonNamespacedId();
-        final MappingsState mappingsState = switch (mappingsType) {
+        return switch (mappingsType) {
             case CUSTOM -> tryResolveCustomMappings(id);
             case BUILTIN -> tryResolveBuiltinMappings(id, MappingsType.BUILTIN);
             case DEFAULT -> tryResolveBuiltinMappings(defaultMappingsId, MappingsType.DEFAULT);
         };
-        if (mappingsState == null)
-            return tryResolveBuiltinMappings(defaultMappingsId, MappingsType.DEFAULT);
-        return mappingsState;
     }
 
     public static void writeActiveMappings(@NonNull String namespacedId) throws IOException {

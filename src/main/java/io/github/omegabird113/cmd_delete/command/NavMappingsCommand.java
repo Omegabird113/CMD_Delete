@@ -9,11 +9,11 @@ import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.data.KeyNameRegistry;
 import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
+import io.github.omegabird113.cmd_delete.config.fileio.ActiveMappingsManager;
 import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.MappingsType;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
-import io.github.omegabird113.cmd_delete.utils.CrashUtils;
 import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
@@ -228,8 +228,9 @@ public final class NavMappingsCommand {
         return 1;
     }
 
-    private static int setDefault(@NonNull CommandContext<FabricClientCommandSource> context) {
-        CrashUtils.crashMinecraftOnFailure(NavMappingsManager::updateMappingsToDefault);
+    private static int setDefault(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+        if (!NavMappingsManager.updateMappingsToDefault())
+            throw UNKNOWN_CUSTOM_MAPPINGS.create(ActiveMappingsManager.resolveDefaultMappingsNonNamespacedId());
         context.getSource().sendFeedback(Component.literal("Set navmappings to default"));
         return 1;
     }

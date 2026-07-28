@@ -11,6 +11,7 @@ import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public final class NavMappingsManager {
@@ -57,14 +58,14 @@ public final class NavMappingsManager {
     }
 
     public static boolean updateMappingsTo(@NonNull MappingsType type, @NonNull String id) {
-        final MappingsState old = currentMappingsState;
-        currentMappingsState = ActiveMappingsManager.resolveMappings(
+        final MappingsState newState = ActiveMappingsManager.resolveMappings(
                 MappingsIdResolutionUtils.resolveNamespacedId(type, id)
         );
-        if (old != null && old.equals(currentMappingsState))
+        if (newState == null || Objects.equals(newState, currentMappingsState))
             return false;
+        currentMappingsState = newState;
         ActiveMappingsManager.trySaveMappings(
-                MappingsIdResolutionUtils.resolveNamespacedId(getMappingsState())
+                MappingsIdResolutionUtils.resolveNamespacedId(newState)
         );
         logMappings();
         return true;
@@ -78,9 +79,7 @@ public final class NavMappingsManager {
         return updateMappingsTo(MappingsType.BUILTIN, id);
     }
 
-    public static void updateMappingsToDefault() {
-        boolean success = updateMappingsTo(MappingsType.DEFAULT, "");
-        if (!success)
-            throw new IllegalStateException("Failed to load default mappings");
+    public static boolean updateMappingsToDefault() {
+       return updateMappingsTo(MappingsType.DEFAULT, "");
     }
 }
