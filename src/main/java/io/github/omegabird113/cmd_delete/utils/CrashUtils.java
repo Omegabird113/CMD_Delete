@@ -35,11 +35,15 @@ public final class CrashUtils {
     }
 
     public static void crashMinecraft(@NonNull Throwable e) {
-        LOGGER.error("A fatal error occurred and CMD + Delete must initiate a game crash...\nThe mappings state is:\n{}\nand the exception that occurred is:\n\t{}",
-                NavMappingsManager.getOptionalMappingsState().orElse(null),
-                String.join("\n\t", Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).toArray(String[]::new))
-        );
-        Minecraft minecraft = Minecraft.getInstance();
-        minecraft.emergencySaveAndCrash(CrashReport.forThrowable(e, "CMD + Delete encountered an irrecoverable exception. Please report this at: " + CmdDeleteClient.ISSUE_TRACKER_URL_STRING));
+        if (!Boolean.getBoolean("cmd_delete.forcePreventMinecraftCrashes")) {
+            LOGGER.error("A fatal error occurred and CMD + Delete must initiate a game crash...\nThe mappings state is:\n{}\nand the exception that occurred is:\n\t{}",
+                    NavMappingsManager.getOptionalMappingsState().orElse(null),
+                    String.join("\n\t", Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).toArray(String[]::new))
+            );
+            Minecraft minecraft = Minecraft.getInstance();
+            minecraft.emergencySaveAndCrash(CrashReport.forThrowable(e, "CMD + Delete encountered an irrecoverable exception. Please report this at: " + CmdDeleteClient.ISSUE_TRACKER_URL_STRING));
+        } else {
+            LOGGER.error("A fatal error occurred and CMD + Delete was forced not to initiate a game crash by the \"cmd_delete.forcePreventMinecraftCrashes\" jvm arguement...");
+        }
     }
 }
