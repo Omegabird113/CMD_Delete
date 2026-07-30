@@ -37,9 +37,9 @@ public final class CmdDeleteClient implements ClientModInitializer {
 
                 final MixinEnvironment mixinEnv = MixinEnvironment.getCurrentEnvironment();
                 LOGGER.debug("Mixin version {} with obfuscation \"{}\" and compatibility level \"{}\" in phase \"{}\" on side \"{}\"", mixinEnv.getVersion(), mixinEnv.getObfuscationContext(), MixinEnvironment.getCompatibilityLevel(), mixinEnv.getPhase(), mixinEnv.getSide());
-            }, "initial logging", true);
 
-            LoadTimer.time(CrashUtils::sendLoadInfo, "CrashUtils info", true);
+                CrashUtils.sendLoadInfo();
+            }, "initial logging & CrashUtils info", true);
 
             LoadTimer.time(() -> {
                 final Path gameDir = LOADER.getGameDir();
