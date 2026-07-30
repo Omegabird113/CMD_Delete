@@ -13,8 +13,16 @@ import java.util.function.Supplier;
 
 public final class CrashUtils {
     private static final @NonNull Logger LOGGER = LoggingManager.getLogger(CrashUtils.class);
+    public static final boolean CRASHING_ALLOWED = !Boolean.getBoolean("cmd_delete.forcePreventMinecraftCrashes");
 
     private CrashUtils() {
+    }
+
+    public static void sendLoadInfo() {
+        if (!CRASHING_ALLOWED)
+            LOGGER.warn("CMD + Delete is not allowed to crash Minecraft in this environment if it enters an invalid/irrecoverable state due to a JVM property (\"cmd_delete.forcePreventMinecraftCrashes\"). This means you may experience undefined behavior or the mod not working in the event that something goes terribly wrong.");
+        else
+            LOGGER.debug("Crashing is allowed in this environment. This can be prevented with the \"cmd_delete.forcePreventMinecraftCrashes\" JVM property if needed, though setting that property is not recommended.");
     }
 
     public static <T> @Nullable T crashMinecraftOnFailure(@NonNull Supplier<T> supplier) {
@@ -35,7 +43,7 @@ public final class CrashUtils {
     }
 
     public static void crashMinecraft(@NonNull Throwable e) {
-        if (!Boolean.getBoolean("cmd_delete.forcePreventMinecraftCrashes")) {
+        if (CRASHING_ALLOWED) {
             LOGGER.error("A fatal error occurred and CMD + Delete must initiate a game crash...\nThe mappings state is:\n{}\nand the exception that occurred is:\n\t{}",
                     NavMappingsManager.getOptionalMappingsState().orElse(null),
                     String.join("\n\t", Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).toArray(String[]::new))
@@ -43,7 +51,7 @@ public final class CrashUtils {
             Minecraft minecraft = Minecraft.getInstance();
             minecraft.emergencySaveAndCrash(CrashReport.forThrowable(e, "CMD + Delete encountered an irrecoverable exception. Please report this at: " + CmdDeleteClient.ISSUE_TRACKER_URL_STRING));
         } else {
-            LOGGER.error("A fatal error occurred and CMD + Delete was forced not to initiate a game crash by the \"cmd_delete.forcePreventMinecraftCrashes\" JVM argument...");
+            LOGGER.error("A fatal error occurred and CMD + Delete was prevented from crashing...");
         }
     }
 }
