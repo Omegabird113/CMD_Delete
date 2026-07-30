@@ -126,9 +126,9 @@ public final class NavMappingsCommand {
     private static int dumpMappingsState(@NonNull CommandContext<FabricClientCommandSource> context) {
         final MappingsState ms = NavMappingsManager.getOptionalMappingsState().orElse(null);
         if (ms == null)
-            context.getSource().sendFeedback(Component.literal("Registry dump:\nnull"));
+            context.getSource().sendFeedback(Component.literal("State dump:\nnull"));
         else
-            context.getSource().sendFeedback(Component.literal("Registry dump:\n" + ms.toString().replace("\t", "    ")));
+            context.getSource().sendFeedback(Component.literal("State dump:\n" + ms.toString().replace("\t", "    ")));
         return 1;
     }
 
