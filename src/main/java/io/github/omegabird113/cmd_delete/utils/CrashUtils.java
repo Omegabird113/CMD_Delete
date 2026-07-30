@@ -8,7 +8,6 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 
-import java.util.Arrays;
 import java.util.function.Supplier;
 
 public final class CrashUtils {
@@ -44,9 +43,9 @@ public final class CrashUtils {
 
     public static void crashMinecraft(@NonNull Throwable e) {
         if (CRASHING_ALLOWED) {
-            LOGGER.error("A fatal error occurred and CMD + Delete must initiate a game crash...\nThe mappings state is:\n{}\nand the exception that occurred is:\n\t{}",
+            LOGGER.error("A fatal error occurred and CMD + Delete must initiate a game crash...\nThe mappings state is:\n{}\nand the exception that occurred is:",
                     NavMappingsManager.getOptionalMappingsState().orElse(null),
-                    String.join("\n\t", Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).toArray(String[]::new))
+                    e
             );
             Minecraft minecraft = Minecraft.getInstance();
             minecraft.emergencySaveAndCrash(CrashReport.forThrowable(e, "CMD + Delete encountered an irrecoverable exception. Please report this at: " + CmdDeleteClient.ISSUE_TRACKER_URL_STRING));
