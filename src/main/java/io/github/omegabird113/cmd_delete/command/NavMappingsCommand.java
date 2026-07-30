@@ -69,6 +69,7 @@ public final class NavMappingsCommand {
                         .then(literal("dumpFeatureFlags").executes(NavMappingsCommand::dumpFeatureFlags))
                         .then(literal("dumpRegistry").executes(NavMappingsCommand::dumpRegistry))
                         .then(literal("dumpKeymap").executes(NavMappingsCommand::dumpKeyMap))
+                        .then(literal("dumpMappingsState").executes(NavMappingsCommand::dumpMappingsState))
                 )
                 .then(literal("export")
                         .then(literal("builtin")
@@ -119,6 +120,15 @@ public final class NavMappingsCommand {
     private static int dumpRegistry(@NonNull CommandContext<FabricClientCommandSource> context) {
         final MappingsRegistry mr = NavMappingsManager.getCurrentMappingsRegistry();
         context.getSource().sendFeedback(Component.literal("Registry dump:\n" + mr.toString().replace("\t", "    ")));
+        return 1;
+    }
+
+    private static int dumpMappingsState(@NonNull CommandContext<FabricClientCommandSource> context) {
+        final MappingsState ms = NavMappingsManager.getOptionalMappingsState().orElse(null);
+        if (ms == null)
+            context.getSource().sendFeedback(Component.literal("Registry dump:\nnull"));
+        else
+            context.getSource().sendFeedback(Component.literal("Registry dump:\n" + ms.toString().replace("\t", "    ")));
         return 1;
     }
 
