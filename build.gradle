@@ -127,7 +127,7 @@ loom {
         ciClient {
             client()
 
-            vmArg "-Dci.stopMinecraftAfterLoad=true"
+            vmArg "-Dcmd_delete.ci.stopMinecraftAfterLoad=true"
 
         }
     }
