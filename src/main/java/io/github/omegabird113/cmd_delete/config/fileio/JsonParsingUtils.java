@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.config.data.KeyNameRegistry;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
@@ -126,5 +127,17 @@ public final class JsonParsingUtils {
             } catch (NumberFormatException e) {
                 throw new JsonParseException("Expected \"" + fieldName + "\" to be a string or an integer");
             }
+    }
+
+    public static int requireFv(@NonNull JsonObject parent) {
+        final int fv = requireInt(parent, "fv", true); // we don't know fv/strict so always use it
+        if (fv < CmdDeleteClient.MINIMUM_MAPPINGS_FORMAT_VERSION || fv > CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION)
+            throw new JsonParseException("Invalid format version number: " + fv + ". The current format version is: " + CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION);
+        if (fv != CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION)
+            MappingsJSONDeserializer.logWarn(
+                    "Old mappings version (" + fv + ") used by custom mappings. Please update to version " + CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION,
+                    false
+            );
+        return fv;
     }
 }

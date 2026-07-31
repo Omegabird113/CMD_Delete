@@ -43,16 +43,8 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
         final JsonObject jsonObject = json.getAsJsonObject();
 
         final boolean strictModeVal = getOptionalBoolean(jsonObject, "strict");
-
-        final int fv = requireInt(jsonObject, "fv", true); // we don't know fv/strict yet
+        final int fv = requireFv(jsonObject);
         final boolean strictMode = strictModeVal && fv >= 4;
-        if (fv < CmdDeleteClient.MINIMUM_MAPPINGS_FORMAT_VERSION || fv > CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION)
-            throw new JsonParseException("Invalid format version number: " + fv + ". The current format version is: " + CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION);
-        if (fv != CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION)
-            logWarn(
-                    "Old mappings version (" + fv + ") used by custom mappings. Please update to version " + CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION,
-                    false
-            );
 
         final String inherits = getStringElse(jsonObject, "inherits", "");
 
