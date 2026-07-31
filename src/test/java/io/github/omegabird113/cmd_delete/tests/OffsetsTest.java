@@ -3,7 +3,7 @@ package io.github.omegabird113.cmd_delete.tests;
 import io.github.omegabird113.cmd_delete.TestLoader;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.actions.NavActionOffset;
-import io.github.omegabird113.cmd_delete.utils.LoggingManager;
+import io.github.omegabird113.cmd_delete.utils.LoggerCreationManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import java.util.List;
 
 public class OffsetsTest {
-    private static final Logger LOGGER = LoggingManager.getLogger(OffsetsTest.class);
+    private static final Logger LOGGER = LoggerCreationManager.getLoggerFor(OffsetsTest.class);
 
     @BeforeAll
     static void beforeAll() {

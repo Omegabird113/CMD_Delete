@@ -3,7 +3,7 @@ package io.github.omegabird113.cmd_delete.config.fileio;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.MappingsType;
 import io.github.omegabird113.cmd_delete.mappings.NavMappings;
-import io.github.omegabird113.cmd_delete.utils.LoggingManager;
+import io.github.omegabird113.cmd_delete.utils.LoggerCreationManager;
 import io.github.omegabird113.cmd_delete.utils.Os;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -17,7 +17,7 @@ import static io.github.omegabird113.cmd_delete.config.data.MappingsIdResolution
 import static io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils.resolveType;
 
 public final class ActiveMappingsManager {
-    private static final @NonNull Logger LOGGER = LoggingManager.getLogger(ActiveMappingsManager.class);
+    private static final @NonNull Logger LOGGER = LoggerCreationManager.getLoggerFor(ActiveMappingsManager.class);
 
     private ActiveMappingsManager() {
     }

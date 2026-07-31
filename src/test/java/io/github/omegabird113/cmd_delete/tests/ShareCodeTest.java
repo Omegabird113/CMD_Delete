@@ -5,7 +5,7 @@ import io.github.omegabird113.cmd_delete.command.MappingsInfoCollectionUtils;
 import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
 import io.github.omegabird113.cmd_delete.config.sharecode.ShareCodeDecoder;
 import io.github.omegabird113.cmd_delete.config.sharecode.ShareCodeGenerator;
-import io.github.omegabird113.cmd_delete.utils.LoggingManager;
+import io.github.omegabird113.cmd_delete.utils.LoggerCreationManager;
 import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 
 public class ShareCodeTest {
-    private static final @NonNull Logger LOGGER = LoggingManager.getLogger(ShareCodeTest.class);
+    private static final @NonNull Logger LOGGER = LoggerCreationManager.getLoggerFor(ShareCodeTest.class);
 
     @BeforeAll
     static void beforeAll() {

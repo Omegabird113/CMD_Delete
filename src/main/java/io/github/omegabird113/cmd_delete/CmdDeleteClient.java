@@ -5,7 +5,7 @@ import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import io.github.omegabird113.cmd_delete.utils.CrashUtils;
 import io.github.omegabird113.cmd_delete.utils.LoadTimer;
-import io.github.omegabird113.cmd_delete.utils.LoggingManager;
+import io.github.omegabird113.cmd_delete.utils.LoggerCreationManager;
 import io.github.omegabird113.cmd_delete.utils.Os;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
@@ -26,7 +26,7 @@ public final class CmdDeleteClient implements ClientModInitializer {
     public static final @NonNull String VERSION = LOADER.getModContainer(MODID)
             .map(container -> container.getMetadata().getVersion().getFriendlyString())
             .orElse("<unknown>");
-    private static final @NonNull Logger LOGGER = LoggingManager.getLogger(CmdDeleteClient.class);
+    private static final @NonNull Logger LOGGER = LoggerCreationManager.getLoggerFor(CmdDeleteClient.class);
 
     @Override
     public void onInitializeClient() {

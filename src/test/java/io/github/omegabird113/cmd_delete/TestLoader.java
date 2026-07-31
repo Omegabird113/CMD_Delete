@@ -1,7 +1,7 @@
 package io.github.omegabird113.cmd_delete;
 
 import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
-import io.github.omegabird113.cmd_delete.utils.LoggingManager;
+import io.github.omegabird113.cmd_delete.utils.LoggerCreationManager;
 import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -15,7 +15,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 public class TestLoader {
-    private static final @NonNull Logger LOGGER = LoggingManager.getLogger(TestLoader.class);
+    private static final @NonNull Logger LOGGER = LoggerCreationManager.getLoggerFor(TestLoader.class);
     private static final Path tempDir;
     private static boolean initialized = false;
 

@@ -8,7 +8,7 @@ import io.github.omegabird113.cmd_delete.config.data.KeyCombo;
 import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
 import io.github.omegabird113.cmd_delete.config.fileio.MappingsInheritanceManager;
 import io.github.omegabird113.cmd_delete.mappings.NavMappings;
-import io.github.omegabird113.cmd_delete.utils.LoggingManager;
+import io.github.omegabird113.cmd_delete.utils.LoggerCreationManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class InheritanceTests {
-    private static final Logger LOGGER = LoggingManager.getLogger(InheritanceTests.class);
+    private static final Logger LOGGER = LoggerCreationManager.getLoggerFor(InheritanceTests.class);
 
     @BeforeAll
     static void beforeAll() {

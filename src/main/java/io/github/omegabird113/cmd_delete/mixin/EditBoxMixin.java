@@ -3,7 +3,7 @@ package io.github.omegabird113.cmd_delete.mixin;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import io.github.omegabird113.cmd_delete.utils.CrashUtils;
-import io.github.omegabird113.cmd_delete.utils.LoggingManager;
+import io.github.omegabird113.cmd_delete.utils.LoggerCreationManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = EditBox.class, priority = 2000)
 public abstract class EditBoxMixin extends AbstractWidget {
     @Unique
-    private static final Logger LOGGER = LoggingManager.getLogger(EditBoxMixin.class);
+    private static final Logger LOGGER = LoggerCreationManager.getLoggerFor(EditBoxMixin.class);
 
     static {
         LOGGER.debug("EditBoxMixin loaded");

@@ -7,7 +7,7 @@ import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
 import io.github.omegabird113.cmd_delete.mappings.MappingsType;
 import io.github.omegabird113.cmd_delete.mappings.NavMappings;
-import io.github.omegabird113.cmd_delete.utils.LoggingManager;
+import io.github.omegabird113.cmd_delete.utils.LoggerCreationManager;
 import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
@@ -26,7 +26,7 @@ public final class MappingsJSONManager {
     public static final @NonNull Gson GSON = new GsonBuilder()
             .registerTypeAdapter(MappingsRegistry.class, new MappingsJSONDeserializer())
             .create();
-    private static final @NonNull Logger LOGGER = LoggingManager.getLogger(MappingsJSONManager.class);
+    private static final @NonNull Logger LOGGER = LoggerCreationManager.getLoggerFor(MappingsJSONManager.class);
 
     private MappingsJSONManager() {
     }

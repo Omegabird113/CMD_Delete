@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 
 public final class CrashUtils {
     public static final boolean CRASHING_ALLOWED = !Boolean.getBoolean("cmd_delete.forcePreventMinecraftCrashes");
-    private static final @NonNull Logger LOGGER = LoggingManager.getLogger(CrashUtils.class);
+    private static final @NonNull Logger LOGGER = LoggerCreationManager.getLoggerFor(CrashUtils.class);
 
     private CrashUtils() {
     }

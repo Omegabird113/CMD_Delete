@@ -5,7 +5,7 @@ import com.google.gson.JsonParser;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.config.fileio.MappingsJSONManager;
 import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
-import io.github.omegabird113.cmd_delete.utils.LoggingManager;
+import io.github.omegabird113.cmd_delete.utils.LoggerCreationManager;
 import org.apache.commons.codec.binary.Base58;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
@@ -22,7 +22,7 @@ import java.util.zip.GZIPOutputStream;
 
 public final class ShareCodeGenerator {
     static final @NonNull Base58 BASE_58 = new Base58();
-    private static final @NonNull Logger LOGGER = LoggingManager.getLogger(ShareCodeGenerator.class);
+    private static final @NonNull Logger LOGGER = LoggerCreationManager.getLoggerFor(ShareCodeGenerator.class);
 
     private ShareCodeGenerator() {
     }
