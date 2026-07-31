@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.config.data.KeyNameRegistry;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
@@ -17,14 +18,14 @@ public final class JsonParsingUtils {
     }
 
     @Contract(pure = true)
-    public static @NonNull String getStringElse(@NonNull JsonObject parent, @NonNull String fieldName, @NonNull String defaultValue) {
+    public static @NonNull String getStringElse(final @NonNull JsonObject parent, final @NonNull String fieldName, final @NonNull String defaultValue) {
         if (!parent.has(fieldName))
             return defaultValue;
         final String value = requireString(parent, fieldName).trim();
         return value.isEmpty() ? defaultValue : value;
     }
 
-    public static @NonNull JsonObject requireObject(@NonNull JsonObject parent, @NonNull String fieldName) {
+    public static @NonNull JsonObject requireObject(final @NonNull JsonObject parent, final @NonNull String fieldName) {
         if (!parent.has(fieldName))
             throw new JsonParseException("Missing required field: " + fieldName);
         final JsonElement element = parent.get(fieldName);
@@ -33,7 +34,7 @@ public final class JsonParsingUtils {
         return element.getAsJsonObject();
     }
 
-    public static @NonNull JsonArray requireArray(@NonNull JsonObject parent, @NonNull String fieldName) {
+    public static @NonNull JsonArray requireArray(final @NonNull JsonObject parent, final @NonNull String fieldName) {
         if (!parent.has(fieldName))
             throw new JsonParseException("Missing required field: " + fieldName);
         final JsonElement element = parent.get(fieldName);
@@ -42,7 +43,7 @@ public final class JsonParsingUtils {
         return element.getAsJsonArray();
     }
 
-    public static @NonNull String requireString(@NonNull JsonObject parent, @NonNull String fieldName) {
+    public static @NonNull String requireString(final @NonNull JsonObject parent, final @NonNull String fieldName) {
         if (!parent.has(fieldName))
             throw new JsonParseException("Missing required field: " + fieldName);
         final JsonElement element = parent.get(fieldName);
@@ -52,7 +53,7 @@ public final class JsonParsingUtils {
     }
 
     @Contract(pure = true)
-    public static boolean getOptionalBoolean(@NonNull JsonObject parent, @NonNull String fieldName) {
+    public static boolean getOptionalBoolean(final @NonNull JsonObject parent, final @NonNull String fieldName) {
         if (!parent.has(fieldName))
             return false;
         final JsonElement element = parent.get(fieldName);
@@ -62,7 +63,7 @@ public final class JsonParsingUtils {
     }
 
     @Contract(pure = true)
-    public static @Nullable Boolean getNullableBoolean(@NonNull JsonObject parent, @NonNull String fieldName) {
+    public static @Nullable Boolean getNullableBoolean(final @NonNull JsonObject parent, final @NonNull String fieldName) {
         if (!parent.has(fieldName))
             return null;
         final JsonElement element = parent.get(fieldName);
@@ -71,7 +72,7 @@ public final class JsonParsingUtils {
         return element.getAsBoolean();
     }
 
-    public static int requireInt(@NonNull JsonObject parent, @NonNull String fieldName, boolean strictMode) {
+    public static int requireInt(final @NonNull JsonObject parent, final @NonNull String fieldName, final boolean strictMode) {
         if (!parent.has(fieldName))
             throw new JsonParseException("Missing required field: " + fieldName);
 
@@ -92,7 +93,7 @@ public final class JsonParsingUtils {
         }
     }
 
-    public static int requireKeyCode(@NonNull JsonObject parent, @NonNull String fieldName, boolean strictMode) throws JsonParseException {
+    public static int requireKeyCode(final @NonNull JsonObject parent, final @NonNull String fieldName, final boolean strictMode) throws JsonParseException {
         final Map<String, Integer> keyMap = KeyNameRegistry.getKeyMap();
 
         if (!parent.has(fieldName))
@@ -126,5 +127,17 @@ public final class JsonParsingUtils {
             } catch (NumberFormatException e) {
                 throw new JsonParseException("Expected \"" + fieldName + "\" to be a string or an integer");
             }
+    }
+
+    public static int requireFv(final @NonNull JsonObject parent) {
+        final int fv = requireInt(parent, "fv", true); // we don't know fv/strict so always use it
+        if (fv < CmdDeleteClient.MINIMUM_MAPPINGS_FORMAT_VERSION || fv > CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION)
+            throw new JsonParseException("Invalid format version number: " + fv + ". The current format version is: " + CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION);
+        if (fv != CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION)
+            MappingsJSONDeserializer.logWarn(
+                    "Old mappings version (" + fv + ") used by custom mappings. Please update to version " + CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION,
+                    false
+            );
+        return fv;
     }
 }

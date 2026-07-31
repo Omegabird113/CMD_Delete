@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class InheritanceTests {
-    private static final Logger LOGGER = LoggingManager.getLogger(InheritanceTests.class);
+    private static final Logger LOGGER = LoggingManager.getLoggerFor(InheritanceTests.class);
 
     @BeforeAll
     static void beforeAll() {

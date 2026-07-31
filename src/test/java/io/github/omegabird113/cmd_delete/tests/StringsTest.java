@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import java.util.Arrays;
 
 public class StringsTest {
-    private static final Logger LOGGER = LoggingManager.getLogger(StringsTest.class);
+    private static final Logger LOGGER = LoggingManager.getLoggerFor(StringsTest.class);
 
     @BeforeAll
     static void beforeAll() {

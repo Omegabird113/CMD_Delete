@@ -26,12 +26,12 @@ public final class MappingsJSONManager {
     public static final @NonNull Gson GSON = new GsonBuilder()
             .registerTypeAdapter(MappingsRegistry.class, new MappingsJSONDeserializer())
             .create();
-    private static final @NonNull Logger LOGGER = LoggingManager.getLogger(MappingsJSONManager.class);
+    private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(MappingsJSONManager.class);
 
     private MappingsJSONManager() {
     }
 
-    public static @NonNull MappingsRegistry loadFromDir(@NonNull MappingsType mappingsType, @NonNull String id) throws IOException {
+    public static @NonNull MappingsRegistry loadFromDir(final @NonNull MappingsType mappingsType, final @NonNull String id) throws IOException {
         final Path path = PathConstants.getPathOf(mappingsType, id);
 
         if (!Files.exists(path))
@@ -45,9 +45,9 @@ public final class MappingsJSONManager {
         }
     }
 
-    public static @NonNull Optional<NavMappings> tryLoadCustomMappings(@NonNull String id) {
+    public static @NonNull Optional<NavMappings> tryLoadCustomMappings(final @NonNull String id) {
         final Optional<MappingsRegistry> registry = getRegistryFrom(true, id);
-        if (registry.isPresent()) {
+        if (registry.isPresent())
             try {
                 final MappingsRegistry resolved = resolveInheritance(registry.get());
                 return Optional.of(new NavMappings(resolved));
@@ -55,17 +55,17 @@ public final class MappingsJSONManager {
                 LOGGER.error("Failed to resolve {} mappings inheritance for \"{}\"", MappingsType.CUSTOM.commonName(), id, e);
                 return Optional.empty();
             }
-        } else
+        else
             return Optional.empty();
     }
 
-    public static @NonNull Optional<NavMappings> tryLoadBuiltinMappings(@NonNull String id) {
+    public static @NonNull Optional<NavMappings> tryLoadBuiltinMappings(final @NonNull String id) {
         final Optional<MappingsRegistry> registry = getRegistryFrom(false, id);
         return registry.map(NavMappings::new);
     }
 
-    public static @NonNull Optional<MappingsRegistry> getRegistryFrom(boolean custom, @NonNull String id) {
-        String typeCName = MappingsType.fromIfCustom(custom).commonName();
+    public static @NonNull Optional<MappingsRegistry> getRegistryFrom(final boolean custom, final @NonNull String id) {
+        final String typeCName = MappingsType.fromIfCustom(custom).commonName();
         try {
             final MappingsRegistry registry = loadFromDir(MappingsType.fromIfCustom(custom), id);
             return Optional.of(registry);
@@ -78,7 +78,7 @@ public final class MappingsJSONManager {
         }
     }
 
-    public static @NonNull MappingsRegistry resolveInheritance(@NonNull MappingsRegistry startRegistry) throws IOException {
+    public static @NonNull MappingsRegistry resolveInheritance(final @NonNull MappingsRegistry startRegistry) throws IOException {
         final List<MappingsRegistry> registries = new ArrayList<>();
         final List<String> ids = new ArrayList<>();
         MappingsRegistry current = startRegistry;
@@ -104,7 +104,7 @@ public final class MappingsJSONManager {
                 current = newRegistry.get();
             }
         }
-        LOGGER.debug("Resolved inheritance chain of {} ({}) from registries: {\n{}\n}", ids, registries.stream().map(MappingsRegistry::hashCode).toArray(), String.join("\n--------------------\n", registries.stream().map(MappingsRegistry::toString).toList()));
+        LoggingManager.verboseLog(LOGGER, "Resolved inheritance chain of {} ({}) from registries: {\n{}\n}", ids, registries.stream().map(MappingsRegistry::hashCode).toArray(), String.join("\n--------------------\n", registries.stream().map(MappingsRegistry::toString).toList()));
         return MappingsInheritanceManager.merge(registries.reversed());
     }
 
@@ -131,7 +131,7 @@ public final class MappingsJSONManager {
     }
 
     @Contract(pure = true)
-    public static @NonNull List<String> getAvailableOptions(boolean namespacedIds) {
+    public static @NonNull List<String> getAvailableOptions(final boolean namespacedIds) {
         final List<String> options = new ArrayList<>();
 
         final File configDirectory = PathConstants.getMappingsJSONPath().toFile();

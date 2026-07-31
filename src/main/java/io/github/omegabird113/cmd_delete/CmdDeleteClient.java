@@ -3,6 +3,7 @@ package io.github.omegabird113.cmd_delete;
 import io.github.omegabird113.cmd_delete.command.NavMappingsCommand;
 import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
+import io.github.omegabird113.cmd_delete.utils.CrashUtils;
 import io.github.omegabird113.cmd_delete.utils.LoadTimer;
 import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import io.github.omegabird113.cmd_delete.utils.Os;
@@ -25,18 +26,20 @@ public final class CmdDeleteClient implements ClientModInitializer {
     public static final @NonNull String VERSION = LOADER.getModContainer(MODID)
             .map(container -> container.getMetadata().getVersion().getFriendlyString())
             .orElse("<unknown>");
-    private static final @NonNull Logger LOGGER = LoggingManager.getLogger(CmdDeleteClient.class);
+    private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(CmdDeleteClient.class);
 
     @Override
     public void onInitializeClient() {
-        LoadTimer.time(() -> {
+        LoadTimer.time(() -> CrashUtils.crashMinecraftOnFailure(() -> {
             LoadTimer.time(() -> {
                 LOGGER.info("Initializing client mod \"{}\" (version: {}, mappings format version: {}, minimum mappings compatible version: {}, sharecode encoding version: {})... You can report any issues at {}.", MODID, VERSION, CURRENT_MAPPINGS_FORMAT_VERSION, MINIMUM_MAPPINGS_FORMAT_VERSION, SHARECODE_FORMAT_VERSION, ISSUE_TRACKER_URL_STRING);
                 LOGGER.info("User appears to be running system: {}", Os.USING);
 
                 final MixinEnvironment mixinEnv = MixinEnvironment.getCurrentEnvironment();
-                LOGGER.debug("Mixin version {} with obfuscation \"{}\" and compatibility level \"{}\" in phase \"{}\" on side \"{}\"", mixinEnv.getVersion(), mixinEnv.getObfuscationContext(), MixinEnvironment.getCompatibilityLevel(), mixinEnv.getPhase(), mixinEnv.getSide());
-            }, "initial logging", true);
+                LoggingManager.verboseLog(LOGGER, "Mixin version {} with obfuscation \"{}\" and compatibility level \"{}\" in phase \"{}\" on side \"{}\"", mixinEnv.getVersion(), mixinEnv.getObfuscationContext(), MixinEnvironment.getCompatibilityLevel(), mixinEnv.getPhase(), mixinEnv.getSide());
+
+                CrashUtils.sendLoadInfo();
+            }, "initial logging & CrashUtils info", true);
 
             LoadTimer.time(() -> {
                 final Path gameDir = LOADER.getGameDir();
@@ -47,10 +50,10 @@ public final class CmdDeleteClient implements ClientModInitializer {
 
             LoadTimer.time(NavMappingsManager::loadMappings, "loading mappings", true);
             LoadTimer.time(NavMappingsCommand::register, "registering /navmappings", true);
-        }, "full load", false);
+        }), "full load", false);
 
-        if (Boolean.getBoolean("ci.stopMinecraftAfterLoad")) {
-            LOGGER.info("Stopping Minecraft client due to set \"ci.stopMinecraftAfterLoad\" jvm property...");
+        if (Boolean.getBoolean("cmd_delete.ci.stopMinecraftAfterLoad")) {
+            LOGGER.info("Stopping Minecraft client due to set \"cmd_delete.ci.stopMinecraftAfterLoad\" jvm property...");
             Minecraft.getInstance().stop();
             System.exit(0);
         }

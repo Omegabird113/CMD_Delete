@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import java.nio.file.Path;
 
 public final class PathConstants {
-    private static final @NonNull Logger LOGGER = LoggingManager.getLogger(PathConstants.class);
+    private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(PathConstants.class);
 
     private static @Nullable Path mappingsResourcePath;
     private static @Nullable Path activeMappingsFilePath;
@@ -20,17 +20,15 @@ public final class PathConstants {
     private PathConstants() {
     }
 
-    public static void init(@NonNull Path gamePath, @NonNull Path mappingsResourcePath) {
+    public static void init(final @NonNull Path gamePath, final @NonNull Path mappingsResourcePath) {
         if (initialized)
             throw new IllegalStateException("PathConstants has already been initialized");
-        initialized = true;
-
         PathConstants.mappingsResourcePath = mappingsResourcePath;
         PathConstants.activeMappingsFilePath = gamePath.resolve("config/cmd_delete/.active_mappings");
         PathConstants.mappingsJSONPath = gamePath.resolve("config/cmd_delete/mappings/");
-
         MappingsJSONManager.tryMakeConfigFiles();
-        LOGGER.debug("Initialized paths locations for the mod... (mappingsResourcePath=\"{}\", mappingsJSONPath=\"{}\", activeMappingsFilePath=\"{}\", gamePath=\"{}\")", PathConstants.mappingsResourcePath, PathConstants.mappingsJSONPath, PathConstants.activeMappingsFilePath, gamePath);
+        LoggingManager.debugLog(LOGGER, "Initialized paths locations for the mod... (mappingsResourcePath=\"{}\", mappingsJSONPath=\"{}\", activeMappingsFilePath=\"{}\", gamePath=\"{}\")", PathConstants.mappingsResourcePath, PathConstants.mappingsJSONPath, PathConstants.activeMappingsFilePath, gamePath);
+        initialized = true;
     }
 
     public static @NonNull Path getMappingsResourcePath() {
@@ -51,14 +49,14 @@ public final class PathConstants {
         return mappingsJSONPath;
     }
 
-    public static @NonNull Path getPathOf(@NonNull MappingsType mappingsType, @NonNull String id) {
+    public static @NonNull Path getPathOf(final @NonNull MappingsType mappingsType, final @NonNull String id) {
         final Path path = (mappingsType == MappingsType.CUSTOM)
                 ? getMappingsJSONPath()
                 : getMappingsResourcePath();
         return path.resolve(id + ".json");
     }
 
-    public static @NonNull Path getPathOf(@NonNull String namespacedId) {
+    public static @NonNull Path getPathOf(final @NonNull String namespacedId) {
         return getPathOf(
                 MappingsIdResolutionUtils.resolveType(namespacedId),
                 MappingsIdResolutionUtils.removeNamespaceFromId(namespacedId)

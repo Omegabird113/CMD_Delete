@@ -11,10 +11,11 @@ import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public final class NavMappingsManager {
-    private static final @NonNull Logger LOGGER = LoggingManager.getLogger(NavMappingsManager.class);
+    private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(NavMappingsManager.class);
     private static @Nullable MappingsState currentMappingsState;
 
     private NavMappingsManager() {
@@ -45,7 +46,7 @@ public final class NavMappingsManager {
     private static void logMappings() {
         LOGGER.info("Mappings id \"{}\" loaded with supported systems \"{}\" and Coverage of {}% with a registry size of {}. It supports the actions: {}", MappingsIdResolutionUtils.resolveNamespacedId(getMappingsState()), List.of(getCurrentMappings().getMappingsSupportedSystems()), getCurrentMappings().getCoverage() * 100, getCurrentMappings().registry().getSize(), getCurrentMappings().getPossibleActions());
         LOGGER.info("The active mappings' info in \"/navmappings info\" will show as: \"{}\"", MappingsInfoCollectionUtils.getInfoFrom(getMappingsState(), false).replace("\n", " "));
-        LOGGER.debug("Mappings state loaded: \"{}\"", currentMappingsState);
+        LoggingManager.verboseLog(LOGGER, "Mappings state loaded: \"{}\"", currentMappingsState);
     }
 
     public static void loadMappings() {
@@ -56,31 +57,29 @@ public final class NavMappingsManager {
         logMappings();
     }
 
-    public static boolean updateMappingsTo(@NonNull MappingsType type, @NonNull String id) {
-        final MappingsState old = currentMappingsState;
-        currentMappingsState = ActiveMappingsManager.resolveMappings(
+    public static boolean updateMappingsTo(final @NonNull MappingsType type, final @NonNull String id) {
+        final MappingsState newState = ActiveMappingsManager.resolveMappings(
                 MappingsIdResolutionUtils.resolveNamespacedId(type, id)
         );
-        if (old != null && old.equals(currentMappingsState))
+        if (newState == null || Objects.equals(newState, currentMappingsState))
             return false;
+        currentMappingsState = newState;
         ActiveMappingsManager.trySaveMappings(
-                MappingsIdResolutionUtils.resolveNamespacedId(getMappingsState())
+                MappingsIdResolutionUtils.resolveNamespacedId(newState)
         );
         logMappings();
         return true;
     }
 
-    public static boolean updateMappingsToCustom(@NonNull String id) {
+    public static boolean updateMappingsToCustom(final @NonNull String id) {
         return updateMappingsTo(MappingsType.CUSTOM, id);
     }
 
-    public static boolean updateMappingsToBuiltIn(@NonNull String id) {
+    public static boolean updateMappingsToBuiltIn(final @NonNull String id) {
         return updateMappingsTo(MappingsType.BUILTIN, id);
     }
 
-    public static void updateMappingsToDefault() {
-        boolean success = updateMappingsTo(MappingsType.DEFAULT, "");
-        if (!success)
-            throw new IllegalStateException("Failed to load default mappings");
+    public static boolean updateMappingsToDefault() {
+        return updateMappingsTo(MappingsType.DEFAULT, "");
     }
 }

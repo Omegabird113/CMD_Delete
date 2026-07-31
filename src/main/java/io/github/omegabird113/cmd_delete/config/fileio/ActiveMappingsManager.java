@@ -17,21 +17,23 @@ import static io.github.omegabird113.cmd_delete.config.data.MappingsIdResolution
 import static io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils.resolveType;
 
 public final class ActiveMappingsManager {
-    private static final @NonNull Logger LOGGER = LoggingManager.getLogger(ActiveMappingsManager.class);
+    private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(ActiveMappingsManager.class);
 
     private ActiveMappingsManager() {
     }
 
-    public static @Nullable MappingsState tryResolveCustomMappings(@NonNull String id) {
+    public static @Nullable MappingsState tryResolveCustomMappings(final @NonNull String id) {
         final Optional<NavMappings> mappings = MappingsJSONManager.tryLoadCustomMappings(id);
         return mappings.map(navMappings -> new MappingsState(navMappings, MappingsType.CUSTOM, id)).orElse(null);
     }
 
-    public static @Nullable MappingsState tryResolveBuiltinMappings(@NonNull String id, @NonNull MappingsType mappingsType) {
+    public static @Nullable MappingsState tryResolveBuiltinMappings(final @NonNull String id, final @NonNull MappingsType mappingsType) {
         final Optional<NavMappings> mappings = MappingsJSONManager.tryLoadBuiltinMappings(id);
         if (mappings.isEmpty())
             return null;
         final String idToGet = mappingsType == MappingsType.DEFAULT ? "" : id;
+        if (idToGet.equals("emacs_windows_linux") || idToGet.equals("emacs_mac") || idToGet.equals("readline"))
+            LOGGER.warn("These mappings are not completely accurate to the conventions of the software they emulate. They do their best to provide similar behaviour to cause less issues with muscle memory, but they do not fully re-work Minecraft to provide the full experience of the control scheme.");
         return new MappingsState(mappings.get(), mappingsType, idToGet);
     }
 
@@ -41,21 +43,18 @@ public final class ActiveMappingsManager {
                 : "windows_linux";
     }
 
-    public static @Nullable MappingsState resolveMappings(@NonNull String namespacedId) {
+    public static @Nullable MappingsState resolveMappings(final @NonNull String namespacedId) {
         final String id = removeNamespaceFromId(namespacedId);
         final MappingsType mappingsType = resolveType(namespacedId);
         final String defaultMappingsId = resolveDefaultMappingsNonNamespacedId();
-        final MappingsState mappingsState = switch (mappingsType) {
+        return switch (mappingsType) {
             case CUSTOM -> tryResolveCustomMappings(id);
             case BUILTIN -> tryResolveBuiltinMappings(id, MappingsType.BUILTIN);
             case DEFAULT -> tryResolveBuiltinMappings(defaultMappingsId, MappingsType.DEFAULT);
         };
-        if (mappingsState == null)
-            return tryResolveBuiltinMappings(defaultMappingsId, MappingsType.DEFAULT);
-        return mappingsState;
     }
 
-    public static void writeActiveMappings(@NonNull String namespacedId) throws IOException {
+    public static void writeActiveMappings(final @NonNull String namespacedId) throws IOException {
         Files.createDirectories(PathConstants.getActiveMappingsFilePath().getParent());
         Files.writeString(PathConstants.getActiveMappingsFilePath(), namespacedId);
     }
@@ -75,7 +74,7 @@ public final class ActiveMappingsManager {
         return resolveMappings(namespacedId);
     }
 
-    public static void trySaveMappings(@NonNull String namespacedId) {
+    public static void trySaveMappings(final @NonNull String namespacedId) {
         try {
             writeActiveMappings(namespacedId);
         } catch (IOException e) {

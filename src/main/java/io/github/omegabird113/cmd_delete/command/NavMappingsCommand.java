@@ -9,11 +9,11 @@ import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.data.KeyNameRegistry;
 import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
+import io.github.omegabird113.cmd_delete.config.fileio.ActiveMappingsManager;
 import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.MappingsType;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
-import io.github.omegabird113.cmd_delete.utils.CrashUtils;
 import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
@@ -32,7 +32,7 @@ import java.util.Arrays;
 import static io.github.omegabird113.cmd_delete.command.CommandCreationUtils.*;
 
 public final class NavMappingsCommand {
-    static final @NonNull Logger LOGGER = LoggingManager.getLogger(NavMappingsCommand.class);
+    public static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(NavMappingsCommand.class);
 
     private NavMappingsCommand() {
     }
@@ -42,7 +42,7 @@ public final class NavMappingsCommand {
         LOGGER.info("Registered client command \"/navmappings\" through Fabric API");
     }
 
-    private static void register(@NonNull CommandDispatcher<FabricClientCommandSource> dispatcher) {
+    private static void register(final @NonNull CommandDispatcher<FabricClientCommandSource> dispatcher) {
         dispatcher.register(literal("navmappings")
                 .then(literal("set")
                         .then(literal("builtin")
@@ -69,6 +69,7 @@ public final class NavMappingsCommand {
                         .then(literal("dumpFeatureFlags").executes(NavMappingsCommand::dumpFeatureFlags))
                         .then(literal("dumpRegistry").executes(NavMappingsCommand::dumpRegistry))
                         .then(literal("dumpKeymap").executes(NavMappingsCommand::dumpKeyMap))
+                        .then(literal("dumpMappingsState").executes(NavMappingsCommand::dumpMappingsState))
                 )
                 .then(literal("export")
                         .then(literal("builtin")
@@ -116,67 +117,76 @@ public final class NavMappingsCommand {
         );
     }
 
-    private static int dumpRegistry(@NonNull CommandContext<FabricClientCommandSource> context) {
+    private static int dumpRegistry(final @NonNull CommandContext<FabricClientCommandSource> context) {
         final MappingsRegistry mr = NavMappingsManager.getCurrentMappingsRegistry();
         context.getSource().sendFeedback(Component.literal("Registry dump:\n" + mr.toString().replace("\t", "    ")));
         return 1;
     }
 
-    private static int dumpActions(@NonNull CommandContext<FabricClientCommandSource> context) {
+    private static int dumpMappingsState(final @NonNull CommandContext<FabricClientCommandSource> context) {
+        final MappingsState ms = NavMappingsManager.getOptionalMappingsState().orElse(null);
+        if (ms == null)
+            context.getSource().sendFeedback(Component.literal("State dump:\nnull"));
+        else
+            context.getSource().sendFeedback(Component.literal("State dump:\n" + ms.toString().replace("\t", "    ")));
+        return 1;
+    }
+
+    private static int dumpActions(final @NonNull CommandContext<FabricClientCommandSource> context) {
         final String actionsDump = String.join(", ", Arrays.stream(NavAction.values()).map(NavAction::name).toArray(String[]::new));
         context.getSource().sendFeedback(Component.literal("Actions dump:\n" + actionsDump));
         return 1;
     }
 
-    private static int dumpDetailedActions(@NonNull CommandContext<FabricClientCommandSource> context) {
+    private static int dumpDetailedActions(final @NonNull CommandContext<FabricClientCommandSource> context) {
         final String actionsDump = NavAction.getDetailedActionDump();
         context.getSource().sendFeedback(Component.literal("Detailed actions dump:\n" + actionsDump));
         return 1;
     }
 
-    private static int dumpFeatureFlags(@NonNull CommandContext<FabricClientCommandSource> context) {
+    private static int dumpFeatureFlags(final @NonNull CommandContext<FabricClientCommandSource> context) {
         context.getSource().sendFeedback(Component.literal("Feature flags dump:\noverrideVanillaNavigation - default false\ncrossLineSignMovement - default true"));
         return 1;
     }
 
-    private static int dumpKeyMap(@NonNull CommandContext<FabricClientCommandSource> context) {
+    private static int dumpKeyMap(final @NonNull CommandContext<FabricClientCommandSource> context) {
         context.getSource().sendFeedback(Component.literal("KeyMap dump:\n" + KeyNameRegistry.getDumpString()));
         return 1;
     }
 
-    private static int exportCustomShareCode(@NonNull CommandContext<FabricClientCommandSource> context) {
+    private static int exportCustomShareCode(final @NonNull CommandContext<FabricClientCommandSource> context) {
         NavMappingsCommandExecutionUtils.exportShareCode(context, true);
         return 1;
     }
 
-    private static int exportBuiltinShareCode(@NonNull CommandContext<FabricClientCommandSource> context) {
+    private static int exportBuiltinShareCode(final @NonNull CommandContext<FabricClientCommandSource> context) {
         NavMappingsCommandExecutionUtils.exportShareCode(context, false);
         return 1;
     }
 
-    private static int exportBuiltin(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+    private static int exportBuiltin(final @NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
         NavMappingsCommandExecutionUtils.exportMappings(context, false);
         return 1;
     }
 
-    private static int exportCustom(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+    private static int exportCustom(final @NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
         NavMappingsCommandExecutionUtils.exportMappings(context, true);
         return 1;
     }
 
-    private static int importCustomShareCode(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+    private static int importCustomShareCode(final @NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
         final String shareCode = Minecraft.getInstance().keyboardHandler.getClipboard();
         NavMappingsCommandExecutionUtils.importShareCode(context, shareCode);
         return 1;
     }
 
-    private static int importCustomShareCodeFromChat(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+    private static int importCustomShareCodeFromChat(final @NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
         final String shareCode = StringArgumentType.getString(context, "sharecode");
         NavMappingsCommandExecutionUtils.importShareCode(context, shareCode);
         return 1;
     }
 
-    private static int importCustom(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+    private static int importCustom(final @NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
         final String locationStr = StringArgumentType.getString(context, "location");
 
         final Path oldPath = Path.of(locationStr);
@@ -206,21 +216,23 @@ public final class NavMappingsCommand {
         return 1;
     }
 
-    private static int reloadMappings(@NonNull CommandContext<FabricClientCommandSource> context) {
+    private static int reloadMappings(final @NonNull CommandContext<FabricClientCommandSource> context) {
         NavMappingsManager.loadMappings();
         context.getSource().sendFeedback(Component.literal("Reloaded mappings: \"" + MappingsIdResolutionUtils.resolveNamespacedId(NavMappingsManager.getMappingsState()) + "\""));
         return 1;
     }
 
-    private static int setBuiltIn(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+    private static int setBuiltIn(final @NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
         final String id = StringArgumentType.getString(context, "id");
         if (!NavMappingsManager.updateMappingsToBuiltIn(id))
             throw UNKNOWN_BUILTIN_MAPPINGS.create(id);
         context.getSource().sendFeedback(Component.literal("Set navmappings to builtin:" + id));
+        if (id.equals("emacs_windows_linux") || id.equals("emacs_mac") || id.equals("readline"))
+            context.getSource().sendFeedback(Component.literal("WARNING: These mappings are not completely accurate to the conventions of the software they emulate. They do their best to provide similar behaviour to cause less issues with muscle memory, but they do not fully re-work Minecraft to provide the full experience of the control scheme."));
         return 1;
     }
 
-    private static int setCustom(@NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+    private static int setCustom(final @NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
         final String id = StringArgumentType.getString(context, "id");
         if (!NavMappingsManager.updateMappingsToCustom(id))
             throw UNKNOWN_CUSTOM_MAPPINGS.create(id);
@@ -228,26 +240,27 @@ public final class NavMappingsCommand {
         return 1;
     }
 
-    private static int setDefault(@NonNull CommandContext<FabricClientCommandSource> context) {
-        CrashUtils.crashMinecraftOnFailure(NavMappingsManager::updateMappingsToDefault);
+    private static int setDefault(final @NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
+        if (!NavMappingsManager.updateMappingsToDefault())
+            throw UNKNOWN_CUSTOM_MAPPINGS.create(ActiveMappingsManager.resolveDefaultMappingsNonNamespacedId());
         context.getSource().sendFeedback(Component.literal("Set navmappings to default"));
         return 1;
     }
 
-    private static int printMappingsInfo(@NonNull CommandContext<FabricClientCommandSource> context) {
+    private static int printMappingsInfo(final @NonNull CommandContext<FabricClientCommandSource> context) {
         final MappingsState currentMappingState = NavMappingsManager.getMappingsState();
         final String info = MappingsInfoCollectionUtils.getInfoFrom(currentMappingState, true);
         context.getSource().sendFeedback(Component.literal("The currently active mappings are:\n" + info));
         return 1;
     }
 
-    private static int printMappingsList(@NonNull CommandContext<FabricClientCommandSource> context) {
+    private static int printMappingsList(final @NonNull CommandContext<FabricClientCommandSource> context) {
         final String[] options = MappingsInfoCollectionUtils.getMappingsList();
         context.getSource().sendFeedback(Component.literal("The currently available mappings options are:\n" + String.join("\n", options)));
         return 1;
     }
 
-    private static int printCmdDeleteAbout(@NonNull CommandContext<FabricClientCommandSource> context) {
+    private static int printCmdDeleteAbout(final @NonNull CommandContext<FabricClientCommandSource> context) {
         final String about = String.format(
                 "CMD + Delete (modid:%s) by Omegabird113 v%s using mappings format version %s (minimum of %s) and sharecode encoding version %s. You can report issues at %s.",
                 CmdDeleteClient.MODID,

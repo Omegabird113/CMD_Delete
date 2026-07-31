@@ -20,10 +20,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = EditBox.class, priority = 2000)
 public abstract class EditBoxMixin extends AbstractWidget {
     @Unique
-    private static final Logger LOGGER = LoggingManager.getLogger(EditBoxMixin.class);
+    private static final Logger LOGGER = LoggingManager.getLoggerFor(EditBoxMixin.class);
 
     static {
-        LOGGER.debug("EditBoxMixin loaded");
+        LoggingManager.debugLog(LOGGER, "EditBoxMixin loaded");
     }
 
     public EditBoxMixin(int x, int y, int width, int height, Component message) {

@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 import static io.github.omegabird113.cmd_delete.config.fileio.JsonParsingUtils.*;
 
 public final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistry> {
-    private static final @NonNull Logger LOGGER = LoggingManager.getLogger(MappingsJSONManager.class);
+    private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(MappingsJSONManager.class);
     private static final @NonNull Map<String, Os> OS_MAP = Map.of(
             "windows", Os.WINDOWS,
             "mac", Os.MAC,
@@ -37,22 +37,14 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
     }
 
     @Override
-    public @NonNull MappingsRegistry deserialize(@NonNull JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public @NonNull MappingsRegistry deserialize(final @NonNull JsonElement json, final Type typeOfT, final JsonDeserializationContext context) throws JsonParseException {
         if (!json.isJsonObject())
             throw new JsonParseException("Expected a JSON object at root");
         final JsonObject jsonObject = json.getAsJsonObject();
 
         final boolean strictModeVal = getOptionalBoolean(jsonObject, "strict");
-
-        final int fv = requireInt(jsonObject, "fv", true); // we don't know fv/strict yet
+        final int fv = requireFv(jsonObject);
         final boolean strictMode = strictModeVal && fv >= 4;
-        if (fv < CmdDeleteClient.MINIMUM_MAPPINGS_FORMAT_VERSION || fv > CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION)
-            throw new JsonParseException("Invalid format version number: " + fv + ". The current format version is: " + CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION);
-        if (fv != CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION)
-            logWarn(
-                    "Old mappings version (" + fv + ") used by custom mappings. Please update to version " + CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION,
-                    false
-            );
 
         final String inherits = getStringElse(jsonObject, "inherits", "");
 
@@ -67,7 +59,7 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
         return new MappingsRegistry(localKeys, (disabledKeys.isEmpty() ? null : disabledKeys), List.copyOf(container.systems()), ff, inherits, container.name(), container.author(), container.description(), container.version(), container.id());
     }
 
-    private String trimAndCaseIfNotStrict(@NonNull String str, boolean upper, boolean strictMode) {
+    private String trimAndCaseIfNotStrict(final @NonNull String str, final boolean upper, final boolean strictMode) {
         if (strictMode)
             return str;
 
@@ -77,7 +69,7 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
             return str.trim().toLowerCase(Locale.ROOT);
     }
 
-    private void parseActions(@NonNull JsonObject actions, @NonNull HashMap<@NonNull KeyCombo, @NonNull NavAction> localKeys, @NonNull HashMap<@NonNull KeyCombo, @NonNull NavAction> disabledKeys, int fv, boolean strictMode) {
+    private void parseActions(final @NonNull JsonObject actions, final @NonNull HashMap<@NonNull KeyCombo, @NonNull NavAction> localKeys, final @NonNull HashMap<@NonNull KeyCombo, @NonNull NavAction> disabledKeys, final int fv, final boolean strictMode) {
         for (String actionName : actions.keySet()) {
             final NavAction action = NAV_ACTION_MAP.get(trimAndCaseIfNotStrict(actionName, true, strictMode));
             if (action == null || action == NavAction.NONE) {
@@ -150,7 +142,7 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
         }
     }
 
-    private @NonNull FeatureFlags parseFlags(@NonNull JsonObject root, int fv, @NonNull String inherits) {
+    private @NonNull FeatureFlags parseFlags(final @NonNull JsonObject root, final int fv, final @NonNull String inherits) {
         if (fv == 2)
             return new FeatureFlags(false, true);
         else {
@@ -171,7 +163,7 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
     }
 
     @Contract("_, _ -> new")
-    private @NonNull MetadataContainer parseMeta(@NonNull JsonObject meta, boolean strictMode) {
+    private @NonNull MetadataContainer parseMeta(final @NonNull JsonObject meta, final boolean strictMode) {
         final String name = getStringElse(meta, "name", "Unnamed Custom Mappings");
         final String author = getStringElse(meta, "author", "unknown").replace("$$cmd_delete$$", "Omegabird113");
         final String description = getStringElse(meta, "description", "No description provided");
@@ -185,11 +177,11 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
         return new MetadataContainer(name, author, version, description, id, parsedSystems);
     }
 
-    private @NonNull KeyCombo[] expandKeyWildcards(int key,
-                                                   boolean hasShift, boolean shiftValue,
-                                                   boolean hasAltOption, boolean altOptionValue,
-                                                   boolean hasControl, boolean controlValue,
-                                                   boolean hasSuperCommand, boolean superCommandValue) {
+    private @NonNull KeyCombo[] expandKeyWildcards(final int key,
+                                                   final boolean hasShift, final boolean shiftValue,
+                                                   final boolean hasAltOption, final boolean altOptionValue,
+                                                   final boolean hasControl, final boolean controlValue,
+                                                   final boolean hasSuperCommand, final boolean superCommandValue) {
 
         final boolean[] shiftVals = hasShift ? new boolean[]{shiftValue} : new boolean[]{false, true};
         final boolean[] altOptionVals = hasAltOption ? new boolean[]{altOptionValue} : new boolean[]{false, true};
@@ -208,7 +200,7 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
         return results;
     }
 
-    private @NonNull Set<Os> parseSystems(@NonNull JsonArray systemsArray, boolean strictMode) {
+    private @NonNull Set<Os> parseSystems(final @NonNull JsonArray systemsArray, final boolean strictMode) {
         final Set<Os> systems = new LinkedHashSet<>();
 
         for (JsonElement systemElement : systemsArray) {
