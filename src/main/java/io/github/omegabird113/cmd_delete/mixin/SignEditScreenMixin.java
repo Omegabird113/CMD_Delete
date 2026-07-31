@@ -30,10 +30,10 @@ import java.util.Objects;
 @Mixin(value = AbstractSignEditScreen.class, priority = 2000)
 public abstract class SignEditScreenMixin {
     @Unique
-    private static final Logger LOGGER = LoggingManager.getLogger(SignEditScreenMixin.class);
+    private static final Logger LOGGER = LoggingManager.getLoggerFor(SignEditScreenMixin.class);
 
     static {
-        LOGGER.debug("SignEditScreenMixin loaded");
+        LoggingManager.debugLog(LOGGER, "SignEditScreenMixin loaded");
     }
 
     @Shadow

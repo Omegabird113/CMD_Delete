@@ -45,10 +45,10 @@ public enum NavAction {
     OVR_SELECT_ALL(INVALID, EDIT, TEXT, true),
     NONE(INVALID, NO_TYPE, NO_SCOPE, false);
 
-    private static final Logger LOGGER = LoggingManager.getLogger(NavAction.class);
+    private static final Logger LOGGER = LoggingManager.getLoggerFor(LoggingManager.class);
 
     static {
-        LOGGER.debug("NavAction enum loaded. Detailed dump:\n{}", NavAction.getDetailedActionDump());
+        LoggingManager.verboseLog(LOGGER, "NavAction enum loaded. Detailed dump:\n{}", getDetailedActionDump());
     }
 
     private final @NonNull NavActionOffset offset;
@@ -56,7 +56,7 @@ public enum NavAction {
     private final @NonNull NavActionScope scope;
     private final boolean overrideMode;
 
-    NavAction(@NonNull NavActionOffset offset, @NonNull NavActionType type, @NonNull NavActionScope scope, boolean overrideMode) {
+    NavAction(final @NonNull NavActionOffset offset, final @NonNull NavActionType type, final @NonNull NavActionScope scope, final boolean overrideMode) {
         this.offset = offset;
         this.overrideMode = overrideMode;
         this.type = type;
@@ -80,7 +80,7 @@ public enum NavAction {
             table[i + 1] = entry;
         }
 
-        StringBuilder dump = new StringBuilder();
+        final StringBuilder dump = new StringBuilder();
         for (int i = 0; i < table.length; i++) {
             final String[] row = table[i];
             dump.append(

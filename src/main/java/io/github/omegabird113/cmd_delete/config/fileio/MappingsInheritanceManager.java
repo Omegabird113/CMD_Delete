@@ -16,10 +16,7 @@ public final class MappingsInheritanceManager {
     }
 
     @Contract("_ -> new")
-    public static @NonNull MappingsRegistry merge(@NonNull List<@NonNull MappingsRegistry> toMerge) {
-        if (toMerge.size() < 2)
-            throw new IllegalArgumentException("Cannot merge less than 2 elements");
-
+    public static @NonNull MappingsRegistry merge(final @NonNull List<@NonNull MappingsRegistry> toMerge) {
         final MappingsRegistry first = toMerge.getFirst();
         final Map<KeyCombo, NavAction> firstMap = first.internalRegistry();
         final Map<KeyCombo, NavAction> localRegistry = new HashMap<>(firstMap);

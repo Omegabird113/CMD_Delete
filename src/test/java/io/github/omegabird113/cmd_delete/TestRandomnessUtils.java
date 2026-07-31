@@ -46,7 +46,7 @@ public class TestRandomnessUtils {
         return new String(strBytes, StandardCharsets.UTF_8);
     }
 
-    static @NonNull List<@NonNull Os> genSystems() {
+    public static @NonNull List<@NonNull Os> genSystems() {
         final boolean windows = RANDOM.nextBoolean();
         final boolean linux = RANDOM.nextBoolean();
         final boolean mac = RANDOM.nextBoolean();

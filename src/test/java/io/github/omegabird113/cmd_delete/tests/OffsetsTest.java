@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import java.util.List;
 
 public class OffsetsTest {
-    private static final Logger LOGGER = LoggingManager.getLogger(OffsetsTest.class);
+    private static final Logger LOGGER = LoggingManager.getLoggerFor(OffsetsTest.class);
 
     @BeforeAll
     static void beforeAll() {

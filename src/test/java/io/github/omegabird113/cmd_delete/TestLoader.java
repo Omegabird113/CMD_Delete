@@ -15,7 +15,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 public class TestLoader {
-    private static final @NonNull Logger LOGGER = LoggingManager.getLogger(TestLoader.class);
+    private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(TestLoader.class);
     private static final Path tempDir;
     private static boolean initialized = false;
 
@@ -50,7 +50,7 @@ public class TestLoader {
     }
 
     @AfterAll
-    static void afterAll() {
+    public static void afterAll() {
         try {
             Files.deleteIfExists(tempDir);
         } catch (IOException e) {
