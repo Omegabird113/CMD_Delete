@@ -41,7 +41,7 @@ public final class LoggingManager {
         return getLoggerFor(CmdDeleteClient.MODID, o);
     }
 
-    public static void verboseLog(Logger logger, String format, Object... args) {
+    public static void verboseLog(final @NonNull Logger logger, final @NonNull String format, final Object... args) {
         if (VERBOSE_LOGGING_ALLOWED) {
             logger.info("[VERBOSE/TRACE]: " + format, args);
         } else {
@@ -49,7 +49,7 @@ public final class LoggingManager {
         }
     }
 
-    public static void debugLog(Logger logger, String format, Object... args) {
+    public static void debugLog(final @NonNull Logger logger, final @NonNull String format, final Object... args) {
         if (VERBOSE_LOGGING_ALLOWED) {
             logger.info("[VERBOSE/DEBUG]: " + format, args);
         } else {
