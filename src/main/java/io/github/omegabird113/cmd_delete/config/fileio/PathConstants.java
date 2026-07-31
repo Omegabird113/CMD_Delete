@@ -30,7 +30,7 @@ public final class PathConstants {
         PathConstants.mappingsJSONPath = gamePath.resolve("config/cmd_delete/mappings/");
 
         MappingsJSONManager.tryMakeConfigFiles();
-        LOGGER.debug("Initialized paths locations for the mod... (mappingsResourcePath=\"{}\", mappingsJSONPath=\"{}\", activeMappingsFilePath=\"{}\", gamePath=\"{}\")", PathConstants.mappingsResourcePath, PathConstants.mappingsJSONPath, PathConstants.activeMappingsFilePath, gamePath);
+        LoggingManager.debugLog(LOGGER, "Initialized paths locations for the mod... (mappingsResourcePath=\"{}\", mappingsJSONPath=\"{}\", activeMappingsFilePath=\"{}\", gamePath=\"{}\")", PathConstants.mappingsResourcePath, PathConstants.mappingsJSONPath, PathConstants.activeMappingsFilePath, gamePath);
     }
 
     public static @NonNull Path getMappingsResourcePath() {

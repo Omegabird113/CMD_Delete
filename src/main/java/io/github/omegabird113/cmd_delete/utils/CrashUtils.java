@@ -21,7 +21,7 @@ public final class CrashUtils {
         if (!CRASHING_ALLOWED)
             LOGGER.warn("CMD + Delete is not allowed to crash Minecraft in this environment if it enters an invalid/irrecoverable state due to a JVM property (\"cmd_delete.forcePreventMinecraftCrashes\"). This means you may experience undefined behavior or the mod not working in the event that something goes terribly wrong.");
         else
-            LOGGER.debug("Crashing is allowed in this environment. This can be prevented with the \"cmd_delete.forcePreventMinecraftCrashes\" JVM property if needed, though setting that property is not recommended.");
+            LoggingManager.debugLog(LOGGER, "Crashing is allowed in this environment. This can be prevented with the \"cmd_delete.forcePreventMinecraftCrashes\" JVM property if needed, though setting that property is not recommended.");
     }
 
     public static <T> @Nullable T crashMinecraftOnFailure(final @NonNull Supplier<T> supplier) {

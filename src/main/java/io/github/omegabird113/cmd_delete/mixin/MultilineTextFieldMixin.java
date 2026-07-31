@@ -27,7 +27,7 @@ public abstract class MultilineTextFieldMixin {
     private static final Logger LOGGER = LoggingManager.getLoggerFor(MultilineTextFieldMixin.class);
 
     static {
-        LOGGER.debug("MultilineTextFieldMixin loaded");
+        LoggingManager.debugLog(LOGGER, "MultilineTextFieldMixin loaded");
     }
 
     @Shadow

@@ -33,7 +33,7 @@ public abstract class SignEditScreenMixin {
     private static final Logger LOGGER = LoggingManager.getLoggerFor(SignEditScreenMixin.class);
 
     static {
-        LOGGER.debug("SignEditScreenMixin loaded");
+        LoggingManager.debugLog(LOGGER, "SignEditScreenMixin loaded");
     }
 
     @Shadow

@@ -1,7 +1,9 @@
 package io.github.omegabird113.cmd_delete.actions;
 
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
+import org.slf4j.Logger;
 
 import java.util.Locale;
 
@@ -48,11 +50,17 @@ public enum NavAction {
     private final @NonNull NavActionScope scope;
     private final boolean overrideMode;
 
+    private static final Logger LOGGER = LoggingManager.getLoggerFor(LoggingManager.class);
+
     NavAction(final @NonNull NavActionOffset offset, final @NonNull NavActionType type, final @NonNull NavActionScope scope, final boolean overrideMode) {
         this.offset = offset;
         this.overrideMode = overrideMode;
         this.type = type;
         this.scope = scope;
+    }
+
+    static {
+        LoggingManager.verboseLog(LOGGER, "NavAction enum loaded. Detailed dump:\n{}", getDetailedActionDump());
     }
 
     public static String getDetailedActionDump() {

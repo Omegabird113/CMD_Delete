@@ -36,7 +36,7 @@ public final class CmdDeleteClient implements ClientModInitializer {
                 LOGGER.info("User appears to be running system: {}", Os.USING);
 
                 final MixinEnvironment mixinEnv = MixinEnvironment.getCurrentEnvironment();
-                LOGGER.debug("Mixin version {} with obfuscation \"{}\" and compatibility level \"{}\" in phase \"{}\" on side \"{}\"", mixinEnv.getVersion(), mixinEnv.getObfuscationContext(), MixinEnvironment.getCompatibilityLevel(), mixinEnv.getPhase(), mixinEnv.getSide());
+                LoggingManager.verboseLog(LOGGER, "Mixin version {} with obfuscation \"{}\" and compatibility level \"{}\" in phase \"{}\" on side \"{}\"", mixinEnv.getVersion(), mixinEnv.getObfuscationContext(), MixinEnvironment.getCompatibilityLevel(), mixinEnv.getPhase(), mixinEnv.getSide());
 
                 CrashUtils.sendLoadInfo();
             }, "initial logging & CrashUtils info", true);

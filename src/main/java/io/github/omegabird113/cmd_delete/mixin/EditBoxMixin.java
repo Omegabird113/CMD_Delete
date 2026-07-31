@@ -24,7 +24,7 @@ public abstract class EditBoxMixin extends AbstractWidget {
     private static final Logger LOGGER = LoggingManager.getLoggerFor(EditBoxMixin.class);
 
     static {
-        LOGGER.debug("EditBoxMixin loaded");
+        LoggingManager.debugLog(LOGGER, "EditBoxMixin loaded");
     }
 
     public EditBoxMixin(int x, int y, int width, int height, Component message) {
