@@ -47,7 +47,7 @@ public final class MappingsJSONManager {
 
     public static @NonNull Optional<NavMappings> tryLoadCustomMappings(final @NonNull String id) {
         final Optional<MappingsRegistry> registry = getRegistryFrom(true, id);
-        if (registry.isPresent()) {
+        if (registry.isPresent())
             try {
                 final MappingsRegistry resolved = resolveInheritance(registry.get());
                 return Optional.of(new NavMappings(resolved));
@@ -55,7 +55,7 @@ public final class MappingsJSONManager {
                 LOGGER.error("Failed to resolve {} mappings inheritance for \"{}\"", MappingsType.CUSTOM.commonName(), id, e);
                 return Optional.empty();
             }
-        } else
+        else
             return Optional.empty();
     }
 

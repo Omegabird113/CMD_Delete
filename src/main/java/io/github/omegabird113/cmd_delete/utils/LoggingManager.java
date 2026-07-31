@@ -41,18 +41,16 @@ public final class LoggingManager {
     }
 
     public static void verboseLog(final @NonNull Logger logger, final @NonNull String format, final Object... args) {
-        if (VERBOSE_LOGGING_ALLOWED) {
+        if (VERBOSE_LOGGING_ALLOWED)
             logger.info("[VERBOSE/TRACE]: " + format, args);
-        } else {
+        else
             logger.trace(format, args);
-        }
     }
 
     public static void debugLog(final @NonNull Logger logger, final @NonNull String format, final Object... args) {
-        if (VERBOSE_LOGGING_ALLOWED) {
+        if (VERBOSE_LOGGING_ALLOWED)
             logger.info("[VERBOSE/DEBUG]: " + format, args);
-        } else {
+        else
             logger.debug(format, args);
-        }
     }
 }

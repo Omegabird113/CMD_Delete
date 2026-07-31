@@ -21,10 +21,8 @@ public record NavMappings(@NonNull MappingsRegistry registry) {
         final NavAction action = registry.get(keyCombo);
         if (action == null)
             return NONE;
-
         if (action.overrideMode() && Boolean.FALSE.equals(registry.featureFlags().overrideVanillaNavigation()))
             return NONE;
-
         return action;
     }
 

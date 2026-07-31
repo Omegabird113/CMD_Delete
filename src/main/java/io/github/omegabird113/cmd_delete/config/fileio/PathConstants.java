@@ -23,14 +23,12 @@ public final class PathConstants {
     public static void init(final @NonNull Path gamePath, final @NonNull Path mappingsResourcePath) {
         if (initialized)
             throw new IllegalStateException("PathConstants has already been initialized");
-        initialized = true;
-
         PathConstants.mappingsResourcePath = mappingsResourcePath;
         PathConstants.activeMappingsFilePath = gamePath.resolve("config/cmd_delete/.active_mappings");
         PathConstants.mappingsJSONPath = gamePath.resolve("config/cmd_delete/mappings/");
-
         MappingsJSONManager.tryMakeConfigFiles();
         LoggingManager.debugLog(LOGGER, "Initialized paths locations for the mod... (mappingsResourcePath=\"{}\", mappingsJSONPath=\"{}\", activeMappingsFilePath=\"{}\", gamePath=\"{}\")", PathConstants.mappingsResourcePath, PathConstants.mappingsJSONPath, PathConstants.activeMappingsFilePath, gamePath);
+        initialized = true;
     }
 
     public static @NonNull Path getMappingsResourcePath() {
