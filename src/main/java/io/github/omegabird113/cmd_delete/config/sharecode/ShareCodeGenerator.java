@@ -21,7 +21,7 @@ import java.util.zip.CRC32;
 import java.util.zip.GZIPOutputStream;
 
 public final class ShareCodeGenerator {
-    static final @NonNull Base58 BASE_58 = new Base58();
+    public static final @NonNull Base58 BASE_58 = new Base58();
     private static final @NonNull Logger LOGGER = LoggerCreationManager.getLoggerFor(ShareCodeGenerator.class);
 
     private ShareCodeGenerator() {

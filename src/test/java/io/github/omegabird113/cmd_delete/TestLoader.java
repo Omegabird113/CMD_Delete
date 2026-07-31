@@ -50,7 +50,7 @@ public class TestLoader {
     }
 
     @AfterAll
-    static void afterAll() {
+    public static void afterAll() {
         try {
             Files.deleteIfExists(tempDir);
         } catch (IOException e) {

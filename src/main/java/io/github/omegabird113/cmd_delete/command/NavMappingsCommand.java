@@ -32,7 +32,7 @@ import java.util.Arrays;
 import static io.github.omegabird113.cmd_delete.command.CommandCreationUtils.*;
 
 public final class NavMappingsCommand {
-    static final @NonNull Logger LOGGER = LoggerCreationManager.getLoggerFor(NavMappingsCommand.class);
+    public static final @NonNull Logger LOGGER = LoggerCreationManager.getLoggerFor(NavMappingsCommand.class);
 
     private NavMappingsCommand() {
     }
