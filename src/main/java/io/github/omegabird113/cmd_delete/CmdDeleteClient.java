@@ -53,7 +53,7 @@ public final class CmdDeleteClient implements ClientModInitializer {
         }), "full load", false);
 
         if (Boolean.getBoolean("cmd_delete.ci.stopMinecraftAfterLoad")) {
-            LOGGER.info("Stopping Minecraft client due to set \"ci.stopMinecraftAfterLoad\" jvm property...");
+            LOGGER.info("Stopping Minecraft client due to set \"cmd_delete.ci.stopMinecraftAfterLoad\" jvm property...");
             Minecraft.getInstance().stop();
             System.exit(0);
         }
