@@ -227,6 +227,8 @@ public final class NavMappingsCommand {
         if (!NavMappingsManager.updateMappingsToBuiltIn(id))
             throw UNKNOWN_BUILTIN_MAPPINGS.create(id);
         context.getSource().sendFeedback(Component.literal("Set navmappings to builtin:" + id));
+        if (id.equals("emacs_windows_linux") || id.equals("emacs_mac") || id.equals("readline"))
+            context.getSource().sendFeedback(Component.literal("WARNING: These mappings are not completely accurate to the conventions of the software they emulate. They do their best to provide similar behaviour to cause less issues with muscle memory, but they do not fully re-work Minecraft to provide the full experience of the control scheme."));
         return 1;
     }
 

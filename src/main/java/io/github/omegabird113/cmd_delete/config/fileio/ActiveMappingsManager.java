@@ -32,6 +32,8 @@ public final class ActiveMappingsManager {
         if (mappings.isEmpty())
             return null;
         final String idToGet = mappingsType == MappingsType.DEFAULT ? "" : id;
+        if (idToGet.equals("emacs_windows_linux") || idToGet.equals("emacs_mac") || idToGet.equals("readline"))
+            LOGGER.warn("These mappings are not completely accurate to the conventions of the software they emulate. They do their best to provide similar behaviour to cause less issues with muscle memory, but they do not fully re-work Minecraft to provide the full experience of the control scheme.");
         return new MappingsState(mappings.get(), mappingsType, idToGet);
     }
 
