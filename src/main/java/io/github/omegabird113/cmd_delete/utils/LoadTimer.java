@@ -9,7 +9,7 @@ public final class LoadTimer {
     private LoadTimer() {
     }
 
-    public static void time(@NonNull Runnable toTime, @NonNull String name, boolean detailed) {
+    public static void time(final @NonNull Runnable toTime, final @NonNull String name, final boolean detailed) {
         final long startTime = System.nanoTime();
         toTime.run();
         final long endTime = System.nanoTime();

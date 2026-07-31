@@ -57,7 +57,7 @@ public final class NavMappingsManager {
         logMappings();
     }
 
-    public static boolean updateMappingsTo(@NonNull MappingsType type, @NonNull String id) {
+    public static boolean updateMappingsTo(final @NonNull MappingsType type, final @NonNull String id) {
         final MappingsState newState = ActiveMappingsManager.resolveMappings(
                 MappingsIdResolutionUtils.resolveNamespacedId(type, id)
         );
@@ -71,11 +71,11 @@ public final class NavMappingsManager {
         return true;
     }
 
-    public static boolean updateMappingsToCustom(@NonNull String id) {
+    public static boolean updateMappingsToCustom(final @NonNull String id) {
         return updateMappingsTo(MappingsType.CUSTOM, id);
     }
 
-    public static boolean updateMappingsToBuiltIn(@NonNull String id) {
+    public static boolean updateMappingsToBuiltIn(final @NonNull String id) {
         return updateMappingsTo(MappingsType.BUILTIN, id);
     }
 

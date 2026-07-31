@@ -22,12 +22,12 @@ public final class ActiveMappingsManager {
     private ActiveMappingsManager() {
     }
 
-    public static @Nullable MappingsState tryResolveCustomMappings(@NonNull String id) {
+    public static @Nullable MappingsState tryResolveCustomMappings(final @NonNull String id) {
         final Optional<NavMappings> mappings = MappingsJSONManager.tryLoadCustomMappings(id);
         return mappings.map(navMappings -> new MappingsState(navMappings, MappingsType.CUSTOM, id)).orElse(null);
     }
 
-    public static @Nullable MappingsState tryResolveBuiltinMappings(@NonNull String id, @NonNull MappingsType mappingsType) {
+    public static @Nullable MappingsState tryResolveBuiltinMappings(final @NonNull String id, final @NonNull MappingsType mappingsType) {
         final Optional<NavMappings> mappings = MappingsJSONManager.tryLoadBuiltinMappings(id);
         if (mappings.isEmpty())
             return null;
@@ -41,7 +41,7 @@ public final class ActiveMappingsManager {
                 : "windows_linux";
     }
 
-    public static @Nullable MappingsState resolveMappings(@NonNull String namespacedId) {
+    public static @Nullable MappingsState resolveMappings(final @NonNull String namespacedId) {
         final String id = removeNamespaceFromId(namespacedId);
         final MappingsType mappingsType = resolveType(namespacedId);
         final String defaultMappingsId = resolveDefaultMappingsNonNamespacedId();
@@ -52,7 +52,7 @@ public final class ActiveMappingsManager {
         };
     }
 
-    public static void writeActiveMappings(@NonNull String namespacedId) throws IOException {
+    public static void writeActiveMappings(final @NonNull String namespacedId) throws IOException {
         Files.createDirectories(PathConstants.getActiveMappingsFilePath().getParent());
         Files.writeString(PathConstants.getActiveMappingsFilePath(), namespacedId);
     }
@@ -72,7 +72,7 @@ public final class ActiveMappingsManager {
         return resolveMappings(namespacedId);
     }
 
-    public static void trySaveMappings(@NonNull String namespacedId) {
+    public static void trySaveMappings(final @NonNull String namespacedId) {
         try {
             writeActiveMappings(namespacedId);
         } catch (IOException e) {

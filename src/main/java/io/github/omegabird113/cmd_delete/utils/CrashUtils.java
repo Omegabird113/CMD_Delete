@@ -24,7 +24,7 @@ public final class CrashUtils {
             LOGGER.debug("Crashing is allowed in this environment. This can be prevented with the \"cmd_delete.forcePreventMinecraftCrashes\" JVM property if needed, though setting that property is not recommended.");
     }
 
-    public static <T> @Nullable T crashMinecraftOnFailure(@NonNull Supplier<T> supplier) {
+    public static <T> @Nullable T crashMinecraftOnFailure(final @NonNull Supplier<T> supplier) {
         try {
             return supplier.get();
         } catch (Exception e) {
@@ -33,7 +33,7 @@ public final class CrashUtils {
         }
     }
 
-    public static void crashMinecraftOnFailure(@NonNull Runnable runnable) {
+    public static void crashMinecraftOnFailure(final @NonNull Runnable runnable) {
         try {
             runnable.run();
         } catch (Exception e) {
@@ -41,7 +41,7 @@ public final class CrashUtils {
         }
     }
 
-    public static void crashMinecraft(@NonNull Throwable e) {
+    public static void crashMinecraft(final @NonNull Throwable e) {
         if (CRASHING_ALLOWED) {
             LOGGER.error("A fatal error occurred and CMD + Delete must initiate a game crash...\nThe mappings state is:\n{}\nand the exception that occurred is:",
                     NavMappingsManager.getOptionalMappingsState().orElse(null),

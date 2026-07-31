@@ -19,7 +19,7 @@ public enum Os {
     }
 
     @Contract("_ -> new")
-    public static @NonNull Os get(@NonNull String osName) {
+    public static @NonNull Os get(final @NonNull String osName) {
         if (osName.contains("mac"))
             return MAC;
         else if (osName.contains("win"))

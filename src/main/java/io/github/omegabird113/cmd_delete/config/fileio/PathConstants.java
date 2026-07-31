@@ -20,7 +20,7 @@ public final class PathConstants {
     private PathConstants() {
     }
 
-    public static void init(@NonNull Path gamePath, @NonNull Path mappingsResourcePath) {
+    public static void init(final @NonNull Path gamePath, final @NonNull Path mappingsResourcePath) {
         if (initialized)
             throw new IllegalStateException("PathConstants has already been initialized");
         initialized = true;
@@ -51,14 +51,14 @@ public final class PathConstants {
         return mappingsJSONPath;
     }
 
-    public static @NonNull Path getPathOf(@NonNull MappingsType mappingsType, @NonNull String id) {
+    public static @NonNull Path getPathOf(final @NonNull MappingsType mappingsType, final @NonNull String id) {
         final Path path = (mappingsType == MappingsType.CUSTOM)
                 ? getMappingsJSONPath()
                 : getMappingsResourcePath();
         return path.resolve(id + ".json");
     }
 
-    public static @NonNull Path getPathOf(@NonNull String namespacedId) {
+    public static @NonNull Path getPathOf(final @NonNull String namespacedId) {
         return getPathOf(
                 MappingsIdResolutionUtils.resolveType(namespacedId),
                 MappingsIdResolutionUtils.removeNamespaceFromId(namespacedId)

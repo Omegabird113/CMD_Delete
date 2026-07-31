@@ -31,7 +31,7 @@ public final class MappingsJSONManager {
     private MappingsJSONManager() {
     }
 
-    public static @NonNull MappingsRegistry loadFromDir(@NonNull MappingsType mappingsType, @NonNull String id) throws IOException {
+    public static @NonNull MappingsRegistry loadFromDir(final @NonNull MappingsType mappingsType, final @NonNull String id) throws IOException {
         final Path path = PathConstants.getPathOf(mappingsType, id);
 
         if (!Files.exists(path))
@@ -45,7 +45,7 @@ public final class MappingsJSONManager {
         }
     }
 
-    public static @NonNull Optional<NavMappings> tryLoadCustomMappings(@NonNull String id) {
+    public static @NonNull Optional<NavMappings> tryLoadCustomMappings(final @NonNull String id) {
         final Optional<MappingsRegistry> registry = getRegistryFrom(true, id);
         if (registry.isPresent()) {
             try {
@@ -59,13 +59,13 @@ public final class MappingsJSONManager {
             return Optional.empty();
     }
 
-    public static @NonNull Optional<NavMappings> tryLoadBuiltinMappings(@NonNull String id) {
+    public static @NonNull Optional<NavMappings> tryLoadBuiltinMappings(final @NonNull String id) {
         final Optional<MappingsRegistry> registry = getRegistryFrom(false, id);
         return registry.map(NavMappings::new);
     }
 
-    public static @NonNull Optional<MappingsRegistry> getRegistryFrom(boolean custom, @NonNull String id) {
-        String typeCName = MappingsType.fromIfCustom(custom).commonName();
+    public static @NonNull Optional<MappingsRegistry> getRegistryFrom(final boolean custom, final @NonNull String id) {
+        final String typeCName = MappingsType.fromIfCustom(custom).commonName();
         try {
             final MappingsRegistry registry = loadFromDir(MappingsType.fromIfCustom(custom), id);
             return Optional.of(registry);
@@ -78,7 +78,7 @@ public final class MappingsJSONManager {
         }
     }
 
-    public static @NonNull MappingsRegistry resolveInheritance(@NonNull MappingsRegistry startRegistry) throws IOException {
+    public static @NonNull MappingsRegistry resolveInheritance(final @NonNull MappingsRegistry startRegistry) throws IOException {
         final List<MappingsRegistry> registries = new ArrayList<>();
         final List<String> ids = new ArrayList<>();
         MappingsRegistry current = startRegistry;
@@ -131,7 +131,7 @@ public final class MappingsJSONManager {
     }
 
     @Contract(pure = true)
-    public static @NonNull List<String> getAvailableOptions(boolean namespacedIds) {
+    public static @NonNull List<String> getAvailableOptions(final boolean namespacedIds) {
         final List<String> options = new ArrayList<>();
 
         final File configDirectory = PathConstants.getMappingsJSONPath().toFile();

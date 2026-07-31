@@ -12,12 +12,12 @@ public final class LoggingManager {
     }
 
     @Contract("_, _ -> new")
-    public static @NonNull Logger getLogger(@NotNull String modid, @NonNull Class<?> clazz) {
+    public static @NonNull Logger getLogger(final @NotNull String modid, final @NonNull Class<?> clazz) {
         return LoggerFactory.getLogger(modid + "/" + clazz.getSimpleName());
     }
 
     @Contract("_ -> new")
-    public static @NonNull Logger getLogger(@NonNull Class<?> clazz) {
+    public static @NonNull Logger getLogger(final @NonNull Class<?> clazz) {
         return getLogger(CmdDeleteClient.MODID, clazz);
     }
 }

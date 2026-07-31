@@ -17,7 +17,7 @@ import static io.github.omegabird113.cmd_delete.actions.NavAction.NONE;
 
 public record NavMappings(@NonNull MappingsRegistry registry) {
     @Contract(pure = true)
-    public @NonNull NavAction getAction(@NonNull KeyCombo keyCombo) {
+    public @NonNull NavAction getAction(final @NonNull KeyCombo keyCombo) {
         final NavAction action = registry.get(keyCombo);
         if (action == null)
             return NONE;
@@ -29,7 +29,7 @@ public record NavMappings(@NonNull MappingsRegistry registry) {
     }
 
     @Contract(pure = true)
-    public @NonNull NavAction getAction(@NonNull KeyEvent event, @NonNull Window window) {
+    public @NonNull NavAction getAction(final @NonNull KeyEvent event, final @NonNull Window window) {
         final int key = event.key();
         final boolean shift = event.hasShiftDown();
         final boolean altOption = event.hasAltDown();
