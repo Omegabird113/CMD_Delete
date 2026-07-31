@@ -1,9 +1,7 @@
 package io.github.omegabird113.cmd_delete.actions;
 
-import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
 
 import java.util.Locale;
 
@@ -44,12 +42,6 @@ public enum NavAction {
     OVR_PASTE(INVALID, EDIT, TEXT, true),
     OVR_SELECT_ALL(INVALID, EDIT, TEXT, true),
     NONE(INVALID, NO_TYPE, NO_SCOPE, false);
-
-    private static final Logger LOGGER = LoggingManager.getLogger(NavAction.class);
-
-    static {
-        LOGGER.debug("NavAction enum loaded. Detailed dump:\n{}", NavAction.getDetailedActionDump());
-    }
 
     private final @NonNull NavActionOffset offset;
     private final @NonNull NavActionType type;
