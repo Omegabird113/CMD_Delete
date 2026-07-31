@@ -8,9 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public final class LoggingManager {
-    private LoggingManager() {
-    }
-
     public static final boolean VERBOSE_LOGGING_ALLOWED = Boolean.getBoolean("cmd_delete.allowVerboseLogs");
     private static final Logger LOGGER = getLoggerFor(LoggingManager.class);
 
@@ -19,6 +16,9 @@ public final class LoggingManager {
             debugLog(LOGGER, "LoggingManager initialized. Verbose logging is enabled with the \"cmd_delete.allowVerboseLogs\" JVM argument... This means messages from TRACE and DEBUG levels will be bumped to INFO for users to be able to reasonably obtain these detailed messages in their latest.log file for bug reports without messing with Log4j configurations and/or downloading 3rd-party launchers.");
         else
             debugLog(LOGGER, "LoggingManager initialized. Verbose logging is disabled. If you're debugging, consider setting the \"cmd_delete.allowVerboseLogs\" JVM argument to true...");
+    }
+
+    private LoggingManager() {
     }
 
     @Contract("_, _ -> new")

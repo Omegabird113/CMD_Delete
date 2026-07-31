@@ -45,22 +45,22 @@ public enum NavAction {
     OVR_SELECT_ALL(INVALID, EDIT, TEXT, true),
     NONE(INVALID, NO_TYPE, NO_SCOPE, false);
 
+    private static final Logger LOGGER = LoggingManager.getLoggerFor(LoggingManager.class);
+
+    static {
+        LoggingManager.verboseLog(LOGGER, "NavAction enum loaded. Detailed dump:\n{}", getDetailedActionDump());
+    }
+
     private final @NonNull NavActionOffset offset;
     private final @NonNull NavActionType type;
     private final @NonNull NavActionScope scope;
     private final boolean overrideMode;
-
-    private static final Logger LOGGER = LoggingManager.getLoggerFor(LoggingManager.class);
 
     NavAction(final @NonNull NavActionOffset offset, final @NonNull NavActionType type, final @NonNull NavActionScope scope, final boolean overrideMode) {
         this.offset = offset;
         this.overrideMode = overrideMode;
         this.type = type;
         this.scope = scope;
-    }
-
-    static {
-        LoggingManager.verboseLog(LOGGER, "NavAction enum loaded. Detailed dump:\n{}", getDetailedActionDump());
     }
 
     public static String getDetailedActionDump() {
