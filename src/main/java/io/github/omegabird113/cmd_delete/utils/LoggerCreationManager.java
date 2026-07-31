@@ -20,4 +20,14 @@ public final class LoggerCreationManager {
     public static @NonNull Logger getLoggerFor(final @NonNull Class<?> clazz) {
         return getLoggerFor(CmdDeleteClient.MODID, clazz);
     }
+
+    @Contract("_, _ -> new")
+    public static @NonNull Logger getLoggerFor(final @NotNull String modid, final @NonNull Object o) {
+        return LoggerFactory.getLogger(modid + "/" + o.getClass().getSimpleName() + "@" + Integer.toHexString(System.identityHashCode(o)));
+    }
+
+    @Contract("_ -> new")
+    public static @NonNull Logger getLoggerFor(final @NonNull Object o) {
+        return getLoggerFor(CmdDeleteClient.MODID, o);
+    }
 }
