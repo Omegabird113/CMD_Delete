@@ -16,7 +16,7 @@ public enum MappingsType {
     }
 
     public static @NonNull MappingsType fromIfCustom(boolean custom) {
-        return custom ? MappingsType.CUSTOM : MappingsType.DEFAULT;
+        return custom ? MappingsType.CUSTOM : MappingsType.BUILTIN;
     }
 
     public @NonNull String prefix() {
