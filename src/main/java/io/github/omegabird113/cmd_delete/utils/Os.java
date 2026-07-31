@@ -18,7 +18,7 @@ public enum Os {
         return Os.get(System.getProperty("os.name").toLowerCase(Locale.ROOT));
     }
 
-    @Contract("_ -> new")
+    @Contract(value = "_ -> new", pure = true)
     public static @NonNull Os get(final @NonNull String osName) {
         if (osName.contains("mac"))
             return MAC;
