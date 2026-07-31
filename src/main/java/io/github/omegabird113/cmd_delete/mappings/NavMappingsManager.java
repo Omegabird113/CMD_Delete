@@ -80,6 +80,6 @@ public final class NavMappingsManager {
     }
 
     public static boolean updateMappingsToDefault() {
-       return updateMappingsTo(MappingsType.DEFAULT, "");
+        return updateMappingsTo(MappingsType.DEFAULT, "");
     }
 }

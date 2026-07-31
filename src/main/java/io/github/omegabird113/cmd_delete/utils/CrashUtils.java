@@ -11,8 +11,8 @@ import org.slf4j.Logger;
 import java.util.function.Supplier;
 
 public final class CrashUtils {
-    private static final @NonNull Logger LOGGER = LoggingManager.getLogger(CrashUtils.class);
     public static final boolean CRASHING_ALLOWED = !Boolean.getBoolean("cmd_delete.forcePreventMinecraftCrashes");
+    private static final @NonNull Logger LOGGER = LoggingManager.getLogger(CrashUtils.class);
 
     private CrashUtils() {
     }
