@@ -5,7 +5,7 @@ import io.github.omegabird113.cmd_delete.config.data.FeatureFlags;
 import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
 import io.github.omegabird113.cmd_delete.config.fileio.ActiveMappingsManager;
-import io.github.omegabird113.cmd_delete.utils.LoggerCreationManager;
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
@@ -15,7 +15,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 public final class NavMappingsManager {
-    private static final @NonNull Logger LOGGER = LoggerCreationManager.getLoggerFor(NavMappingsManager.class);
+    private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(NavMappingsManager.class);
     private static @Nullable MappingsState currentMappingsState;
 
     private NavMappingsManager() {

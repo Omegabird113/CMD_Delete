@@ -5,7 +5,7 @@ import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.command.MappingsInfoCollectionUtils;
 import io.github.omegabird113.cmd_delete.config.data.KeyNameRegistry;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
-import io.github.omegabird113.cmd_delete.utils.LoggerCreationManager;
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import java.util.Arrays;
 
 public class StringsTest {
-    private static final Logger LOGGER = LoggerCreationManager.getLoggerFor(StringsTest.class);
+    private static final Logger LOGGER = LoggingManager.getLoggerFor(StringsTest.class);
 
     @BeforeAll
     static void beforeAll() {

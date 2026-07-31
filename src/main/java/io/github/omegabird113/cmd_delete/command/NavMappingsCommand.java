@@ -14,7 +14,7 @@ import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.MappingsType;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
-import io.github.omegabird113.cmd_delete.utils.LoggerCreationManager;
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.Minecraft;
@@ -32,7 +32,7 @@ import java.util.Arrays;
 import static io.github.omegabird113.cmd_delete.command.CommandCreationUtils.*;
 
 public final class NavMappingsCommand {
-    public static final @NonNull Logger LOGGER = LoggerCreationManager.getLoggerFor(NavMappingsCommand.class);
+    public static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(NavMappingsCommand.class);
 
     private NavMappingsCommand() {
     }

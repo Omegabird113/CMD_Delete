@@ -4,7 +4,7 @@ import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.actions.NavActionOffset;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import io.github.omegabird113.cmd_delete.utils.CrashUtils;
-import io.github.omegabird113.cmd_delete.utils.LoggerCreationManager;
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -30,7 +30,7 @@ import java.util.Objects;
 @Mixin(value = AbstractSignEditScreen.class, priority = 2000)
 public abstract class SignEditScreenMixin {
     @Unique
-    private static final Logger LOGGER = LoggerCreationManager.getLoggerFor(SignEditScreenMixin.class);
+    private static final Logger LOGGER = LoggingManager.getLoggerFor(SignEditScreenMixin.class);
 
     static {
         LOGGER.debug("SignEditScreenMixin loaded");

@@ -7,8 +7,8 @@ import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class LoggerCreationManager {
-    private LoggerCreationManager() {
+public final class LoggingManager {
+    private LoggingManager() {
     }
 
     @Contract("_, _ -> new")

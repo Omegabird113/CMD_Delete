@@ -4,7 +4,7 @@ import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 
 public final class LoadTimer {
-    private static final @NonNull Logger LOGGER = LoggerCreationManager.getLoggerFor(LoadTimer.class);
+    private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(LoadTimer.class);
 
     private LoadTimer() {
     }

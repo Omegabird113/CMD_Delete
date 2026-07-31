@@ -2,7 +2,7 @@ package io.github.omegabird113.cmd_delete.config.fileio;
 
 import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.mappings.MappingsType;
-import io.github.omegabird113.cmd_delete.utils.LoggerCreationManager;
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import java.nio.file.Path;
 
 public final class PathConstants {
-    private static final @NonNull Logger LOGGER = LoggerCreationManager.getLoggerFor(PathConstants.class);
+    private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(PathConstants.class);
 
     private static @Nullable Path mappingsResourcePath;
     private static @Nullable Path activeMappingsFilePath;
