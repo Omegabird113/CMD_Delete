@@ -132,3 +132,4 @@ jobs:
             fabric
             quilt
           environment: client
+          fail-mode: skip
