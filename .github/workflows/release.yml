@@ -50,6 +50,12 @@ jobs:
       - name: Build
         run: ./gradlew clean build --stacktrace --no-daemon
 
+      - name: Upload built JARs as artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: cmd-delete-release-builds
+          path: build/libs/*.jar
+
       - name: Locate built JAR
         id: jar
         run: |
