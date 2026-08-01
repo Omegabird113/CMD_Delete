@@ -75,9 +75,9 @@ jobs:
           fi
 
           if [ "${#JARS[@]}" -gt 1 ]; then
-            echo "Multiple candidate JARs found:"
+            echo "ERROR: Multiple release JARs found:"
             printf ' - %s\n' "${JARS[@]}"
-            echo "Using the first one."
+            exit 1
           fi
 
           echo "path=${JARS[0]}" >> "$GITHUB_OUTPUT"
