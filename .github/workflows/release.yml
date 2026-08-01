@@ -59,7 +59,8 @@ jobs:
               ! -name "*-sources.jar" \
               ! -name "*-javadoc.jar" \
               ! -name "*-dev.jar" \
-              ! -name "*-dev-shadow.jar"
+              ! -name "*-dev-shadow.jar" \
+              ! -name "*-shadow.jar"
           )
 
           if [ "${#JARS[@]}" -eq 0 ]; then
