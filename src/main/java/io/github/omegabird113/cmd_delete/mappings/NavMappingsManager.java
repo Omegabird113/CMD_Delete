@@ -11,7 +11,6 @@ import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 public final class NavMappingsManager {
@@ -61,7 +60,7 @@ public final class NavMappingsManager {
         final MappingsState newState = ActiveMappingsManager.resolveMappings(
                 MappingsIdResolutionUtils.resolveNamespacedId(type, id)
         );
-        if (newState == null || Objects.equals(newState, currentMappingsState))
+        if (newState == null)
             return false;
         currentMappingsState = newState;
         ActiveMappingsManager.trySaveMappings(
