@@ -31,7 +31,7 @@ final class NavMappingsCommandExecutionUtils {
     private NavMappingsCommandExecutionUtils() {
     }
 
-    static void exportShareCode(final @NonNull CommandContext<FabricClientCommandSource> context, final boolean custom) {
+    static void exportShareCode(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context, final boolean custom) {
         final String idStr = StringArgumentType.getString(context, "id");
 
         final String namespacedId = MappingsIdResolutionUtils.resolveNamespacedId(MappingsType.fromIfCustom(custom), idStr);
@@ -41,7 +41,7 @@ final class NavMappingsCommandExecutionUtils {
         context.getSource().sendFeedback(Component.literal("Mappings \"" + (custom ? "custom:" : "builtin:") + idStr + "\" can be shared as: " + shareCode));
     }
 
-    static void exportMappings(final @NonNull CommandContext<FabricClientCommandSource> context, final boolean custom) throws CommandSyntaxException {
+    static void exportMappings(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context, final boolean custom) throws CommandSyntaxException {
         final String idStr = StringArgumentType.getString(context, "id");
         final String locationStr = StringArgumentType.getString(context, "location");
 
@@ -85,7 +85,7 @@ final class NavMappingsCommandExecutionUtils {
         context.getSource().sendFeedback(Component.literal("Mappings \"" + (typeCName) + idStr + "\" copied to path: " + newPath.toAbsolutePath()));
     }
 
-    static void importShareCode(final @NonNull CommandContext<FabricClientCommandSource> context, final @NonNull String shareCode) throws CommandSyntaxException {
+    static void importShareCode(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context, final @NonNull String shareCode) throws CommandSyntaxException {
         String decoded;
         try {
             decoded = ShareCodeDecoder.decode(shareCode.trim());

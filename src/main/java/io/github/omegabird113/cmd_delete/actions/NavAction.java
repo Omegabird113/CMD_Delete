@@ -63,7 +63,7 @@ public enum NavAction {
         this.scope = scope;
     }
 
-    public static String getDetailedActionDump() {
+    public static @NonNull String getDetailedActionDump() {
         final NavAction[] actions = values();
 
         final String[][] table = new String[actions.length + 1][5];
