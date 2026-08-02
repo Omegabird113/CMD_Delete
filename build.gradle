@@ -128,7 +128,6 @@ loom {
             client()
 
             vmArg "-Dcmd_delete.ci.stopMinecraftAfterLoad=true"
-
         }
     }
 }
