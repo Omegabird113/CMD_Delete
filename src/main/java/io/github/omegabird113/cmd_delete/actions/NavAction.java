@@ -48,7 +48,7 @@ public enum NavAction {
     private static final Logger LOGGER = LoggingManager.getLoggerFor(LoggingManager.class);
 
     static {
-        LoggingManager.verboseLog(LOGGER, "NavAction enum loaded. Detailed dump:\n{}", getDetailedActionDump());
+        LoggingManager.traceLog(LOGGER, "NavAction enum loaded. Detailed dump:\n{}", getDetailedActionDump());
     }
 
     private final @NonNull NavActionOffset offset;
