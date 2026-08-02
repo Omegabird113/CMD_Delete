@@ -224,7 +224,7 @@ public final class NavMappingsCommand {
 
     private static int setBuiltIn(final @NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
         final String id = StringArgumentType.getString(context, "id");
-        if (!NavMappingsManager.updateMappingsToBuiltIn(id))
+        if (!NavMappingsManager.updateMappingsTo(MappingsType.BUILTIN, id))
             throw UNKNOWN_BUILTIN_MAPPINGS.create(id);
         context.getSource().sendFeedback(Component.literal("Set navmappings to builtin:" + id));
         if (id.equals("emacs_windows_linux") || id.equals("emacs_mac") || id.equals("readline"))
@@ -234,14 +234,14 @@ public final class NavMappingsCommand {
 
     private static int setCustom(final @NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
         final String id = StringArgumentType.getString(context, "id");
-        if (!NavMappingsManager.updateMappingsToCustom(id))
+        if (!NavMappingsManager.updateMappingsTo(MappingsType.CUSTOM, id))
             throw UNKNOWN_CUSTOM_MAPPINGS.create(id);
         context.getSource().sendFeedback(Component.literal("Set navmappings to custom:" + id));
         return 1;
     }
 
     private static int setDefault(final @NonNull CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
-        if (!NavMappingsManager.updateMappingsToDefault())
+        if (!NavMappingsManager.updateMappingsTo(MappingsType.DEFAULT, ""))
             throw UNKNOWN_CUSTOM_MAPPINGS.create(ActiveMappingsManager.resolveDefaultMappingsNonNamespacedId());
         context.getSource().sendFeedback(Component.literal("Set navmappings to default"));
         return 1;

@@ -70,16 +70,4 @@ public final class NavMappingsManager {
         logMappings();
         return true;
     }
-
-    public static boolean updateMappingsToCustom(final @NonNull String id) {
-        return updateMappingsTo(MappingsType.CUSTOM, id);
-    }
-
-    public static boolean updateMappingsToBuiltIn(final @NonNull String id) {
-        return updateMappingsTo(MappingsType.BUILTIN, id);
-    }
-
-    public static boolean updateMappingsToDefault() {
-        return updateMappingsTo(MappingsType.DEFAULT, "");
-    }
 }

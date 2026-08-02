@@ -33,10 +33,7 @@ public class MappingsLoadTests {
                 continue;
             final String id = MappingsIdResolutionUtils.removeNamespaceFromId(namespacedId);
             final MappingsType mappingsType = id.isEmpty() ? MappingsType.DEFAULT : MappingsIdResolutionUtils.resolveType(namespacedId);
-            switch (mappingsType) {
-                case CUSTOM -> Assertions.assertTrue(NavMappingsManager.updateMappingsToCustom(id));
-                case BUILTIN -> Assertions.assertTrue(NavMappingsManager.updateMappingsToBuiltIn(id));
-            }
+            Assertions.assertTrue(() -> NavMappingsManager.updateMappingsTo(mappingsType, id));
             final MappingsState current = NavMappingsManager.getMappingsState();
             Assertions.assertNotEquals(lastState, current, () -> "Mappings failed to load: " + namespacedId);
             lastState = current;
@@ -47,7 +44,7 @@ public class MappingsLoadTests {
     @Order(3)
     void sampleLoadTest() {
         final MappingsState before = NavMappingsManager.getMappingsState();
-        boolean success = NavMappingsManager.updateMappingsToCustom("sample");
+        boolean success = NavMappingsManager.updateMappingsTo(MappingsType.CUSTOM, "sample");
         final MappingsState after = NavMappingsManager.getMappingsState();
         Assertions.assertNotEquals(before, after, "sample mappings failed to load");
         Assertions.assertTrue(success);
@@ -56,6 +53,6 @@ public class MappingsLoadTests {
     @Test
     @Order(4)
     void switchToDefaultMappingsTest() {
-        Assertions.assertTrue(NavMappingsManager::updateMappingsToDefault);
+        Assertions.assertTrue(() -> NavMappingsManager.updateMappingsTo(MappingsType.DEFAULT, ""));
     }
 }
