@@ -49,7 +49,10 @@ public final class NavMappingsManager {
     }
 
     public static void loadMappings() {
-        currentMappingsState = ActiveMappingsManager.tryGetMappings();
+        MappingsState toLoad = ActiveMappingsManager.tryGetMappings();
+        if (toLoad == null)
+            toLoad = ActiveMappingsManager.resolveMappings("");
+        currentMappingsState = toLoad;
         ActiveMappingsManager.trySaveMappings(
                 MappingsIdResolutionUtils.resolveNamespacedId(getMappingsState())
         );
