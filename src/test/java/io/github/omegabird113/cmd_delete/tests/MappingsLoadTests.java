@@ -19,9 +19,15 @@ public class MappingsLoadTests {
     @Order(1)
     void mappingsLoadTest() {
         NavMappingsManager.loadMappings();
-        Assertions.assertDoesNotThrow(() -> {
-            NavMappingsManager.getMappingsState();
-        });
+        final MappingsState state = NavMappingsManager.getMappingsState();
+        Assertions.assertNotNull(state);
+        Assertions.assertNotNull(state.mappings());
+        Assertions.assertNotNull(state.type());
+        Assertions.assertNotNull(state.id());
+        if (state.type() == MappingsType.DEFAULT)
+            Assertions.assertTrue(state.id().isEmpty());
+        else
+            Assertions.assertFalse(state.id().isBlank());
     }
 
     @Test
@@ -33,12 +39,11 @@ public class MappingsLoadTests {
                 continue;
             final String id = MappingsIdResolutionUtils.removeNamespaceFromId(namespacedId);
             final MappingsType mappingsType = id.isEmpty() ? MappingsType.DEFAULT : MappingsIdResolutionUtils.resolveType(namespacedId);
-            switch (mappingsType) {
-                case CUSTOM -> Assertions.assertTrue(NavMappingsManager.updateMappingsToCustom(id));
-                case BUILTIN -> Assertions.assertTrue(NavMappingsManager.updateMappingsToBuiltIn(id));
-            }
+            Assertions.assertTrue(() -> NavMappingsManager.updateMappingsTo(mappingsType, id));
             final MappingsState current = NavMappingsManager.getMappingsState();
             Assertions.assertNotEquals(lastState, current, () -> "Mappings failed to load: " + namespacedId);
+            Assertions.assertEquals(mappingsType, current.type());
+            Assertions.assertEquals(id, current.id());
             lastState = current;
         }
     }
@@ -47,18 +52,17 @@ public class MappingsLoadTests {
     @Order(3)
     void sampleLoadTest() {
         final MappingsState before = NavMappingsManager.getMappingsState();
-        boolean success = NavMappingsManager.updateMappingsToCustom("sample");
+        boolean success = NavMappingsManager.updateMappingsTo(MappingsType.CUSTOM, "sample");
         final MappingsState after = NavMappingsManager.getMappingsState();
         Assertions.assertNotEquals(before, after, "sample mappings failed to load");
+        Assertions.assertEquals(MappingsType.CUSTOM, after.type());
+        Assertions.assertEquals("sample", after.id());
         Assertions.assertTrue(success);
     }
 
     @Test
     @Order(4)
     void switchToDefaultMappingsTest() {
-        final MappingsState before = NavMappingsManager.getMappingsState();
-        Assertions.assertDoesNotThrow(NavMappingsManager::updateMappingsToDefault);
-        final MappingsState after = NavMappingsManager.getMappingsState();
-        Assertions.assertNotEquals(before, after, "Default mappings failed to load");
+        Assertions.assertTrue(() -> NavMappingsManager.updateMappingsTo(MappingsType.DEFAULT, ""));
     }
 }

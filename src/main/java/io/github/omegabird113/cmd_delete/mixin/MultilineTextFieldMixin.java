@@ -24,10 +24,10 @@ import java.util.List;
 @Mixin(value = MultilineTextField.class, priority = 2000)
 public abstract class MultilineTextFieldMixin {
     @Unique
-    private static final Logger LOGGER = LoggingManager.getLogger(MultilineTextFieldMixin.class);
+    private static final Logger LOGGER = LoggingManager.getLoggerFor(MultilineTextFieldMixin.class);
 
     static {
-        LOGGER.debug("MultilineTextFieldMixin loaded");
+        LoggingManager.debugLog(LOGGER, "MultilineTextFieldMixin loaded");
     }
 
     @Shadow

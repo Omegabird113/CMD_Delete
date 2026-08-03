@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 
 public class ShareCodeTest {
-    private static final @NonNull Logger LOGGER = LoggingManager.getLogger(ShareCodeTest.class);
+    private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(ShareCodeTest.class);
 
     @BeforeAll
     static void beforeAll() {

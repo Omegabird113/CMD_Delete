@@ -10,17 +10,17 @@ public final class MappingsIdResolutionUtils {
     }
 
     @Contract(pure = true)
-    public static @NonNull String resolveNamespacedId(@NonNull MappingsType mappingsType, String id) {
+    public static @NonNull String resolveNamespacedId(final @NonNull MappingsType mappingsType, final @NonNull String id) {
         return mappingsType.prefix() + id;
     }
 
     @Contract(pure = true)
-    public static @NonNull String resolveNamespacedId(@NonNull MappingsState mappingState) {
+    public static @NonNull String resolveNamespacedId(final @NonNull MappingsState mappingState) {
         return resolveNamespacedId(mappingState.type(), mappingState.id());
     }
 
     @Contract(pure = true)
-    public static MappingsType resolveType(@NonNull String namespacedId) {
+    public static MappingsType resolveType(final @NonNull String namespacedId) {
         if (namespacedId.startsWith(MappingsType.CUSTOM.prefix()))
             return MappingsType.CUSTOM;
         if (namespacedId.startsWith(MappingsType.BUILTIN.prefix()))
@@ -29,7 +29,7 @@ public final class MappingsIdResolutionUtils {
     }
 
     @Contract(pure = true)
-    public static @NonNull String removeNamespaceFromId(@NonNull String namespacedId) {
+    public static @NonNull String removeNamespaceFromId(final @NonNull String namespacedId) {
         if (namespacedId.startsWith(MappingsType.CUSTOM.prefix()))
             return namespacedId.substring(MappingsType.CUSTOM.prefix().length());
         if (namespacedId.startsWith(MappingsType.BUILTIN.prefix()))

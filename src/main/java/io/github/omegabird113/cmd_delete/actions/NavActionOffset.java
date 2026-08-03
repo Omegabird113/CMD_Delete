@@ -9,7 +9,7 @@ public enum NavActionOffset {
 
     private final int value;
 
-    NavActionOffset(int value) {
+    NavActionOffset(final int value) {
         this.value = value;
     }
 

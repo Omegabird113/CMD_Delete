@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import java.util.Arrays;
 
 public class StringsTest {
-    private static final Logger LOGGER = LoggingManager.getLogger(StringsTest.class);
+    private static final Logger LOGGER = LoggingManager.getLoggerFor(StringsTest.class);
 
     @BeforeAll
     static void beforeAll() {
@@ -37,8 +37,15 @@ public class StringsTest {
                     Arrays.stream(strings)
                             .map(s -> () -> {
                                 LOGGER.info("Testing string: {}", s);
-                                Assertions.assertFalse(s.isEmpty());
+                                Assertions.assertFalse(s.isBlank());
                             })
+            );
+            Assertions.assertAll(
+                    () -> Assertions.assertTrue(strings[1].contains(NavMappingsManager.getMappingsState().id())),
+                    () -> Assertions.assertTrue(strings[2].contains("Mappings state:")),
+                    () -> Assertions.assertTrue(strings[3].contains("Description:")),
+                    () -> Assertions.assertFalse(strings[4].contains("Description:")),
+                    () -> Assertions.assertTrue(strings[5].contains("Action"))
             );
         });
     }

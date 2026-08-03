@@ -50,6 +50,12 @@ jobs:
       - name: Build
         run: ./gradlew clean build --stacktrace --no-daemon
 
+      - name: Upload built JARs as artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: cmd-delete-release-builds
+          path: build/libs/*.jar
+
       - name: Locate built JAR
         id: jar
         run: |
@@ -58,7 +64,9 @@ jobs:
             find build/libs -maxdepth 1 -type f -name "*.jar" \
               ! -name "*-sources.jar" \
               ! -name "*-javadoc.jar" \
-              ! -name "*-dev.jar"
+              ! -name "*-dev.jar" \
+              ! -name "*-dev-shadow.jar" \
+              ! -name "*-shadow.jar"
           )
 
           if [ "${#JARS[@]}" -eq 0 ]; then
@@ -67,9 +75,9 @@ jobs:
           fi
 
           if [ "${#JARS[@]}" -gt 1 ]; then
-            echo "Multiple candidate JARs found:"
+            echo "ERROR: Multiple release JARs found:"
             printf ' - %s\n' "${JARS[@]}"
-            echo "Using the first one."
+            exit 1
           fi
 
           echo "path=${JARS[0]}" >> "$GITHUB_OUTPUT"
@@ -110,7 +118,7 @@ jobs:
             $PRERELEASE_FLAG
 
       - name: Publish to Modrinth & CurseForge
-        uses: Kir-Antipov/mc-publish@v3
+        uses: Kira-NT/mc-publish@v3
         with:
           modrinth-id: xrOWVab9
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
@@ -124,7 +132,9 @@ jobs:
           java: 21
           game-versions: |
             >=1.21.11 <26.1
+          game-version-filter: any
           loaders: |
             fabric
             quilt
           environment: client
+          fail-mode: skip
