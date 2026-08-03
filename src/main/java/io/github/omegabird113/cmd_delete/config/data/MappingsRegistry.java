@@ -29,7 +29,7 @@ public record MappingsRegistry(
         systems = List.copyOf(systems);
     }
 
-    public @Nullable NavAction get(@NonNull KeyCombo key) {
+    public @Nullable NavAction get(final @NonNull KeyCombo key) {
         return internalRegistry.get(key);
     }
 
@@ -42,7 +42,7 @@ public record MappingsRegistry(
     }
 
     @Contract(pure = true)
-    private @NonNull String registryStringUtil(@Nullable Map<@NonNull KeyCombo, @NonNull NavAction> registry) {
+    private @NonNull String registryStringUtil(final @Nullable Map<@NonNull KeyCombo, @NonNull NavAction> registry) {
         if (registry == null)
             return "null";
         if (registry.isEmpty())

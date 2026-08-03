@@ -31,7 +31,7 @@ final class NavMappingsCommandExecutionUtils {
     private NavMappingsCommandExecutionUtils() {
     }
 
-    static void exportShareCode(@NonNull CommandContext<FabricClientCommandSource> context, boolean custom) {
+    static void exportShareCode(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context, final boolean custom) {
         final String idStr = StringArgumentType.getString(context, "id");
 
         final String namespacedId = MappingsIdResolutionUtils.resolveNamespacedId(MappingsType.fromIfCustom(custom), idStr);
@@ -41,12 +41,12 @@ final class NavMappingsCommandExecutionUtils {
         context.getSource().sendFeedback(Component.literal("Mappings \"" + (custom ? "custom:" : "builtin:") + idStr + "\" can be shared as: " + shareCode));
     }
 
-    static void exportMappings(@NonNull CommandContext<FabricClientCommandSource> context, boolean custom) throws CommandSyntaxException {
+    static void exportMappings(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context, final boolean custom) throws CommandSyntaxException {
         final String idStr = StringArgumentType.getString(context, "id");
         final String locationStr = StringArgumentType.getString(context, "location");
 
         final Path newPath = Path.of(locationStr);
-        String typeCName = MappingsType.fromIfCustom(custom).commonName();
+        final String typeCName = MappingsType.fromIfCustom(custom).commonName();
         if (!newPath.isAbsolute()) {
             LOGGER.error("New path \"{}\" for {} copy is not absolute", locationStr, typeCName);
             if (custom)
@@ -85,7 +85,7 @@ final class NavMappingsCommandExecutionUtils {
         context.getSource().sendFeedback(Component.literal("Mappings \"" + (typeCName) + idStr + "\" copied to path: " + newPath.toAbsolutePath()));
     }
 
-    static void importShareCode(@NonNull CommandContext<FabricClientCommandSource> context, @NonNull String shareCode) throws CommandSyntaxException {
+    static void importShareCode(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context, final @NonNull String shareCode) throws CommandSyntaxException {
         String decoded;
         try {
             decoded = ShareCodeDecoder.decode(shareCode.trim());

@@ -17,7 +17,7 @@ public final class MappingsInfoCollectionUtils {
     }
 
     @Contract(pure = true)
-    public static @NonNull String getInfoFrom(@NonNull MappingsState mappingsState, boolean includeDescription) {
+    public static @NonNull String getInfoFrom(final @NonNull MappingsState mappingsState, final boolean includeDescription) {
         final double coverage = mappingsState.mappings().getCoverage();
 
         String displayName = "";

@@ -10,13 +10,13 @@ public enum MappingsType {
     private final @NonNull String prefix;
     private final @NonNull String commonName;
 
-    MappingsType(@NonNull String prefix, @NonNull String commonName) {
+    MappingsType(final @NonNull String prefix, final @NonNull String commonName) {
         this.prefix = prefix;
         this.commonName = commonName;
     }
 
-    public static @NonNull MappingsType fromIfCustom(boolean custom) {
-        return custom ? MappingsType.CUSTOM : MappingsType.DEFAULT;
+    public static @NonNull MappingsType fromIfCustom(final boolean custom) {
+        return custom ? MappingsType.CUSTOM : MappingsType.BUILTIN;
     }
 
     public @NonNull String prefix() {
