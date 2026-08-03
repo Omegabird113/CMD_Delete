@@ -242,7 +242,7 @@ public final class NavMappingsCommand {
 
     private static int setDefault(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) throws CommandSyntaxException {
         if (!NavMappingsManager.updateMappingsTo(MappingsType.DEFAULT, ""))
-            throw UNKNOWN_CUSTOM_MAPPINGS.create(ActiveMappingsManager.resolveDefaultMappingsNonNamespacedId());
+            throw UNKNOWN_BUILTIN_MAPPINGS.create(ActiveMappingsManager.resolveDefaultMappingsNonNamespacedId());
         context.getSource().sendFeedback(Component.literal("Set navmappings to default"));
         return 1;
     }
