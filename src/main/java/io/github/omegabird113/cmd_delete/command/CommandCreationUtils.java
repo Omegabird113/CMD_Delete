@@ -28,21 +28,21 @@ public final class CommandCreationUtils {
             shareCode -> Component.literal("Invalid share code: " + shareCode)
     );
 
-    public static final @NonNull SuggestionProvider<FabricClientCommandSource> BUILTIN_SUGGESTIONS =
+    public static final @NonNull SuggestionProvider<@NonNull FabricClientCommandSource> BUILTIN_SUGGESTIONS =
             (context, builder) -> SharedSuggestionProvider.suggest(List.of("windows_linux", "mac", "emacs_windows_linux", "emacs_mac", "readline"), builder);
-    public static final @NonNull SuggestionProvider<FabricClientCommandSource> CUSTOM_SUGGESTIONS =
+    public static final @NonNull SuggestionProvider<@NonNull FabricClientCommandSource> CUSTOM_SUGGESTIONS =
             (context, builder) -> SharedSuggestionProvider.suggest(MappingsJSONManager.getAvailableOptions(false), builder);
 
     private CommandCreationUtils() {
     }
 
     @Contract(value = "_ -> new", pure = true)
-    public static @NonNull LiteralArgumentBuilder<FabricClientCommandSource> literal(final @NonNull String name) {
+    public static @NonNull LiteralArgumentBuilder<@NonNull FabricClientCommandSource> literal(final @NonNull String name) {
         return LiteralArgumentBuilder.literal(name);
     }
 
     @Contract(value = "_, _ -> new", pure = true)
-    public static <T> @NonNull RequiredArgumentBuilder<FabricClientCommandSource, T> argument(final @NonNull String name, final @NonNull ArgumentType<T> type) {
+    public static <T> @NonNull RequiredArgumentBuilder<@NonNull FabricClientCommandSource, T> argument(final @NonNull String name, final @NonNull ArgumentType<T> type) {
         return RequiredArgumentBuilder.argument(name, type);
     }
 }

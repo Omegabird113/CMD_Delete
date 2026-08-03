@@ -48,7 +48,7 @@ public enum NavAction {
     private static final Logger LOGGER = LoggingManager.getLoggerFor(LoggingManager.class);
 
     static {
-        LoggingManager.verboseLog(LOGGER, "NavAction enum loaded. Detailed dump:\n{}", getDetailedActionDump());
+        LoggingManager.traceLog(LOGGER, "NavAction enum loaded. Detailed dump:\n{}", getDetailedActionDump());
     }
 
     private final @NonNull NavActionOffset offset;
@@ -63,7 +63,7 @@ public enum NavAction {
         this.scope = scope;
     }
 
-    public static String getDetailedActionDump() {
+    public static @NonNull String getDetailedActionDump() {
         final NavAction[] actions = values();
 
         final String[][] table = new String[actions.length + 1][5];

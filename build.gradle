@@ -50,7 +50,7 @@ dependencies {
     implementation include('com.google.code.gson:gson:2.14.0')
     implementation include('org.jspecify:jspecify:1.0.0')
 
-    shadeOnly 'commons-codec:commons-codec:1.22.0'
+    shadeOnly 'commons-codec:commons-codec:1.22.1'
 
     testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
 }
@@ -136,8 +136,6 @@ loom {
             client()
 
             vmArg "-Dcmd_delete.ci.stopMinecraftAfterLoad=true"
-
         }
     }
 }
-

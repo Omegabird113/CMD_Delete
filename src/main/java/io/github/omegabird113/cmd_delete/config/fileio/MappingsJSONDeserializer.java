@@ -59,7 +59,7 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
         return new MappingsRegistry(localKeys, (disabledKeys.isEmpty() ? null : disabledKeys), List.copyOf(container.systems()), ff, inherits, container.name(), container.author(), container.description(), container.version(), container.id());
     }
 
-    private String trimAndCaseIfNotStrict(final @NonNull String str, final boolean upper, final boolean strictMode) {
+    private @NonNull String trimAndCaseIfNotStrict(final @NonNull String str, final boolean upper, final boolean strictMode) {
         if (strictMode)
             return str;
 
@@ -177,11 +177,11 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
         return new MetadataContainer(name, author, version, description, id, parsedSystems);
     }
 
-    private @NonNull KeyCombo[] expandKeyWildcards(final int key,
-                                                   final boolean hasShift, final boolean shiftValue,
-                                                   final boolean hasAltOption, final boolean altOptionValue,
-                                                   final boolean hasControl, final boolean controlValue,
-                                                   final boolean hasSuperCommand, final boolean superCommandValue) {
+    private @NonNull KeyCombo @NonNull [] expandKeyWildcards(final int key,
+                                                             final boolean hasShift, final boolean shiftValue,
+                                                             final boolean hasAltOption, final boolean altOptionValue,
+                                                             final boolean hasControl, final boolean controlValue,
+                                                             final boolean hasSuperCommand, final boolean superCommandValue) {
 
         final boolean[] shiftVals = hasShift ? new boolean[]{shiftValue} : new boolean[]{false, true};
         final boolean[] altOptionVals = hasAltOption ? new boolean[]{altOptionValue} : new boolean[]{false, true};

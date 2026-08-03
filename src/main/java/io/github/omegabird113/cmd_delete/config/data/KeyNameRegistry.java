@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import static org.lwjgl.glfw.GLFW.*;
 
 public final class KeyNameRegistry {
-    private static final Map<@NonNull String, @NonNull Integer> KEY_MAP = Map.<String, Integer>ofEntries(
+    private static final @NonNull Map<@NonNull String, @NonNull Integer> KEY_MAP = Map.<String, Integer>ofEntries(
             Map.entry("left", GLFW_KEY_LEFT),
             Map.entry("right", GLFW_KEY_RIGHT),
             Map.entry("up", GLFW_KEY_UP),

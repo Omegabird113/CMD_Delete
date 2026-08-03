@@ -40,7 +40,7 @@ public final class LoggingManager {
         return getLoggerFor(CmdDeleteClient.MODID, o);
     }
 
-    public static void verboseLog(final @NonNull Logger logger, final @NonNull String format, final Object... args) {
+    public static void traceLog(final @NonNull Logger logger, final @NonNull String format, final Object... args) {
         if (VERBOSE_LOGGING_ALLOWED)
             logger.info("[VERBOSE/TRACE]: " + format, args);
         else

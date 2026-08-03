@@ -104,7 +104,7 @@ public final class MappingsJSONManager {
                 current = newRegistry.get();
             }
         }
-        LoggingManager.verboseLog(LOGGER, "Resolved inheritance chain of {} ({}) from registries: {\n{}\n}", ids, registries.stream().map(MappingsRegistry::hashCode).toArray(), String.join("\n--------------------\n", registries.stream().map(MappingsRegistry::toString).toList()));
+        LoggingManager.traceLog(LOGGER, "Resolved inheritance chain of {} ({}) from registries: {\n{}\n}", ids, registries.stream().map(MappingsRegistry::hashCode).toArray(), String.join("\n--------------------\n", registries.stream().map(MappingsRegistry::toString).toList()));
         return MappingsInheritanceManager.merge(registries.reversed());
     }
 
