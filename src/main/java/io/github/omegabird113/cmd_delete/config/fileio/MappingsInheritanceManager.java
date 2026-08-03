@@ -32,7 +32,7 @@ public final class MappingsInheritanceManager {
             currentFeatureFlags = FeatureFlags.merge(currentFeatureFlags, currentRegistry.featureFlags());
         }
 
-        final MappingsRegistry last = toMerge.getLast();
+        final MappingsRegistry last = toMerge.get(toMerge.size() - 1);
 
         return new MappingsRegistry(localRegistry, null, last.systems(), currentFeatureFlags, "", last.name(), last.author(), last.description(), last.version(), last.id());
     }
