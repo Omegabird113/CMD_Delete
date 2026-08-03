@@ -23,12 +23,12 @@ public final class ActiveMappingsManager {
     }
 
     public static @Nullable MappingsState tryResolveCustomMappings(final @NonNull String id) {
-        final Optional<NavMappings> mappings = MappingsJSONManager.tryLoadCustomMappings(id);
+        final Optional<NavMappings> mappings = MappingsJSONManager.tryLoadMappings(id, true);
         return mappings.map(navMappings -> new MappingsState(navMappings, MappingsType.CUSTOM, id)).orElse(null);
     }
 
     public static @Nullable MappingsState tryResolveBuiltinMappings(final @NonNull String id, final @NonNull MappingsType mappingsType) {
-        final Optional<NavMappings> mappings = MappingsJSONManager.tryLoadBuiltinMappings(id);
+        final Optional<NavMappings> mappings = MappingsJSONManager.tryLoadMappings(id, false);
         if (mappings.isEmpty())
             return null;
         final String idToGet = mappingsType == MappingsType.DEFAULT ? "" : id;
