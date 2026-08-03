@@ -97,7 +97,7 @@ public abstract class EditBoxMixin extends AbstractWidget {
             case OVR_CUT -> {
                 Minecraft.getInstance().keyboardHandler.setClipboard(this.getHighlighted());
                 if (this.isEditable())
-                    this.deleteCharsToPos(this.getHighlighted().length());
+                    this.insertText("");
             }
             case OVR_PASTE -> {
                 if (this.isEditable())
