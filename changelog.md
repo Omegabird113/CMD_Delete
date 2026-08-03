@@ -1,4 +1,4 @@
-### 1.4.0 Release Candidate 1
+### 1.4.0
 
 Changes:
 
