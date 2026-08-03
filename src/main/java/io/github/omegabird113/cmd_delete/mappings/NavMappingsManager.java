@@ -51,10 +51,10 @@ public final class NavMappingsManager {
     public static void loadMappings() {
         MappingsState toLoad = ActiveMappingsManager.tryGetMappings();
         if (toLoad == null)
-            toLoad = ActiveMappingsManager.resolveMappings("");
+            toLoad = ActiveMappingsManager.resolveMappingsWithDefaultFallback("");
         currentMappingsState = toLoad;
         ActiveMappingsManager.trySaveMappings(
-                MappingsIdResolutionUtils.resolveNamespacedId(getMappingsState())
+                MappingsIdResolutionUtils.resolveNamespacedId(toLoad)
         );
         logMappings();
     }
