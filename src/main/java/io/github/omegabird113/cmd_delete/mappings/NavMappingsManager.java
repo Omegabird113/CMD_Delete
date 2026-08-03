@@ -11,7 +11,6 @@ import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 public final class NavMappingsManager {
@@ -46,7 +45,7 @@ public final class NavMappingsManager {
     private static void logMappings() {
         LOGGER.info("Mappings id \"{}\" loaded with supported systems \"{}\" and Coverage of {}% with a registry size of {}. It supports the actions: {}", MappingsIdResolutionUtils.resolveNamespacedId(getMappingsState()), List.of(getCurrentMappings().getMappingsSupportedSystems()), getCurrentMappings().getCoverage() * 100, getCurrentMappings().registry().getSize(), getCurrentMappings().getPossibleActions());
         LOGGER.info("The active mappings' info in \"/navmappings info\" will show as: \"{}\"", MappingsInfoCollectionUtils.getInfoFrom(getMappingsState(), false).replace("\n", " "));
-        LoggingManager.verboseLog(LOGGER, "Mappings state loaded: \"{}\"", currentMappingsState);
+        LoggingManager.traceLog(LOGGER, "Mappings state loaded: \"{}\"", currentMappingsState);
     }
 
     public static void loadMappings() {
@@ -61,7 +60,7 @@ public final class NavMappingsManager {
         final MappingsState newState = ActiveMappingsManager.resolveMappings(
                 MappingsIdResolutionUtils.resolveNamespacedId(type, id)
         );
-        if (newState == null || Objects.equals(newState, currentMappingsState))
+        if (newState == null)
             return false;
         currentMappingsState = newState;
         ActiveMappingsManager.trySaveMappings(
@@ -69,17 +68,5 @@ public final class NavMappingsManager {
         );
         logMappings();
         return true;
-    }
-
-    public static boolean updateMappingsToCustom(final @NonNull String id) {
-        return updateMappingsTo(MappingsType.CUSTOM, id);
-    }
-
-    public static boolean updateMappingsToBuiltIn(final @NonNull String id) {
-        return updateMappingsTo(MappingsType.BUILTIN, id);
-    }
-
-    public static boolean updateMappingsToDefault() {
-        return updateMappingsTo(MappingsType.DEFAULT, "");
     }
 }

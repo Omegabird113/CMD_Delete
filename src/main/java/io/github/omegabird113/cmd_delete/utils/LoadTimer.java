@@ -14,7 +14,7 @@ public final class LoadTimer {
         toTime.run();
         final long endTime = System.nanoTime();
         final double detailedDuration = (endTime - startTime) / 1000000.0;
-        LoggingManager.verboseLog(LOGGER, "Timed \"{}\". Took exactly {} ms", name, detailedDuration);
+        LoggingManager.traceLog(LOGGER, "Timed \"{}\". Took exactly {} ms", name, detailedDuration);
         if (!detailed) {
             final long duration = Math.round(detailedDuration);
             LOGGER.info("Timed {}. Took {} ms", name, duration);

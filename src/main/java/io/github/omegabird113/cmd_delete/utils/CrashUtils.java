@@ -28,7 +28,7 @@ public final class CrashUtils {
         try {
             return supplier.get();
         } catch (Exception e) {
-            crashMinecraft(e);
+            tryCrashMinecraft(e);
             return null;
         }
     }
@@ -37,11 +37,11 @@ public final class CrashUtils {
         try {
             runnable.run();
         } catch (Exception e) {
-            crashMinecraft(e);
+            tryCrashMinecraft(e);
         }
     }
 
-    public static void crashMinecraft(final @NonNull Throwable e) {
+    public static void tryCrashMinecraft(final @NonNull Throwable e) {
         if (CRASHING_ALLOWED) {
             LOGGER.error("A fatal error occurred and CMD + Delete must initiate a game crash...\nThe mappings state is:\n{}\nand the exception that occurred is:",
                     NavMappingsManager.getOptionalMappingsState().orElse(null),

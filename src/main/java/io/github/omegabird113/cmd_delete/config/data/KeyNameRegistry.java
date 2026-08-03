@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import static org.lwjgl.sdl.SDLScancode.*;
 
 public final class KeyNameRegistry {
-    private static final Map<@NonNull String, @NonNull Integer> KEY_MAP = Map.<String, Integer>ofEntries(
+    private static final @NonNull Map<@NonNull String, @NonNull Integer> KEY_MAP = Map.<String, Integer>ofEntries(
             Map.entry("left", SDL_SCANCODE_LEFT),
             Map.entry("right", SDL_SCANCODE_RIGHT),
             Map.entry("up", SDL_SCANCODE_UP),
