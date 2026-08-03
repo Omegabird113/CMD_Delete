@@ -1,11 +1,11 @@
 package io.github.omegabird113.cmd_delete.command;
 
-import io.github.omegabird113.cmd_delete.CmdDeleteClient;
-import io.github.omegabird113.cmd_delete.actions.NavActionManager;
-import io.github.omegabird113.cmd_delete.config.load.CustomMappingsJSONManager;
-import io.github.omegabird113.cmd_delete.mappings.CustomNavMappings;
+import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
+import io.github.omegabird113.cmd_delete.config.fileio.MappingsJSONManager;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
-import io.github.omegabird113.cmd_delete.mappings.Os;
+import io.github.omegabird113.cmd_delete.utils.Os;
+import org.jetbrains.annotations.Contract;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,69 +16,55 @@ public final class MappingsInfoCollectionUtils {
     private MappingsInfoCollectionUtils() {
     }
 
-    public static String getInfoFrom(MappingsState mappingsState, boolean includeDescription) {
-        float coverage = NavActionManager.getCoverage(mappingsState.mappings());
+    @Contract(pure = true)
+    public static @NonNull String getInfoFrom(final @NonNull MappingsState mappingsState, final boolean includeDescription) {
+        final double coverage = mappingsState.mappings().getCoverage();
 
-        String namespacedId = "";
         String displayName = "";
         String description = "";
-        String version = "";
-        String author = "";
 
-        String keyCombinationsString = "";
+        final String namespacedId = "\"" + MappingsIdResolutionUtils.resolveNamespacedId(mappingsState) + "\"";
+        final String version = mappingsState.mappings().registry().version();
+        final String author = mappingsState.mappings().registry().author();
+        final String[] systemStrings = Arrays.stream(mappingsState.mappings().getMappingsSupportedSystems())
+                .map(Os::name)
+                .toArray(String[]::new);
 
         switch (mappingsState.type()) {
             case CUSTOM -> {
-                CustomNavMappings custom = (CustomNavMappings) mappingsState.mappings();
-
-                namespacedId = "custom:" + custom.getRegistry().getFilename();
-                displayName = "\"" + custom.getRegistry().getName() + "\"";
-                description = custom.getRegistry().getDescription();
-                version = custom.getRegistry().getVersion();
-                author = custom.getRegistry().getAuthor();
-
-                keyCombinationsString = " with " + custom.getRegistry().getSize() + " key combinations registered";
+                displayName = "\"" + mappingsState.mappings().registry().name() + "\"";
+                description = mappingsState.mappings().registry().description();
             }
             case BUILTIN -> {
-                String[] systemStrings = Arrays.stream(mappingsState.mappings().getMappingsSupportedSystems())
-                        .map(Os::name)
-                        .toArray(String[]::new);
-
-                namespacedId = "builtin:" + String.join("_", systemStrings).toLowerCase(Locale.ROOT);
-                displayName = String.join(" and ", systemStrings) + " mappings";
-                description = "Hard-coded mappings for the specified operating system(s).";
-                version = CmdDeleteClient.VERSION;
-                author = "Omegabird113";
+                displayName = mappingsState.mappings().registry().name();
+                description = mappingsState.mappings().registry().description();
             }
             case DEFAULT -> {
-                String[] systemStrings = Arrays.stream(mappingsState.mappings().getMappingsSupportedSystems())
-                        .map(Os::name)
-                        .toArray(String[]::new);
-
-                namespacedId = "\"\"";
                 displayName = "Default Mappings (Resolved to " + String.join(" and ", systemStrings) + ")";
-                description = "The default behaviour to set the mappings to the hard-coded mappings for the OS you're currently using.";
-                version = CmdDeleteClient.VERSION;
-                author = "Omegabird113";
+                description = "The hard-coded default behaviour to set the mappings to the pre-bundled mappings for the OS of the system when the client is loaded.";
             }
         }
 
-        String baseString = displayName + " (id: " + namespacedId + ") v" + version + " by " + author;
-        String descriptionString = "\nDescription:\n" + description;
-        String coverageString = "\nThese mappings have " + String.format(Locale.ROOT, "%.2f", coverage * 100) + "% action coverage" + keyCombinationsString + ".";
+        final String baseString = displayName + " (id: " + namespacedId + ") v" + version + " by " + author;
+        final String descriptionString = "\nDescription:\n" + description;
+        final String coverageString = "\nThese mappings have " + String.format(Locale.ROOT, "%.2f", coverage * 100) + "% action coverage with " + mappingsState.mappings().registry().getSize() + " key combinations registered with support for " + String.join(" and ", systemStrings) + ".";
 
         return includeDescription ? baseString + coverageString + descriptionString : baseString + coverageString;
     }
 
-    public static String[] getMappingsList() {
-        List<String> internal = new ArrayList<>(
+    @Contract(pure = true)
+    public static @NonNull String @NonNull [] getMappingsList() {
+        final List<String> internal = new ArrayList<>(
                 List.of(
                         "default",
                         "builtin:windows_linux",
-                        "builtin:mac"
+                        "builtin:mac",
+                        "builtin:emacs_windows_linux",
+                        "builtin:emacs_mac",
+                        "builtin:readline"
                 )
         );
-        internal.addAll(CustomMappingsJSONManager.getAvailableOptions());
+        internal.addAll(MappingsJSONManager.getAvailableOptions(true));
         return internal.toArray(String[]::new);
     }
 }

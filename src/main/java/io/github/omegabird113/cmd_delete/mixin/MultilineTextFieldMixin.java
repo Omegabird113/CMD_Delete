@@ -1,12 +1,16 @@
 package io.github.omegabird113.cmd_delete.mixin;
 
 import io.github.omegabird113.cmd_delete.actions.NavAction;
-import io.github.omegabird113.cmd_delete.actions.NavActionManager;
+import io.github.omegabird113.cmd_delete.actions.NavActionOffset;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
+import io.github.omegabird113.cmd_delete.utils.CrashUtils;
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.MultilineTextField;
 import net.minecraft.client.gui.components.Whence;
 import net.minecraft.client.input.KeyEvent;
+import org.lwjgl.glfw.GLFW;
+import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -19,6 +23,13 @@ import java.util.List;
 
 @Mixin(value = MultilineTextField.class, priority = 2000)
 public abstract class MultilineTextFieldMixin {
+    @Unique
+    private static final Logger LOGGER = LoggingManager.getLoggerFor(MultilineTextFieldMixin.class);
+
+    static {
+        LoggingManager.debugLog(LOGGER, "MultilineTextFieldMixin loaded");
+    }
+
     @Shadow
     private String value;
 
@@ -28,6 +39,9 @@ public abstract class MultilineTextFieldMixin {
     @Final
     @Shadow
     private List<?> displayLines;
+
+    @Shadow
+    private int selectCursor;
 
     @Shadow
     public abstract void setSelecting(boolean selecting);
@@ -44,10 +58,13 @@ public abstract class MultilineTextFieldMixin {
     @Shadow
     public abstract void seekCursorLine(int lineOffset);
 
+    @Shadow
+    public abstract String getSelectedText();
+
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void cmd_delete$overrideMultilineNavigation(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
-        NavAction action = NavMappingsManager.getCurrentMappings().getAction(event, Minecraft.getInstance().getWindow());
-        int direction = NavActionManager.getDirection(action);
+        final NavAction action = CrashUtils.crashMinecraftOnFailure(() -> NavMappingsManager.getCurrentMappings().getAction(event, Minecraft.getInstance().getWindow()));
+        int direction = action != null ? action.offset().value() : NavActionOffset.INVALID.value();
 
         switch (action) {
             case DEL_LINE_LEFT, DEL_LINE_RIGHT -> {
@@ -108,7 +125,47 @@ public abstract class MultilineTextFieldMixin {
                 this.setSelecting(true);
                 this.seekCursorLine(direction);
             }
-            default -> {
+            case OVR_NAV_CHAR_LEFT -> {
+                this.setSelecting(false);
+                this.seekCursor(Whence.RELATIVE, -1);
+            }
+            case OVR_NAV_CHAR_RIGHT -> {
+                this.setSelecting(false);
+                this.seekCursor(Whence.RELATIVE, 1);
+            }
+            case OVR_SEL_CHAR_LEFT -> {
+                this.setSelecting(true);
+                this.seekCursor(Whence.RELATIVE, -1);
+            }
+            case OVR_SEL_CHAR_RIGHT -> {
+                this.setSelecting(true);
+                this.seekCursor(Whence.RELATIVE, 1);
+            }
+            case OVR_DEL_CHAR_LEFT -> this.deleteText(-1);
+            case OVR_DEL_CHAR_RIGHT -> this.deleteText(1);
+            case OVR_NAV_TEXT_UP -> {
+                this.setSelecting(false);
+                this.seekCursorLine(-1);
+            }
+            case OVR_NAV_TEXT_DOWN -> {
+                this.setSelecting(false);
+                this.seekCursorLine(1);
+            }
+            case OVR_COPY -> Minecraft.getInstance().keyboardHandler.setClipboard(this.getSelectedText());
+            case OVR_CUT -> {
+                Minecraft.getInstance().keyboardHandler.setClipboard(this.getSelectedText());
+                this.insertText("");
+            }
+            case OVR_PASTE -> this.insertText(Minecraft.getInstance().keyboardHandler.getClipboard());
+            case OVR_SELECT_ALL -> {
+                this.cursor = this.value.length();
+                this.selectCursor = 0;
+            }
+            case NONE -> {
+                if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation()) || event.isEscape() || event.key() == GLFW.GLFW_KEY_ENTER || event.key() == GLFW.GLFW_KEY_KP_ENTER)
+                    return;
+            }
+            case null -> {
                 return;
             }
         }
@@ -118,64 +175,48 @@ public abstract class MultilineTextFieldMixin {
 
     @Unique
     private void cmd_delete$moveToLineEdge(int direction) {
-        this.seekCursor(Whence.ABSOLUTE, direction < 0
-                ? this.cmd_delete$getLineStart()
-                : this.cmd_delete$getLineEnd());
+        this.seekCursor(Whence.ABSOLUTE, direction < 0 ? this.cmd_delete$getLineStart() : this.cmd_delete$getLineEnd());
     }
 
     @Unique
     private int cmd_delete$getLineStart() {
-        MultilineTextFieldStringViewAccessor lineView = this.cmd_delete$getCursorLineView();
+        final MultilineTextFieldStringViewAccessor lineView = this.cmd_delete$getCursorLineView();
         return lineView == null ? 0 : lineView.cmd_delete$getBeginIndex();
     }
 
     @Unique
     private int cmd_delete$getLineEnd() {
-        MultilineTextFieldStringViewAccessor lineView = this.cmd_delete$getCursorLineView();
+        final MultilineTextFieldStringViewAccessor lineView = this.cmd_delete$getCursorLineView();
         return lineView == null ? this.value.length() : lineView.cmd_delete$getEndIndex();
     }
 
     @Unique
     private MultilineTextFieldStringViewAccessor cmd_delete$getCursorLineView() {
         for (Object lineView : this.displayLines) {
-            MultilineTextFieldStringViewAccessor accessor = (MultilineTextFieldStringViewAccessor) lineView;
-            if (this.cursor >= accessor.cmd_delete$getBeginIndex() && this.cursor <= accessor.cmd_delete$getEndIndex()) {
+            final MultilineTextFieldStringViewAccessor accessor = (MultilineTextFieldStringViewAccessor) lineView;
+            if (this.cursor >= accessor.cmd_delete$getBeginIndex() && this.cursor <= accessor.cmd_delete$getEndIndex())
                 return accessor;
-            }
         }
-
-        return this.displayLines.isEmpty()
-                ? null
-                : (MultilineTextFieldStringViewAccessor) this.displayLines.getLast();
+        return this.displayLines.isEmpty() ? null : (MultilineTextFieldStringViewAccessor) this.displayLines.getLast();
     }
 
     @Unique
     private int cmd_delete$getPreviousWordStart() {
         int pos = Math.clamp(this.cursor, 0, this.value.length());
-
-        while (pos > 0 && Character.isWhitespace(this.value.charAt(pos - 1))) {
+        while (pos > 0 && Character.isWhitespace(this.value.charAt(pos - 1)))
             pos--;
-        }
-
-        while (pos > 0 && !Character.isWhitespace(this.value.charAt(pos - 1))) {
+        while (pos > 0 && !Character.isWhitespace(this.value.charAt(pos - 1)))
             pos--;
-        }
-
         return pos;
     }
 
     @Unique
     private int cmd_delete$getNextWordStart() {
         int pos = Math.clamp(this.cursor, 0, this.value.length());
-
-        while (pos < this.value.length() && !Character.isWhitespace(this.value.charAt(pos))) {
+        while (pos < this.value.length() && !Character.isWhitespace(this.value.charAt(pos)))
             pos++;
-        }
-
-        while (pos < this.value.length() && Character.isWhitespace(this.value.charAt(pos))) {
+        while (pos < this.value.length() && Character.isWhitespace(this.value.charAt(pos)))
             pos++;
-        }
-
         return pos;
     }
 }

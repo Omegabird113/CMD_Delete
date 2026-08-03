@@ -1,25 +1,61 @@
 package io.github.omegabird113.cmd_delete;
 
 import io.github.omegabird113.cmd_delete.command.NavMappingsCommand;
-import io.github.omegabird113.cmd_delete.config.load.CustomMappingsJSONManager;
+import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
+import io.github.omegabird113.cmd_delete.utils.CrashUtils;
+import io.github.omegabird113.cmd_delete.utils.LoadTimer;
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
+import io.github.omegabird113.cmd_delete.utils.Os;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.Minecraft;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.spongepowered.asm.mixin.MixinEnvironment;
 
-public class CmdDeleteClient implements ClientModInitializer {
-    public static final String MODID = "cmd_delete";
-    public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
-    public static final String VERSION = FabricLoader.getInstance().getModContainer(MODID)
+import java.nio.file.Path;
+
+public final class CmdDeleteClient implements ClientModInitializer {
+    public static final @NonNull String MODID = "cmd_delete";
+    public static final @NonNull String ISSUE_TRACKER_URL_STRING = "https://github.com/Omegabird113/CMD_Delete/issues";
+    public static final int CURRENT_MAPPINGS_FORMAT_VERSION = 4;
+    public static final int MINIMUM_MAPPINGS_FORMAT_VERSION = 2;
+    public static final int SHARECODE_FORMAT_VERSION = 1;
+    private static final @NonNull FabricLoader LOADER = FabricLoader.getInstance();
+    public static final @NonNull String VERSION = LOADER.getModContainer(MODID)
             .map(container -> container.getMetadata().getVersion().getFriendlyString())
             .orElse("<unknown>");
+    private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(CmdDeleteClient.class);
 
     @Override
     public void onInitializeClient() {
-        LOGGER.info("Initializing client mod \"{}\" (version {})...", MODID, VERSION);
-        CustomMappingsJSONManager.tryMakeConfigFiles();
-        NavMappingsManager.loadMappings();
-        NavMappingsCommand.register();
+        LoadTimer.time(() -> CrashUtils.crashMinecraftOnFailure(() -> {
+            LoadTimer.time(() -> {
+                LOGGER.info("Initializing client mod \"{}\" (version: {}, mappings format version: {}, minimum mappings compatible version: {}, sharecode encoding version: {})... You can report any issues at {}.", MODID, VERSION, CURRENT_MAPPINGS_FORMAT_VERSION, MINIMUM_MAPPINGS_FORMAT_VERSION, SHARECODE_FORMAT_VERSION, ISSUE_TRACKER_URL_STRING);
+                LOGGER.info("User appears to be running system: {}", Os.USING);
+
+                final MixinEnvironment mixinEnv = MixinEnvironment.getCurrentEnvironment();
+                LoggingManager.traceLog(LOGGER, "Mixin version {} with obfuscation \"{}\" and compatibility level \"{}\" in phase \"{}\" on side \"{}\"", mixinEnv.getVersion(), mixinEnv.getObfuscationContext(), MixinEnvironment.getCompatibilityLevel(), mixinEnv.getPhase(), mixinEnv.getSide());
+
+                CrashUtils.sendLoadInfo();
+            }, "initial logging & CrashUtils info", true);
+
+            LoadTimer.time(() -> {
+                final Path gameDir = LOADER.getGameDir();
+                final Path resourceMappingsDir = LOADER.getModContainer(CmdDeleteClient.MODID)
+                        .orElseThrow().findPath("mappings/").orElseThrow();
+                PathConstants.init(gameDir, resourceMappingsDir);
+            }, "path initialization", true);
+
+            LoadTimer.time(NavMappingsManager::loadMappings, "loading mappings", true);
+            LoadTimer.time(NavMappingsCommand::register, "registering /navmappings", true);
+        }), "full load", false);
+
+        if (Boolean.getBoolean("cmd_delete.ci.stopMinecraftAfterLoad")) {
+            LOGGER.info("Stopping Minecraft client due to set \"cmd_delete.ci.stopMinecraftAfterLoad\" jvm property...");
+            Minecraft.getInstance().stop();
+            System.exit(0);
+        }
     }
 }
