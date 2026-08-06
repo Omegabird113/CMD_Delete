@@ -23,12 +23,12 @@ public final class ActiveMappingsManager {
     }
 
     public static @Nullable MappingsState tryResolveCustomMappings(final @NonNull String id) {
-        final Optional<NavMappings> mappings = MappingsJSONManager.tryLoadCustomMappings(id);
+        final Optional<NavMappings> mappings = MappingsJSONManager.tryLoadMappings(id, true);
         return mappings.map(navMappings -> new MappingsState(navMappings, MappingsType.CUSTOM, id)).orElse(null);
     }
 
     public static @Nullable MappingsState tryResolveBuiltinMappings(final @NonNull String id, final @NonNull MappingsType mappingsType) {
-        final Optional<NavMappings> mappings = MappingsJSONManager.tryLoadBuiltinMappings(id);
+        final Optional<NavMappings> mappings = MappingsJSONManager.tryLoadMappings(id, false);
         if (mappings.isEmpty())
             return null;
         final String idToGet = mappingsType == MappingsType.DEFAULT ? "" : id;
@@ -52,6 +52,25 @@ public final class ActiveMappingsManager {
             case BUILTIN -> tryResolveBuiltinMappings(id, MappingsType.BUILTIN);
             case DEFAULT -> tryResolveBuiltinMappings(defaultMappingsId, MappingsType.DEFAULT);
         };
+    }
+
+    public static @NonNull MappingsState resolveMappingsWithDefaultFallback(final @NonNull String namespacedId) {
+        final String id = removeNamespaceFromId(namespacedId);
+        final MappingsType mappingsType = resolveType(namespacedId);
+        final String defaultMappingsId = resolveDefaultMappingsNonNamespacedId();
+        MappingsState newState = switch (mappingsType) {
+            case CUSTOM -> tryResolveCustomMappings(id);
+            case BUILTIN -> tryResolveBuiltinMappings(id, MappingsType.BUILTIN);
+            case DEFAULT -> tryResolveBuiltinMappings(defaultMappingsId, MappingsType.DEFAULT);
+        };
+        if (newState == null) {
+            if (mappingsType == MappingsType.DEFAULT)
+                throw new IllegalStateException("Failed to resolve default mappings.");
+            newState = tryResolveBuiltinMappings(defaultMappingsId, MappingsType.DEFAULT);
+            if (newState == null)
+                throw new IllegalStateException("Failed to resolve default mappings.");
+        }
+        return newState;
     }
 
     public static void writeActiveMappings(final @NonNull String namespacedId) throws IOException {
