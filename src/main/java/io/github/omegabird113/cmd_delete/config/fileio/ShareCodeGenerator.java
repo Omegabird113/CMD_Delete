@@ -1,23 +1,25 @@
-package io.github.omegabird113.cmd_delete.config.sharecode;
+package io.github.omegabird113.cmd_delete.config.fileio;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
-import io.github.omegabird113.cmd_delete.config.fileio.MappingsJSONManager;
-import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
 import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import org.apache.commons.codec.binary.Base58;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Locale;
+import java.util.Objects;
 import java.util.zip.CRC32;
+import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 public final class ShareCodeGenerator {
@@ -70,10 +72,57 @@ public final class ShareCodeGenerator {
         return crc32.getValue();
     }
 
-    public static @NonNull String generate(final @NonNull String namespacedId) {
+    public static @NonNull String encode(final @NonNull String namespacedId) {
         return "CDS:"
                 + "EV" + CmdDeleteClient.SHARECODE_FORMAT_VERSION + ":"
                 + generateCoreShareCode(namespacedId) + ":"
                 + genCRC32checksum(collapseWhitespace(namespacedId));
+    }
+
+    @Contract("_ -> new")
+    public static @NonNull String decodeCoreShareCode(final @NonNull String input) throws IOException {
+        try (final ByteArrayInputStream bais = new ByteArrayInputStream(BASE_58.decode(input));
+             final GZIPInputStream gzip = new GZIPInputStream(bais)) {
+            return new String(gzip.readAllBytes(), StandardCharsets.UTF_8);
+        }
+    }
+
+    @Contract("_ -> new")
+    public static String @NonNull [] getShareCodeStringArray(final @NonNull String shareCode) {
+        final String[] split = shareCode.split(":");
+
+        if (split.length != 4)
+            throw new IllegalArgumentException("Invalid share code (Wrong length): " + shareCode);
+        if (!Objects.equals(split[0].toUpperCase(Locale.ROOT), "CDS"))
+            throw new IllegalArgumentException("Invalid share code (Not CDS pre-fixed): " + shareCode);
+        if (!Objects.equals(split[1].toUpperCase(Locale.ROOT), "EV" + CmdDeleteClient.SHARECODE_FORMAT_VERSION))
+            throw new IllegalArgumentException("Invalid share code (Incorrect format version): " + shareCode);
+
+        return split;
+    }
+
+    public static @NonNull String decode(final @NonNull String shareCode) {
+        final String[] split = getShareCodeStringArray(shareCode);
+
+        String coreDecoded;
+        try {
+            coreDecoded = decodeCoreShareCode(split[2]);
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Invalid share code (Failed to decode core): " + shareCode, e);
+        }
+
+        final long actualChecksum = genCRC32checksum(coreDecoded);
+        long expectedChecksum;
+        try {
+            expectedChecksum = Long.parseLong(split[3]);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Invalid share code (Invalid checksum): " + shareCode, e);
+        }
+
+        if (actualChecksum != expectedChecksum) {
+            throw new IllegalArgumentException("Invalid share code (Checksum mismatch): " + shareCode);
+        }
+
+        return coreDecoded;
     }
 }

@@ -10,8 +10,7 @@ import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.config.fileio.JsonParsingUtils;
 import io.github.omegabird113.cmd_delete.config.fileio.MappingsJSONManager;
 import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
-import io.github.omegabird113.cmd_delete.config.sharecode.ShareCodeDecoder;
-import io.github.omegabird113.cmd_delete.config.sharecode.ShareCodeGenerator;
+import io.github.omegabird113.cmd_delete.config.fileio.ShareCodeGenerator;
 import io.github.omegabird113.cmd_delete.mappings.MappingsType;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.Minecraft;
@@ -35,7 +34,7 @@ final class NavMappingsCommandExecutionUtils {
         final String idStr = StringArgumentType.getString(context, "id");
 
         final String namespacedId = MappingsIdResolutionUtils.resolveNamespacedId(MappingsType.fromIfCustom(custom), idStr);
-        final String shareCode = ShareCodeGenerator.generate(namespacedId);
+        final String shareCode = ShareCodeGenerator.encode(namespacedId);
 
         Minecraft.getInstance().keyboardHandler.setClipboard(shareCode);
         context.getSource().sendFeedback(Component.literal("Mappings \"" + (custom ? "custom:" : "builtin:") + idStr + "\" can be shared as: " + shareCode));
@@ -88,7 +87,7 @@ final class NavMappingsCommandExecutionUtils {
     static void importShareCode(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context, final @NonNull String shareCode) throws CommandSyntaxException {
         String decoded;
         try {
-            decoded = ShareCodeDecoder.decode(shareCode.trim());
+            decoded = ShareCodeGenerator.decode(shareCode.trim());
 
             final JsonObject jsonObject = MappingsJSONManager.GSON.fromJson(decoded, JsonObject.class);
             final JsonObject meta = JsonParsingUtils.requireObject(jsonObject, "meta");
