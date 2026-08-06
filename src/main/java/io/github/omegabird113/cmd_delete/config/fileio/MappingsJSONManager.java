@@ -31,43 +31,38 @@ public final class MappingsJSONManager {
     private MappingsJSONManager() {
     }
 
-    public static @NonNull MappingsRegistry loadFromDir(final @NonNull MappingsType mappingsType, final @NonNull String id) throws IOException {
-        final Path path = PathConstants.getPathOf(mappingsType, id);
+    public static @NonNull MappingsRegistry loadFromDir(final @NonNull String id, final boolean custom) throws IOException {
+        final Path path = PathConstants.getPathOf(MappingsType.fromIfCustom(custom), id);
 
         if (!Files.exists(path))
-            throw new FileNotFoundException(mappingsType.commonName() + " mapping file not found at: " + path);
+            throw new FileNotFoundException(MappingsType.fromIfCustom(custom).commonName() + " mapping file not found at: " + path);
 
         try (java.io.BufferedReader reader = Files.newBufferedReader(path)) {
             final MappingsRegistry registry = GSON.fromJson(reader, MappingsRegistry.class);
             if (!registry.id().equals(id))
-                throw new JsonParseException(mappingsType.commonName() + " mappings id \"" + registry.id() + "\" does not match filename \"" + id + "\"");
+                throw new JsonParseException(MappingsType.fromIfCustom(custom).commonName() + " mappings id \"" + registry.id() + "\" does not match filename \"" + id + "\"");
             return registry;
         }
     }
 
-    public static @NonNull Optional<NavMappings> tryLoadCustomMappings(final @NonNull String id) {
-        final Optional<MappingsRegistry> registry = getRegistryFrom(true, id);
+    public static @NonNull Optional<NavMappings> tryLoadMappings(final @NonNull String id, final boolean custom) {
+        final Optional<MappingsRegistry> registry = getRegistryFrom(id, custom);
         if (registry.isPresent())
             try {
                 final MappingsRegistry resolved = resolveInheritance(registry.get());
                 return Optional.of(new NavMappings(resolved));
             } catch (IOException e) {
-                LOGGER.error("Failed to resolve {} mappings inheritance for \"{}\"", MappingsType.CUSTOM.commonName(), id, e);
+                LOGGER.error("Failed to resolve {} mappings inheritance for \"{}\"", MappingsType.fromIfCustom(custom).commonName(), id, e);
                 return Optional.empty();
             }
         else
             return Optional.empty();
     }
 
-    public static @NonNull Optional<NavMappings> tryLoadBuiltinMappings(final @NonNull String id) {
-        final Optional<MappingsRegistry> registry = getRegistryFrom(false, id);
-        return registry.map(NavMappings::new);
-    }
-
-    public static @NonNull Optional<MappingsRegistry> getRegistryFrom(final boolean custom, final @NonNull String id) {
+    public static @NonNull Optional<MappingsRegistry> getRegistryFrom(final @NonNull String id, final boolean custom) {
         final String typeCName = MappingsType.fromIfCustom(custom).commonName();
         try {
-            final MappingsRegistry registry = loadFromDir(MappingsType.fromIfCustom(custom), id);
+            final MappingsRegistry registry = loadFromDir(id, custom);
             return Optional.of(registry);
         } catch (FileNotFoundException ignored) {
             LOGGER.error("Could not access {} mapping file \"{}\" (at \"{}\") because it does not exist.", typeCName, id, PathConstants.getPathOf(MappingsType.fromIfCustom(custom), id));
@@ -95,7 +90,7 @@ public final class MappingsJSONManager {
             } else {
                 final boolean inheritsCustom = current.inherits().startsWith(MappingsType.CUSTOM.prefix());
                 final String idToGet = MappingsIdResolutionUtils.removeNamespaceFromId(current.inherits());
-                final Optional<MappingsRegistry> newRegistry = getRegistryFrom(inheritsCustom, idToGet);
+                final Optional<MappingsRegistry> newRegistry = getRegistryFrom(idToGet, inheritsCustom);
                 namespacePrefix = MappingsType.fromIfCustom(inheritsCustom).prefix();
                 if (newRegistry.isEmpty())
                     throw new IOException("Failed to resolve inheritance of " + MappingsType.fromIfCustom(inheritsCustom).commonName() + " mappings \"" + idToGet + "\" by mappings \"" + current.id() + "\" because the inherited registry couldn't load.");
