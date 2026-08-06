@@ -3,7 +3,7 @@
   "id": "cmd_delete",
   "version": "1.4.1+mc26.1",
   "name": "CMD + Delete",
-  "description": "A text navigation shortcuts framework for Minecraft, allowing macOS users to have native text behavior & everyone else to define custom shortcuts.",
+  "description": "Fix macOS text navigation shortcuts in chat/books/signs/etc + allow custom shortcuts.",
   "authors": [
     "Omegabird113"
   ],
