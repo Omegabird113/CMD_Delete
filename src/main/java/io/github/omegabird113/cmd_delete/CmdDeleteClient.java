@@ -22,6 +22,7 @@ public final class CmdDeleteClient implements ClientModInitializer {
     public static final int CURRENT_MAPPINGS_FORMAT_VERSION = 4;
     public static final int MINIMUM_MAPPINGS_FORMAT_VERSION = 2;
     public static final int SHARECODE_FORMAT_VERSION = 1;
+    public static final boolean FORCE_PREVENT_OVERRIDE_MODE = Boolean.getBoolean("cmd_delete.forcePreventOverrideMode");
     private static final @NonNull FabricLoader LOADER = FabricLoader.getInstance();
     public static final @NonNull String VERSION = LOADER.getModContainer(MODID)
             .map(container -> container.getMetadata().getVersion().getFriendlyString())
@@ -39,6 +40,9 @@ public final class CmdDeleteClient implements ClientModInitializer {
                 LoggingManager.traceLog(LOGGER, "Mixin version {} with obfuscation \"{}\" and compatibility level \"{}\" in phase \"{}\" on side \"{}\"", mixinEnv.getVersion(), mixinEnv.getObfuscationContext(), MixinEnvironment.getCompatibilityLevel(), mixinEnv.getPhase(), mixinEnv.getSide());
 
                 CrashUtils.sendLoadInfo();
+
+                if (FORCE_PREVENT_OVERRIDE_MODE)
+                    LOGGER.warn("Override mode is not allowed for any mappings set due to the \"cmd_delete.forcePreventOverrideMode\" JVM property being set to true. This prevents any mappings set from using override actions even if it enables the Feature Flag. This mode is not recommended unless you are actively troubleshooting an issue with override mode.");
             }, "initial logging & CrashUtils info", true);
 
             LoadTimer.time(() -> {

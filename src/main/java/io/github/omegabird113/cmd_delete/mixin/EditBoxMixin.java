@@ -1,5 +1,6 @@
 package io.github.omegabird113.cmd_delete.mixin;
 
+import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import io.github.omegabird113.cmd_delete.utils.CrashUtils;
@@ -98,7 +99,7 @@ public abstract class EditBoxMixin extends AbstractWidget {
             case OVR_CUT -> {
                 Minecraft.getInstance().keyboardHandler.setClipboard(this.getHighlighted());
                 if (this.isEditable())
-                    this.deleteCharsToPos(this.getHighlighted().length());
+                    this.insertText("");
             }
             case OVR_PASTE -> {
                 if (this.isEditable())
@@ -112,7 +113,7 @@ public abstract class EditBoxMixin extends AbstractWidget {
                 return;
             }
             case NONE -> {
-                if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation()) || keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER)
+                if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation()) || CmdDeleteClient.FORCE_PREVENT_OVERRIDE_MODE || keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER)
                     return;
             }
         }
