@@ -104,8 +104,10 @@ public final class MappingsJSONManager {
     }
 
     public static <T> List<T> reverseList(List<T> list) {
-        if (list == null || list.size() <= 1)
+        if (list == null || list.isEmpty())
             return List.of();
+        if (list.size() == 1)
+            return List.copyOf(list);
 
         ArrayList<T> internal = new ArrayList<>(list);
         int left = 0;
