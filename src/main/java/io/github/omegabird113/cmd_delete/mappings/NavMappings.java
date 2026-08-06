@@ -20,7 +20,7 @@ public record NavMappings(@NonNull MappingsRegistry registry) {
         final NavAction action = registry.get(keyCombo);
         if (action == null)
             return NONE;
-        if (action.overrideMode() && Boolean.FALSE.equals(registry.featureFlags().overrideVanillaNavigation()))
+        if (action.overrideMode() && (Boolean.FALSE.equals(registry.featureFlags().overrideVanillaNavigation()) || CmdDeleteClient.FORCE_PREVENT_OVERRIDE_MODE))
             return NONE;
         return action;
     }
