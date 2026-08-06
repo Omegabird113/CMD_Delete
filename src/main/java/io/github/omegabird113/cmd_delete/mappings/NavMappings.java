@@ -1,6 +1,7 @@
 package io.github.omegabird113.cmd_delete.mappings;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.data.KeyCombo;
 import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
