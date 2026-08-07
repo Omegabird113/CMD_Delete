@@ -35,7 +35,7 @@ public class JsonParsingUtilsTests {
         final JsonObject json = new JsonObject();
         json.addProperty("id", "sample_mapping");
 
-        Assertions.assertEquals("sample_mapping", JsonParsingUtils.requireFileSafeString(json, "id"));
+        Assertions.assertEquals("sample_mapping", JsonParsingUtils.requireFilenameSafeString(json, "id"));
     }
 
     @Test
@@ -43,6 +43,6 @@ public class JsonParsingUtilsTests {
         final JsonObject json = new JsonObject();
         json.addProperty("id", "../sample");
 
-        Assertions.assertThrows(JsonParseException.class, () -> JsonParsingUtils.requireFileSafeString(json, "id"));
+        Assertions.assertThrows(JsonParseException.class, () -> JsonParsingUtils.requireFilenameSafeString(json, "id"));
     }
 }
