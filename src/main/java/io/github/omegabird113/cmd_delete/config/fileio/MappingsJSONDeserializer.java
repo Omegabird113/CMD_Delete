@@ -185,7 +185,7 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
         final String author = getStringElse(meta, "author", "unknown").replace("$$cmd_delete$$", "Omegabird113");
         final String description = getStringElse(meta, "description", "No description provided");
         final String version = getStringElse(meta, "version", "unknown").replace("$$cmd_delete$$", CmdDeleteClient.VERSION);
-        final String id = requireString(meta, "id");
+        final String id = requireFileSafeString(meta, "id");
 
         final JsonArray systems = requireArray(meta, "systems");
         final Set<Os> parsedSystems = parseSystems(systems, strictMode);

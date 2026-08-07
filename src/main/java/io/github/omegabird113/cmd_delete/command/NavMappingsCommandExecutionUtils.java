@@ -107,7 +107,7 @@ final class NavMappingsCommandExecutionUtils {
 
             final JsonObject jsonObject = MappingsJSONManager.GSON.fromJson(decoded, JsonObject.class);
             final JsonObject meta = JsonParsingUtils.requireObject(jsonObject, "meta");
-            final String idStr = JsonParsingUtils.requireString(meta, "id");
+            final String idStr = JsonParsingUtils.requireFileSafeString(meta, "id");
 
             final Path toCopyTo = PathConstants.getPathOf(MappingsType.CUSTOM, idStr);
             try (FileWriter writer = new FileWriter(toCopyTo.toFile())) {

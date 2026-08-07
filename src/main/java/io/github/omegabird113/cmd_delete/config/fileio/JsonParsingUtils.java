@@ -68,6 +68,15 @@ public final class JsonParsingUtils {
         return element.getAsString();
     }
 
+    public static @NonNull String requireFileSafeString(final @NonNull JsonObject parent, final @NonNull String fieldName) {
+        final String value = requireString(parent, fieldName);
+        if (value.indexOf('/') >= 0 || value.indexOf('\\') >= 0)
+            throw new JsonParseException("Expected \"" + fieldName + "\" to not contain path separators");
+        if (value.indexOf('\u0000') >= 0)
+            throw new JsonParseException("Expected \"" + fieldName + "\" to not contain NUL characters");
+        return value;
+    }
+
     @Contract(pure = true)
     public static boolean getOptionalBoolean(final @NonNull JsonObject parent, final @NonNull String fieldName) {
         if (!parent.has(fieldName))
