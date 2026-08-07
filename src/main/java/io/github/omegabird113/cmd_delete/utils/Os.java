@@ -31,14 +31,15 @@ public enum Os {
 
     @Contract(pure = true)
     public static @NonNull Os getCurrent() {
-        return Os.get(System.getProperty("os.name").toLowerCase(Locale.ROOT));
+        return Os.get(System.getProperty("os.name"));
     }
 
     @Contract(value = "_ -> new", pure = true)
     public static @NonNull Os get(final @NonNull String osName) {
-        if (osName.contains("mac"))
+        final String osNameLower = osName.toLowerCase(Locale.ROOT);
+        if (osNameLower.contains("mac"))
             return MAC;
-        else if (osName.contains("win"))
+        else if (osNameLower.contains("win"))
             return WINDOWS;
         else
             return LINUX;
