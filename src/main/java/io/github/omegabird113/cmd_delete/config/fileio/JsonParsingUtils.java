@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2026 Omegabird113.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package io.github.omegabird113.cmd_delete.config.fileio;
 
 import com.google.gson.JsonArray;
@@ -50,6 +66,15 @@ public final class JsonParsingUtils {
         if (!element.isJsonPrimitive() || !element.getAsJsonPrimitive().isString())
             throw new JsonParseException("Expected \"" + fieldName + "\" to be a string");
         return element.getAsString();
+    }
+
+    public static @NonNull String requireFilenameSafeString(final @NonNull JsonObject parent, final @NonNull String fieldName) {
+        final String value = requireString(parent, fieldName);
+        if (value.indexOf('/') >= 0 || value.indexOf('\\') >= 0)
+            throw new JsonParseException("Expected \"" + fieldName + "\" to not contain path separators");
+        if (value.indexOf('\u0000') >= 0)
+            throw new JsonParseException("Expected \"" + fieldName + "\" to not contain NUL characters");
+        return value;
     }
 
     @Contract(pure = true)

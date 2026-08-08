@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2026 Omegabird113.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package io.github.omegabird113.cmd_delete.command;
 
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -16,16 +32,16 @@ import java.util.List;
 
 public final class CommandCreationUtils {
     public static final @NonNull DynamicCommandExceptionType UNKNOWN_CUSTOM_MAPPINGS = new DynamicCommandExceptionType(
-            id -> Component.literal("Could not load custom navmappings: " + id)
+            id -> Component.translatable("commands.cmd_delete.error.unknown_custom_mappings", id)
     );
     public static final @NonNull DynamicCommandExceptionType UNKNOWN_BUILTIN_MAPPINGS = new DynamicCommandExceptionType(
-            id -> Component.literal("Could not load builtin navmappings: " + id)
+            id -> Component.translatable("commands.cmd_delete.error.unknown_builtin_mappings", id)
     );
     public static final @NonNull DynamicCommandExceptionType FAILED_CUSTOM_MAPPINGS_IMPORT = new DynamicCommandExceptionType(
-            location -> Component.literal("Could not import custom navmappings from: " + location)
+            location -> Component.translatable("commands.cmd_delete.error.failed_custom_mappings_import", location)
     );
     public static final @NonNull DynamicCommandExceptionType INVALID_SHARE_CODE = new DynamicCommandExceptionType(
-            shareCode -> Component.literal("Invalid share code: " + shareCode)
+            shareCode -> Component.translatable("commands.cmd_delete.error.invalid_share_code", shareCode)
     );
 
     public static final @NonNull SuggestionProvider<@NonNull FabricClientCommandSource> BUILTIN_SUGGESTIONS =

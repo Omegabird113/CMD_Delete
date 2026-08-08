@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2026 Omegabird113.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package io.github.omegabird113.cmd_delete.command;
 
 import com.google.gson.GsonBuilder;
@@ -10,8 +26,7 @@ import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.config.fileio.JsonParsingUtils;
 import io.github.omegabird113.cmd_delete.config.fileio.MappingsJSONManager;
 import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
-import io.github.omegabird113.cmd_delete.config.sharecode.ShareCodeDecoder;
-import io.github.omegabird113.cmd_delete.config.sharecode.ShareCodeGenerator;
+import io.github.omegabird113.cmd_delete.config.fileio.ShareCodeGenerator;
 import io.github.omegabird113.cmd_delete.mappings.MappingsType;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.Minecraft;
@@ -35,10 +50,10 @@ final class NavMappingsCommandExecutionUtils {
         final String idStr = StringArgumentType.getString(context, "id");
 
         final String namespacedId = MappingsIdResolutionUtils.resolveNamespacedId(MappingsType.fromIfCustom(custom), idStr);
-        final String shareCode = ShareCodeGenerator.generate(namespacedId);
+        final String shareCode = ShareCodeGenerator.encode(namespacedId);
 
         Minecraft.getInstance().keyboardHandler.setClipboard(shareCode);
-        context.getSource().sendFeedback(Component.literal("Mappings \"" + (custom ? "custom:" : "builtin:") + idStr + "\" can be shared as: " + shareCode));
+        context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.export_sharecode", MappingsIdResolutionUtils.resolveNamespacedId(MappingsType.fromIfCustom(custom), idStr), shareCode));
     }
 
     static void exportMappings(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context, final boolean custom) throws CommandSyntaxException {
@@ -82,17 +97,17 @@ final class NavMappingsCommandExecutionUtils {
                 throw CommandCreationUtils.UNKNOWN_BUILTIN_MAPPINGS.create(idStr);
         }
 
-        context.getSource().sendFeedback(Component.literal("Mappings \"" + (typeCName) + idStr + "\" copied to path: " + newPath.toAbsolutePath()));
+        context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.export_mappings", MappingsIdResolutionUtils.resolveNamespacedId(MappingsType.fromIfCustom(custom), idStr), newPath.toAbsolutePath()));
     }
 
     static void importShareCode(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context, final @NonNull String shareCode) throws CommandSyntaxException {
         String decoded;
         try {
-            decoded = ShareCodeDecoder.decode(shareCode.trim());
+            decoded = ShareCodeGenerator.decode(shareCode.trim());
 
             final JsonObject jsonObject = MappingsJSONManager.GSON.fromJson(decoded, JsonObject.class);
             final JsonObject meta = JsonParsingUtils.requireObject(jsonObject, "meta");
-            final String idStr = JsonParsingUtils.requireString(meta, "id");
+            final String idStr = JsonParsingUtils.requireFilenameSafeString(meta, "id");
 
             final Path toCopyTo = PathConstants.getPathOf(MappingsType.CUSTOM, idStr);
             try (FileWriter writer = new FileWriter(toCopyTo.toFile())) {
@@ -102,7 +117,7 @@ final class NavMappingsCommandExecutionUtils {
                 throw CommandCreationUtils.FAILED_CUSTOM_MAPPINGS_IMPORT.create(idStr);
             }
 
-            context.getSource().sendFeedback(Component.literal("Custom mappings sharecode imported successfully: " + idStr));
+            context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.import_sharecode_success", idStr));
         } catch (IllegalArgumentException | JsonParseException e) {
             LOGGER.error("Invalid share code: {}", shareCode, e);
             throw CommandCreationUtils.INVALID_SHARE_CODE.create(shareCode);
