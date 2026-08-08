@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "id": "cmd_delete",
-  "version": "1.4.1+mc26.3",
+  "version": "1.4.2+mc26.3",
   "name": "CMD + Delete",
-  "description": "A text navigation shortcuts framework for Minecraft, allowing macOS users to have native text behavior & everyone else to define custom shortcuts.",
+  "description": "Fix macOS text navigation shortcuts in chat/books/signs/etc + allow custom shortcuts.",
   "authors": [
     "Omegabird113"
   ],
@@ -30,5 +30,8 @@
       ">=26.3-alpha.4 <=26.3-alpha.7",
       ">=26.3-snapshot.4 <=26.3-snapshot.7"
     ]
+  },
+  "breaks": {
+    "macos-chat-fixes": "*"
   }
 }
