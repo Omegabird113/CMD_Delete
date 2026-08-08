@@ -1,3 +1,21 @@
+/*
+ * Copyright (c) 2026 Omegabird113.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import com.github.jengelman.gradle.plugins.shadow.relocation.SimpleRelocator
+
 plugins {
     id 'fabric-loom' version '1.10.5'
     id 'com.gradleup.shadow' version '9.6.1'
@@ -92,8 +110,15 @@ java {
 }
 
 tasks.shadowJar {
-    configurations = [project.configurations.shadeOnly]
-    relocate 'org.apache.commons.codec', 'io.github.omegabird113.cmd_delete.libs.commons.codec'
+    configurations.set([project.configurations.shadeOnly] as Set)
+    relocators.add(new SimpleRelocator(
+            'org.apache.commons.codec',
+            'io.github.omegabird113.cmd_delete.libs.commons.codec',
+            [] as List<String>,
+            [] as List<String>,
+            false,
+            false
+    ))
     archiveClassifier.set('dev-shadow')
 }
 
@@ -105,15 +130,16 @@ tasks.remapJar {
 tasks.jar {
     archiveClassifier.set('dev')
     from("LICENSE") {
-        rename { "${it}_${project.archives_base_name}" }
+        rename { String fileName -> "${fileName}_${project.archives_base_name}" }
     }
 }
 
 publishing {
     publications {
-        create("mavenJava", MavenPublication) {
-            artifactId = project.archives_base_name
-            from components.java
+        create("mavenJava", MavenPublication) { MavenPublication publication ->
+            publication.artifactId = project.archives_base_name
+            SoftwareComponent javaComponent = project.components.getByName("java")
+            publication.from(javaComponent)
         }
     }
 
@@ -135,7 +161,7 @@ loom {
         ciClient {
             client()
 
-            vmArg "-Dcmd_delete.ci.stopMinecraftAfterLoad=true"
+            getJvmArguments().add("-Dcmd_delete.ci.stopMinecraftAfterLoad=true")
         }
     }
 }
