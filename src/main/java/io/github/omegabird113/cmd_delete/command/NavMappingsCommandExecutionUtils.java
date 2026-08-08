@@ -53,7 +53,7 @@ final class NavMappingsCommandExecutionUtils {
         final String shareCode = ShareCodeGenerator.encode(namespacedId);
 
         Minecraft.getInstance().keyboardHandler.setClipboard(shareCode);
-        context.getSource().sendFeedback(Component.literal("Mappings \"" + (custom ? "custom:" : "builtin:") + idStr + "\" can be shared as: " + shareCode));
+        context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.export_sharecode", MappingsIdResolutionUtils.resolveNamespacedId(MappingsType.fromIfCustom(custom), idStr), shareCode));
     }
 
     static void exportMappings(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context, final boolean custom) throws CommandSyntaxException {
@@ -97,7 +97,7 @@ final class NavMappingsCommandExecutionUtils {
                 throw CommandCreationUtils.UNKNOWN_BUILTIN_MAPPINGS.create(idStr);
         }
 
-        context.getSource().sendFeedback(Component.literal("Mappings \"" + (typeCName) + idStr + "\" copied to path: " + newPath.toAbsolutePath()));
+        context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.export_mappings", MappingsIdResolutionUtils.resolveNamespacedId(MappingsType.fromIfCustom(custom), idStr), newPath.toAbsolutePath()));
     }
 
     static void importShareCode(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context, final @NonNull String shareCode) throws CommandSyntaxException {
@@ -117,7 +117,7 @@ final class NavMappingsCommandExecutionUtils {
                 throw CommandCreationUtils.FAILED_CUSTOM_MAPPINGS_IMPORT.create(idStr);
             }
 
-            context.getSource().sendFeedback(Component.literal("Custom mappings sharecode imported successfully: " + idStr));
+            context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.import_sharecode_success", idStr));
         } catch (IllegalArgumentException | JsonParseException e) {
             LOGGER.error("Invalid share code: {}", shareCode, e);
             throw CommandCreationUtils.INVALID_SHARE_CODE.create(shareCode);

@@ -32,16 +32,16 @@ import java.util.List;
 
 public final class CommandCreationUtils {
     public static final @NonNull DynamicCommandExceptionType UNKNOWN_CUSTOM_MAPPINGS = new DynamicCommandExceptionType(
-            id -> Component.literal("Could not load custom navmappings: " + id)
+            id -> Component.translatable("commands.cmd_delete.error.unknown_custom_mappings", id)
     );
     public static final @NonNull DynamicCommandExceptionType UNKNOWN_BUILTIN_MAPPINGS = new DynamicCommandExceptionType(
-            id -> Component.literal("Could not load builtin navmappings: " + id)
+            id -> Component.translatable("commands.cmd_delete.error.unknown_builtin_mappings", id)
     );
     public static final @NonNull DynamicCommandExceptionType FAILED_CUSTOM_MAPPINGS_IMPORT = new DynamicCommandExceptionType(
-            location -> Component.literal("Could not import custom navmappings from: " + location)
+            location -> Component.translatable("commands.cmd_delete.error.failed_custom_mappings_import", location)
     );
     public static final @NonNull DynamicCommandExceptionType INVALID_SHARE_CODE = new DynamicCommandExceptionType(
-            shareCode -> Component.literal("Invalid share code: " + shareCode)
+            shareCode -> Component.translatable("commands.cmd_delete.error.invalid_share_code", shareCode)
     );
 
     public static final @NonNull SuggestionProvider<@NonNull FabricClientCommandSource> BUILTIN_SUGGESTIONS =

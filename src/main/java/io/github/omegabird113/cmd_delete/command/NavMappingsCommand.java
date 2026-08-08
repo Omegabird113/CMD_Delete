@@ -135,38 +135,41 @@ public final class NavMappingsCommand {
 
     private static int dumpRegistry(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) {
         final MappingsRegistry mr = NavMappingsManager.getCurrentMappingsRegistry();
-        context.getSource().sendFeedback(Component.literal("Registry dump:\n" + mr.toString().replace("\t", "    ")));
+        context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.registry_dump", mr.toString().replace("\t", "    ")));
         return 1;
     }
 
     private static int dumpMappingsState(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) {
         final MappingsState ms = NavMappingsManager.getOptionalMappingsState().orElse(null);
         if (ms == null)
-            context.getSource().sendFeedback(Component.literal("State dump:\nnull"));
+            context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.state_dump.null"));
         else
-            context.getSource().sendFeedback(Component.literal("State dump:\n" + ms.toString().replace("\t", "    ")));
+            context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.state_dump", ms.toString().replace("\t", "    ")));
         return 1;
     }
 
     private static int dumpActions(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) {
         final String actionsDump = String.join(", ", Arrays.stream(NavAction.values()).map(NavAction::name).toArray(String[]::new));
-        context.getSource().sendFeedback(Component.literal("Actions dump:\n" + actionsDump));
+        context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.actions_dump", actionsDump));
         return 1;
     }
 
     private static int dumpDetailedActions(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) {
         final String actionsDump = NavAction.getDetailedActionDump();
-        context.getSource().sendFeedback(Component.literal("Detailed actions dump:\n" + actionsDump));
+        context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.detailed_actions_dump", actionsDump));
         return 1;
     }
 
     private static int dumpFeatureFlags(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) {
-        context.getSource().sendFeedback(Component.literal("Feature flags dump:\noverrideVanillaNavigation - default false\ncrossLineSignMovement - default true"));
+        context.getSource().sendFeedback(Component.translatable(
+                "commands.cmd_delete.feature_flags_dump",
+                "overrideVanillaNavigation - default false\ncrossLineSignMovement - default true"
+        ));
         return 1;
     }
 
     private static int dumpKeyMap(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) {
-        context.getSource().sendFeedback(Component.literal("KeyMap dump:\n" + KeyNameRegistry.getDumpString()));
+        context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.keymap_dump", KeyNameRegistry.getDumpString()));
         return 1;
     }
 
@@ -228,13 +231,13 @@ public final class NavMappingsCommand {
             throw FAILED_CUSTOM_MAPPINGS_IMPORT.create(locationStr);
         }
 
-        context.getSource().sendFeedback(Component.literal("Custom mappings from " + locationStr + " copied to path now available as \"custom:" + FilenameUtils.getBaseName(locationStr) + "\""));
+        context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.import_custom_success", locationStr, FilenameUtils.getBaseName(locationStr)));
         return 1;
     }
 
     private static int reloadMappings(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) {
         NavMappingsManager.loadMappings();
-        context.getSource().sendFeedback(Component.literal("Reloaded mappings: \"" + MappingsIdResolutionUtils.resolveNamespacedId(NavMappingsManager.getMappingsState()) + "\""));
+        context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.reload_success", MappingsIdResolutionUtils.resolveNamespacedId(NavMappingsManager.getMappingsState())));
         return 1;
     }
 
@@ -242,9 +245,9 @@ public final class NavMappingsCommand {
         final String id = StringArgumentType.getString(context, "id");
         if (!NavMappingsManager.updateMappingsTo(MappingsType.BUILTIN, id))
             throw UNKNOWN_BUILTIN_MAPPINGS.create(id);
-        context.getSource().sendFeedback(Component.literal("Set navmappings to builtin:" + id));
+        context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.set_builtin", id));
         if (id.equals("emacs_windows_linux") || id.equals("emacs_mac") || id.equals("readline"))
-            context.getSource().sendFeedback(Component.literal("WARNING: These mappings are not completely accurate to the conventions of the software they emulate. They do their best to provide similar behaviour to cause less issues with muscle memory, but they do not fully re-work Minecraft to provide the full experience of the control scheme."));
+            context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.warning_for_imperfect_mappings"));
         return 1;
     }
 
@@ -252,41 +255,40 @@ public final class NavMappingsCommand {
         final String id = StringArgumentType.getString(context, "id");
         if (!NavMappingsManager.updateMappingsTo(MappingsType.CUSTOM, id))
             throw UNKNOWN_CUSTOM_MAPPINGS.create(id);
-        context.getSource().sendFeedback(Component.literal("Set navmappings to custom:" + id));
+        context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.set_custom", id));
         return 1;
     }
 
     private static int setDefault(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) throws CommandSyntaxException {
         if (!NavMappingsManager.updateMappingsTo(MappingsType.DEFAULT, ""))
             throw UNKNOWN_BUILTIN_MAPPINGS.create(ActiveMappingsManager.resolveDefaultMappingsNonNamespacedId());
-        context.getSource().sendFeedback(Component.literal("Set navmappings to default"));
+        context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.set_default"));
         return 1;
     }
 
     private static int printMappingsInfo(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) {
         final MappingsState currentMappingState = NavMappingsManager.getMappingsState();
         final String info = MappingsInfoCollectionUtils.getInfoFrom(currentMappingState, true);
-        context.getSource().sendFeedback(Component.literal("The currently active mappings are:\n" + info));
+        context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.current_mappings", info));
         return 1;
     }
 
     private static int printMappingsList(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) {
         final String[] options = MappingsInfoCollectionUtils.getMappingsList();
-        context.getSource().sendFeedback(Component.literal("The currently available mappings options are:\n" + String.join("\n", options)));
+        context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.available_mappings", String.join("\n", options)));
         return 1;
     }
 
     private static int printCmdDeleteAbout(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) {
-        final String about = String.format(
-                "CMD + Delete (modid:%s) by Omegabird113 v%s using mappings format version %s (minimum of %s) and sharecode encoding version %s. You can report issues at %s.",
+        context.getSource().sendFeedback(Component.translatable(
+                "commands.cmd_delete.about",
                 CmdDeleteClient.MODID,
                 CmdDeleteClient.VERSION,
                 CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION,
                 CmdDeleteClient.MINIMUM_MAPPINGS_FORMAT_VERSION,
                 CmdDeleteClient.SHARECODE_FORMAT_VERSION,
                 CmdDeleteClient.ISSUE_TRACKER_URL_STRING
-        );
-        context.getSource().sendFeedback(Component.literal(about));
+        ));
         return 1;
     }
 }
