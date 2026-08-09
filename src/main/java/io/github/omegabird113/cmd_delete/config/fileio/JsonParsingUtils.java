@@ -79,12 +79,15 @@ public final class JsonParsingUtils {
 
     @Contract(pure = true)
     public static boolean getOptionalBoolean(final @NonNull JsonObject parent, final @NonNull String fieldName) {
-        if (!parent.has(fieldName))
-            return false;
-        final JsonElement element = parent.get(fieldName);
-        if (!element.isJsonPrimitive() || !element.getAsJsonPrimitive().isBoolean())
-            throw new JsonParseException("Expected \"" + fieldName + "\" to be a boolean");
-        return element.getAsBoolean();
+        return getOptionalBoolean(parent, fieldName, false);
+    }
+
+    @Contract(pure = true)
+    public static boolean getOptionalBoolean(final @NonNull JsonObject parent, final @NonNull String fieldName, boolean defaultVal) {
+        Boolean b = getNullableBoolean(parent, fieldName);
+        if (b == null)
+            return defaultVal;
+        return b;
     }
 
     @Contract(pure = true)
@@ -93,7 +96,7 @@ public final class JsonParsingUtils {
             return null;
         final JsonElement element = parent.get(fieldName);
         if (!element.isJsonPrimitive() || !element.getAsJsonPrimitive().isBoolean())
-            return null;
+            throw new JsonParseException("Expected \"" + fieldName + "\" to be a boolean");
         return element.getAsBoolean();
     }
 
