@@ -141,7 +141,7 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
                         hasSuperCommand, superCommandValue
                 );
 
-                final boolean enabled = !binding.has("enabled") || binding.get("enabled").getAsBoolean();
+                final boolean enabled = getOptionalBoolean(binding, "enabled", true);
 
                 final Map<KeyCombo, NavAction> toAdd = enabled ? localKeys : disabledKeys;
 
