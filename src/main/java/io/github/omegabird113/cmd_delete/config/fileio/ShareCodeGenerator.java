@@ -19,11 +19,9 @@ package io.github.omegabird113.cmd_delete.config.fileio;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
-import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import org.apache.commons.codec.binary.Base58;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -40,7 +38,6 @@ import java.util.zip.GZIPOutputStream;
 
 public final class ShareCodeGenerator {
     public static final @NonNull Base58 BASE_58 = new Base58();
-    private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(ShareCodeGenerator.class);
 
     private ShareCodeGenerator() {
     }
@@ -52,14 +49,9 @@ public final class ShareCodeGenerator {
         }
     }
 
-    public static @NonNull String collapseWhitespace(final @NonNull String namespacedId) {
+    public static @NonNull String collapseWhitespace(final @NonNull String namespacedId) throws IOException {
         final Path path = PathConstants.getPathOf(namespacedId);
-        try {
-            return collapseWhitespace(path);
-        } catch (IOException e) {
-            LOGGER.error("Error while removing whitespace of {}: {}", path, e);
-            return "";
-        }
+        return collapseWhitespace(path);
     }
 
     @Contract("_ -> new")
@@ -71,14 +63,9 @@ public final class ShareCodeGenerator {
         return new String(BASE_58.encode(byteArrayOutputStream.toByteArray()), StandardCharsets.UTF_8);
     }
 
-    public static @NonNull String generateCoreShareCode(final @NonNull String namespacedId) {
+    public static @NonNull String generateCoreShareCode(final @NonNull String namespacedId) throws IOException {
         final Path path = PathConstants.getPathOf(namespacedId);
-        try {
-            return compressAndBase58Encode(collapseWhitespace(path));
-        } catch (Exception e) {
-            LOGGER.error("Error while generating share code for namespaced id mappings: {}", namespacedId, e);
-            return "";
-        }
+        return compressAndBase58Encode(collapseWhitespace(path));
     }
 
     public static long genCRC32checksum(final @NonNull String contents) {
@@ -88,7 +75,7 @@ public final class ShareCodeGenerator {
         return crc32.getValue();
     }
 
-    public static @NonNull String encode(final @NonNull String namespacedId) {
+    public static @NonNull String encode(final @NonNull String namespacedId) throws IOException {
         return "CDS:"
                 + "EV" + CmdDeleteClient.SHARECODE_FORMAT_VERSION + ":"
                 + generateCoreShareCode(namespacedId) + ":"

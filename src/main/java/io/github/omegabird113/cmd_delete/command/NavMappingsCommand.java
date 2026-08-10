@@ -173,12 +173,12 @@ public final class NavMappingsCommand {
         return 1;
     }
 
-    private static int exportCustomShareCode(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) {
+    private static int exportCustomShareCode(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) throws CommandSyntaxException {
         NavMappingsCommandExecutionUtils.exportShareCode(context, true);
         return 1;
     }
 
-    private static int exportBuiltinShareCode(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) {
+    private static int exportBuiltinShareCode(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) throws CommandSyntaxException {
         NavMappingsCommandExecutionUtils.exportShareCode(context, false);
         return 1;
     }
