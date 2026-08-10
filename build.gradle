@@ -56,7 +56,7 @@ dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-    implementation include('com.google.code.gson:gson:2.14.0')
+    shadeOnly 'com.google.code.gson:gson:2.14.0'
     shadeOnly 'commons-codec:commons-codec:1.22.1'
 
     implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
@@ -110,13 +110,27 @@ tasks.shadowJar {
             false,
             false
     ))
+    relocators.add(new SimpleRelocator(
+            'com.google',
+            'io.github.omegabird113.cmd_delete.libs.google',
+            [] as List<String>,
+            [] as List<String>,
+            false,
+            false
+    ))
+    from("LICENSE") {
+        rename { "CMD_DELETE_LICENSE.txt" }
+    }
+    from("licenses/") {
+        into("licenses/")
+    }
     archiveClassifier.set('')
 }
 
 tasks.jar {
     archiveClassifier.set('dev')
     from("LICENSE") {
-        rename { String fileName -> "${fileName}_${project.archives_base_name}" }
+        rename { "CMD_DELETE_LICENSE.txt" }
     }
 }
 
