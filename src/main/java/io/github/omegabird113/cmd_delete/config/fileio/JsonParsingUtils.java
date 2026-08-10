@@ -110,9 +110,8 @@ public final class JsonParsingUtils {
 
         final String s = element.getAsString();
 
-        if (strictMode)
-            if (!s.matches("-?(0|[1-9]\\d*)"))
-                throw new JsonParseException("Expected \"" + fieldName + "\" to be an integer literal");
+        if (strictMode && !s.matches("-?(0|[1-9]\\d*)"))
+            throw new JsonParseException("Expected \"" + fieldName + "\" to be an integer literal");
 
         try {
             return Integer.parseInt(s);
@@ -146,11 +145,8 @@ public final class JsonParsingUtils {
                 return keyCode;
         } else
             try {
-                if (strictMode)
-                    if (!keyString.matches("-?(0|[1-9]\\d*)"))
-                        throw new JsonParseException(
-                                "Expected \"" + fieldName + "\" to be an integer literal");
-
+                if (strictMode && !keyString.matches("-?(0|[1-9]\\d*)"))
+                    throw new JsonParseException("Expected \"" + fieldName + "\" to be an integer literal");
                 return Integer.parseInt(keyString);
             } catch (NumberFormatException e) {
                 throw new JsonParseException("Expected \"" + fieldName + "\" to be a string or an integer");

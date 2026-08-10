@@ -48,8 +48,7 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
     static void logWarn(@NonNull String message, boolean strictMode) {
         if (strictMode)
             throw new JsonParseException(message);
-        else
-            LOGGER.warn(message);
+        LOGGER.warn(message);
     }
 
     @Override
@@ -78,11 +77,9 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
     private @NonNull String trimAndCaseIfNotStrict(final @NonNull String str, final boolean upper, final boolean strictMode) {
         if (strictMode)
             return str;
-
         if (upper)
             return str.trim().toUpperCase(Locale.ROOT);
-        else
-            return str.trim().toLowerCase(Locale.ROOT);
+        return str.trim().toLowerCase(Locale.ROOT);
     }
 
     private void parseActions(final @NonNull JsonObject actions, final @NonNull HashMap<@NonNull KeyCombo, @NonNull NavAction> localKeys, final @NonNull HashMap<@NonNull KeyCombo, @NonNull NavAction> disabledKeys, final int fv, final boolean strictMode) {
@@ -98,7 +95,6 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
 
             if (action.overrideMode() && fv == 2)
                 throw new JsonParseException("Format version 2 file specified actions of fv 3: " + actionName);
-
             if (action.isOverrideEdit() && fv < 4)
                 throw new JsonParseException("Format version 2 or 3 file specified actions of fv 4: " + actionName);
 

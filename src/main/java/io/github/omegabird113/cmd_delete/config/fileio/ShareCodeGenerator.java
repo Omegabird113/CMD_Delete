@@ -135,9 +135,8 @@ public final class ShareCodeGenerator {
             throw new IllegalArgumentException("Invalid share code (Invalid checksum): " + shareCode, e);
         }
 
-        if (actualChecksum != expectedChecksum) {
+        if (actualChecksum != expectedChecksum)
             throw new IllegalArgumentException("Invalid share code (Checksum mismatch): " + shareCode);
-        }
 
         return coreDecoded;
     }
