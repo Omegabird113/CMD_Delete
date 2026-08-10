@@ -24,7 +24,7 @@
   "commands.cmd_delete.about": "CMD + Delete (modid:%s) by Omegabird113 v%s using mappings format version %s (minimum of %s) and sharecode encoding version %s. You can report issues at %s.",
   "commands.cmd_delete.mappings_info.default_display": "Default Mappings (Resolved to %s)",
   "commands.cmd_delete.mappings_info.default_description": "The hard-coded default behaviour to set the mappings to the pre-bundled mappings for the OS of the system when the client is loaded.",
-  "commands.cmd_delete.mappings_info.base": "%s (id: %s) v%s by %s",
+  "commands.cmd_delete.mappings_info.base": "%s (id: \"%s\") v%s by %s",
   "commands.cmd_delete.mappings_info.coverage": "These mappings have %s%% action coverage with %s key combinations registered with support for %s.",
   "commands.cmd_delete.mappings_info.description": "Description:\n%s"
 }
