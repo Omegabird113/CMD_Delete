@@ -69,7 +69,7 @@ public final class MappingsInfoCollectionUtils {
                 Component.literal(namespacedId),
                 Component.literal(version),
                 Component.literal(author)
-        ).copy();
+        );
 
         final Component coverageComponent = Component.translatable(
                 "commands.cmd_delete.mappings_info.coverage",
