@@ -20,6 +20,8 @@ import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.config.fileio.MappingsJSONManager;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.utils.Os;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 
@@ -39,7 +41,7 @@ public final class MappingsInfoCollectionUtils {
         String displayName = "";
         String description = "";
 
-        final String namespacedId = "\"" + MappingsIdResolutionUtils.resolveNamespacedId(mappingsState) + "\"";
+        final String namespacedId = MappingsIdResolutionUtils.resolveNamespacedId(mappingsState);
         final String version = mappingsState.mappings().registry().version();
         final String author = mappingsState.mappings().registry().author();
         final String[] systemStrings = Arrays.stream(mappingsState.mappings().getMappingsSupportedSystems())
@@ -61,11 +63,34 @@ public final class MappingsInfoCollectionUtils {
             }
         }
 
-        final String baseString = displayName + " (id: " + namespacedId + ") v" + version + " by " + author;
-        final String descriptionString = "\nDescription:\n" + description;
-        final String coverageString = "\nThese mappings have " + String.format(Locale.ROOT, "%.2f", coverage * 100) + "% action coverage with " + mappingsState.mappings().registry().getSize() + " key combinations registered with support for " + String.join(" and ", systemStrings) + ".";
+        final MutableComponent baseComponent = Component.translatable(
+                "commands.cmd_delete.mappings_info.base",
+                Component.literal(displayName),
+                Component.literal(namespacedId),
+                Component.literal(version),
+                Component.literal(author)
+        ).copy();
 
-        return includeDescription ? baseString + coverageString + descriptionString : baseString + coverageString;
+        final Component coverageComponent = Component.translatable(
+                "commands.cmd_delete.mappings_info.coverage",
+                String.format(Locale.ROOT, "%.2f", coverage * 100),
+                String.valueOf(mappingsState.mappings().registry().getSize()),
+                String.join(" and ", systemStrings)
+        );
+
+        final MutableComponent result = baseComponent
+                .append("\n")
+                .append(coverageComponent);
+
+        if (includeDescription) {
+            final Component descriptionComponent = Component.translatable(
+                    "commands.cmd_delete.mappings_info.description",
+                    description
+            );
+            result.append("\n").append(descriptionComponent);
+        }
+
+        return result.getString();
     }
 
     @Contract(pure = true)
