@@ -130,7 +130,7 @@ tasks.shadowJar {
 tasks.jar {
     archiveClassifier.set('dev')
     from("LICENSE") {
-        rename { "CMD_DELETE_LICENSE.txt" }
+        rename { "CMD + Delete License.txt" }
     }
 }
 
