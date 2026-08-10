@@ -268,7 +268,7 @@ public final class NavMappingsCommand {
 
     private static int printMappingsInfo(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) {
         final MappingsState currentMappingState = NavMappingsManager.getMappingsState();
-        final String info = MappingsInfoCollectionUtils.getInfoFrom(currentMappingState, true);
+        final Component info = MappingsInfoCollectionUtils.getInfoComponentFrom(currentMappingState, true);
         context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.current_mappings", info));
         return 1;
     }

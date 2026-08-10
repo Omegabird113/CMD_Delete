@@ -35,7 +35,7 @@ public final class MappingsInfoCollectionUtils {
     }
 
     @Contract(pure = true)
-    public static @NonNull String getInfoFrom(final @NonNull MappingsState mappingsState, final boolean includeDescription) {
+    public static @NonNull Component getInfoComponentFrom(final @NonNull MappingsState mappingsState, final boolean includeDescription) {
         final double coverage = mappingsState.mappings().getCoverage();
 
         String displayName = "";
@@ -90,10 +90,15 @@ public final class MappingsInfoCollectionUtils {
             result.append("\n").append(descriptionComponent);
         }
 
-        return result.getString();
+        return result;
     }
 
     @Contract(pure = true)
+    public static @NonNull String getInfoFrom(final @NonNull MappingsState mappingsState, final boolean includeDescription) {
+        return getInfoComponentFrom(mappingsState, includeDescription).getString();
+    }
+
+        @Contract(pure = true)
     public static @NonNull String @NonNull [] getMappingsList() {
         final List<String> internal = new ArrayList<>(
                 List.of(
