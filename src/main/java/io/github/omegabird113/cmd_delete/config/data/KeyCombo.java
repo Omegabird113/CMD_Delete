@@ -23,8 +23,8 @@ public record KeyCombo(int key, boolean shift, boolean altOption, boolean contro
                        boolean superCommand) {
     @Override
     public @NonNull String toString() {
-        return "<" +
-                (control ? "ctrl+" : "")
+        return "<"
+                + (control ? "ctrl+" : "")
                 + (superCommand ? (Os.IS_USING_MAC ? "cmd+" : "sup+") : "")
                 + (altOption ? (Os.IS_USING_MAC ? "opt+" : "alt+") : "")
                 + (shift ? "shift+" : "")
