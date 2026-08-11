@@ -1,7 +1,7 @@
-### 1.4.3a
+### 1.4.3b
 
 Changes:
 
-- Revert a change to the source of the game directory that I believe caused a crash on Minecraft 1.21.11 and before.
+- Fixed a dependency configuration issue on 1.21.11 and earlier that actually caused the crash in 1.4.3/1.4.3a.
 
-Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.4.3+mc26.1...1.4.3a+mc26.1
+Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.4.3a+mc1.21.11...1.4.3b+mc1.21.11
