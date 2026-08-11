@@ -31,8 +31,9 @@
 build/
 out/**
 
-# Minecraft client/server files
-run/
+# Minecraft client/server files. Include options.txt to make it easier to have my settings when cloning.
+run/**
+!run/options.txt
 
 # ---- MacOS system files ----
 .DS_STORE

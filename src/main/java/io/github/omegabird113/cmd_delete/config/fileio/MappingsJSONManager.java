@@ -50,7 +50,7 @@ public final class MappingsJSONManager {
     public static @NonNull MappingsRegistry loadFromDir(final @NonNull String id, final boolean custom) throws IOException {
         final Path path = PathConstants.getPathOf(MappingsType.fromIfCustom(custom), id);
 
-        if (!Files.exists(path))
+        if (!Files.isRegularFile(path))
             throw new FileNotFoundException(MappingsType.fromIfCustom(custom).commonName() + " mapping file not found at: " + path);
 
         try (java.io.BufferedReader reader = Files.newBufferedReader(path)) {
