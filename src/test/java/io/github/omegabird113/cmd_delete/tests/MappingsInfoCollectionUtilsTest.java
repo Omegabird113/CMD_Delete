@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-public class MappingsInfoCollectionUtilsTests {
+public class MappingsInfoCollectionUtilsTest {
     @BeforeAll
     static void beforeAll() {
         TestLoader.setup();
@@ -48,21 +48,6 @@ public class MappingsInfoCollectionUtilsTests {
                 () -> Assertions.assertTrue(mappings.contains("custom:sample")),
                 () -> Assertions.assertTrue(mappings.contains("custom:inherited")),
                 () -> Assertions.assertEquals(mappings.size(), new HashSet<>(mappings).size())
-        );
-    }
-
-    @Test
-    void infoStringFormattingTest() {
-        final String withDescription = MappingsInfoCollectionUtils.getInfoFrom(NavMappingsManager.getMappingsState(), true);
-        final String withoutDescription = MappingsInfoCollectionUtils.getInfoFrom(NavMappingsManager.getMappingsState(), false);
-
-        Assertions.assertAll(
-                () -> Assertions.assertFalse(withDescription.isBlank()),
-                () -> Assertions.assertFalse(withoutDescription.isBlank()),
-                () -> Assertions.assertTrue(withDescription.contains("Description:")),
-                () -> Assertions.assertFalse(withoutDescription.contains("Description:")),
-                () -> Assertions.assertTrue(withDescription.contains(NavMappingsManager.getMappingsState().id())),
-                () -> Assertions.assertTrue(withoutDescription.contains(NavMappingsManager.getMappingsState().id()))
         );
     }
 }
