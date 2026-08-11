@@ -18,7 +18,6 @@ package io.github.omegabird113.cmd_delete.tests;
 
 import io.github.omegabird113.cmd_delete.TestLoader;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
-import io.github.omegabird113.cmd_delete.command.MappingsInfoCollectionUtils;
 import io.github.omegabird113.cmd_delete.config.data.KeyNameRegistry;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import io.github.omegabird113.cmd_delete.utils.LoggingManager;
@@ -45,8 +44,6 @@ public class StringsTest {
                     KeyNameRegistry.getDumpString(),
                     NavMappingsManager.getCurrentMappingsRegistry().toString(),
                     NavMappingsManager.getMappingsState().toString(),
-                    MappingsInfoCollectionUtils.getInfoFrom(NavMappingsManager.getMappingsState(), true),
-                    MappingsInfoCollectionUtils.getInfoFrom(NavMappingsManager.getMappingsState(), false),
                     NavAction.getDetailedActionDump()
             };
             Assertions.assertAll(
@@ -59,9 +56,7 @@ public class StringsTest {
             Assertions.assertAll(
                     () -> Assertions.assertTrue(strings[1].contains(NavMappingsManager.getMappingsState().id())),
                     () -> Assertions.assertTrue(strings[2].contains("Mappings state:")),
-                    () -> Assertions.assertTrue(strings[3].contains("Description:")),
-                    () -> Assertions.assertFalse(strings[4].contains("Description:")),
-                    () -> Assertions.assertTrue(strings[5].contains("Action"))
+                    () -> Assertions.assertTrue(strings[3].contains("Action"))
             );
         });
     }

@@ -173,12 +173,12 @@ public final class NavMappingsCommand {
         return 1;
     }
 
-    private static int exportCustomShareCode(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) {
+    private static int exportCustomShareCode(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) throws CommandSyntaxException {
         NavMappingsCommandExecutionUtils.exportShareCode(context, true);
         return 1;
     }
 
-    private static int exportBuiltinShareCode(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) {
+    private static int exportBuiltinShareCode(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) throws CommandSyntaxException {
         NavMappingsCommandExecutionUtils.exportShareCode(context, false);
         return 1;
     }
@@ -268,7 +268,7 @@ public final class NavMappingsCommand {
 
     private static int printMappingsInfo(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) {
         final MappingsState currentMappingState = NavMappingsManager.getMappingsState();
-        final String info = MappingsInfoCollectionUtils.getInfoFrom(currentMappingState, true);
+        final Component info = MappingsInfoCollectionUtils.getInfoComponentFrom(currentMappingState, true);
         context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.current_mappings", info));
         return 1;
     }
