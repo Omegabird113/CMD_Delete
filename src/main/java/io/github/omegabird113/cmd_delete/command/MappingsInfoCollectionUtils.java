@@ -98,7 +98,7 @@ public final class MappingsInfoCollectionUtils {
         return getInfoComponentFrom(mappingsState, includeDescription).getString();
     }
 
-        @Contract(pure = true)
+    @Contract(pure = true)
     public static @NonNull String @NonNull [] getMappingsList() {
         final List<String> internal = new ArrayList<>(
                 List.of(
