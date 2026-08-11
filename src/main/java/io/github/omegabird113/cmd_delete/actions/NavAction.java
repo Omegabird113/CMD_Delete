@@ -61,7 +61,7 @@ public enum NavAction {
     OVR_SELECT_ALL(INVALID, EDIT, TEXT, true),
     NONE(INVALID, NO_TYPE, NO_SCOPE, false);
 
-    private static final Logger LOGGER = LoggingManager.getLoggerFor(LoggingManager.class);
+    private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(LoggingManager.class);
 
     static {
         LoggingManager.traceLog(LOGGER, "NavAction enum loaded. Detailed dump:\n{}", getDetailedActionDump());

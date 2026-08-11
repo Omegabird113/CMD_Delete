@@ -46,11 +46,17 @@ final class NavMappingsCommandExecutionUtils {
     private NavMappingsCommandExecutionUtils() {
     }
 
-    static void exportShareCode(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context, final boolean custom) {
+    static void exportShareCode(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context, final boolean custom) throws CommandSyntaxException {
         final String idStr = StringArgumentType.getString(context, "id");
 
         final String namespacedId = MappingsIdResolutionUtils.resolveNamespacedId(MappingsType.fromIfCustom(custom), idStr);
-        final String shareCode = ShareCodeGenerator.encode(namespacedId);
+        final String shareCode;
+        try {
+            shareCode = ShareCodeGenerator.encode(namespacedId);
+        } catch (IOException e) {
+            LOGGER.error("Failed to generate share code.", e);
+            throw CommandCreationUtils.INVALID_SHARE_CODE.create(idStr);
+        }
 
         Minecraft.getInstance().keyboardHandler.setClipboard(shareCode);
         context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.export_sharecode", MappingsIdResolutionUtils.resolveNamespacedId(MappingsType.fromIfCustom(custom), idStr), shareCode));

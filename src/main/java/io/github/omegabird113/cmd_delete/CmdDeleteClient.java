@@ -39,6 +39,7 @@ public final class CmdDeleteClient implements ClientModInitializer {
     public static final int MINIMUM_MAPPINGS_FORMAT_VERSION = 2;
     public static final int SHARECODE_FORMAT_VERSION = 1;
     public static final boolean FORCE_PREVENT_OVERRIDE_MODE = Boolean.getBoolean("cmd_delete.forcePreventOverrideMode");
+    private static final @NonNull Minecraft MINECRAFT = Minecraft.getInstance();
     private static final @NonNull FabricLoader LOADER = FabricLoader.getInstance();
     public static final @NonNull String VERSION = LOADER.getModContainer(MODID)
             .map(container -> container.getMetadata().getVersion().getFriendlyString())
@@ -62,7 +63,7 @@ public final class CmdDeleteClient implements ClientModInitializer {
             }, "initial logging & CrashUtils info", true);
 
             LoadTimer.time(() -> {
-                final Path gameDir = LOADER.getGameDir();
+                final Path gameDir = MINECRAFT.gameDirectory.toPath();
                 final Path resourceMappingsDir = LOADER.getModContainer(CmdDeleteClient.MODID)
                         .orElseThrow().findPath("mappings/").orElseThrow();
                 PathConstants.init(gameDir, resourceMappingsDir);
@@ -74,7 +75,7 @@ public final class CmdDeleteClient implements ClientModInitializer {
 
         if (Boolean.getBoolean("cmd_delete.ci.stopMinecraftAfterLoad")) {
             LOGGER.info("Stopping Minecraft client due to set \"cmd_delete.ci.stopMinecraftAfterLoad\" jvm property...");
-            Minecraft.getInstance().stop();
+            MINECRAFT.stop();
             System.exit(0);
         }
     }
