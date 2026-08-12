@@ -134,7 +134,6 @@ jobs:
             >=26.1 <=26.3-snapshot.3
             >=26.1-pre.1 <=26.1
             >=26.1-rc.1 <=26.1
-          game-version-filter: any
           loaders: |
             fabric
             quilt
