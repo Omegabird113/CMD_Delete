@@ -117,23 +117,22 @@ jobs:
             --notes-file changelog.md \
             $PRERELEASE_FLAG
 
-      - name: Publish to Modrinth & CurseForge
-        uses: Kira-NT/mc-publish@v3
-        with:
-          modrinth-id: xrOWVab9
-          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-          files: ${{ steps.jar.outputs.path }}
-          name: ${{ inputs.release_title }}
-          version: ${{ steps.props.outputs.version }}
-          version-type: ${{ inputs.release_type }}
-          changelog-file: changelog.md
-          java: 25
-          game-versions: |
-            >=26.3-snapshot.4 <=26.3-snapshot.7
-            >=26.3-snapshot.4 <=26.3-snapshot.7
-          game-version-filter: any
-          loaders: |
-            fabric
-            quilt
-          environment: client
-          fail-mode: skip
+#      - name: Publish to Modrinth & CurseForge
+#        uses: Kira-NT/mc-publish@v3
+#        with:
+#          modrinth-id: xrOWVab9
+#          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+#          files: ${{ steps.jar.outputs.path }}
+#          name: ${{ inputs.release_title }}
+#          version: ${{ steps.props.outputs.version }}
+#          version-type: ${{ inputs.release_type }}
+#          changelog-file: changelog.md
+#          java: 25
+#          game-versions: |
+#            >=26.3-snapshot.4 <=26.3-snapshot.8
+#            >=26.3-snapshot.4 <=26.3-snapshot.8
+#          loaders: |
+#            fabric
+#            quilt
+#          environment: client
+#          fail-mode: skip
