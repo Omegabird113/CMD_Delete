@@ -1,4 +1,4 @@
-# Changelogs
+# Changelog
 
 This is a collection of all historical CMD + Delete changelogs for every release of the mod. Note that some release notes were retroactively added and the formatting was retroactively changed in some versions to fix issues and make inter-version formatting consistent.
 
@@ -48,9 +48,9 @@ Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.4.2+mc26.1.
 
 Changes:
 
-- Fix an exploit where sharecodes and files could contain ids that would cause them to be placed in a sub-folder of or outside of the custom mappings folder when imported. Path separation characters are now not allowed in ids.
+- Fix an exploit where sharecodes and files could contain ids that would cause them to be placed in a sub-folder of or outside the custom mappings folder when imported. Path separation characters are now not allowed in ids.
 - Make many strings for the `/navmappings` command translatable.
-- Use less technical description for the mod's about informataion.
+- Use less technical description for the mod's about information.
 - Mark the mod as breakingly incompatible with `macOS Chat Fixes`.
 - Internal code improvements.
 
@@ -108,7 +108,7 @@ Changes:
 - Added a hard-coded warning that the builtin mappings `emacs_mac`, `emacs_windows_linux`, and `readline` are incomplete & not fully accurate emulates of those pieces of software.
 - Added a verbose logging mode which promotes `TRACE`/`DEBUG` level logs to `INFO` for inclusion in `latest.log` in all environments (especially for the vanilla launcher) for easier bug reports. This mode is only enabled if the `cmd_delete.allowVerboseLogs` JVM argument is set to `true`.
 - Fixed a crash that would occur when exporting or importing sharecodes on Minecraft 26.1.2 or earlier (#24).
-- Fixed a bug where exporting builtin mappings' sharecodes would not work outside of a development environment.
+- Fixed a bug where exporting builtin mappings' sharecodes would not work outside a development environment.
 - Fixed a bug where custom mappings JSONs that inherited nothing wouldn't load.
 - Added support for forcing CMD + Delete not to crash Minecraft on certain fatal exceptions by setting the `cmd_delete.forcePreventMinecraftCrashes` JVM argument to `true`. Note that this may allow for undefined behavior and/or illegal states after certain types of failures, so this mode is not recommended for normal use.
 - Internal code improvements.
@@ -277,7 +277,7 @@ Changes:
 Release notes:
 
 - The 1.14.4, 1.15-1.15.2, and 1.16-1.16.4 builds of this update do not have working command suggestions (the /navmappings command works, but it'll appear highlighted in red as if it didn't exist).
-- At the time of this release, changelogs were input as a comma-separated single-line list into a GitHub actions workflow. Due to an issue with this workflow's formatting not allowing the ` charcter, a very broken version of this changelog was posted on to modding platforms.
+- At the time of this release, changelogs were input as a comma-separated single-line list into a GitHub Actions workflow. Due to an issue with this workflow's formatting not allowing the ` charcter, a very broken version of this changelog was posted on to modding platforms.
 - Many backport builds were released significantly after the main release of this update.
 
 Full Changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.0.0+mc26.1...1.1.0+mc26.1
@@ -308,7 +308,7 @@ Full Changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.0.0-beta4+m
 Changes:
 
 - There's a new logo
-- CMD + Delete now uses an actions/mapping system internaly
+- CMD + Delete now uses an actions/mapping system internally
 - CMD + Delete now supports user-defined custom mappings (there is currently no way to switch between mappings in game, you have to edit .active_mappings to change mappings)
 - Moved back to the old `cmd_delete` modid
 - internal code improvements

@@ -1,5 +1,5 @@
 # /navmappings Command
-This is a table of the /navmnappings sub-commands and what they do, as of `1.4.3b`:
+This is a table of the /navmnappings sub-commands and what they do:
 
 | Command                                                                   | Description                                                                                                                           |
 |:--------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------|
