@@ -136,7 +136,7 @@ public final class KeyNameRegistry {
             Map.entry("numpad_minus", SDL_SCANCODE_KP_MINUS),
             Map.entry("numpad_plus", SDL_SCANCODE_KP_PLUS),
             Map.entry("numpad_enter", SDL_SCANCODE_KP_ENTER),
-            Map.entry("numpad_dot", SDL_SCANCODE_KP_DECIMAL),
+            Map.entry("numpad_dot", SDL_SCANCODE_KP_PERIOD),
             Map.entry("numpad_equals", SDL_SCANCODE_KP_EQUALS),
 
             Map.entry("space", SDL_SCANCODE_SPACE),
