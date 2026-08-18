@@ -1,4 +1,5 @@
 # Documentation License
+
 © 2026 Omegabird113
 
 The [CMD + Delete Documentation](https://omegabird113.github.io/CMD_Delete/) is available under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) license.
