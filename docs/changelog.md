@@ -264,6 +264,7 @@ Full Changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.1.0+mc26.1.
 ### 1.1.0
 
 Changes:
+
 - Added support for the new 26.2 update
 - Improved the details & formatting of `/navmappings info`
 - `/navmappings set builtin windows` and `/navmappings set builtin linux` are no longer allowed (you must use `/navmappings set builtin windows_linux`)
