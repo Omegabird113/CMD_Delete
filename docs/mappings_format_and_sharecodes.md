@@ -24,7 +24,6 @@ Minimum possible mappings example of the `my-mappings.json` file
 ```json
 {
   "fv": 4,
-  "inherits": "builtin:mac",
   "meta": {
     "id": "my-mappings",
     "systems": ["mac"]
