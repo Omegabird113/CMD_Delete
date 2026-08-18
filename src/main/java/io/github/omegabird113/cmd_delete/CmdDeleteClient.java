@@ -63,7 +63,7 @@ public final class CmdDeleteClient implements ClientModInitializer {
             }, "initial logging & CrashUtils info", true);
 
             LoadTimer.time(() -> {
-                final Path gameDir = LOADER.getGameDir();
+                final Path gameDir = MINECRAFT.gameDirectory.toPath();
                 final Path resourceMappingsDir = LOADER.getModContainer(CmdDeleteClient.MODID)
                         .orElseThrow().findPath("mappings/").orElseThrow();
                 PathConstants.init(gameDir, resourceMappingsDir);
