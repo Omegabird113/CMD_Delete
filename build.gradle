@@ -168,6 +168,13 @@ test {
 }
 
 loom {
+    mods {
+        "cmd_delete" {
+            sourceSet sourceSets.main
+            configuration configurations.shadeOnly
+        }
+    }
+
     runs {
         ciClient {
             client()
