@@ -54,3 +54,10 @@ CMD + Delete also now provides these other builtin mappings:
 - `builtin:emacs_windows_linux` the standard Windows/Linux shortcuts for text navigation in Emacs to the best replication I can make (they're not perfect).
 - `builtin:emacs_mac` the standard macOS Cocoa shortcuts for text navigation in Emacs to the best replication I can make (they're not perfect).
 - `builtin:readline` the standard shortcuts for text navigation in GNU Readline to the best replication I can make (they're not perfect).
+
+## Licensing
+
+- The CMD + Delete mod itself is licensed under the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0.html).
+- The CMD + Delete wiki/documentation is licensed under the [CC BY 4.0 license](https://creativecommons.org/licenses/by/4.0/legalcode.en).
+- All builtin mappings JSON files are aviable under either the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0.html) or the [CC BY 4.0 license](https://creativecommons.org/licenses/by/4.0/legalcode.en) (You may chose to comply with either license).
+- You may include CMD + Delete in any CurseForge and/or Modrinth modpack.
