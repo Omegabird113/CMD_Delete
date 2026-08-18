@@ -4,6 +4,7 @@ This is a file that explains the contents of the documentation sorted alphabetic
 - [actions_list.md](actions_list.md) - a table of all NavAction values and their properties
 - [builtin_mappings.md](builtin_mappings.md) - provides samples of the JSONs and sharecodes of all builtin mappings
 - [changelog.md](changelog.md) - a combined master historical changelog of every version of CMD + Delete
+- [doc_license.txt](docs_license.txt) - a copy of the CC BY 4.0 license which these docs are licensed under
 - [friendly_keynames.md](friendly_keynames.md) - a list of every possible friendly keyname alongside its corresponding raw GLFW keycode and SDL3 scancode
 - [jvm_arguments.md](jvm_arguments.md) - a list of every single JVM argument that affects the mod's behavior
 - [mappings_format_and_sharecodes.md](mappings_format_and_sharecodes.md) - explains the basics of the mappings format and sharecodes and provides examples
