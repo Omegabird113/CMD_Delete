@@ -26,6 +26,10 @@
 .idea/modules/*
 .idea/runConfigurations/*
 
+# Zensical
+.venv/
+site/
+
 # Gradle build system ignores
 .gradle/
 build/
