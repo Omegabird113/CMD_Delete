@@ -135,7 +135,7 @@ Changes:
 - Added support for `26.3-snapshot.5` on the 26.3 snapshots build.
 - Internal code improvements.
 
-Some notes on Minecraft 26.3 Snapshot 4/5 amd above:
+Some notes on Minecraft 26.3 Snapshot 4/5 and above:
 
 - Beta 1 added a separate build for this version, because it breaks compatibility due to the fact that Mojang moved from `GLFW` to `SDL3` for the game's input library.
 - As a result of this, mappings that use integers instead of friendly keynames will be treated differently on different versions (They'll be `GLFW keycodes` on `1.16`-`26.3-snapshot.3` and `SDL3 scancodes` on `26.3-snapshot.4` and above). Also, the friendly keyname `f25` only works on GLFW. In a future mappings format version, `f25` will be removed as a friendly keyname.
