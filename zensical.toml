@@ -1,6 +1,6 @@
 [project]
 site_name = "CMD + Delete Documentation"
-copyright = "Copyright &copy; 2026 Omegabird113. The contents of this documentation is available under the CC BY 4.0 license."
+copyright = "Copyright &copy; 2026 Omegabird113. The contents of this documentation is available under the CC BY 4.0 license unless otherwise stated."
 repo_url = "https://github.com/Omegabird113/CMD_Delete"
 repo_name = "Omegabird113/CMD_Delete"
 repo = "fontawesome/brands/git-alt"
@@ -33,19 +33,16 @@ property = "G-4TM9B89H9C"
 title = "Was this page helpful?"
 
 [[project.extra.analytics.feedback.ratings]]
-icon = "material/emoticon-happy-outline"
+icon = "material/thumb-up-outline"
 name = "This page was helpful"
 data = 1
 note = "Thanks for your feedback!"
 
 [[project.extra.analytics.feedback.ratings]]
-icon = "material/emoticon-sad-outline"
+icon = "material/thumb-down-outline"
 name = "This page could be improved"
 data = 0
-note = """
-  Thanks for your feedback! Help us improve this page by
-  using our <a href="..." target="_blank" rel="noopener">feedback form</a>.
-"""
+note = "Thanks for your feedback!"
 
 [project.extra.consent]
 title = "Cookie consent"
