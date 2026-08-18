@@ -9,4 +9,4 @@ This is a file that explains the contents of the documentation sorted alphabetic
 - [jvm_arguments.md](jvm_arguments.md) - a list of every single JVM argument that affects the mod's behavior
 - [mappings_format_and_sharecodes.md](mappings_format_and_sharecodes.md) - explains the basics of the mappings format and sharecodes and provides examples
 - [navmappings_command.md](navmappings_command.md) - an explanation of every sub-command of the client /navmappings command
-- [page-index.md](page-index.md) - this index
+- [index.md](index.md) - this index
