@@ -33,9 +33,19 @@ jobs:
         with:
           python-version: 3.x
 
-      - run: pip install zensical
+      - name: Cache Pip Zensical Dependency
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-zensical
+          restore-keys: |
+            ${{ runner.os }}-pip-
 
-      - run: zensical build --clean
+      - name: Install/Upgrade Zensical
+        run: pip install --upgrade zensical
+
+      - name: Build Docs
+        run: zensical build --clean
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v5
