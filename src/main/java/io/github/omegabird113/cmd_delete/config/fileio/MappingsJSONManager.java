@@ -24,7 +24,6 @@ import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
 import io.github.omegabird113.cmd_delete.mappings.MappingsType;
 import io.github.omegabird113.cmd_delete.mappings.NavMappings;
 import io.github.omegabird113.cmd_delete.utils.LoggingManager;
-import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
@@ -155,9 +154,12 @@ public final class MappingsJSONManager {
         if (files == null)
             return options;
 
-        for (File file : files)
-            if (file.getName().endsWith(".json"))
-                options.add((namespacedIds ? MappingsType.CUSTOM.prefix() : "") + FilenameUtils.removeExtension(file.getName()));
+        for (File file : files) {
+            String fileName = file.getName();
+            if (fileName.endsWith(".json"))
+                options.add((namespacedIds ? MappingsType.CUSTOM.prefix() : "")
+                        + fileName.substring(0, fileName.length() - ".json".length()));
+        }
 
         return options;
     }
