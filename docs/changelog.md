@@ -4,6 +4,8 @@ This is a collection of all historical CMD + Delete changelogs for every release
 
 ### 1.4.3b
 
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.4.3b%2Bmc1.21.11) on August 11th, 2026.
+
 Changes:
 
 - Fixed a dependency configuration issue on 1.21.11 and earlier that actually caused the crash in 1.4.3/1.4.3a.
@@ -16,6 +18,8 @@ Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.4.3a+mc1.21
 
 ### 1.4.3a
 
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.4.3a%2Bmc26.1) on August 11th, 2026.
+
 Changes:
 
 - Revert a change to the source of the game directory that I believe caused a crash on Minecraft 1.21.11 and before.
@@ -27,6 +31,8 @@ Release notes:
 Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.4.3+mc26.1...1.4.3a+mc26.1
 
 ### 1.4.3
+
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.4.3%2Bmc26.1) on August 11th, 2026.
 
 Changes:
 
@@ -46,6 +52,8 @@ Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.4.2+mc26.1.
 
 ### 1.4.2
 
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.4.2%2Bmc26.1) on August 8th, 2026.
+
 Changes:
 
 - Fix an exploit where sharecodes and files could contain ids that would cause them to be placed in a sub-folder of or outside the custom mappings folder when imported. Path separation characters are now not allowed in ids.
@@ -58,6 +66,8 @@ Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.4.1+mc26.1.
 
 ### 1.4.1
 
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.4.1%2Bmc26.1) on August 6th, 2026.
+
 Changes:
 
 - Fixed a crash that would occur if you loaded Minecraft after deleting a custom mappings JSON file that was previously active.
@@ -68,6 +78,8 @@ Changes:
 Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.4.0+mc26.1...1.4.1+mc26.1
 
 ### 1.4.0
+
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.4.0%2Bmc26.1) on August 3rd, 2026.
 
 Changes:
 
@@ -101,6 +113,8 @@ Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.3.1+mc26.1.
 
 ### 1.4.0 Release Candidate 1
 
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.4.0-rc.1%2Bmc26.1) on July 31st, 2026.
+
 Changes:
 
 - When you switch mappings, and your previous mappings fail to load, the previously active mappings will be used instead of always switching to default mappings. This comes with other stability & robustness improvements to mappings switching.
@@ -117,6 +131,8 @@ Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.4.0-beta.3+
 
 ### 1.4.0 Beta 3
 
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.4.0-beta.3%2Bmc26.1) on July 24th, 2026.
+
 Changes:
 
 - Fixed the survival inventory not closing when the recipe book is open with CMD + Delete installed (#23).
@@ -128,6 +144,8 @@ Changes:
 Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.4.0-beta.2+mc26.1...1.4.0-beta.3+mc26.1
 
 ### 1.4.0 Beta 2
+
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.4.0-beta.2%2Bmc26.1) on July 21st, 2026.
 
 Changes:
 
@@ -145,6 +163,8 @@ Some notes on Minecraft 26.3 Snapshot 4/5 and above:
 Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.4.0-beta.1+mc26.1...1.4.0-beta.2+mc26.1
 
 ### 1.4.0 Beta 1
+
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.4.0-beta.1%2Bmc26.1) on July 16th, 2026.
 
 Changes:
 
@@ -166,6 +186,8 @@ Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.3.1+mc26.1.
 
 ### 1.3.1
 
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.3.1%2Bmc26.1) on July 11th, 2026.
+
 Changes:
 
 - Fixed a bug where many vanilla shortcuts for things like copy/paste and select-all would not work with the default mappings (#20).
@@ -173,6 +195,8 @@ Changes:
 Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.3.0+mc26.1...1.3.1+mc26.1
 
 ### 1.3.0
+
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.3.0%2Bmc26.1) on July 10th, 2026.
 
 Changes:
 
@@ -196,6 +220,8 @@ Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.2.0+mc26.1.
 
 ### 1.3.0 Release Candidate 1
 
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.3.0-rc1%2Bmc26.1) on July 8th, 2026.
+
 Changes:
 
 - Increased the Mappings format version to `3`, which:
@@ -213,6 +239,8 @@ Release notes:
 Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.2.0+mc26.1...1.3.0-rc1+mc26.1
 
 ### 1.2.0
+
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.2.0%2Bmc26.1) on June 27th, 2026.
 
 Changes:
 
@@ -237,6 +265,8 @@ Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.1.0+mc26.1.
 
 ### 1.2.0 Release Candidate 2
 
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.2.0-rc2%2Bmc26.1) on June 26th, 2026.
+
 Changes:
 
 - Add dedicated subcommands for `/navammpings import` and `/navmappings export`
@@ -247,6 +277,8 @@ Changes:
 Full Changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.2.0-rc1+mc26.1...1.2.0-rc2+mc26.1
 
 ### 1.2.0 Release Candidate 1
+
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.2.0-rc1%2Bmc26.1) on June 25th, 2026.
 
 Changes:
 
@@ -262,6 +294,8 @@ Changes:
 Full Changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.1.0+mc26.1...1.2.0-rc1+mc26.1
 
 ### 1.1.0
+
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.1.0%2Bmc26.1) on June 16th. 2026.
 
 Changes:
 
@@ -285,6 +319,8 @@ Full Changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.0.0+mc26.1.
 
 ### 1.0.0
 
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.0.0%2Bmc26.1) on June 6th, 2026.
+
 Changes:
 
 - The initial public full release of CMD + Delete 
@@ -296,6 +332,8 @@ Changes since RC1:
 
 ### 1.0.0 Release Candidate 1
 
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.0.0-rc1%2Bmc26.1) on June 5th, 2026.
+
 Changes:
 
 - Added book support
@@ -305,6 +343,8 @@ Changes:
 Full Changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.0.0-beta4+mc26.1.x...1.0.0-rc1+mc26.1
 
 ### 1.0.0 Beta 4
+
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.0.0-beta4%2Bmc26.1.x) on May 7th, 2026.
 
 Changes:
 
@@ -322,6 +362,8 @@ Full Changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.0.0-beta3+m
 
 ### 1.0.0 Beta 3
 
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.0.0-beta3%2Bmc26.1.x) on April 30th, 2026. 
+
 Changes:
 
 - Added support for signs
@@ -334,6 +376,8 @@ Release notes:
 Full Changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.0.0-beta2+mc26.1.x...1.0.0-beta3+mc26.1.x
 
 ### 1.0.0 Beta 2
+
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.0.0-beta2%2Bmc26.1.x) on April 16th, 2026.
 
 Changes:
 
@@ -348,6 +392,8 @@ Release notes:
 Full Changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.0.0-beta1+mc26.1...1.0.0-beta2+mc26.1.x
 
 ### 1.0.0 Beta 1
+
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.0.0-beta1%2Bmc26.1) on March 25th, 2026.
 
 Changes:
 
@@ -365,6 +411,8 @@ Full Changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.0-alpha3+mc
 
 ### 1.0 Alpha 3
 
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.0-alpha3%2Bmc1.21.11) on February 28th, 2026.
+
 Changes:
 
 - The mod has now been exported properly, so it actually works
@@ -379,6 +427,8 @@ Release notes:
 Full Changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.0-alpha2...1.0-alpha3+mc1.21.11
 
 ### 1.0 Alpha 2
+
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.0-alpha2) on February 12th, 2026.
 
 Changes:
 
@@ -395,6 +445,8 @@ Release notes:
 Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.0-alpha1...1.0-alpha2
 
 ### 1.0 Alpha 1
+
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.0-alpha1) on February 6th, 2026.
 
 Changes:
 
