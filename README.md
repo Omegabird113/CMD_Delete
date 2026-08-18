@@ -22,7 +22,7 @@ This mod also functions as a fully configurable text editing/navigation shortcut
 > 
 > It also supports Forge 1.20.1 and NeoForge 1.21.1, but **only with [Sinytra Connector](https://modrinth.com/mod/connector)**.
 
-![A showcase of opt/cmd + backspace in chat.](./showcase.gif)
+![A showcase of opt/cmd + backspace in chat.](./docs/resources/showcase.gif)
 
 ## Builtin Mappings' Shortcuts
 
