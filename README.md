@@ -14,6 +14,7 @@ This mod also functions as a fully configurable text editing/navigation shortcut
 
 1. If you use this mod on Windows or Linux, and you don't use custom mappings, nothing will change from vanilla Minecraft.
 2. If you have any problems with this mod, **please report them as Issues on GitHub**. This mod is Open Source and Pull Requests are very much welcome! :)
+3. For technical information about custom mappings and how the mod works, you should go to the [CMD + Delete documentation](https://omegabird113.github.io/CMD_Delete/). 
 
 > [!Note]
 >
