@@ -31,7 +31,7 @@ import java.util.Optional;
 
 public final class NavMappingsManager {
     private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(NavMappingsManager.class);
-    private static @Nullable MappingsState currentMappingsState;
+    private static volatile @Nullable MappingsState currentMappingsState;
 
     private NavMappingsManager() {
     }
