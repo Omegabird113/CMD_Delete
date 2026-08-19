@@ -5,6 +5,7 @@ You can define your own custom mappings in configuration files with the location
 ## Mappings Format Features
 
 Custom mappings can:
+
 - Use wildcard expansion where any modifier not included in a key combo is treated as `true` OR `false`.
 - Use [friendly keyname strings](friendly_keynames.md) defined by CMD + Delete instead of GLFW keycodes. If a keyname is not defined, you can still choose to use a raw GLFW keycode in your JSON.
 - Inherit keybinds from the builtin mappings or other custom mappings by setting the top-level `inherits` value to `custom:<id>` to inherit a custom JSON, or `builtin:<id>` or just `<id>` to inherit a builtin JSON.
@@ -13,6 +14,7 @@ Custom mappings can:
 - Enable `strict` mode (as a top-level JSON boolean) which would prevent your mappings from loading if they have certain recoverable issues like keybind conflicts or unknown actions.
 
 Note that:
+
 - The format version `fv` is currently `4` and your mappings should match that (Though old mappings of format versions `2` and `3` are still supported in-game).
 - The `meta.id` field must exactly match the filename without the `.json` extension
 - In some places, you'll see a mappings id of `""` (empty string), that refers to the default mappings behavior of loading either `builtin:windows_linux` or `builtin:mac` depending on the user's OS. Note that `"inherits": ""` means a mappings JSON does not inherit anything, so it is impossible to inherit from the default behavior.
@@ -178,7 +180,6 @@ The strict number RegEx is `-?(0|[1-9]\d*)`.
 ### Inheritance
 
 NavAction/KeyCombo pairs are inherited through an iterative `parent's enabled bindings` - `child's disabled bindings` + `child's enabled bindings` process. There is no maximum on the levels of inheritance allowed, though any cyclical inheritance is treated as an error and the parser fails. If you try to remove a binding that doesn't exist anywhere in the parent mappings, it does nothing. If you try to disable a binding in the wrong NavAction (one where it wasn't registered by the parent), the removal does nothing and may leave a conflicting key combo registered.
-
 
 Feature flags inherit the parent's feature flag if the child feature flag is not specified, otherwise, they use the child's feature flag.
 
