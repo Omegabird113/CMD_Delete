@@ -196,7 +196,7 @@ public final class MappingsJSONDeserializer {
                 "Omegabird113", custom);
         final String description = getStringElse(meta, "description", "No description provided");
         final String version = replacePlaceholderWithIfBuiltin(
-                getStringElse(meta, "version", "unknown").replace("$$cmd_delete$$", CmdDeleteClient.VERSION),
+                getStringElse(meta, "version", "unknown"),
                 CmdDeleteClient.VERSION, custom);
         final String id = requireFilenameSafeString(meta, "id");
 
