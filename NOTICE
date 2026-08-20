@@ -8,6 +8,7 @@ This product includes the following third-party components:
 - Gson
 - Error Prone
 - Apache Commons Codec
+- JSpecify
 
 Apache Commons Codec
 Copyright 2002-2026 The Apache Software Foundation

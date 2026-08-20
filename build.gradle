@@ -57,6 +57,7 @@ dependencies {
     implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     shadeOnly 'com.google.code.gson:gson:2.14.0'
+    shadeOnly 'org.jspecify:jspecify:1.0.0'
     shadeOnly 'commons-codec:commons-codec:1.22.1'
 
     implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
@@ -113,6 +114,14 @@ tasks.shadowJar {
     relocators.add(new SimpleRelocator(
             'com.google',
             'io.github.omegabird113.cmd_delete.libs.google',
+            [] as List<String>,
+            [] as List<String>,
+            false,
+            false
+    ))
+    relocators.add(new SimpleRelocator(
+            'org.jspecify',
+            'io.github.omegabird113.cmd_delete.libs.jspecify',
             [] as List<String>,
             [] as List<String>,
             false,
