@@ -22,20 +22,23 @@ import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.data.FeatureFlags;
 import io.github.omegabird113.cmd_delete.config.data.KeyCombo;
 import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
+import io.github.omegabird113.cmd_delete.mappings.MappingsType;
 import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import io.github.omegabird113.cmd_delete.utils.Os;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 
-import java.lang.reflect.Type;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static io.github.omegabird113.cmd_delete.config.fileio.JsonParsingUtils.*;
 
-public final class MappingsJSONDeserializer implements JsonDeserializer<MappingsRegistry> {
+public final class MappingsJSONDeserializer {
+    private MappingsJSONDeserializer() {
+    }
+
     private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(MappingsJSONManager.class);
     private static final @NonNull Map<String, Os> OS_MAP = Map.of(
             "windows", Os.WINDOWS,
@@ -51,8 +54,7 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
         LOGGER.warn(message);
     }
 
-    @Override
-    public @NonNull MappingsRegistry deserialize(final @NonNull JsonElement json, final Type typeOfT, final JsonDeserializationContext context) throws JsonParseException {
+    public static @NonNull MappingsRegistry deserialize(final @NonNull JsonElement json, final String fileName, final boolean custom) throws JsonParseException {
         if (!json.isJsonObject())
             throw new JsonParseException("Expected a JSON object at root");
         final JsonObject jsonObject = json.getAsJsonObject();
@@ -68,13 +70,17 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
         final HashMap<KeyCombo, NavAction> disabledKeys = new HashMap<>();
         parseActions(actions, localKeys, disabledKeys, fv, strictMode);
 
-        final MetadataContainer container = parseMeta(requireObject(jsonObject, "meta"), strictMode);
+        final MetadataContainer container = parseMeta(requireObject(jsonObject, "meta"), strictMode, custom);
+
+        if (!container.id().equals(fileName))
+            throw new JsonParseException(MappingsType.fromIfCustom(custom).commonName() + " mappings id \"" + container.id() + "\" does not match filename \"" + fileName + "\"");
+
         final FeatureFlags ff = parseFlags(jsonObject, fv, inherits);
 
         return new MappingsRegistry(localKeys, (disabledKeys.isEmpty() ? null : disabledKeys), List.copyOf(container.systems()), ff, inherits, container.name(), container.author(), container.description(), container.version(), container.id());
     }
 
-    private @NonNull String trimAndCaseIfNotStrict(final @NonNull String str, final boolean upper, final boolean strictMode) {
+    private static @NonNull String trimAndCaseIfNotStrict(final @NonNull String str, final boolean upper, final boolean strictMode) {
         if (strictMode)
             return str;
         if (upper)
@@ -82,7 +88,7 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
         return str.trim().toLowerCase(Locale.ROOT);
     }
 
-    private void parseActions(final @NonNull JsonObject actions, final @NonNull HashMap<@NonNull KeyCombo, @NonNull NavAction> localKeys, final @NonNull HashMap<@NonNull KeyCombo, @NonNull NavAction> disabledKeys, final int fv, final boolean strictMode) {
+    private static void parseActions(final @NonNull JsonObject actions, final @NonNull HashMap<@NonNull KeyCombo, @NonNull NavAction> localKeys, final @NonNull HashMap<@NonNull KeyCombo, @NonNull NavAction> disabledKeys, final int fv, final boolean strictMode) {
         for (String actionName : actions.keySet()) {
             final NavAction action = NAV_ACTION_MAP.get(trimAndCaseIfNotStrict(actionName, true, strictMode));
             if (action == null || action == NavAction.NONE) {
@@ -155,7 +161,7 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
     }
 
     @Contract("_, _, _ -> new")
-    private @NonNull FeatureFlags parseFlags(final @NonNull JsonObject root, final int fv, final @NonNull String inherits) {
+    private static @NonNull FeatureFlags parseFlags(final @NonNull JsonObject root, final int fv, final @NonNull String inherits) {
         if (fv == 2)
             return new FeatureFlags(false, true);
         else {
@@ -175,12 +181,23 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
         }
     }
 
-    @Contract("_, _ -> new")
-    private @NonNull MetadataContainer parseMeta(final @NonNull JsonObject meta, final boolean strictMode) {
+    @Contract(pure = true)
+    private static @NonNull String replacePlaceholderWithIfBuiltin(final @NonNull String input, final @NonNull String replaceWith, final boolean custom) {
+        if (custom || !input.equals("$$cmd_delete$$"))
+            return input;
+        return replaceWith;
+    }
+
+    @Contract("_, _, _ -> new")
+    private static @NonNull MetadataContainer parseMeta(final @NonNull JsonObject meta, final boolean strictMode, final boolean custom) {
         final String name = getStringElse(meta, "name", "Unnamed Custom Mappings");
-        final String author = getStringElse(meta, "author", "unknown").replace("$$cmd_delete$$", "Omegabird113");
+        final String author = replacePlaceholderWithIfBuiltin(
+                getStringElse(meta, "author", "unknown"),
+                "Omegabird113", custom);
         final String description = getStringElse(meta, "description", "No description provided");
-        final String version = getStringElse(meta, "version", "unknown").replace("$$cmd_delete$$", CmdDeleteClient.VERSION);
+        final String version = replacePlaceholderWithIfBuiltin(
+                getStringElse(meta, "version", "unknown").replace("$$cmd_delete$$", CmdDeleteClient.VERSION),
+                CmdDeleteClient.VERSION, custom);
         final String id = requireFilenameSafeString(meta, "id");
 
         final JsonArray systems = requireArray(meta, "systems");
@@ -190,7 +207,7 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
         return new MetadataContainer(name, author, version, description, id, parsedSystems);
     }
 
-    private @NonNull KeyCombo @NonNull [] expandKeyWildcards(final int key,
+    private static @NonNull KeyCombo @NonNull [] expandKeyWildcards(final int key,
                                                              final boolean hasShift, final boolean shiftValue,
                                                              final boolean hasAltOption, final boolean altOptionValue,
                                                              final boolean hasControl, final boolean controlValue,
@@ -213,7 +230,7 @@ public final class MappingsJSONDeserializer implements JsonDeserializer<Mappings
         return results;
     }
 
-    private @NonNull Set<Os> parseSystems(final @NonNull JsonArray systemsArray, final boolean strictMode) {
+    private static @NonNull Set<Os> parseSystems(final @NonNull JsonArray systemsArray, final boolean strictMode) {
         final Set<Os> systems = new LinkedHashSet<>();
 
         for (JsonElement systemElement : systemsArray) {

@@ -18,6 +18,7 @@ package io.github.omegabird113.cmd_delete.config.fileio;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
@@ -39,7 +40,6 @@ import java.util.Optional;
 
 public final class MappingsJSONManager {
     public static final @NonNull Gson GSON = new GsonBuilder()
-            .registerTypeAdapter(MappingsRegistry.class, new MappingsJSONDeserializer())
             .create();
     private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(MappingsJSONManager.class);
 
@@ -53,10 +53,7 @@ public final class MappingsJSONManager {
             throw new FileNotFoundException(MappingsType.fromIfCustom(custom).commonName() + " mapping file not found at: " + path);
 
         try (java.io.BufferedReader reader = Files.newBufferedReader(path)) {
-            final MappingsRegistry registry = GSON.fromJson(reader, MappingsRegistry.class);
-            if (!registry.id().equals(id))
-                throw new JsonParseException(MappingsType.fromIfCustom(custom).commonName() + " mappings id \"" + registry.id() + "\" does not match filename \"" + id + "\"");
-            return registry;
+            return MappingsJSONDeserializer.deserialize(GSON.fromJson(reader, JsonObject.class), id, custom);
         }
     }
 
