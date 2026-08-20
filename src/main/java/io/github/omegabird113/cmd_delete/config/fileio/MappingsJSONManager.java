@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
 import io.github.omegabird113.cmd_delete.mappings.MappingsType;
@@ -39,8 +40,6 @@ import java.util.List;
 import java.util.Optional;
 
 public final class MappingsJSONManager {
-    public static final @NonNull Gson GSON = new GsonBuilder()
-            .create();
     private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(MappingsJSONManager.class);
 
     private MappingsJSONManager() {
@@ -53,7 +52,7 @@ public final class MappingsJSONManager {
             throw new FileNotFoundException(MappingsType.fromIfCustom(custom).commonName() + " mapping file not found at: " + path);
 
         try (java.io.BufferedReader reader = Files.newBufferedReader(path)) {
-            return MappingsJSONDeserializer.deserialize(GSON.fromJson(reader, JsonObject.class), id, custom);
+            return MappingsJSONDeserializer.deserialize(CmdDeleteClient.GSON.fromJson(reader, JsonObject.class), id, custom);
         }
     }
 

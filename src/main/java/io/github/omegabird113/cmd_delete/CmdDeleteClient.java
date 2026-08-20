@@ -16,6 +16,8 @@
 
 package io.github.omegabird113.cmd_delete;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import io.github.omegabird113.cmd_delete.command.NavMappingsCommand;
 import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
@@ -39,8 +41,10 @@ public final class CmdDeleteClient implements ClientModInitializer {
     public static final int MINIMUM_MAPPINGS_FORMAT_VERSION = 2;
     public static final int SHARECODE_FORMAT_VERSION = 1;
     public static final boolean FORCE_PREVENT_OVERRIDE_MODE = Boolean.getBoolean("cmd_delete.forcePreventOverrideMode");
-    private static final @NonNull Minecraft MINECRAFT = Minecraft.getInstance();
-    private static final @NonNull FabricLoader LOADER = FabricLoader.getInstance();
+    public static final @NonNull Gson GSON = new GsonBuilder()
+            .create();
+    public static final @NonNull Minecraft MINECRAFT = Minecraft.getInstance();
+    public static final @NonNull FabricLoader LOADER = FabricLoader.getInstance();
     public static final @NonNull String VERSION = LOADER.getModContainer(MODID)
             .map(container -> container.getMetadata().getVersion().getFriendlyString())
             .orElse("<unknown>");

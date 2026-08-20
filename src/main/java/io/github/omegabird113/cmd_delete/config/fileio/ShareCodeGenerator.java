@@ -45,7 +45,7 @@ public final class ShareCodeGenerator {
     public static @NonNull String collapseWhitespace(final @NonNull Path path) throws IOException {
         try (final Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
             final JsonElement json = JsonParser.parseReader(reader);
-            return MappingsJSONManager.GSON.toJson(json);
+            return CmdDeleteClient.GSON.toJson(json);
         }
     }
 

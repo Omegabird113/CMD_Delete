@@ -22,6 +22,7 @@ import com.google.gson.JsonParseException;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.config.fileio.JsonParsingUtils;
 import io.github.omegabird113.cmd_delete.config.fileio.MappingsJSONManager;
@@ -111,7 +112,7 @@ final class NavMappingsCommandExecutionUtils {
         try {
             decoded = ShareCodeGenerator.decode(shareCode.trim());
 
-            final JsonObject jsonObject = MappingsJSONManager.GSON.fromJson(decoded, JsonObject.class);
+            final JsonObject jsonObject = CmdDeleteClient.GSON.fromJson(decoded, JsonObject.class);
             final JsonObject meta = JsonParsingUtils.requireObject(jsonObject, "meta");
             final String idStr = JsonParsingUtils.requireFilenameSafeString(meta, "id");
 
