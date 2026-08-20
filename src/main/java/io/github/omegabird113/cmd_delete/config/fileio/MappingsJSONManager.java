@@ -16,8 +16,6 @@
 
 package io.github.omegabird113.cmd_delete.config.fileio;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;

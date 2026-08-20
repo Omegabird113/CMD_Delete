@@ -16,7 +16,10 @@
 
 package io.github.omegabird113.cmd_delete.config.fileio;
 
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.data.FeatureFlags;
@@ -36,9 +39,6 @@ import java.util.stream.Collectors;
 import static io.github.omegabird113.cmd_delete.config.fileio.JsonParsingUtils.*;
 
 public final class MappingsJSONDeserializer {
-    private MappingsJSONDeserializer() {
-    }
-
     private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(MappingsJSONManager.class);
     private static final @NonNull Map<String, Os> OS_MAP = Map.of(
             "windows", Os.WINDOWS,
@@ -47,6 +47,8 @@ public final class MappingsJSONDeserializer {
     );
     private static final @NonNull Map<@NonNull String, @NonNull NavAction> NAV_ACTION_MAP = Arrays.stream(NavAction.values())
             .collect(Collectors.toUnmodifiableMap(NavAction::name, Function.identity()));
+    private MappingsJSONDeserializer() {
+    }
 
     static void logWarn(@NonNull String message, boolean strictMode) {
         if (strictMode)
@@ -208,10 +210,10 @@ public final class MappingsJSONDeserializer {
     }
 
     private static @NonNull KeyCombo @NonNull [] expandKeyWildcards(final int key,
-                                                             final boolean hasShift, final boolean shiftValue,
-                                                             final boolean hasAltOption, final boolean altOptionValue,
-                                                             final boolean hasControl, final boolean controlValue,
-                                                             final boolean hasSuperCommand, final boolean superCommandValue) {
+                                                                    final boolean hasShift, final boolean shiftValue,
+                                                                    final boolean hasAltOption, final boolean altOptionValue,
+                                                                    final boolean hasControl, final boolean controlValue,
+                                                                    final boolean hasSuperCommand, final boolean superCommandValue) {
 
         final boolean[] shiftVals = hasShift ? new boolean[]{shiftValue} : new boolean[]{false, true};
         final boolean[] altOptionVals = hasAltOption ? new boolean[]{altOptionValue} : new boolean[]{false, true};
