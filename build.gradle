@@ -57,7 +57,7 @@ dependencies {
     implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     shadeOnly 'com.google.code.gson:gson:2.14.0'
-    shadeOnly 'org.jspecify:jspecify:1.0.0'
+    shadeOnly 'org.jspecify:jspecify:1.0.1'
     shadeOnly 'commons-codec:commons-codec:1.22.1'
 
     implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
