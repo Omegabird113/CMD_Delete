@@ -1,4 +1,5 @@
 # Friendly Keynames
+
 This is a list of all friendly keynames available in CMD + Delete for mappings JSONs to use.
 
 | Friendly keyname   | GLFW keycode | SDL3 scancode |

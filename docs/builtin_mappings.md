@@ -5,6 +5,7 @@ This page includes the entire JSON contents and sharecodes of every builtin mapp
 ## builtin:emacs_mac
 
 JSON:
+
 ```json
 {
   "fv": 4,
@@ -131,7 +132,8 @@ Sharecode:
 
 ## builtin:emacs_windows_linux
 
-JSON: 
+JSON:
+
 ```json
 {
   "fv": 4,
@@ -251,12 +253,13 @@ JSON:
 }
 ```
 
-Sharecode: 
+Sharecode:
 `CDS:EV1:3xdA1aMDAHdBoEw5G7VV2rSyLgnbpEz169GhAAtzRLv5i6ivHM2mseCHRv3UqeMVKoxSzfGS5azSpvexcjMxMMTuH4k7eidNbNaKAycRupCinTJ5WxUDnhyZSQjhv69vjL9jiDDc27DBCsUnUNsWYcdGJpJjBLnSej46yM9mscZN1jh14qNCijr4y7C8yTSchjJ1xAMch2BpwMrf6BNkBW2ZRvBvHNSH79cEhKEdE3FWNJvMDWvqQGrSGgpDJfaSFYGR22Gcf61zccSpUdWmkhoX3aWxTGUvkh4NWjKxeetRveViYE8euQowogZAjwT9P8eVtgy6nPBgzEUj7k7kHdSH9gqyzWDGV7xSE3X4uHyDdYRWFMJuXsuDQh9ksVuX8ieEL7jK1jRFu7xhESb4cDA8Yp1ftMgVEfrAtTjAjeoy8Ax9toQX1YLuHsWJbootiXT8TTonHamEH15LP7EgAFf65DrWT9W7Zv8V7okcsbZ3kFhMaGF1u7kzNqs2eq86jNhbMdenEcJpaZGfXTiUfeFgEX55jdjKaUmudXkqBdQC3SQ9BbMsLyvtfDve6jaLGVuatRyQnEoQMvaf5sRBKbQoKKM6tXszPEoGEBcL7eV7fcVjYxYLGGQrinZzjTHz7nUfLegzCMtQ2mHLmKtNH5PoE7SEuPU5rupVT94Ao45mWeQLV4Vux6hFh3Xqas75E6HLW9Ba6N26pK2ZBChfcFxcQX61TJrRLYEL2bYCqDdQTgB2A5TwtDN47D4cothdQ7dDQ4q91X2tFUZPSKCSS96YK4RsUvtMkCHMQq2h4VNTofKYPGVTyYg1skow2PA1LkQf:878752458`
 
 ## builtin:mac
 
 JSON:
+
 ```json
 {
   "fv": 4,
@@ -376,6 +379,7 @@ Sharecode:
 ## builtin:readline
 
 JSON:
+
 ```json
 {
   "fv": 4,
@@ -479,12 +483,13 @@ JSON:
 }
 ```
 
-Sharecode: 
+Sharecode:
 `CDS:EV1:3Z15yMrwbyh3XwikdeDtaZqPW7xLFBxq9hLMky5CzDRNFF6XMYy5eN9zHvXRpwDQKLxkc436VgFDcRtsCKR95EsTAjjEZtBqLz6QkcTUU1CfwdfM9yiDktpXHxEe3Mr439ZndY6fu3QYCxVQfwHoJqoAcUB82gM1ZgQxjMbaMryePx2A3N2pTdh9KtqKqBKSikKt5sgJMvpqGj9FkedsUSbgsVF8iYvJUvuuGQkmeJLLCYqgmEqyAw9ofyygGX7cEPCCDgsHCnJRMFd6zAs6VDfEoyJRjDVZRTxAGngtGupAmtGJn6eucXnqNgoNgTL8nrgS4iTLtFcgv5JPt9F8CCk1155JGHFHxDE8o33dWV1MPdYNCRkefesWbwnHDPypufADgw5Hw9LMPo7TqvK7MXPhcP23e2kQmwsgfZ2qU42n93bWHfdFWCywGGeoW6cZN1KwXpWMQQ2mFd8RuKWaSJNhrLU9feBdHppWq6Jey5XDz1QcGnARCsbEMDz3ZhoJL8thes67p48PKPdzR9fQaBKiwLLzgSQfMnUqF1WvFr9ft4NuF1PLzYfBybxGXPWBxxdhYzxG2Cmg4kjhW2xnr55NUATCoed6mxgdLHPHMzW2AwirMwM6TMsTeA9Pf6VdL2PmN1pN2QEakz5ZgMW8phFyeL6ZZtug8ywfGxKjPfsVKTQswXRj3fRUKy7aQwoBtWL51wovjk5Mej21shwHuMe8UJ9c1UsiZMJD2YBQNwWHTM:3994342116`
 
 ## builtin:windows_linux
 
 JSON:
+
 ```json
 {
   "fv": 4,

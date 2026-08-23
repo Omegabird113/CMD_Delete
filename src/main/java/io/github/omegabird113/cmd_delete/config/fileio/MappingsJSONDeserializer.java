@@ -47,6 +47,7 @@ public final class MappingsJSONDeserializer {
     );
     private static final @NonNull Map<@NonNull String, @NonNull NavAction> NAV_ACTION_MAP = Arrays.stream(NavAction.values())
             .collect(Collectors.toUnmodifiableMap(NavAction::name, Function.identity()));
+
     private MappingsJSONDeserializer() {
     }
 

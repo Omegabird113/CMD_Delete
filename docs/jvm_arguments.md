@@ -1,6 +1,7 @@
 # JVM arguments
 
-These are some boolean JVM settings (treated as false if not specified) useful for debugging CMD + Delete. Generally, it is not recommended to change these unless you have an explicit reason to.
+These are some boolean JVM settings (treated as false if not specified) useful for debugging CMD + Delete. Generally, it
+is not recommended to change these unless you have an explicit reason to.
 
 | Argument Name                             | Description                                                                                                                                                                                                                                                                                        | Minimum CMD + Delete version                                              |
 |:------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------|
