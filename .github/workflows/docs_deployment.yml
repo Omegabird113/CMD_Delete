@@ -10,6 +10,10 @@ on:
       - 'zensical.toml'
       - '.github/workflows/docs_deployment.yml'
 
+concurrency:
+  group: docs-deployment
+  cancel-in-progress: true
+
 permissions:
   contents: read
   pages: write
