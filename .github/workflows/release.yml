@@ -118,7 +118,7 @@ jobs:
             $PRERELEASE_FLAG
 
       - name: Publish to Modrinth & CurseForge
-        uses: Kira-NT/mc-publish@v3
+        uses: Kira-NT/mc-publish@52307b03863581dec6b652b83e597aec02ebb075 # v3.3.1
         with:
           modrinth-id: xrOWVab9
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
