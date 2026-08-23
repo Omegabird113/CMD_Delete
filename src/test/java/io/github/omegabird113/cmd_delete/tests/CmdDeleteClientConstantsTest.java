@@ -28,6 +28,7 @@ public class CmdDeleteClientConstantsTest {
         TestLoader.setup();
     }
 
+    @SuppressWarnings("ConstantValue")
     @Test
     void clientConstantsTest() {
         Assertions.assertAll(

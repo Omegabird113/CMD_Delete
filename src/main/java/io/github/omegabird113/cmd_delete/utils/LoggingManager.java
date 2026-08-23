@@ -58,6 +58,7 @@ public final class LoggingManager {
 
     public static void traceLog(final @NonNull Logger logger, final @NonNull String format, final Object... args) {
         if (VERBOSE_LOGGING_ALLOWED)
+            //noinspection StringConcatenationArgumentToLogCall
             logger.info("[VERBOSE/TRACE]: " + format, args);
         else
             logger.trace(format, args);
@@ -65,6 +66,7 @@ public final class LoggingManager {
 
     public static void debugLog(final @NonNull Logger logger, final @NonNull String format, final Object... args) {
         if (VERBOSE_LOGGING_ALLOWED)
+            //noinspection StringConcatenationArgumentToLogCall
             logger.info("[VERBOSE/DEBUG]: " + format, args);
         else
             logger.debug(format, args);
