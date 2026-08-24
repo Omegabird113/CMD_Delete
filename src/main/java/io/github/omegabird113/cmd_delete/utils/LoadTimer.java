@@ -27,13 +27,16 @@ public final class LoadTimer {
 
     public static void time(final @NonNull Runnable toTime, final @NonNull String name, final boolean detailed) {
         final long startTime = System.nanoTime();
-        toTime.run();
-        final long endTime = System.nanoTime();
-        final double detailedDuration = (endTime - startTime) / 1000000.0;
-        LoggingManager.traceLog(LOGGER, "Timed \"{}\". Took exactly {} ms", name, detailedDuration);
-        if (!detailed) {
-            final long duration = Math.round(detailedDuration);
-            LOGGER.info("Timed {}. Took {} ms", name, duration);
+        try {
+            toTime.run();
+        } finally {
+            final long endTime = System.nanoTime();
+            final double detailedDuration = (endTime - startTime) / 1000000.0;
+            LoggingManager.traceLog(LOGGER, "Timed \"{}\". Took exactly {} ms", name, detailedDuration);
+            if (!detailed) {
+                final long duration = Math.round(detailedDuration);
+                LOGGER.info("Timed {}. Took {} ms", name, duration);
+            }
         }
     }
 }
