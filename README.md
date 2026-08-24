@@ -60,5 +60,5 @@ CMD + Delete also now provides these other builtin mappings:
 
 - The CMD + Delete mod itself is licensed under the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0.html).
 - The CMD + Delete wiki/documentation is licensed under the [CC BY 4.0 license](https://creativecommons.org/licenses/by/4.0/legalcode.en).
-- All builtin mappings JSON files are aviable under either the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0.html) or the [CC BY 4.0 license](https://creativecommons.org/licenses/by/4.0/legalcode.en) (You may chose to comply with either license).
+- All builtin mappings JSON files are available under either the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0.html) or the [CC BY 4.0 license](https://creativecommons.org/licenses/by/4.0/legalcode.en) (You may chose to comply with either license).
 - You may include CMD + Delete in any CurseForge and/or Modrinth modpack.
