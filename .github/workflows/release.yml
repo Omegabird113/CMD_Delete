@@ -30,6 +30,24 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
 
+      - name: Check that changelog exists
+        run: |
+          set -euo pipefail
+          test -f changelog.md || {
+            echo "Missing changelog.md"
+            exit 1
+          }
+
+      - name: Check if release already exists
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          if gh release view "${{ steps.props.outputs.version }}" >/dev/null 2>&1; then
+            echo "ERROR: Release ${{ steps.props.outputs.version }} already exists"
+            exit 1
+          fi
+
       - name: Read gradle.properties
         id: props
         run: |
@@ -49,6 +67,9 @@ jobs:
 
       - name: Build
         run: ./gradlew clean build --stacktrace --no-daemon
+
+      - name: Sanity-test client load
+        run: xvfb-run ./gradlew runCiClient --no-daemon
 
       - name: Upload built JARs as artifacts
         uses: actions/upload-artifact@v7
@@ -82,24 +103,6 @@ jobs:
 
           echo "path=${JARS[0]}" >> "$GITHUB_OUTPUT"
 
-      - name: Check that changelog exists
-        run: |
-          set -euo pipefail
-          test -f changelog.md || {
-            echo "Missing changelog.md"
-            exit 1
-          }
-    
-      - name: Check if release already exists
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -euo pipefail
-          if gh release view "${{ steps.props.outputs.version }}" >/dev/null 2>&1; then
-            echo "ERROR: Release ${{ steps.props.outputs.version }} already exists"
-            exit 1
-          fi
-
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -131,9 +134,7 @@ jobs:
           changelog-file: changelog.md
           java: 25
           game-versions: |
-            >=26.1 <=26.3-snapshot.3
-            >=26.1-pre.1 <=26.1
-            >=26.1-rc.1 <=26.1
+            >=26.1 <=26.2
           loaders: |
             fabric
             quilt
