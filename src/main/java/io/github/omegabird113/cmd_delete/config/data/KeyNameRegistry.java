@@ -120,7 +120,7 @@ public final class KeyNameRegistry {
             Map.entry("f22", GLFW_KEY_F22),
             Map.entry("f23", GLFW_KEY_F23),
             Map.entry("f24", GLFW_KEY_F24),
-            Map.entry("f25", GLFW_KEY_F25),
+            Map.entry("f25", GLFW_KEY_F25), // deprecated
 
             Map.entry("numpad_0", GLFW_KEY_KP_0),
             Map.entry("numpad_1", GLFW_KEY_KP_1),
