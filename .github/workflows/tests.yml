@@ -1,4 +1,4 @@
-name: JUint, Compiling, Client, & Docs Tests
+name: Tests
 
 on:
   push:
