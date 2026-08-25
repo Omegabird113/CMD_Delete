@@ -53,6 +53,12 @@ dependencies {
     shadeOnly 'commons-codec:commons-codec:1.22.1'
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
 def targetJavaVersion = 25
 tasks.withType(JavaCompile).configureEach {
     it.options.encoding = "UTF-8"
@@ -91,15 +97,6 @@ tasks.jar {
 
 test {
     useJUnitPlatform()
-}
-
-runs {
-    client {
-        workingDirectory project.file('run/client')
-
-        ideaModule "${rootProject.name}.${project.name}.main"
-        args '--username=Dev'
-    }
 }
 
 publishing {
