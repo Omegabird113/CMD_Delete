@@ -25,16 +25,15 @@ import io.github.omegabird113.cmd_delete.utils.CrashUtils;
 import io.github.omegabird113.cmd_delete.utils.LoadTimer;
 import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import io.github.omegabird113.cmd_delete.utils.Os;
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.MixinEnvironment;
 
 import java.nio.file.Path;
 
-public final class CmdDeleteClient implements ClientModInitializer {
+public final class CmdDeleteClient {
     public static final @NonNull String MODID = "cmd_delete";
     public static final @NonNull String ISSUE_TRACKER_URL_STRING = "https://github.com/Omegabird113/CMD_Delete/issues";
     public static final int CURRENT_MAPPINGS_FORMAT_VERSION = 4;
@@ -44,17 +43,27 @@ public final class CmdDeleteClient implements ClientModInitializer {
     public static final @NonNull Gson GSON = new GsonBuilder()
             .create();
     public static final @NonNull Minecraft MINECRAFT = Minecraft.getInstance();
-    public static final @NonNull FabricLoader LOADER = FabricLoader.getInstance();
-    public static final @NonNull String VERSION = LOADER.getModContainer(MODID)
-            .map(container -> container.getMetadata().getVersion().getFriendlyString())
-            .orElse("<unknown>");
     private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(CmdDeleteClient.class);
 
-    @Override
+    private static @Nullable CmdDeleteClient instance = null;
+    private final @NonNull IPlatform platform;
+
+    public CmdDeleteClient(@NonNull IPlatform platform) {
+        this.platform = platform;
+        instance = this;
+    }
+
+    public static @NonNull IPlatform getPlatform() {
+        CmdDeleteClient client = instance;
+        if (client == null)
+            throw new IllegalStateException("No CmdDeleteClient class instance defined");
+        return instance.platform;
+    }
+
     public void onInitializeClient() {
         LoadTimer.time(() -> CrashUtils.crashMinecraftOnFailure(() -> {
             LoadTimer.time(() -> {
-                LOGGER.info("Initializing client mod \"{}\" (version: {}, mappings format version: {}, minimum mappings compatible version: {}, sharecode encoding version: {})... You can report any issues at {}.", MODID, VERSION, CURRENT_MAPPINGS_FORMAT_VERSION, MINIMUM_MAPPINGS_FORMAT_VERSION, SHARECODE_FORMAT_VERSION, ISSUE_TRACKER_URL_STRING);
+                LOGGER.info("Initializing client mod \"{}\" (version: {}, mappings format version: {}, minimum mappings compatible version: {}, sharecode encoding version: {})... You can report any issues at {}.", MODID, platform.getModVersion(), CURRENT_MAPPINGS_FORMAT_VERSION, MINIMUM_MAPPINGS_FORMAT_VERSION, SHARECODE_FORMAT_VERSION, ISSUE_TRACKER_URL_STRING);
                 LOGGER.info("User appears to be running system: {}", Os.USING);
 
                 final MixinEnvironment mixinEnv = MixinEnvironment.getCurrentEnvironment();
@@ -68,8 +77,7 @@ public final class CmdDeleteClient implements ClientModInitializer {
 
             LoadTimer.time(() -> {
                 final Path gameDir = MINECRAFT.gameDirectory.toPath();
-                final Path resourceMappingsDir = LOADER.getModContainer(CmdDeleteClient.MODID)
-                        .orElseThrow().findPath("mappings/").orElseThrow();
+                final Path resourceMappingsDir = platform.getResourcePath().resolve("mappings/");
                 PathConstants.init(gameDir, resourceMappingsDir);
             }, "path initialization", true);
 

@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-plugins {
-    id 'maven-publish'
-}
+package io.github.omegabird113.cmd_delete;
 
-subprojects {
-    version = project.mod_version
-    group = project.maven_group
+import org.jspecify.annotations.NonNull;
+
+import java.nio.file.Path;
+
+public interface IPlatform {
+    @NonNull String getModVersion();
+
+    @NonNull Path getResourcePath();
 }

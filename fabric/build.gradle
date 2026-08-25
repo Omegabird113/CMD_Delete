@@ -1,0 +1,172 @@
+/*
+ * Copyright (c) 2026 Omegabird113.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import com.github.jengelman.gradle.plugins.shadow.relocation.SimpleRelocator
+
+plugins {
+    id 'net.fabricmc.fabric-loom' version '1.17.19'
+    id 'com.gradleup.shadow' version '9.6.1'
+    id 'maven-publish'
+}
+
+base {
+    archivesName = project.archives_base_name + "-fabric"
+}
+
+configurations {
+    shadeOnly
+}
+
+sourceSets {
+    main {
+        compileClasspath += configurations.shadeOnly
+        runtimeClasspath += configurations.shadeOnly
+    }
+    test {
+        compileClasspath += configurations.shadeOnly
+        runtimeClasspath += configurations.shadeOnly
+    }
+}
+
+repositories {
+    // Loom adds the essential maven repositories automatically
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+    implementation project(":common")
+
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    shadeOnly 'com.google.code.gson:gson:2.14.0'
+    shadeOnly 'org.jspecify:jspecify:1.0.1'
+    shadeOnly 'commons-codec:commons-codec:1.22.1'
+
+    testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
+}
+
+def targetJavaVersion = 25
+tasks.withType(JavaCompile).configureEach {
+    it.options.encoding = "UTF-8"
+    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+        it.options.release.set(targetJavaVersion)
+    }
+}
+
+java {
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+    withSourcesJar()
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "minecraft_version", project.minecraft_version
+    inputs.property "loader_version", project.loader_version
+    filteringCharset "UTF-8"
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version,
+                "minecraft_version": project.minecraft_version,
+                "loader_version": project.loader_version
+    }
+}
+
+tasks.shadowJar {
+    configurations.set([project.configurations.shadeOnly] as Set)
+    relocators.add(new SimpleRelocator(
+            'org.apache.commons.codec',
+            'io.github.omegabird113.cmd_delete.libs.commons.codec',
+            [] as List<String>,
+            [] as List<String>,
+            false,
+            false
+    ))
+    relocators.add(new SimpleRelocator(
+            'com.google',
+            'io.github.omegabird113.cmd_delete.libs.google',
+            [] as List<String>,
+            [] as List<String>,
+            false,
+            false
+    ))
+    relocators.add(new SimpleRelocator(
+            'org.jspecify',
+            'io.github.omegabird113.cmd_delete.libs.jspecify',
+            [] as List<String>,
+            [] as List<String>,
+            false,
+            false
+    ))
+    from("${rootDir}/LICENSE") {
+        rename { "LICENSE.txt" }
+    }
+    from("${rootDir}/NOTICE") {
+        rename { "NOTICE.txt" }
+    }
+    from("${rootDir}/licenses/") {
+        into("licenses/")
+    }
+    archiveClassifier.set('')
+}
+
+tasks.jar {
+    archiveClassifier.set('dev')
+    from("${rootDir}/LICENSE") {
+        rename { "LICENSE.txt" }
+    }
+    from("${rootDir}/NOTICE") {
+        rename { "NOTICE.txt" }
+    }
+}
+
+tasks.build {
+    dependsOn tasks.shadowJar
+}
+
+test {
+    useJUnitPlatform()
+}
+
+loom {
+    mods {
+        "cmd_delete" {
+            sourceSet sourceSets.main
+            configuration configurations.shadeOnly
+        }
+    }
+
+    runs {
+        client {
+            client()
+        }
+
+        ciClient {
+            client()
+            getJvmArguments().add("-Dcmd_delete.ci.stopMinecraftAfterLoad=true")
+        }
+
+        server {
+            server()
+        }
+    }
+}
+
