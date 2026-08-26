@@ -11,6 +11,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import org.jspecify.annotations.NonNull;
 
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -60,9 +61,19 @@ public final class NeoForgePlatform implements IPlatform {
         if (Files.isDirectory(modPath.resolve("mappings")))
             return modPath;
 
+        Path buildResources = modPath;
+        for (int i = 0; i < 3 && buildResources.getParent() != null; i++)
+            buildResources = buildResources.getParent();
+        buildResources = buildResources.resolve("resources/main");
+        if (Files.isDirectory(buildResources.resolve("mappings")))
+            return buildResources;
+
         try {
-            return Path.of(CmdDeleteClient.class.getResource("/mappings").toURI()).getParent();
-        } catch (NullPointerException | URISyntaxException e) {
+            URL mappingsResource = CmdDeleteClient.class.getResource("/mappings");
+            if (mappingsResource == null)
+                throw new IllegalStateException("The bundled mappings resource is missing");
+            return Path.of(mappingsResource.toURI()).getParent();
+        } catch (URISyntaxException e) {
             throw new IllegalStateException("Could not locate CMD + Delete's bundled mappings", e);
         }
     }
