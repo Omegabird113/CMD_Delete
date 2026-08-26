@@ -42,26 +42,21 @@ public final class CmdDeleteClient {
     public static final @NonNull Gson GSON = new GsonBuilder()
             .create();
     private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(CmdDeleteClient.class);
-    public static @NonNull String VERSION;
-    private static @Nullable CmdDeleteClient instance = null;
-    private final @NonNull IPlatform platform;
-
-    public CmdDeleteClient(@NonNull IPlatform platform) {
-        this.platform = platform;
-        instance = this;
-        VERSION = platform.getModVersion();
-    }
+    public static @NonNull String VERSION = "unknown";
+    private static @Nullable IPlatform platform;
 
     public static @NonNull IPlatform getPlatform() {
-        CmdDeleteClient client = instance;
-        if (client == null)
+        if (platform == null)
             throw new IllegalStateException("No CmdDeleteClient class instance defined");
-        return instance.platform;
+        return platform;
     }
 
     public static void start(IPlatform platform) {
         LoadTimer.time(() -> CrashUtils.crashMinecraftOnFailure(() -> {
-            LoadTimer.time(() -> new CmdDeleteClient(platform), "CmdDeleteClient object initialization", true);
+            LoadTimer.time(() -> {
+                CmdDeleteClient.platform = platform;
+                VERSION = platform.getModVersion();
+            }, "Registering platform information", true);
 
             LoadTimer.time(() -> {
                 LOGGER.info("Initializing client mod \"{}\" (version: {}, mappings format version: {}, minimum mappings compatible version: {}, sharecode encoding version: {})... You can report any issues at {}.", MODID, platform.getModVersion(), CURRENT_MAPPINGS_FORMAT_VERSION, MINIMUM_MAPPINGS_FORMAT_VERSION, SHARECODE_FORMAT_VERSION, ISSUE_TRACKER_URL_STRING);
