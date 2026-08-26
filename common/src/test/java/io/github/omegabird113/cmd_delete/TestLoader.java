@@ -68,7 +68,7 @@ public class TestLoader {
         if (initialized)
             return;
         Assertions.assertDoesNotThrow(() -> {
-            new CmdDeleteClient(TEST_PLATFORM);
+            CmdDeleteClient.setPlatform(TEST_PLATFORM);
             PathConstants.init(
                     tempDir,
                     Path.of(Objects.requireNonNull(CmdDeleteClient.class.getResource("/mappings")).toURI())

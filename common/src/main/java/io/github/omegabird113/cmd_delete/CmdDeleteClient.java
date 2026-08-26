@@ -51,12 +51,14 @@ public final class CmdDeleteClient {
         return platform;
     }
 
+    public static void setPlatform(@NonNull IPlatform platform) {
+        CmdDeleteClient.platform = platform;
+        VERSION = platform.getModVersion();
+    }
+
     public static void start(IPlatform platform) {
         LoadTimer.time(() -> CrashUtils.crashMinecraftOnFailure(() -> {
-            LoadTimer.time(() -> {
-                CmdDeleteClient.platform = platform;
-                VERSION = platform.getModVersion();
-            }, "Registering platform information", true);
+            LoadTimer.time(() -> setPlatform(platform), "Registering platform information", true);
 
             LoadTimer.time(() -> {
                 LOGGER.info("Initializing client mod \"{}\" (version: {}, mappings format version: {}, minimum mappings compatible version: {}, sharecode encoding version: {})... You can report any issues at {}.", MODID, platform.getModVersion(), CURRENT_MAPPINGS_FORMAT_VERSION, MINIMUM_MAPPINGS_FORMAT_VERSION, SHARECODE_FORMAT_VERSION, ISSUE_TRACKER_URL_STRING);
