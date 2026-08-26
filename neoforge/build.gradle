@@ -16,7 +16,6 @@
 
 plugins {
     id 'java'
-    id 'net.neoforged.gradle.userdev' version '7.1.21'
     id 'maven-publish'
 }
 
@@ -39,10 +38,6 @@ sourceSets {
     }
 }
 
-repositories {
-    // NeoForged's maven is added by the gradle plugin
-}
-
 dependencies {
     implementation "net.neoforged:neoforge:${project.neoforge_version}"
 
@@ -57,6 +52,7 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(25)
     }
+    withSourcesJar()
 }
 
 def targetJavaVersion = 25
@@ -65,14 +61,6 @@ tasks.withType(JavaCompile).configureEach {
     if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
         it.options.release.set(targetJavaVersion)
     }
-}
-
-java {
-    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
-    if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
-    }
-    withSourcesJar()
 }
 
 processResources {

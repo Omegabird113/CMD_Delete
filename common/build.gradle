@@ -18,6 +18,7 @@ import com.github.jengelman.gradle.plugins.shadow.relocation.SimpleRelocator
 
 plugins {
     id 'java'
+    id "dev.architectury.loom-no-remap"
     id 'com.gradleup.shadow' version '9.6.1'
 }
 
@@ -52,10 +53,14 @@ sourceSets {
 }
 
 dependencies {
+    minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+
+    compileOnly "org.spongepowered:mixin:0.8.7"
+    annotationProcessor "org.spongepowered:mixin:0.8.7:processor"
+
     shadeOnly 'com.google.code.gson:gson:2.14.0'
     shadeOnly 'org.jspecify:jspecify:1.0.1'
     shadeOnly 'commons-codec:commons-codec:1.22.1'
-    compileOnly 'org.jetbrains:annotations:26.1.0'
 }
 
 tasks.shadowJar {
