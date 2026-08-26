@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "cmd_delete",
-  "version": "1.4.3a+mc26.1",
+  "version": "${version}",
   "name": "CMD + Delete",
   "description": "Fix macOS text navigation shortcuts in chat/books/signs/etc + allow custom shortcuts.",
   "authors": [
@@ -24,8 +24,8 @@
     "cmd_delete.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.17.2",
-    "fabric-api": ">=0.143.12+26.1",
+    "fabricloader": ">=${loader_min_version}",
+    "fabric-api": ">=${fabric_min_version}",
     "minecraft": [
       ">=26.1 <=26.3-snapshot.3",
       ">=26.1-pre.1 <=26.1",

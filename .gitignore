@@ -12,6 +12,7 @@
 neoforge/runs
 common/logs/
 **/run/**
+**/out/
 run/**
 !**/run/options.txt
 
