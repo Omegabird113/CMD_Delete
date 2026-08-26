@@ -1,6 +1,6 @@
 # CMD + Delete
 
-[![Build status](https://img.shields.io/github/actions/workflow/status/Omegabird113/cmd_delete/build.yml)](https://github.com/Omegabird113/cmd_delete/actions/workflows/build.yml)
+[![Build status](https://img.shields.io/github/actions/workflow/status/Omegabird113/cmd_delete/tests.yml)](https://github.com/Omegabird113/cmd_delete/actions/workflows/tests.yml)
 [![GitHub License](https://img.shields.io/github/license/Omegabird113/cmd_delete)](https://github.com/Omegabird113/cmd_delete/blob/master/LICENSE)
 [![Modrinth Downloads](https://img.shields.io/modrinth/dt/xrOWVab9)](https://modrinth.com/mod/cmd-delete)
 [![CurseForge Downloads](https://img.shields.io/curseforge/dt/1455987)](https://www.curseforge.com/minecraft/mc-mods/cmd-delete)
