@@ -28,8 +28,8 @@ import io.github.omegabird113.cmd_delete.config.fileio.JsonParsingUtils;
 import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
 import io.github.omegabird113.cmd_delete.config.fileio.ShareCodeGenerator;
 import io.github.omegabird113.cmd_delete.mappings.MappingsType;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.Minecraft;
+import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import org.jspecify.annotations.NonNull;
 
@@ -46,7 +46,7 @@ final class NavMappingsCommandExecutionUtils {
     private NavMappingsCommandExecutionUtils() {
     }
 
-    static void exportShareCode(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context, final boolean custom) throws CommandSyntaxException {
+    static void exportShareCode(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context, final boolean custom) throws CommandSyntaxException {
         final String idStr = StringArgumentType.getString(context, "id");
 
         final String namespacedId = MappingsIdResolutionUtils.resolveNamespacedId(MappingsType.fromIfCustom(custom), idStr);
@@ -59,10 +59,10 @@ final class NavMappingsCommandExecutionUtils {
         }
 
         Minecraft.getInstance().keyboardHandler.setClipboard(shareCode);
-        context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.export_sharecode", MappingsIdResolutionUtils.resolveNamespacedId(MappingsType.fromIfCustom(custom), idStr), shareCode));
+        ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.export_sharecode", MappingsIdResolutionUtils.resolveNamespacedId(MappingsType.fromIfCustom(custom), idStr), shareCode));
     }
 
-    static void exportMappings(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context, final boolean custom) throws CommandSyntaxException {
+    static void exportMappings(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context, final boolean custom) throws CommandSyntaxException {
         final String idStr = StringArgumentType.getString(context, "id");
         final String locationStr = StringArgumentType.getString(context, "location");
 
@@ -103,10 +103,10 @@ final class NavMappingsCommandExecutionUtils {
                 throw CommandCreationUtils.UNKNOWN_BUILTIN_MAPPINGS.create(idStr);
         }
 
-        context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.export_mappings", MappingsIdResolutionUtils.resolveNamespacedId(MappingsType.fromIfCustom(custom), idStr), newPath.toAbsolutePath()));
+        ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.export_mappings", MappingsIdResolutionUtils.resolveNamespacedId(MappingsType.fromIfCustom(custom), idStr), newPath.toAbsolutePath()));
     }
 
-    static void importShareCode(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context, final @NonNull String shareCode) throws CommandSyntaxException {
+    static void importShareCode(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context, final @NonNull String shareCode) throws CommandSyntaxException {
         String decoded;
         try {
             decoded = ShareCodeGenerator.decode(shareCode.trim());
@@ -123,7 +123,7 @@ final class NavMappingsCommandExecutionUtils {
                 throw CommandCreationUtils.FAILED_CUSTOM_MAPPINGS_IMPORT.create(idStr);
             }
 
-            context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.import_sharecode_success", idStr));
+            ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.import_sharecode_success", idStr));
         } catch (IllegalArgumentException | JsonParseException e) {
             LOGGER.error("Invalid share code: {}", shareCode, e);
             throw CommandCreationUtils.INVALID_SHARE_CODE.create(shareCode);

@@ -47,10 +47,12 @@ public final class CmdDeleteClient {
 
     private static @Nullable CmdDeleteClient instance = null;
     private final @NonNull IPlatform platform;
+    public static @NonNull String VERSION;
 
     public CmdDeleteClient(@NonNull IPlatform platform) {
         this.platform = platform;
         instance = this;
+        VERSION = platform.getModVersion();
     }
 
     public static @NonNull IPlatform getPlatform() {
@@ -60,8 +62,12 @@ public final class CmdDeleteClient {
         return instance.platform;
     }
 
-    public void onInitializeClient() {
+    public static void start(IPlatform platform) {
         LoadTimer.time(() -> CrashUtils.crashMinecraftOnFailure(() -> {
+            LoadTimer.time(() -> {
+                new CmdDeleteClient(platform);
+            }, "CmdDeleteClient object initialization", true);
+
             LoadTimer.time(() -> {
                 LOGGER.info("Initializing client mod \"{}\" (version: {}, mappings format version: {}, minimum mappings compatible version: {}, sharecode encoding version: {})... You can report any issues at {}.", MODID, platform.getModVersion(), CURRENT_MAPPINGS_FORMAT_VERSION, MINIMUM_MAPPINGS_FORMAT_VERSION, SHARECODE_FORMAT_VERSION, ISSUE_TRACKER_URL_STRING);
                 LOGGER.info("User appears to be running system: {}", Os.USING);
@@ -82,7 +88,7 @@ public final class CmdDeleteClient {
             }, "path initialization", true);
 
             LoadTimer.time(NavMappingsManager::loadMappings, "loading mappings", true);
-            LoadTimer.time(NavMappingsCommand::register, "registering /navmappings", true);
+            LoadTimer.time(() -> platform.registerClientCommand(NavMappingsCommand::register), "registering /navmappings", true);
         }), "full load", false);
 
         if (Boolean.getBoolean("cmd_delete.ci.stopMinecraftAfterLoad")) {

@@ -16,6 +16,8 @@
 
 package io.github.omegabird113.cmd_delete;
 
+import com.mojang.brigadier.CommandDispatcher;
+import net.minecraft.commands.SharedSuggestionProvider;
 import org.jspecify.annotations.NonNull;
 
 import java.nio.file.Path;
@@ -24,4 +26,11 @@ public interface IPlatform {
     @NonNull String getModVersion();
 
     @NonNull Path getResourcePath();
+
+    <S extends SharedSuggestionProvider> void registerClientCommand(@NonNull CommandRegistration<S> registration);
+
+    @FunctionalInterface
+    interface CommandRegistration<S extends SharedSuggestionProvider> {
+        void register(@NonNull CommandDispatcher<S> dispatcher);
+    }
 }

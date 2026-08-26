@@ -15,7 +15,7 @@
  */
 
 plugins {
-    id 'java'
+    id 'net.neoforged.moddev' version '2.0.144'
     id 'maven-publish'
 }
 
@@ -39,13 +39,28 @@ sourceSets {
 }
 
 dependencies {
-    implementation "net.neoforged:neoforge:${project.neoforge_version}"
-
     implementation project(":common")
 
     shadeOnly 'com.google.code.gson:gson:2.14.0'
     shadeOnly 'org.jspecify:jspecify:1.0.1'
     shadeOnly 'commons-codec:commons-codec:1.22.1'
+}
+
+neoForge {
+    version = project.neoforge_version
+
+    runs {
+        client {
+            client()
+            systemProperty 'cmd_delete.ci.stopMinecraftAfterLoad', System.getProperty('cmd_delete.ci.stopMinecraftAfterLoad', 'false')
+        }
+    }
+
+    mods {
+        cmd_delete {
+            sourceSet sourceSets.main
+        }
+    }
 }
 
 java {
@@ -103,4 +118,3 @@ publishing {
         }
     }
 }
-

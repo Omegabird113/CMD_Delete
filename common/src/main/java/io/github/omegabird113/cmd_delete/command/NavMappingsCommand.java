@@ -31,9 +31,8 @@ import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.MappingsType;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import io.github.omegabird113.cmd_delete.utils.LoggingManager;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.Minecraft;
+import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import org.apache.commons.io.FilenameUtils;
 import org.jspecify.annotations.NonNull;
@@ -53,12 +52,7 @@ public final class NavMappingsCommand {
     private NavMappingsCommand() {
     }
 
-    public static void register() {
-        ClientCommandRegistrationCallback.EVENT.register((dispatcher, _) -> register(dispatcher));
-        LOGGER.info("Registered client command \"/navmappings\" through Fabric API");
-    }
-
-    private static void register(final @NonNull CommandDispatcher<@NonNull FabricClientCommandSource> dispatcher) {
+    public static void register(final @NonNull CommandDispatcher<@NonNull SharedSuggestionProvider> dispatcher) {
         dispatcher.register(literal("navmappings")
                 .then(literal("set")
                         .then(literal("builtin")
@@ -133,79 +127,79 @@ public final class NavMappingsCommand {
         );
     }
 
-    private static int dumpRegistry(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) {
+    private static int dumpRegistry(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) {
         final MappingsRegistry mr = NavMappingsManager.getCurrentMappingsRegistry();
-        context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.registry_dump", mr.toString().replace("\t", "    ")));
+        ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.registry_dump", mr.toString().replace("\t", "    ")));
         return 1;
     }
 
-    private static int dumpMappingsState(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) {
+    private static int dumpMappingsState(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) {
         final MappingsState ms = NavMappingsManager.getOptionalMappingsState().orElse(null);
         if (ms == null)
-            context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.state_dump.null"));
+            ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.state_dump.null"));
         else
-            context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.state_dump", ms.toString().replace("\t", "    ")));
+            ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.state_dump", ms.toString().replace("\t", "    ")));
         return 1;
     }
 
-    private static int dumpActions(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) {
+    private static int dumpActions(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) {
         final String actionsDump = String.join(", ", Arrays.stream(NavAction.values()).map(NavAction::name).toArray(String[]::new));
-        context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.actions_dump", actionsDump));
+        ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.actions_dump", actionsDump));
         return 1;
     }
 
-    private static int dumpDetailedActions(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) {
+    private static int dumpDetailedActions(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) {
         final String actionsDump = NavAction.getDetailedActionDump();
-        context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.detailed_actions_dump", actionsDump));
+        ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.detailed_actions_dump", actionsDump));
         return 1;
     }
 
-    private static int dumpFeatureFlags(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) {
-        context.getSource().sendFeedback(Component.translatable(
+    private static int dumpFeatureFlags(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) {
+        ClientCommandSource.sendFeedback(context.getSource(), Component.translatable(
                 "commands.cmd_delete.feature_flags_dump",
                 "overrideVanillaNavigation - default false\ncrossLineSignMovement - default true"
         ));
         return 1;
     }
 
-    private static int dumpKeyMap(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) {
-        context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.keymap_dump", KeyNameRegistry.getDumpString()));
+    private static int dumpKeyMap(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) {
+        ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.keymap_dump", KeyNameRegistry.getDumpString()));
         return 1;
     }
 
-    private static int exportCustomShareCode(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) throws CommandSyntaxException {
+    private static int exportCustomShareCode(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) throws CommandSyntaxException {
         NavMappingsCommandExecutionUtils.exportShareCode(context, true);
         return 1;
     }
 
-    private static int exportBuiltinShareCode(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) throws CommandSyntaxException {
+    private static int exportBuiltinShareCode(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) throws CommandSyntaxException {
         NavMappingsCommandExecutionUtils.exportShareCode(context, false);
         return 1;
     }
 
-    private static int exportBuiltin(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) throws CommandSyntaxException {
+    private static int exportBuiltin(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) throws CommandSyntaxException {
         NavMappingsCommandExecutionUtils.exportMappings(context, false);
         return 1;
     }
 
-    private static int exportCustom(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) throws CommandSyntaxException {
+    private static int exportCustom(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) throws CommandSyntaxException {
         NavMappingsCommandExecutionUtils.exportMappings(context, true);
         return 1;
     }
 
-    private static int importCustomShareCode(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) throws CommandSyntaxException {
+    private static int importCustomShareCode(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) throws CommandSyntaxException {
         final String shareCode = Minecraft.getInstance().keyboardHandler.getClipboard();
         NavMappingsCommandExecutionUtils.importShareCode(context, shareCode);
         return 1;
     }
 
-    private static int importCustomShareCodeFromChat(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) throws CommandSyntaxException {
+    private static int importCustomShareCodeFromChat(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) throws CommandSyntaxException {
         final String shareCode = StringArgumentType.getString(context, "sharecode");
         NavMappingsCommandExecutionUtils.importShareCode(context, shareCode);
         return 1;
     }
 
-    private static int importCustom(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) throws CommandSyntaxException {
+    private static int importCustom(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) throws CommandSyntaxException {
         final String locationStr = StringArgumentType.getString(context, "location");
 
         final Path oldPath = Path.of(locationStr);
@@ -231,56 +225,56 @@ public final class NavMappingsCommand {
             throw FAILED_CUSTOM_MAPPINGS_IMPORT.create(locationStr);
         }
 
-        context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.import_custom_success", locationStr, FilenameUtils.getBaseName(locationStr)));
+        ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.import_custom_success", locationStr, FilenameUtils.getBaseName(locationStr)));
         return 1;
     }
 
-    private static int reloadMappings(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) {
+    private static int reloadMappings(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) {
         NavMappingsManager.loadMappings();
-        context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.reload_success", MappingsIdResolutionUtils.resolveNamespacedId(NavMappingsManager.getMappingsState())));
+        ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.reload_success", MappingsIdResolutionUtils.resolveNamespacedId(NavMappingsManager.getMappingsState())));
         return 1;
     }
 
-    private static int setBuiltIn(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) throws CommandSyntaxException {
+    private static int setBuiltIn(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) throws CommandSyntaxException {
         final String id = StringArgumentType.getString(context, "id");
         if (!NavMappingsManager.updateMappingsTo(MappingsType.BUILTIN, id))
             throw UNKNOWN_BUILTIN_MAPPINGS.create(id);
-        context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.set_builtin", id));
+        ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.set_builtin", id));
         if (id.equals("emacs_windows_linux") || id.equals("emacs_mac") || id.equals("readline"))
-            context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.warning_for_imperfect_mappings"));
+            ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.warning_for_imperfect_mappings"));
         return 1;
     }
 
-    private static int setCustom(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) throws CommandSyntaxException {
+    private static int setCustom(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) throws CommandSyntaxException {
         final String id = StringArgumentType.getString(context, "id");
         if (!NavMappingsManager.updateMappingsTo(MappingsType.CUSTOM, id))
             throw UNKNOWN_CUSTOM_MAPPINGS.create(id);
-        context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.set_custom", id));
+        ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.set_custom", id));
         return 1;
     }
 
-    private static int setDefault(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) throws CommandSyntaxException {
+    private static int setDefault(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) throws CommandSyntaxException {
         if (!NavMappingsManager.updateMappingsTo(MappingsType.DEFAULT, ""))
             throw UNKNOWN_BUILTIN_MAPPINGS.create(ActiveMappingsManager.resolveDefaultMappingsNonNamespacedId());
-        context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.set_default"));
+        ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.set_default"));
         return 1;
     }
 
-    private static int printMappingsInfo(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) {
+    private static int printMappingsInfo(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) {
         final MappingsState currentMappingState = NavMappingsManager.getMappingsState();
         final Component info = MappingsInfoCollectionUtils.getInfoComponentFrom(currentMappingState, true);
-        context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.current_mappings", info));
+        ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.current_mappings", info));
         return 1;
     }
 
-    private static int printMappingsList(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) {
+    private static int printMappingsList(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) {
         final String[] options = MappingsInfoCollectionUtils.getMappingsList();
-        context.getSource().sendFeedback(Component.translatable("commands.cmd_delete.available_mappings", String.join("\n", options)));
+        ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.available_mappings", String.join("\n", options)));
         return 1;
     }
 
-    private static int printCmdDeleteAbout(final @NonNull CommandContext<@NonNull FabricClientCommandSource> context) {
-        context.getSource().sendFeedback(Component.translatable(
+    private static int printCmdDeleteAbout(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) {
+        ClientCommandSource.sendFeedback(context.getSource(), Component.translatable(
                 "commands.cmd_delete.about",
                 CmdDeleteClient.MODID,
                 CmdDeleteClient.VERSION,

@@ -22,7 +22,6 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import io.github.omegabird113.cmd_delete.config.fileio.MappingsJSONManager;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Contract;
@@ -44,21 +43,21 @@ public final class CommandCreationUtils {
             shareCode -> Component.translatable("commands.cmd_delete.error.invalid_share_code", shareCode)
     );
 
-    public static final @NonNull SuggestionProvider<@NonNull FabricClientCommandSource> BUILTIN_SUGGESTIONS =
+    public static final @NonNull SuggestionProvider<@NonNull SharedSuggestionProvider> BUILTIN_SUGGESTIONS =
             (_, builder) -> SharedSuggestionProvider.suggest(List.of("windows_linux", "mac", "emacs_windows_linux", "emacs_mac", "readline"), builder);
-    public static final @NonNull SuggestionProvider<@NonNull FabricClientCommandSource> CUSTOM_SUGGESTIONS =
+    public static final @NonNull SuggestionProvider<@NonNull SharedSuggestionProvider> CUSTOM_SUGGESTIONS =
             (_, builder) -> SharedSuggestionProvider.suggest(MappingsJSONManager.getAvailableOptions(false), builder);
 
     private CommandCreationUtils() {
     }
 
     @Contract(value = "_ -> new", pure = true)
-    public static @NonNull LiteralArgumentBuilder<@NonNull FabricClientCommandSource> literal(final @NonNull String name) {
+    public static @NonNull LiteralArgumentBuilder<@NonNull SharedSuggestionProvider> literal(final @NonNull String name) {
         return LiteralArgumentBuilder.literal(name);
     }
 
     @Contract(value = "_, _ -> new", pure = true)
-    public static <T> @NonNull RequiredArgumentBuilder<@NonNull FabricClientCommandSource, T> argument(final @NonNull String name, final @NonNull ArgumentType<T> type) {
+    public static <T> @NonNull RequiredArgumentBuilder<@NonNull SharedSuggestionProvider, T> argument(final @NonNull String name, final @NonNull ArgumentType<T> type) {
         return RequiredArgumentBuilder.argument(name, type);
     }
 }
