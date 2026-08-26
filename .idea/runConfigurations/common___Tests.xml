@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Test" type="JUnit" factoryName="JUnit">
-    <module name="CMD_Delete.test" />
+  <configuration default="false" name="common - Tests" type="JUnit" factoryName="JUnit">
+    <module name="CMD_Delete.common.test" />
     <option name="PACKAGE_NAME" value="io.github.omegabird113.cmd_delete.tests" />
     <option name="MAIN_CLASS_NAME" value="" />
     <option name="METHOD_NAME" value="" />
