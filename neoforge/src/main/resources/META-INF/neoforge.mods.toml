@@ -3,7 +3,7 @@ loaderVersion = "[4,)"
 license = "Apache-2.0"
 displayURL = "https://omegabird113.github.io/CMD_Delete/"
 issueTrackerURL = "https://github.com/Omegabird113/CMD_Delete/issues"
-logoFile = "assets/cmd_delete/icon.png"
+iconFile = "assets/cmd_delete/icon.png"
 authors = "Omegabird113"
 
 [[mods]]
