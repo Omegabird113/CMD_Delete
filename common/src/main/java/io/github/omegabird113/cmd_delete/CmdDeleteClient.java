@@ -42,10 +42,9 @@ public final class CmdDeleteClient {
     public static final @NonNull Gson GSON = new GsonBuilder()
             .create();
     private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(CmdDeleteClient.class);
-
+    public static @NonNull String VERSION;
     private static @Nullable CmdDeleteClient instance = null;
     private final @NonNull IPlatform platform;
-    public static @NonNull String VERSION;
 
     public CmdDeleteClient(@NonNull IPlatform platform) {
         this.platform = platform;

@@ -34,8 +34,6 @@ import java.util.stream.Stream;
 public class TestLoader {
     private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(TestLoader.class);
     private static final Path tempDir;
-    private static boolean initialized = false;
-
     private static final IPlatform TEST_PLATFORM = new IPlatform() {
         @Override
         public @NonNull String getModVersion() {
@@ -53,8 +51,10 @@ public class TestLoader {
         }
 
         @Override
-        public <S extends SharedSuggestionProvider> void registerClientCommand(@NonNull CommandRegistration<S> registration) {}
+        public <S extends SharedSuggestionProvider> void registerClientCommand(@NonNull CommandRegistration<S> registration) {
+        }
     };
+    private static boolean initialized = false;
 
     static {
         try {

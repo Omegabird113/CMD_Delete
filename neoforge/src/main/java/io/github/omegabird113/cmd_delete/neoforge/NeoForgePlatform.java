@@ -1,13 +1,13 @@
 package io.github.omegabird113.cmd_delete.neoforge;
 
+import com.mojang.brigadier.CommandDispatcher;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.IPlatform;
 import io.github.omegabird113.cmd_delete.command.ClientCommandSource;
-import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
-import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLPaths;
-import com.mojang.brigadier.CommandDispatcher;
+import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import org.jspecify.annotations.NonNull;
 
 import java.net.URISyntaxException;

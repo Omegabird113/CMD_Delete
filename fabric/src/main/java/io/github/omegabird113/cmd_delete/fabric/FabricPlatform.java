@@ -1,11 +1,11 @@
 package io.github.omegabird113.cmd_delete.fabric;
 
+import com.mojang.brigadier.CommandDispatcher;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.IPlatform;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.commands.SharedSuggestionProvider;
-import com.mojang.brigadier.CommandDispatcher;
 import org.jspecify.annotations.NonNull;
 
 import java.net.URISyntaxException;

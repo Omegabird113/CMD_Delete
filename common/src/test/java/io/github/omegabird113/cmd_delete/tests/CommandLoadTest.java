@@ -16,9 +16,9 @@
 
 package io.github.omegabird113.cmd_delete.tests;
 
+import com.mojang.brigadier.CommandDispatcher;
 import io.github.omegabird113.cmd_delete.TestLoader;
 import io.github.omegabird113.cmd_delete.command.NavMappingsCommand;
-import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.commands.SharedSuggestionProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

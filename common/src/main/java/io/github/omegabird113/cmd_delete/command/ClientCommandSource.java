@@ -1,6 +1,5 @@
 package io.github.omegabird113.cmd_delete.command;
 
-import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import org.jspecify.annotations.NonNull;
