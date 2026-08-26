@@ -3,7 +3,10 @@
     <option name="MAIN_CLASS_NAME" value="net.neoforged.devlaunch.Main" />
     <module name="CMD_Delete.neoforge.main" />
     <option name="PROGRAM_PARAMETERS" value="&quot;@$PROJECT_DIR$/neoforge/build/moddev/clientRunProgramArgs.txt&quot;" />
-    <option name="VM_PARAMETERS" value="&quot;@$PROJECT_DIR$/neoforge/build/moddev/clientRunVmArgs.txt&quot; &quot;-Dfml.modFolders=cmd_delete%%$PROJECT_DIR$/neoforge/out/production/classes:cmd_delete%%$PROJECT_DIR$/neoforge/out/production/resources&quot;" />
+    <option name="VM_PARAMETERS" value="&quot;@$PROJECT_DIR$/neoforge/build/moddev/clientRunVmArgs.txt&quot; &quot;-Dfml.modFolders=cmd_delete%%$PROJECT_DIR$/neoforge/build/classes/java/main:cmd_delete%%$PROJECT_DIR$/neoforge/build/resources/main&quot;" />
+    <envs>
+      <env name="MOD_CLASSES" value="cmd_delete%%$PROJECT_DIR$/neoforge/build/classes/java/main:cmd_delete%%$PROJECT_DIR$/neoforge/build/resources/main" />
+    </envs>
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/neoforge/run" />
     <method v="2">
       <option name="Make" enabled="true" />
