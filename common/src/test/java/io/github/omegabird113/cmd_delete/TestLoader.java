@@ -18,6 +18,8 @@ package io.github.omegabird113.cmd_delete;
 
 import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
 import io.github.omegabird113.cmd_delete.utils.LoggingManager;
+import com.mojang.brigadier.CommandDispatcher;
+import net.minecraft.commands.SharedSuggestionProvider;
 import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -35,6 +37,21 @@ public class TestLoader {
     private static final Path tempDir;
     private static boolean initialized = false;
 
+    private static final IPlatform TEST_PLATFORM = new IPlatform() {
+        @Override
+        public @NonNull String getModVersion() {
+            return "test";
+        }
+
+        @Override
+        public @NonNull Path getResourcePath() {
+            return Path.of(Objects.requireNonNull(TestLoader.class.getResource("/mappings")).getPath());
+        }
+
+        @Override
+        public <S extends SharedSuggestionProvider> void registerClientCommand(@NonNull CommandRegistration<S> registration) {}
+    };
+
     static {
         try {
             tempDir = Files.createTempDirectory("cmd_delete_tests");
@@ -47,6 +64,7 @@ public class TestLoader {
         if (initialized)
             return;
         Assertions.assertDoesNotThrow(() -> {
+            new CmdDeleteClient(TEST_PLATFORM);
             PathConstants.init(
                     tempDir,
                     Path.of(Objects.requireNonNull(CmdDeleteClient.class.getResource("/mappings")).toURI())

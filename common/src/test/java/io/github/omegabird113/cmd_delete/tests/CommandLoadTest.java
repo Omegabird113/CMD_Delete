@@ -18,6 +18,8 @@ package io.github.omegabird113.cmd_delete.tests;
 
 import io.github.omegabird113.cmd_delete.TestLoader;
 import io.github.omegabird113.cmd_delete.command.NavMappingsCommand;
+import com.mojang.brigadier.CommandDispatcher;
+import net.minecraft.commands.SharedSuggestionProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -30,6 +32,8 @@ public class CommandLoadTest {
 
     @Test
     void commandRegistrationTest() {
-        Assertions.assertDoesNotThrow(NavMappingsCommand::register);
+        Assertions.assertDoesNotThrow(
+                () -> NavMappingsCommand.register(new CommandDispatcher<SharedSuggestionProvider>())
+        );
     }
 }

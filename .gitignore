@@ -8,8 +8,9 @@
 .classpath
 .project
 
-# NeoForge JUnit JVM args
+# Multiplatform setup ignores
 neoforge/runs/**
+common/logs/
 
 # IntelliJ IDEA
 .idea/**/workspace.xml
@@ -39,7 +40,6 @@ out/**
 
 # Minecraft client/server files. Include options.txt to make it easier to have my settings when cloning.
 run/**
-!run/options.txt
 
 # ---- MacOS system files ----
 .DS_STORE
