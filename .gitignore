@@ -9,8 +9,11 @@
 .project
 
 # Multiplatform setup ignores
-neoforge/runs/**
+neoforge/runs
 common/logs/
+**/run/**
+run/**
+!**/run/options.txt
 
 # IntelliJ IDEA
 .idea/**/workspace.xml
@@ -37,9 +40,6 @@ site/
 .gradle/
 build/
 out/**
-
-# Minecraft client/server files. Include options.txt to make it easier to have my settings when cloning.
-run/**
 
 # ---- MacOS system files ----
 .DS_STORE

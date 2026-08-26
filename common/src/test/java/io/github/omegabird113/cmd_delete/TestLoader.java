@@ -18,7 +18,6 @@ package io.github.omegabird113.cmd_delete;
 
 import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
 import io.github.omegabird113.cmd_delete.utils.LoggingManager;
-import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.commands.SharedSuggestionProvider;
 import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.AfterAll;
@@ -41,6 +40,11 @@ public class TestLoader {
         @Override
         public @NonNull String getModVersion() {
             return "test";
+        }
+
+        @Override
+        public @NonNull Path getGamePath() {
+            return tempDir;
         }
 
         @Override

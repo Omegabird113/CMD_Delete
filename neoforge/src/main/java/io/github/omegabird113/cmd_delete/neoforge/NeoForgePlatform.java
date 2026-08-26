@@ -6,17 +6,19 @@ import io.github.omegabird113.cmd_delete.command.ClientCommandSource;
 import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLPaths;
 import com.mojang.brigadier.CommandDispatcher;
 import org.jspecify.annotations.NonNull;
 
+import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 public final class NeoForgePlatform implements IPlatform {
     private CommandRegistration<?> commandRegistration;
 
     public NeoForgePlatform() {
-        NeoForge.EVENT_BUS.addListener(RegisterClientCommandsEvent.class, event ->
-                registerClientCommand(event));
+        NeoForge.EVENT_BUS.addListener(RegisterClientCommandsEvent.class, this::registerClientCommand);
     }
 
     @SuppressWarnings("unchecked")
@@ -25,8 +27,8 @@ public final class NeoForgePlatform implements IPlatform {
     ) {
         if (commandRegistration == null)
             throw new IllegalStateException("Client command registration was requested before the platform was initialized");
-        ((CommandRegistration<S>) (CommandRegistration<?>) commandRegistration)
-                .register((CommandDispatcher<S>) (CommandDispatcher<?>) event.getDispatcher());
+        ((CommandRegistration<S>) commandRegistration)
+                .register((CommandDispatcher<S>) event.getDispatcher());
     }
 
     @Override
@@ -46,9 +48,22 @@ public final class NeoForgePlatform implements IPlatform {
     }
 
     @Override
+    public @NonNull Path getGamePath() {
+        return FMLPaths.GAMEDIR.get();
+    }
+
+    @Override
     public @NonNull Path getResourcePath() {
-        return ModList.get().getModContainerById(CmdDeleteClient.MODID)
+        final Path modPath = ModList.get().getModContainerById(CmdDeleteClient.MODID)
                 .orElseThrow(() -> new IllegalStateException("CMD + Delete is not present in NeoForge's mod list"))
                 .getModInfo().getOwningFile().getFile().getFilePath();
+        if (Files.isDirectory(modPath.resolve("mappings")))
+            return modPath;
+
+        try {
+            return Path.of(CmdDeleteClient.class.getResource("/mappings").toURI()).getParent();
+        } catch (NullPointerException | URISyntaxException e) {
+            throw new IllegalStateException("Could not locate CMD + Delete's bundled mappings", e);
+        }
     }
 }

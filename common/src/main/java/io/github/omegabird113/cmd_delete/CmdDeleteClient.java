@@ -25,7 +25,6 @@ import io.github.omegabird113.cmd_delete.utils.CrashUtils;
 import io.github.omegabird113.cmd_delete.utils.LoadTimer;
 import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import io.github.omegabird113.cmd_delete.utils.Os;
-import net.minecraft.client.Minecraft;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
@@ -42,7 +41,6 @@ public final class CmdDeleteClient {
     public static final boolean FORCE_PREVENT_OVERRIDE_MODE = Boolean.getBoolean("cmd_delete.forcePreventOverrideMode");
     public static final @NonNull Gson GSON = new GsonBuilder()
             .create();
-    public static final @NonNull Minecraft MINECRAFT = Minecraft.getInstance();
     private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(CmdDeleteClient.class);
 
     private static @Nullable CmdDeleteClient instance = null;
@@ -64,9 +62,7 @@ public final class CmdDeleteClient {
 
     public static void start(IPlatform platform) {
         LoadTimer.time(() -> CrashUtils.crashMinecraftOnFailure(() -> {
-            LoadTimer.time(() -> {
-                new CmdDeleteClient(platform);
-            }, "CmdDeleteClient object initialization", true);
+            LoadTimer.time(() -> new CmdDeleteClient(platform), "CmdDeleteClient object initialization", true);
 
             LoadTimer.time(() -> {
                 LOGGER.info("Initializing client mod \"{}\" (version: {}, mappings format version: {}, minimum mappings compatible version: {}, sharecode encoding version: {})... You can report any issues at {}.", MODID, platform.getModVersion(), CURRENT_MAPPINGS_FORMAT_VERSION, MINIMUM_MAPPINGS_FORMAT_VERSION, SHARECODE_FORMAT_VERSION, ISSUE_TRACKER_URL_STRING);
@@ -82,7 +78,7 @@ public final class CmdDeleteClient {
             }, "initial logging & CrashUtils info", true);
 
             LoadTimer.time(() -> {
-                final Path gameDir = MINECRAFT.gameDirectory.toPath();
+                final Path gameDir = platform.getGamePath();
                 final Path resourceMappingsDir = platform.getResourcePath().resolve("mappings/");
                 PathConstants.init(gameDir, resourceMappingsDir);
             }, "path initialization", true);
@@ -93,7 +89,6 @@ public final class CmdDeleteClient {
 
         if (Boolean.getBoolean("cmd_delete.ci.stopMinecraftAfterLoad")) {
             LOGGER.info("Stopping Minecraft client due to set \"cmd_delete.ci.stopMinecraftAfterLoad\" jvm property...");
-            MINECRAFT.stop();
             System.exit(0);
         }
     }

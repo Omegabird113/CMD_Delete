@@ -3,13 +3,13 @@ package io.github.omegabird113.cmd_delete.fabric;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.IPlatform;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.commands.SharedSuggestionProvider;
 import com.mojang.brigadier.CommandDispatcher;
 import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.NonNull;
 
+import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 public final class FabricPlatform implements IPlatform {
@@ -19,7 +19,7 @@ public final class FabricPlatform implements IPlatform {
             final @NonNull CommandRegistration<S> registration
     ) {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, _) ->
-                registration.register((CommandDispatcher<S>) (CommandDispatcher<?>) dispatcher));
+                registration.register((CommandDispatcher<S>) dispatcher));
     }
 
     @Override
@@ -31,11 +31,24 @@ public final class FabricPlatform implements IPlatform {
     }
 
     @Override
+    public @NonNull Path getGamePath() {
+        return FabricLoader.getInstance().getGameDir();
+    }
+
+    @Override
     public @NonNull Path getResourcePath() {
-        return FabricLoader.getInstance()
+        final Path modResourcePath = FabricLoader.getInstance()
                 .getModContainer(CmdDeleteClient.MODID)
                 .map(container -> container.getPath("resources"))
                 .orElse(FabricLoader.getInstance().getGameDir())
                 .toAbsolutePath();
+        if (Files.isDirectory(modResourcePath.resolve("mappings")))
+            return modResourcePath;
+
+        try {
+            return Path.of(CmdDeleteClient.class.getResource("/mappings").toURI()).getParent();
+        } catch (NullPointerException | URISyntaxException e) {
+            throw new IllegalStateException("Could not locate CMD + Delete's bundled mappings", e);
+        }
     }
 }

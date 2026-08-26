@@ -25,6 +25,8 @@ import java.nio.file.Path;
 public interface IPlatform {
     @NonNull String getModVersion();
 
+    @NonNull Path getGamePath();
+
     @NonNull Path getResourcePath();
 
     <S extends SharedSuggestionProvider> void registerClientCommand(@NonNull CommandRegistration<S> registration);
