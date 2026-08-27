@@ -59,6 +59,7 @@ public final class NeoForgePlatform implements IPlatform {
                 .getFile().getFilePath();
         try (JarFile jarFile = new JarFile(modFile.toFile())) {
             final Path temp = Files.createTempDirectory("cmd-delete-mappings");
+            final Path normalizedTemp = temp.toAbsolutePath().normalize();
 
             final Enumeration<JarEntry> entries = jarFile.entries();
             while (entries.hasMoreElements()) {
@@ -66,7 +67,9 @@ public final class NeoForgePlatform implements IPlatform {
                 if (!entry.getName().startsWith("mappings/"))
                     continue;
 
-                final Path destination = temp.resolve(entry.getName());
+                final Path destination = normalizedTemp.resolve(entry.getName()).normalize();
+                if (!destination.startsWith(normalizedTemp))
+                    throw new IOException("Bad jar entry: " + entry.getName());
 
                 if (entry.isDirectory()) {
                     Files.createDirectories(destination);
