@@ -9,7 +9,7 @@
 .project
 
 # Multiplatform setup ignores
-neoforge/runs
+neoforge/runs/
 common/logs/
 **/run/**
 **/out/
