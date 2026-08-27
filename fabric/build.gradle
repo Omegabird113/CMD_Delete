@@ -29,6 +29,7 @@ configurations {
 
 sourceSets {
     main {
+        java.srcDir project(":common").sourceSets.main.java
         compileClasspath += configurations.shadeOnly
         runtimeClasspath += configurations.shadeOnly
     }
