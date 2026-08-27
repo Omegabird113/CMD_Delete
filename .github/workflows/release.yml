@@ -21,6 +21,27 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  common_test: # runs the tests for sanity
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@v5
+        with:
+          java-version: '25'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Test common
+        run: ./gradlew :common:test --no-daemon
+
   build_code:
     runs-on: ubuntu-latest
     permissions:
@@ -111,6 +132,7 @@ jobs:
     needs:
       - build_code
       - build_docs
+      - common_test
     runs-on: ubuntu-latest
     permissions:
       contents: write
