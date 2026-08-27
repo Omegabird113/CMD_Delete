@@ -12,10 +12,14 @@ import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import org.jspecify.annotations.NonNull;
 
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.Enumeration;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 public final class NeoForgePlatform implements IPlatform {
     private CommandRegistration<?> commandRegistration;
@@ -51,25 +55,31 @@ public final class NeoForgePlatform implements IPlatform {
 
     @Override
     public @NonNull Path getResourcePath() {
-        final Path modPath = ModList.get().getModContainerById(CmdDeleteClient.MODID)
-                .orElseThrow(() -> new IllegalStateException("CMD + Delete is not present in NeoForge's mod list"))
-                .getModInfo().getOwningFile().getFile().getFilePath();
-        if (Files.isDirectory(modPath.resolve("mappings")))
-            return modPath;
+        final Path modFile = ModList.get().getModFileById(CmdDeleteClient.MODID)
+                .getFile().getFilePath();
+        try (JarFile jarFile = new JarFile(modFile.toFile())) {
+            final Path temp = Files.createTempDirectory("cmd-delete-mappings");
 
-        Path buildResources = modPath;
-        for (int i = 0; i < 3 && buildResources.getParent() != null; i++)
-            buildResources = buildResources.getParent();
-        buildResources = buildResources.resolve("resources/main");
-        if (Files.isDirectory(buildResources.resolve("mappings")))
-            return buildResources;
+            final Enumeration<JarEntry> entries = jarFile.entries();
+            while (entries.hasMoreElements()) {
+                final JarEntry entry = entries.nextElement();
+                if (!entry.getName().startsWith("mappings/"))
+                    continue;
 
-        try {
-            URL mappingsResource = CmdDeleteClient.class.getResource("/mappings");
-            if (mappingsResource == null)
-                throw new IllegalStateException("The bundled mappings resource is missing");
-            return Path.of(mappingsResource.toURI()).getParent();
-        } catch (URISyntaxException e) {
+                final Path destination = temp.resolve(entry.getName());
+
+                if (entry.isDirectory()) {
+                    Files.createDirectories(destination);
+                    continue;
+                }
+
+                Files.createDirectories(destination.getParent());
+                try (InputStream input = jarFile.getInputStream(entry)) {
+                    Files.copy(input, destination, StandardCopyOption.REPLACE_EXISTING);
+                }
+            }
+            return temp;
+        } catch (IOException e) {
             throw new IllegalStateException("Could not locate CMD + Delete's bundled mappings", e);
         }
     }
