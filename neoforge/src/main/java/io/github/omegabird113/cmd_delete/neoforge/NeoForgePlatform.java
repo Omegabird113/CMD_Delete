@@ -23,22 +23,16 @@ public final class NeoForgePlatform implements IPlatform {
     }
 
     @SuppressWarnings("unchecked")
-    private <S extends net.minecraft.commands.SharedSuggestionProvider> void registerClientCommand(
-            final RegisterClientCommandsEvent event
-    ) {
+    private <S extends net.minecraft.commands.SharedSuggestionProvider> void registerClientCommand(final RegisterClientCommandsEvent event) {
         if (commandRegistration == null)
             throw new IllegalStateException("Client command registration was requested before the platform was initialized");
-        ((CommandRegistration<S>) commandRegistration)
-                .register((CommandDispatcher<S>) event.getDispatcher());
+        ((CommandRegistration<S>) commandRegistration).register((CommandDispatcher<S>) event.getDispatcher());
     }
 
     @Override
-    public <S extends net.minecraft.commands.SharedSuggestionProvider> void registerClientCommand(
-            final @NonNull CommandRegistration<S> registration
-    ) {
+    public <S extends net.minecraft.commands.SharedSuggestionProvider> void registerClientCommand(final @NonNull CommandRegistration<S> registration) {
         commandRegistration = registration;
-        ClientCommandSource.setFeedback((source, component) ->
-                ((net.minecraft.commands.CommandSourceStack) source).sendSuccess(() -> component, false));
+        ClientCommandSource.setFeedback((source, component) -> ((net.minecraft.commands.CommandSourceStack) source).sendSuccess(() -> component, false));
     }
 
     @Override

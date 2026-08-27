@@ -15,19 +15,15 @@ import java.nio.file.Path;
 public final class FabricPlatform implements IPlatform {
     @Override
     @SuppressWarnings("unchecked")
-    public <S extends SharedSuggestionProvider> void registerClientCommand(
-            final @NonNull CommandRegistration<S> registration
-    ) {
-        ClientCommandRegistrationCallback.EVENT.register((dispatcher, _) ->
-                registration.register((CommandDispatcher<S>) dispatcher));
+    public <S extends SharedSuggestionProvider> void registerClientCommand(final @NonNull CommandRegistration<S> registration) {
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, _) -> registration.register((CommandDispatcher<S>) dispatcher));
     }
 
     @Override
     public @NonNull String getModVersion() {
-        return FabricLoader.getInstance()
-                .getModContainer(CmdDeleteClient.MODID)
-                .map(container -> container.getMetadata().getVersion().toString())
-                .orElse("unknown");
+        return FabricLoader.getInstance().getModContainer(CmdDeleteClient.MODID)
+                .map(container -> container.getMetadata().getVersion().getFriendlyString())
+                .orElse("<unknown>");
     }
 
     @Override
@@ -37,15 +33,12 @@ public final class FabricPlatform implements IPlatform {
 
     @Override
     public @NonNull Path getResourcePath() {
-        final Path modResourcePath = FabricLoader.getInstance()
-                .getModContainer(CmdDeleteClient.MODID)
-                .map(container -> container.getPath("resources"))
-                .orElse(FabricLoader.getInstance().getGameDir())
-                .toAbsolutePath();
+        final Path modResourcePath = FabricLoader.getInstance().getModContainer(CmdDeleteClient.MODID)
+                .orElseThrow().findPath("mappings/").orElseThrow();
         if (Files.isDirectory(modResourcePath.resolve("mappings")))
             return modResourcePath;
-
         try {
+            //noinspection DataFlowIssue
             return Path.of(CmdDeleteClient.class.getResource("/mappings").toURI()).getParent();
         } catch (NullPointerException | URISyntaxException e) {
             throw new IllegalStateException("Could not locate CMD + Delete's bundled mappings", e);

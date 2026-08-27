@@ -6,6 +6,7 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.function.BiConsumer;
 
+@SuppressWarnings("unused")
 public final class ClientCommandSource {
     private static BiConsumer<SharedSuggestionProvider, Component> feedback;
 

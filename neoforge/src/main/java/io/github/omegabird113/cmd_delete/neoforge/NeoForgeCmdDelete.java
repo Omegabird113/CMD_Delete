@@ -9,10 +9,11 @@ import net.neoforged.neoforge.common.NeoForge;
 
 @Mod(value = CmdDeleteClient.MODID, dist = Dist.CLIENT)
 public final class NeoForgeCmdDelete {
-    private boolean started;
+    private static boolean started;
 
     public NeoForgeCmdDelete() {
-        NeoForge.EVENT_BUS.addListener(ClientTickEvent.Post.class, event -> {
+        NeoForge.EVENT_BUS.addListener(ClientTickEvent.Post.class, _ -> {
+            //noinspection ConstantValue
             if (!started && Minecraft.getInstance() != null) {
                 started = true;
                 CmdDeleteClient.start(new NeoForgePlatform());
