@@ -45,6 +45,9 @@ public final class CmdDeleteClient {
     public static @NonNull String VERSION = "unknown";
     private static @Nullable IPlatform platform;
 
+    private CmdDeleteClient() {
+    }
+
     public static @NonNull IPlatform getPlatform() {
         if (platform == null)
             throw new IllegalStateException("No CmdDeleteClient class instance defined");
