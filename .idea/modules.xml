@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/fabric/CMD_Delete.fabric.main.iml" filepath="$PROJECT_DIR$/.idea/modules/fabric/CMD_Delete.fabric.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/fabric/CMD_Delete.fabric.test.iml" filepath="$PROJECT_DIR$/.idea/modules/fabric/CMD_Delete.fabric.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/neoforge/CMD_Delete.neoforge.main.iml" filepath="$PROJECT_DIR$/.idea/modules/neoforge/CMD_Delete.neoforge.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/neoforge/CMD_Delete.neoforge.test.iml" filepath="$PROJECT_DIR$/.idea/modules/neoforge/CMD_Delete.neoforge.test.iml" />
     </modules>
   </component>
 </project>
