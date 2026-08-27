@@ -21,7 +21,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build:
+  build_code:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -65,8 +65,52 @@ jobs:
           path: ${{ matrix.loader }}/build/libs/*.jar
           if-no-files-found: error
 
+  build_docs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Read gradle.properties
+        id: props
+        run: |
+          set -euo pipefail
+          version=$(grep -E '^mod_version\s*=' gradle.properties | sed 's/.*=\s*//')
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: 3.x
+
+      - name: Install Zensical
+        run: pip install --upgrade zensical
+
+      - name: Build documentation site
+        run: zensical build --clean
+
+      - name: Package documentation
+        run: |
+          set -euo pipefail
+          zip -r "cmd_delete-${{ steps.props.outputs.version }}-docs.zip" docs/
+          zip -r "cmd_delete-${{ steps.props.outputs.version }}-docs-site.zip" site/
+
+      - name: Upload documentation artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: cmd-delete-release-docs
+          path: |
+            cmd_delete-${{ steps.props.outputs.version }}-docs.zip
+            cmd_delete-${{ steps.props.outputs.version }}-docs-site.zip
+          if-no-files-found: error
+
   release:
-    needs: build
+    needs:
+      - build_code
+      - build_docs
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -136,6 +180,24 @@ jobs:
           echo "fabric=$(find_release_jar fabric)" >> "$GITHUB_OUTPUT"
           echo "neoforge=$(find_release_jar neoforge)" >> "$GITHUB_OUTPUT"
 
+      - name: Locate documentation archives
+        id: docs
+        run: |
+          set -euo pipefail
+          docs_dir="release-builds/cmd-delete-release-docs"
+          docs_zip="$docs_dir/cmd_delete-${{ steps.props.outputs.version }}-docs.zip"
+          site_zip="$docs_dir/cmd_delete-${{ steps.props.outputs.version }}-docs-site.zip"
+          test -f "$docs_zip" || {
+            echo "ERROR: Missing documentation archive: $docs_zip"
+            exit 1
+          }
+          test -f "$site_zip" || {
+            echo "ERROR: Missing documentation site archive: $site_zip"
+            exit 1
+          }
+          echo "docs=$docs_zip" >> "$GITHUB_OUTPUT"
+          echo "site=$site_zip" >> "$GITHUB_OUTPUT"
+
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -149,6 +211,8 @@ jobs:
           gh release create "${{ steps.props.outputs.version }}" \
             "${{ steps.jars.outputs.fabric }}" \
             "${{ steps.jars.outputs.neoforge }}" \
+            "${{ steps.docs.outputs.docs }}" \
+            "${{ steps.docs.outputs.site }}" \
             --target "${{ github.sha }}" \
             --title "${{ inputs.release_title }}" \
             --notes-file changelog.md \
