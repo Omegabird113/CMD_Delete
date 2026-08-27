@@ -6,7 +6,7 @@ inter-version formatting consistent.
 
 ### 1.5.0 Alpha 1
 
-Upcoming...
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.5.0-alpha.1%2Bmc26.1) on August 27th, 2026.
 
 This is a pre-release build of the multi-platform support branch (PR [#28](https://github.com/Omegabird113/CMD_Delete/pull/28)) designed to test the new architecture.
 
