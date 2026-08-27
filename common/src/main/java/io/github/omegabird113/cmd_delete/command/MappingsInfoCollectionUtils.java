@@ -23,6 +23,7 @@ import io.github.omegabird113.cmd_delete.utils.Os;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Unmodifiable;
 import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
@@ -100,7 +101,7 @@ public final class MappingsInfoCollectionUtils {
 
     @SuppressWarnings("unused")
     @Contract(pure = true)
-    public static List<String> getBuiltinMappingsNamespacedIdsList() {
+    public static @NonNull @Unmodifiable List<String> getBuiltinMappingsNamespacedIdsList() {
         return List.of(
                 "builtin:windows_linux",
                 "builtin:mac",
@@ -112,16 +113,9 @@ public final class MappingsInfoCollectionUtils {
 
     @Contract(pure = true)
     public static @NonNull String @NonNull [] getMappingsList() {
-        final List<String> internal = new ArrayList<>(
-                List.of(
-                        "default",
-                        "builtin:windows_linux",
-                        "builtin:mac",
-                        "builtin:emacs_windows_linux",
-                        "builtin:emacs_mac",
-                        "builtin:readline"
-                )
-        );
+        final List<String> internal = new ArrayList<>();
+        internal.add("default");
+        internal.addAll(getBuiltinMappingsNamespacedIdsList());
         internal.addAll(MappingsJSONManager.getAvailableOptions(true));
         return internal.toArray(String[]::new);
     }
