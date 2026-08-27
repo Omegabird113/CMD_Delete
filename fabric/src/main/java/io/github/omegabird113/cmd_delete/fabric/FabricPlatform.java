@@ -3,7 +3,9 @@ package io.github.omegabird113.cmd_delete.fabric;
 import com.mojang.brigadier.CommandDispatcher;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.IPlatform;
+import io.github.omegabird113.cmd_delete.command.ClientCommandSource;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.commands.SharedSuggestionProvider;
 import org.jspecify.annotations.NonNull;
@@ -17,6 +19,7 @@ public final class FabricPlatform implements IPlatform {
     @SuppressWarnings("unchecked")
     public <S extends SharedSuggestionProvider> void registerClientCommand(final @NonNull CommandRegistration<S> registration) {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, _) -> registration.register((CommandDispatcher<S>) dispatcher));
+        ClientCommandSource.setFeedback((source, component) -> ((FabricClientCommandSource) source).sendFeedback(component));
     }
 
     @Override

@@ -19,9 +19,8 @@ public final class ClientCommandSource {
 
     public static void sendFeedback(final @NonNull SharedSuggestionProvider source,
                                     final @NonNull Component component) {
-        final BiConsumer<SharedSuggestionProvider, Component> currentFeedback = feedback;
-        if (currentFeedback == null)
+        if (feedback == null)
             throw new IllegalStateException("Client command feedback was requested before platform initialization");
-        currentFeedback.accept(source, component);
+        feedback.accept(source, component);
     }
 }

@@ -4,6 +4,8 @@ import com.mojang.brigadier.CommandDispatcher;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.IPlatform;
 import io.github.omegabird113.cmd_delete.command.ClientCommandSource;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.SharedSuggestionProvider;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
@@ -23,16 +25,16 @@ public final class NeoForgePlatform implements IPlatform {
     }
 
     @SuppressWarnings("unchecked")
-    private <S extends net.minecraft.commands.SharedSuggestionProvider> void registerClientCommand(final RegisterClientCommandsEvent event) {
+    private <S extends SharedSuggestionProvider> void registerClientCommand(final RegisterClientCommandsEvent event) {
         if (commandRegistration == null)
             throw new IllegalStateException("Client command registration was requested before the platform was initialized");
         ((CommandRegistration<S>) commandRegistration).register((CommandDispatcher<S>) event.getDispatcher());
     }
 
     @Override
-    public <S extends net.minecraft.commands.SharedSuggestionProvider> void registerClientCommand(final @NonNull CommandRegistration<S> registration) {
+    public <S extends SharedSuggestionProvider> void registerClientCommand(final @NonNull CommandRegistration<S> registration) {
         commandRegistration = registration;
-        ClientCommandSource.setFeedback((source, component) -> ((net.minecraft.commands.CommandSourceStack) source).sendSuccess(() -> component, false));
+        ClientCommandSource.setFeedback((source, component) -> ((CommandSourceStack) source).sendSuccess(() -> component, false));
     }
 
     @Override
