@@ -30,6 +30,7 @@ configurations {
 sourceSets {
     main {
         java.srcDir project(":common").sourceSets.main.java
+        resources.srcDir project(":common").sourceSets.main.resources
         compileClasspath += configurations.shadeOnly
         runtimeClasspath += configurations.shadeOnly
     }
@@ -78,7 +79,6 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 processResources {
-    from(project(":common").sourceSets.main.resources)
     inputs.property "version", project.version
     inputs.property "neoforge_min_version", project.neoforge_min_version
     filteringCharset "UTF-8"
