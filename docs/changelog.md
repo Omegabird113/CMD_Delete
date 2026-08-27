@@ -4,6 +4,20 @@ This is a collection of all historical CMD + Delete changelogs for every release
 notes were retroactively added and the formatting was retroactively changed in some versions to fix issues and make
 inter-version formatting consistent.
 
+### 1.5.0 Alpha 1
+
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.5.0-alpha.1%2Bmc26.1) on August 27th, 2026.
+
+This is a pre-release build of the multi-platform support branch (PR [#28](https://github.com/Omegabird113/CMD_Delete/pull/28)) designed to test the new architecture.
+
+Changes:
+
+- CMD + Delete now has a NeoForge build alongside its Fabric/Quilt one. In the future, this will also allow NF1.21.1 support without Sinytra Connector and potentially an entire wave of NeoForge backports.
+- Added documentation (with its own [website](https://omegabird113.github.io/CMD_Delete/)) for CMD + Delete.
+- Internal code improvements
+
+Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.4.3+mc26.1...1.5.0-alpha.1+mc26.1
+
 ### 1.4.3b
 
 [Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.4.3b%2Bmc1.21.11) on August 11th, 2026.
