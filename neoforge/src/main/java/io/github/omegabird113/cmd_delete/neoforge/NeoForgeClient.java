@@ -24,10 +24,10 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.common.NeoForge;
 
 @Mod(value = CmdDeleteClient.MODID, dist = Dist.CLIENT)
-public final class NeoForgeCmdDelete {
+public final class NeoForgeClient {
     private static boolean started;
 
-    public NeoForgeCmdDelete() {
+    public NeoForgeClient() {
         NeoForge.EVENT_BUS.addListener(ClientTickEvent.Post.class, _ -> {
             //noinspection ConstantValue
             if (!started && Minecraft.getInstance() != null) {
