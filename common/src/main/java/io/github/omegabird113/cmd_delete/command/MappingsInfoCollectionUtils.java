@@ -98,6 +98,18 @@ public final class MappingsInfoCollectionUtils {
         return getInfoComponentFrom(mappingsState, includeDescription).getString();
     }
 
+    @SuppressWarnings("unused")
+    @Contract(pure = true)
+    public static List<String> getBuiltinMappingsNamespacedIdsList() {
+        return List.of(
+                "builtin:windows_linux",
+                "builtin:mac",
+                "builtin:emacs_windows_linux",
+                "builtin:emacs_mac",
+                "builtin:readline"
+        );
+    }
+
     @Contract(pure = true)
     public static @NonNull String @NonNull [] getMappingsList() {
         final List<String> internal = new ArrayList<>(

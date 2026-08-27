@@ -4,6 +4,8 @@ import com.mojang.brigadier.CommandDispatcher;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.IPlatform;
 import io.github.omegabird113.cmd_delete.command.ClientCommandSource;
+import io.github.omegabird113.cmd_delete.command.MappingsInfoCollectionUtils;
+import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.neoforged.fml.ModList;
@@ -16,10 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
-import java.util.Enumeration;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
+import java.nio.file.Paths;
 
 public final class NeoForgePlatform implements IPlatform {
     private CommandRegistration<?> commandRegistration;
@@ -55,35 +54,29 @@ public final class NeoForgePlatform implements IPlatform {
 
     @Override
     public @NonNull Path getResourcePath() {
-        final Path modFile = ModList.get().getModFileById(CmdDeleteClient.MODID)
-                .getFile().getFilePath();
-        try (JarFile jarFile = new JarFile(modFile.toFile())) {
-            final Path temp = Files.createTempDirectory("cmd-delete-mappings");
-            final Path normalizedTemp = temp.toAbsolutePath().normalize();
+        String devMappings = System.getProperty("cmd_delete.dev.mappings");
+        if (devMappings != null) {
+            Path path = Paths.get(devMappings).resolve("mappings");
+            if (Files.isDirectory(path))
+                return path;
+            throw new IllegalStateException("Configured development mappings directory does not exist: " + path);
+        }
 
-            final Enumeration<JarEntry> entries = jarFile.entries();
-            while (entries.hasMoreElements()) {
-                final JarEntry entry = entries.nextElement();
-                if (!entry.getName().startsWith("mappings/"))
-                    continue;
+        try {
+            Path tempDir = Files.createTempDirectory("cmd-delete-mappings");
 
-                final Path destination = normalizedTemp.resolve(entry.getName()).normalize();
-                if (!destination.startsWith(normalizedTemp))
-                    throw new IOException("Bad jar entry: " + entry.getName());
-
-                if (entry.isDirectory()) {
-                    Files.createDirectories(destination);
-                    continue;
-                }
-
-                Files.createDirectories(destination.getParent());
-                try (InputStream input = jarFile.getInputStream(entry)) {
-                    Files.copy(input, destination, StandardCopyOption.REPLACE_EXISTING);
+            for (String mappings : MappingsInfoCollectionUtils.getBuiltinMappingsNamespacedIdsList().stream().map(MappingsIdResolutionUtils::removeNamespaceFromId).toList()) {
+                try (InputStream in = NeoForgePlatform.class.getClassLoader()
+                        .getResourceAsStream("mappings/" + mappings + ".json")) {
+                    if (in == null)
+                        throw new IllegalStateException("Missing bundled mapping: mappings/" + mappings + ".json");
+                    Files.copy(in, tempDir.resolve(mappings + ".json"));
                 }
             }
-            return temp;
+
+            return tempDir;
         } catch (IOException e) {
-            throw new IllegalStateException("Could not locate CMD + Delete's bundled mappings", e);
+            throw new RuntimeException("Failed to extract CMD + Delete mappings", e);
         }
     }
 }

@@ -154,6 +154,20 @@ tasks.build {
     dependsOn tasks.shadowJar
 }
 
+def devMappingsDir = layout.buildDirectory.dir("dev-mappings")
+
+tasks.register("prepareDevMappings", Sync) {
+    from(project(":common").sourceSets.main.resources) {
+        include "mappings/**"
+    }
+    into(devMappingsDir)
+}
+
+tasks.named("runClient") {
+    dependsOn("prepareDevMappings")
+    systemProperty "cmd_delete.dev.mappings", devMappingsDir.get().asFile.absolutePath
+}
+
 test {
     useJUnitPlatform()
 }

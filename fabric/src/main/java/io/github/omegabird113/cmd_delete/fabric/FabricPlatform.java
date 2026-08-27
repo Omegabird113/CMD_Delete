@@ -10,8 +10,6 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.commands.SharedSuggestionProvider;
 import org.jspecify.annotations.NonNull;
 
-import java.net.URISyntaxException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 public final class FabricPlatform implements IPlatform {
@@ -36,15 +34,7 @@ public final class FabricPlatform implements IPlatform {
 
     @Override
     public @NonNull Path getResourcePath() {
-        final Path modResourcePath = FabricLoader.getInstance().getModContainer(CmdDeleteClient.MODID)
-                .orElseThrow().findPath("mappings/").orElseThrow();
-        if (Files.isDirectory(modResourcePath.resolve("mappings")))
-            return modResourcePath;
-        try {
-            //noinspection DataFlowIssue
-            return Path.of(CmdDeleteClient.class.getResource("/mappings").toURI()).getParent();
-        } catch (NullPointerException | URISyntaxException e) {
-            throw new IllegalStateException("Could not locate CMD + Delete's bundled mappings", e);
-        }
+        return FabricLoader.getInstance().getModContainer(CmdDeleteClient.MODID).orElseThrow()
+                .findPath("mappings/").orElseThrow();
     }
 }

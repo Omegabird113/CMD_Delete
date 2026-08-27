@@ -75,7 +75,7 @@ public final class CmdDeleteClient {
 
             LoadTimer.time(() -> {
                 final Path gameDir = platform.getGamePath();
-                final Path resourceMappingsDir = platform.getResourcePath().resolve("mappings/");
+                final Path resourceMappingsDir = platform.getResourcePath();
                 PathConstants.init(gameDir, resourceMappingsDir);
             }, "path initialization", true);
 
