@@ -30,6 +30,8 @@ import java.nio.file.Path;
 import java.util.function.BiConsumer;
 
 public final class FabricPlatform implements IPlatform {
+    public static final @NonNull FabricLoader LOADER = FabricLoader.getInstance();
+
     @Override
     @SuppressWarnings("unchecked")
     public <S extends SharedSuggestionProvider> void registerClientCommand(final @NonNull CommandRegistration<S> registration) {
@@ -43,19 +45,19 @@ public final class FabricPlatform implements IPlatform {
 
     @Override
     public @NonNull String getModVersion() {
-        return FabricLoader.getInstance().getModContainer(CmdDeleteClient.MODID)
+        return LOADER.getModContainer(CmdDeleteClient.MODID)
                 .map(container -> container.getMetadata().getVersion().getFriendlyString())
                 .orElse("<unknown>");
     }
 
     @Override
     public @NonNull Path getGamePath() {
-        return FabricLoader.getInstance().getGameDir();
+        return LOADER.getGameDir();
     }
 
     @Override
     public @NonNull Path getResourcePath() {
-        return FabricLoader.getInstance().getModContainer(CmdDeleteClient.MODID).orElseThrow()
+        return LOADER.getModContainer(CmdDeleteClient.MODID).orElseThrow()
                 .findPath("mappings/").orElseThrow();
     }
 }
