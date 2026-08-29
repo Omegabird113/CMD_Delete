@@ -10,29 +10,27 @@ In Minecraft on macOS, pressing `option` + `backspace` deletes a single characte
 deletes a word. **This is completely inconsistent with the native OS**, so I fixed it...
 
 This mod also functions as a fully configurable text editing/navigation shortcut framework for Minecraft with custom
-mappings JSONs and sharecodes, in-game switching, and more!
+ mappings, JSONs and sharecodes, in-game switching, and more!
 
 ## Some Context
 
 1. If you use this mod on Windows or Linux, and you don't use custom mappings, nothing will change from vanilla
    Minecraft.
-2. If you have any problems with this mod, **please report them as Issues on GitHub**. This mod is Open Source and Pull
+2. If you have any problems with this mod, **please report them as Issues on GitHub**. This mod is Open Source, and Pull
    Requests are very much welcome! :)
 3. For technical information about custom mappings and how the mod works, you should go to
    the [CMD + Delete documentation](https://omegabird113.github.io/CMD_Delete/).
 
 > [!Note]
 >
-> CMD + Delete is a **Fabric mod** which also supports Quilt for Minecraft 1.14.4 to the latest version.
->
-> It also supports Forge 1.20.1 and NeoForge 1.21.1, but **only
-with [Sinytra Connector](https://modrinth.com/mod/connector)**.
+> **Compatibility**:
+> CMD + Delete is a multi-platform mod that supports for Minecraft Fabric-like `1.14.4` to the latest version, NeoForge `26.1`–`26.2` natively, and NeoForge `1.21.1`/Forge `1.20.1` via [Sinytra Connector](https://modrinth.com/mod/connector).
 
 ![A showcase of opt/cmd + backspace in chat.](./docs/resources/showcase.gif)
 
 ## Builtin Mappings' Shortcuts
 
-By default, CMD + Delete will detect if you're using macOS, and if you are it'll set you to those shortcuts, otherwise
+By default, CMD + Delete will detect if you're using macOS, and if you are, it'll set you to those shortcuts, otherwise
 it will set you to use Windows/Linux shortcuts.
 
 | Action                  | macOS                    | Windows / Linux           |
@@ -75,6 +73,6 @@ CMD + Delete also now provides these other builtin mappings:
   the [CC BY 4.0 license](https://creativecommons.org/licenses/by/4.0/legalcode.en).
 - All builtin mappings JSON files are available under either
   the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0.html) or
-  the [CC BY 4.0 license](https://creativecommons.org/licenses/by/4.0/legalcode.en) (You may chose to comply with either
+  the [CC BY 4.0 license](https://creativecommons.org/licenses/by/4.0/legalcode.en) (You may choose to comply with either
   license).
 - You may include CMD + Delete in any CurseForge and/or Modrinth modpack.
