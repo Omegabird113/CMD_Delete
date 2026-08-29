@@ -39,8 +39,7 @@ public final class CmdDeleteClient {
     public static final int MINIMUM_MAPPINGS_FORMAT_VERSION = 2;
     public static final int SHARECODE_FORMAT_VERSION = 1;
     public static final boolean FORCE_PREVENT_OVERRIDE_MODE = Boolean.getBoolean("cmd_delete.forcePreventOverrideMode");
-    public static final @NonNull Gson GSON = new GsonBuilder()
-            .create();
+    public static final @NonNull Gson GSON = new GsonBuilder().create();
     private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(CmdDeleteClient.class);
     private static @Nullable IPlatform platform;
 
