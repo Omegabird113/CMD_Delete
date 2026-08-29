@@ -28,6 +28,7 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 
 import java.io.IOException;
@@ -56,8 +57,9 @@ public final class NeoForgePlatform implements IPlatform {
         commandRegistration = registration;
     }
 
+    @Contract(pure = true)
     @Override
-    public BiConsumer<SharedSuggestionProvider, Component> getFeedbackMethod() {
+    public @NonNull BiConsumer<SharedSuggestionProvider, Component> getFeedbackMethod() {
         return (source, component) -> ((CommandSourceStack) source).sendSuccess(() -> component, false);
     }
 
@@ -75,26 +77,21 @@ public final class NeoForgePlatform implements IPlatform {
 
     @Override
     public @NonNull Path getResourcePath() {
-        String devMappings = System.getProperty("cmd_delete.dev.mappings");
+        final String devMappings = System.getProperty("cmd_delete.dev.mappings");
         if (devMappings != null) {
-            Path path = Paths.get(devMappings).resolve("mappings");
+            final Path path = Paths.get(devMappings).resolve("mappings");
             if (Files.isDirectory(path))
                 return path;
             throw new IllegalStateException("Configured development mappings directory does not exist: " + path);
         }
-
         try {
-            Path tempDir = Files.createTempDirectory("cmd-delete-mappings");
-
-            for (String mappings : MappingsInfoCollectionUtils.getBuiltinMappingsNamespacedIdsList().stream().map(MappingsIdResolutionUtils::removeNamespaceFromId).toList()) {
-                try (InputStream in = NeoForgePlatform.class.getClassLoader()
-                        .getResourceAsStream("mappings/" + mappings + ".json")) {
+            final Path tempDir = Files.createTempDirectory("cmd-delete-mappings");
+            for (String mappings : MappingsInfoCollectionUtils.getBuiltinMappingsNamespacedIdsList().stream().map(MappingsIdResolutionUtils::removeNamespaceFromId).toList())
+                try (InputStream in = NeoForgePlatform.class.getClassLoader().getResourceAsStream("mappings/" + mappings + ".json")) {
                     if (in == null)
                         throw new IllegalStateException("Missing bundled mapping: mappings/" + mappings + ".json");
                     Files.copy(in, tempDir.resolve(mappings + ".json"));
                 }
-            }
-
             return tempDir;
         } catch (IOException e) {
             throw new RuntimeException("Failed to extract CMD + Delete mappings", e);
