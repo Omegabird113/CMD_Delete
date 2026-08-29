@@ -19,6 +19,7 @@ package io.github.omegabird113.cmd_delete;
 import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
 import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.network.chat.Component;
 import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -29,6 +30,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
 public class TestLoader {
@@ -52,6 +54,11 @@ public class TestLoader {
 
         @Override
         public <S extends SharedSuggestionProvider> void registerClientCommand(@NonNull CommandRegistration<S> registration) {
+        }
+
+        @Override
+        public BiConsumer<SharedSuggestionProvider, Component> getFeedbackMethod() {
+            return null;
         }
     };
     private static boolean initialized = false;

@@ -19,11 +19,11 @@ package io.github.omegabird113.cmd_delete.neoforge;
 import com.mojang.brigadier.CommandDispatcher;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.IPlatform;
-import io.github.omegabird113.cmd_delete.command.ClientCommandSource;
 import io.github.omegabird113.cmd_delete.command.MappingsInfoCollectionUtils;
 import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.network.chat.Component;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
@@ -35,6 +35,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.function.BiConsumer;
 
 public final class NeoForgePlatform implements IPlatform {
     private CommandRegistration<?> commandRegistration;
@@ -53,7 +54,11 @@ public final class NeoForgePlatform implements IPlatform {
     @Override
     public <S extends SharedSuggestionProvider> void registerClientCommand(final @NonNull CommandRegistration<S> registration) {
         commandRegistration = registration;
-        ClientCommandSource.setFeedback((source, component) -> ((CommandSourceStack) source).sendSuccess(() -> component, false));
+    }
+
+    @Override
+    public BiConsumer<SharedSuggestionProvider, Component> getFeedbackMethod() {
+        return (source, component) -> ((CommandSourceStack) source).sendSuccess(() -> component, false);
     }
 
     @Override
