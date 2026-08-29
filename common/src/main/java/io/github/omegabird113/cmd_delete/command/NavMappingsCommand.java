@@ -277,7 +277,7 @@ public final class NavMappingsCommand {
         ClientCommandSource.sendFeedback(context.getSource(), Component.translatable(
                 "commands.cmd_delete.about",
                 CmdDeleteClient.MODID,
-                CmdDeleteClient.VERSION,
+                CmdDeleteClient.getPlatform().getModVersion(),
                 CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION,
                 CmdDeleteClient.MINIMUM_MAPPINGS_FORMAT_VERSION,
                 CmdDeleteClient.SHARECODE_FORMAT_VERSION,

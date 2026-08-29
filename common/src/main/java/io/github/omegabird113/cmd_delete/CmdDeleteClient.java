@@ -42,7 +42,6 @@ public final class CmdDeleteClient {
     public static final @NonNull Gson GSON = new GsonBuilder()
             .create();
     private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(CmdDeleteClient.class);
-    public static @NonNull String VERSION = "unknown";
     private static @Nullable IPlatform platform;
 
     private CmdDeleteClient() {
@@ -56,7 +55,6 @@ public final class CmdDeleteClient {
 
     public static void setPlatform(@NonNull IPlatform platform) {
         CmdDeleteClient.platform = platform;
-        VERSION = platform.getModVersion();
     }
 
     public static void start(IPlatform platform) {

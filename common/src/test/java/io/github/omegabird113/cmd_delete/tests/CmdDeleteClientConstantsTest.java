@@ -35,9 +35,9 @@ public class CmdDeleteClientConstantsTest {
                 () -> Assertions.assertEquals("cmd_delete", CmdDeleteClient.MODID),
                 () -> Assertions.assertTrue(CmdDeleteClient.ISSUE_TRACKER_URL_STRING.startsWith("https://github.com/")),
                 () -> Assertions.assertTrue(CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION >= CmdDeleteClient.MINIMUM_MAPPINGS_FORMAT_VERSION),
-                () -> Assertions.assertNotNull(CmdDeleteClient.VERSION),
-                () -> Assertions.assertFalse(CmdDeleteClient.VERSION.isBlank()),
-                () -> Assertions.assertNotEquals("<unknown>", CmdDeleteClient.VERSION)
+                () -> Assertions.assertNotNull(CmdDeleteClient.getPlatform().getModVersion()),
+                () -> Assertions.assertFalse(CmdDeleteClient.getPlatform().getModVersion().isBlank()),
+                () -> Assertions.assertNotEquals("<unknown>", CmdDeleteClient.getPlatform().getModVersion())
         );
     }
 }

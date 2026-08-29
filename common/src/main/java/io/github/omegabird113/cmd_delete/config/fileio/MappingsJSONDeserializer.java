@@ -200,7 +200,7 @@ public final class MappingsJSONDeserializer {
         final String description = getStringElse(meta, "description", "No description provided");
         final String version = replacePlaceholderWithIfBuiltin(
                 getStringElse(meta, "version", "unknown"),
-                CmdDeleteClient.VERSION, custom);
+                CmdDeleteClient.getPlatform().getModVersion(), custom);
         final String id = requireFilenameSafeString(meta, "id");
 
         final JsonArray systems = requireArray(meta, "systems");
