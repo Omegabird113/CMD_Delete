@@ -44,6 +44,7 @@ import java.util.function.BiConsumer;
 public final class NeoForgePlatform implements IPlatform {
     public static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(NeoForgePlatform.class);
     private CommandRegistration<?> commandRegistration;
+    private final @NonNull Path resourcePath = setupResourcePath();
 
     public NeoForgePlatform() {
         NeoForge.EVENT_BUS.addListener(RegisterClientCommandsEvent.class, this::registerClientCommand);
@@ -84,8 +85,7 @@ public final class NeoForgePlatform implements IPlatform {
         return FMLPaths.GAMEDIR.get();
     }
 
-    @Override
-    public @NonNull Path getResourcePath() {
+    private @NotNull Path setupResourcePath() {
         final String devMappings = System.getProperty("cmd_delete.dev.mappings");
         if (devMappings != null) {
             final Path path = Paths.get(devMappings).resolve("mappings");
@@ -94,7 +94,7 @@ public final class NeoForgePlatform implements IPlatform {
             throw new IllegalStateException("Configured development mappings directory does not exist: " + path);
         }
         try {
-            final Path tempDir = Files.createTempDirectory("cmd-delete-mappings");
+            final Path tempDir = Files.createTempDirectory("cmd_delete-builtin-mappings");
             for (String mappings : MappingsInfoCollectionUtils.getBuiltinMappingsNamespacedIdsList().stream().map(MappingsIdResolutionUtils::removeNamespaceFromId).toList())
                 try (InputStream in = NeoForgePlatform.class.getClassLoader().getResourceAsStream("mappings/" + mappings + ".json")) {
                     if (in == null)
@@ -105,6 +105,11 @@ public final class NeoForgePlatform implements IPlatform {
         } catch (IOException e) {
             throw new RuntimeException("Failed to extract CMD + Delete mappings", e);
         }
+    }
+
+    @Override
+    public @NonNull Path getResourcePath() {
+        return resourcePath;
     }
 
     @Override
