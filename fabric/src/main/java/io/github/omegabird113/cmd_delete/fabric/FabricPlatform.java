@@ -25,6 +25,7 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
@@ -42,8 +43,9 @@ public final class FabricPlatform implements IPlatform {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, _) -> registration.register((CommandDispatcher<S>) dispatcher));
     }
 
+    @Contract(pure = true)
     @Override
-    public BiConsumer<SharedSuggestionProvider, Component> getFeedbackMethod() {
+    public @NonNull BiConsumer<SharedSuggestionProvider, Component> getFeedbackMethod() {
         return (source, component) -> ((FabricClientCommandSource) source).sendFeedback(component);
     }
 
