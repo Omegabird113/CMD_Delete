@@ -41,15 +41,16 @@ public final class CmdDeleteClient {
     public static final boolean FORCE_PREVENT_OVERRIDE_MODE = Boolean.getBoolean("cmd_delete.forcePreventOverrideMode");
     public static final @NonNull Gson GSON = new GsonBuilder().create();
     private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(CmdDeleteClient.class);
-    private static @Nullable IPlatform platform;
+    private static volatile @Nullable IPlatform platform;
 
     private CmdDeleteClient() {
     }
 
     public static @NonNull IPlatform getPlatform() {
-        if (platform == null)
+        final IPlatform currentPlatform = platform;
+        if (currentPlatform == null)
             throw new IllegalStateException("No CmdDeleteClient class instance defined");
-        return platform;
+        return currentPlatform;
     }
 
     public static void setPlatform(@NonNull IPlatform platform) {
