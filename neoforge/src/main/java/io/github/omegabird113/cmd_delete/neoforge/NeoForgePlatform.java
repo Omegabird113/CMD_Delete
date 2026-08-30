@@ -42,8 +42,8 @@ import java.nio.file.Paths;
 import java.util.function.BiConsumer;
 
 public final class NeoForgePlatform implements IPlatform {
-    private CommandRegistration<?> commandRegistration;
     public static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(NeoForgePlatform.class);
+    private CommandRegistration<?> commandRegistration;
 
     public NeoForgePlatform() {
         NeoForge.EVENT_BUS.addListener(RegisterClientCommandsEvent.class, this::registerClientCommand);
