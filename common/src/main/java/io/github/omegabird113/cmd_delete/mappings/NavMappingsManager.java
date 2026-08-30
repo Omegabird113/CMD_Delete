@@ -37,10 +37,10 @@ public final class NavMappingsManager {
     }
 
     public static @NonNull MappingsState getMappingsState() {
-        if (currentMappingsState == null)
+        final MappingsState current = currentMappingsState;
+        if (current == null)
             throw new IllegalStateException("No current mappings state has been set, but the mappings were accessed");
-        //noinspection DataFlowIssue
-        return currentMappingsState;
+        return current;
     }
 
     public static @NonNull Optional<MappingsState> getOptionalMappingsState() {
