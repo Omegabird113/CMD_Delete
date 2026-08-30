@@ -60,6 +60,11 @@ public class TestLoader {
         public BiConsumer<SharedSuggestionProvider, Component> getFeedbackMethod() {
             return null;
         }
+
+        @Override
+        public @NonNull Logger getPlatformLogger() {
+            return LOGGER;
+        }
     };
     private static boolean initialized = false;
 

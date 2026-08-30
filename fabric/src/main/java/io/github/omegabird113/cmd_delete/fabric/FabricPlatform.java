@@ -19,18 +19,22 @@ package io.github.omegabird113.cmd_delete.fabric;
 import com.mojang.brigadier.CommandDispatcher;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.IPlatform;
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
+import org.slf4j.Logger;
 
 import java.nio.file.Path;
 import java.util.function.BiConsumer;
 
 public final class FabricPlatform implements IPlatform {
     public static final @NonNull FabricLoader LOADER = FabricLoader.getInstance();
+    public static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(FabricPlatform.class);
 
     @Override
     @SuppressWarnings("unchecked")
@@ -59,5 +63,10 @@ public final class FabricPlatform implements IPlatform {
     public @NonNull Path getResourcePath() {
         return LOADER.getModContainer(CmdDeleteClient.MODID).orElseThrow()
                 .findPath("mappings/").orElseThrow();
+    }
+
+    @Override
+    public @NotNull Logger getPlatformLogger() {
+        return LOGGER;
     }
 }

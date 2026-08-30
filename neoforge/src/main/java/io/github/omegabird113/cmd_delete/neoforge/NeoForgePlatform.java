@@ -21,6 +21,7 @@ import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.IPlatform;
 import io.github.omegabird113.cmd_delete.command.MappingsInfoCollectionUtils;
 import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
+import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
@@ -29,7 +30,9 @@ import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,6 +43,7 @@ import java.util.function.BiConsumer;
 
 public final class NeoForgePlatform implements IPlatform {
     private CommandRegistration<?> commandRegistration;
+    public static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(NeoForgePlatform.class);
 
     public NeoForgePlatform() {
         NeoForge.EVENT_BUS.addListener(RegisterClientCommandsEvent.class, this::registerClientCommand);
@@ -96,5 +100,10 @@ public final class NeoForgePlatform implements IPlatform {
         } catch (IOException e) {
             throw new RuntimeException("Failed to extract CMD + Delete mappings", e);
         }
+    }
+
+    @Override
+    public @NotNull Logger getPlatformLogger() {
+        return LOGGER;
     }
 }
