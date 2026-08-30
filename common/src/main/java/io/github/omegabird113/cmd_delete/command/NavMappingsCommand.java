@@ -21,6 +21,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
+import io.github.omegabird113.cmd_delete.IPlatform;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.data.KeyNameRegistry;
 import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
@@ -129,33 +130,33 @@ public final class NavMappingsCommand {
 
     private static int dumpRegistry(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) {
         final MappingsRegistry mr = NavMappingsManager.getCurrentMappingsRegistry();
-        ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.registry_dump", mr.toString().replace("\t", "    ")));
+        IPlatform.sendCommandFeedback(context.getSource(), Component.translatable("commands.cmd_delete.registry_dump", mr.toString().replace("\t", "    ")));
         return 1;
     }
 
     private static int dumpMappingsState(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) {
         final MappingsState ms = NavMappingsManager.getOptionalMappingsState().orElse(null);
         if (ms == null)
-            ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.state_dump.null"));
+            IPlatform.sendCommandFeedback(context.getSource(), Component.translatable("commands.cmd_delete.state_dump.null"));
         else
-            ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.state_dump", ms.toString().replace("\t", "    ")));
+            IPlatform.sendCommandFeedback(context.getSource(), Component.translatable("commands.cmd_delete.state_dump", ms.toString().replace("\t", "    ")));
         return 1;
     }
 
     private static int dumpActions(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) {
         final String actionsDump = String.join(", ", Arrays.stream(NavAction.values()).map(NavAction::name).toArray(String[]::new));
-        ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.actions_dump", actionsDump));
+        IPlatform.sendCommandFeedback(context.getSource(), Component.translatable("commands.cmd_delete.actions_dump", actionsDump));
         return 1;
     }
 
     private static int dumpDetailedActions(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) {
         final String actionsDump = NavAction.getDetailedActionDump();
-        ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.detailed_actions_dump", actionsDump));
+        IPlatform.sendCommandFeedback(context.getSource(), Component.translatable("commands.cmd_delete.detailed_actions_dump", actionsDump));
         return 1;
     }
 
     private static int dumpFeatureFlags(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) {
-        ClientCommandSource.sendFeedback(context.getSource(), Component.translatable(
+        IPlatform.sendCommandFeedback(context.getSource(), Component.translatable(
                 "commands.cmd_delete.feature_flags_dump",
                 "overrideVanillaNavigation - default false\ncrossLineSignMovement - default true"
         ));
@@ -163,7 +164,7 @@ public final class NavMappingsCommand {
     }
 
     private static int dumpKeyMap(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) {
-        ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.keymap_dump", KeyNameRegistry.getDumpString()));
+        IPlatform.sendCommandFeedback(context.getSource(), Component.translatable("commands.cmd_delete.keymap_dump", KeyNameRegistry.getDumpString()));
         return 1;
     }
 
@@ -225,13 +226,13 @@ public final class NavMappingsCommand {
             throw FAILED_CUSTOM_MAPPINGS_IMPORT.create(locationStr);
         }
 
-        ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.import_custom_success", locationStr, FilenameUtils.getBaseName(locationStr)));
+        IPlatform.sendCommandFeedback(context.getSource(), Component.translatable("commands.cmd_delete.import_custom_success", locationStr, FilenameUtils.getBaseName(locationStr)));
         return 1;
     }
 
     private static int reloadMappings(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) {
         NavMappingsManager.loadMappings();
-        ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.reload_success", MappingsIdResolutionUtils.resolveNamespacedId(NavMappingsManager.getMappingsState())));
+        IPlatform.sendCommandFeedback(context.getSource(), Component.translatable("commands.cmd_delete.reload_success", MappingsIdResolutionUtils.resolveNamespacedId(NavMappingsManager.getMappingsState())));
         return 1;
     }
 
@@ -239,9 +240,9 @@ public final class NavMappingsCommand {
         final String id = StringArgumentType.getString(context, "id");
         if (!NavMappingsManager.updateMappingsTo(MappingsType.BUILTIN, id))
             throw UNKNOWN_BUILTIN_MAPPINGS.create(id);
-        ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.set_builtin", id));
+        IPlatform.sendCommandFeedback(context.getSource(), Component.translatable("commands.cmd_delete.set_builtin", id));
         if (id.equals("emacs_windows_linux") || id.equals("emacs_mac") || id.equals("readline"))
-            ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.warning_for_imperfect_mappings"));
+            IPlatform.sendCommandFeedback(context.getSource(), Component.translatable("commands.cmd_delete.warning_for_imperfect_mappings"));
         return 1;
     }
 
@@ -249,32 +250,32 @@ public final class NavMappingsCommand {
         final String id = StringArgumentType.getString(context, "id");
         if (!NavMappingsManager.updateMappingsTo(MappingsType.CUSTOM, id))
             throw UNKNOWN_CUSTOM_MAPPINGS.create(id);
-        ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.set_custom", id));
+        IPlatform.sendCommandFeedback(context.getSource(), Component.translatable("commands.cmd_delete.set_custom", id));
         return 1;
     }
 
     private static int setDefault(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) throws CommandSyntaxException {
         if (!NavMappingsManager.updateMappingsTo(MappingsType.DEFAULT, ""))
             throw UNKNOWN_BUILTIN_MAPPINGS.create(ActiveMappingsManager.resolveDefaultMappingsNonNamespacedId());
-        ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.set_default"));
+        IPlatform.sendCommandFeedback(context.getSource(), Component.translatable("commands.cmd_delete.set_default"));
         return 1;
     }
 
     private static int printMappingsInfo(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) {
         final MappingsState currentMappingState = NavMappingsManager.getMappingsState();
         final Component info = MappingsInfoCollectionUtils.getInfoComponentFrom(currentMappingState, true);
-        ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.current_mappings", info));
+        IPlatform.sendCommandFeedback(context.getSource(), Component.translatable("commands.cmd_delete.current_mappings", info));
         return 1;
     }
 
     private static int printMappingsList(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) {
         final String[] options = MappingsInfoCollectionUtils.getMappingsList();
-        ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.available_mappings", String.join("\n", options)));
+        IPlatform.sendCommandFeedback(context.getSource(), Component.translatable("commands.cmd_delete.available_mappings", String.join("\n", options)));
         return 1;
     }
 
     private static int printCmdDeleteAbout(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) {
-        ClientCommandSource.sendFeedback(context.getSource(), Component.translatable(
+        IPlatform.sendCommandFeedback(context.getSource(), Component.translatable(
                 "commands.cmd_delete.about",
                 CmdDeleteClient.MODID,
                 CmdDeleteClient.getPlatform().getModVersion(),

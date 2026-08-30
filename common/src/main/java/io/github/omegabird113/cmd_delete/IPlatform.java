@@ -28,6 +28,14 @@ import java.nio.file.Path;
 import java.util.function.BiConsumer;
 
 public interface IPlatform {
+    static void sendCommandFeedback(final @NonNull SharedSuggestionProvider source,
+                                    final @NonNull Component component) {
+        final BiConsumer<SharedSuggestionProvider, Component> feedback = CmdDeleteClient.getPlatform().getFeedbackMethod();
+        if (feedback == null)
+            throw new IllegalStateException("Client command feedback was requested before platform initialization or in tests");
+        feedback.accept(source, component);
+    }
+
     @NonNull String getModVersion();
 
     @NonNull Path getGamePath();
@@ -36,14 +44,14 @@ public interface IPlatform {
 
     <S extends SharedSuggestionProvider> void registerClientCommand(@NonNull CommandRegistration<S> registration);
 
-    @FunctionalInterface
-    interface CommandRegistration<S extends SharedSuggestionProvider> {
-        void register(@NonNull CommandDispatcher<S> dispatcher);
-    }
-
     @Nullable BiConsumer<@NonNull SharedSuggestionProvider, @NonNull Component> getFeedbackMethod();
 
     @NotNull String getPlatformName();
 
     @NotNull Logger getPlatformLogger();
+
+    @FunctionalInterface
+    interface CommandRegistration<S extends SharedSuggestionProvider> {
+        void register(@NonNull CommandDispatcher<S> dispatcher);
+    }
 }

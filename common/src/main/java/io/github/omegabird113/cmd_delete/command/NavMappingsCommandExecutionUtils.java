@@ -23,6 +23,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
+import io.github.omegabird113.cmd_delete.IPlatform;
 import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.config.fileio.JsonParsingUtils;
 import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
@@ -59,7 +60,7 @@ final class NavMappingsCommandExecutionUtils {
         }
 
         Minecraft.getInstance().keyboardHandler.setClipboard(shareCode);
-        ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.export_sharecode", MappingsIdResolutionUtils.resolveNamespacedId(MappingsType.fromIfCustom(custom), idStr), shareCode));
+        IPlatform.sendCommandFeedback(context.getSource(), Component.translatable("commands.cmd_delete.export_sharecode", MappingsIdResolutionUtils.resolveNamespacedId(MappingsType.fromIfCustom(custom), idStr), shareCode));
     }
 
     static void exportMappings(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context, final boolean custom) throws CommandSyntaxException {
@@ -103,7 +104,7 @@ final class NavMappingsCommandExecutionUtils {
                 throw CommandCreationUtils.UNKNOWN_BUILTIN_MAPPINGS.create(idStr);
         }
 
-        ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.export_mappings", MappingsIdResolutionUtils.resolveNamespacedId(MappingsType.fromIfCustom(custom), idStr), newPath.toAbsolutePath()));
+        IPlatform.sendCommandFeedback(context.getSource(), Component.translatable("commands.cmd_delete.export_mappings", MappingsIdResolutionUtils.resolveNamespacedId(MappingsType.fromIfCustom(custom), idStr), newPath.toAbsolutePath()));
     }
 
     static void importShareCode(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context, final @NonNull String shareCode) throws CommandSyntaxException {
@@ -123,7 +124,7 @@ final class NavMappingsCommandExecutionUtils {
                 throw CommandCreationUtils.FAILED_CUSTOM_MAPPINGS_IMPORT.create(idStr);
             }
 
-            ClientCommandSource.sendFeedback(context.getSource(), Component.translatable("commands.cmd_delete.import_sharecode_success", idStr));
+            IPlatform.sendCommandFeedback(context.getSource(), Component.translatable("commands.cmd_delete.import_sharecode_success", idStr));
         } catch (IllegalArgumentException | JsonParseException e) {
             LOGGER.error("Invalid share code: {}", shareCode, e);
             throw CommandCreationUtils.INVALID_SHARE_CODE.create(shareCode);
