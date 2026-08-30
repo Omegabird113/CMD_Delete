@@ -54,7 +54,7 @@ public final class CmdDeleteClient {
 
     public static void setPlatform(@NonNull IPlatform platform) {
         CmdDeleteClient.platform = platform;
-        LOGGER.info("CmdDeleteClient platform set to \"{}\"", platform.getPlatformName());
+        LoggingManager.debugLog(LOGGER, "CmdDeleteClient platform set to \"{}\"", platform.getPlatformName());
     }
 
     public static void start(IPlatform platform) {
