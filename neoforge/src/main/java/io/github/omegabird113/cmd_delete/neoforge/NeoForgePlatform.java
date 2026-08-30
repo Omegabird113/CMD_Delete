@@ -68,6 +68,11 @@ public final class NeoForgePlatform implements IPlatform {
     }
 
     @Override
+    public @NotNull String getPlatformName() {
+        return "NeoForge Platform";
+    }
+
+    @Override
     public @NonNull String getModVersion() {
         return ModList.get().getModContainerById(CmdDeleteClient.MODID)
                 .orElseThrow(() -> new IllegalStateException("CMD + Delete is not present in NeoForge's mod list"))

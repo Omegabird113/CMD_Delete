@@ -48,6 +48,11 @@ public final class FabricPlatform implements IPlatform {
     }
 
     @Override
+    public @NotNull String getPlatformName() {
+        return "Fabric Platform";
+    }
+
+    @Override
     public @NonNull String getModVersion() {
         return LOADER.getModContainer(CmdDeleteClient.MODID)
                 .map(container -> container.getMetadata().getVersion().getFriendlyString())

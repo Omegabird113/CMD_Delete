@@ -43,5 +43,7 @@ public interface IPlatform {
 
     @Nullable BiConsumer<@NonNull SharedSuggestionProvider, @NonNull Component> getFeedbackMethod();
 
+    @NotNull String getPlatformName();
+
     @NotNull Logger getPlatformLogger();
 }
