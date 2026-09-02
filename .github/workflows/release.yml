@@ -21,7 +21,118 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  common_test: # runs the tests for sanity
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@v5
+        with:
+          java-version: '25'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Test common
+        run: ./gradlew :common:test --no-daemon
+
+  build_code:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - loader: fabric
+            build_task: :fabric:build
+            client_task: :fabric:runCiClient
+            client_args: ""
+          - loader: neoforge
+            build_task: :neoforge:build
+            client_task: :neoforge:runClient
+            client_args: -Dcmd_delete.ci.stopMinecraftAfterLoad=true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@v5
+        with:
+          java-version: 25
+          distribution: "microsoft"
+          cache: gradle
+
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      - name: Build ${{ matrix.loader }}
+        run: ./gradlew ${{ matrix.build_task }} --stacktrace --no-daemon
+
+      - name: Sanity-test ${{ matrix.loader }} client load
+        run: xvfb-run ./gradlew ${{ matrix.client_args }} ${{ matrix.client_task }} --no-daemon
+
+      - name: Upload ${{ matrix.loader }} JARs as artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: cmd-delete-release-${{ matrix.loader }}
+          path: ${{ matrix.loader }}/build/libs/*.jar
+          if-no-files-found: error
+
+  build_docs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Read gradle.properties
+        id: props
+        run: |
+          set -euo pipefail
+          version=$(grep -E '^mod_version\s*=' gradle.properties | sed 's/.*=\s*//')
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: 3.x
+
+      - name: Install Zensical
+        run: pip install --upgrade zensical
+
+      - name: Build documentation site
+        run: zensical build --clean
+
+      - name: Package documentation
+        run: |
+          set -euo pipefail
+          zip -r "cmd_delete-${{ steps.props.outputs.version }}-docs.zip" docs/
+          zip -r "cmd_delete-${{ steps.props.outputs.version }}-docs-site.zip" site/
+
+      - name: Upload documentation artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: cmd-delete-release-docs
+          path: |
+            cmd_delete-${{ steps.props.outputs.version }}-docs.zip
+            cmd_delete-${{ steps.props.outputs.version }}-docs-site.zip
+          if-no-files-found: error
+
   release:
+    needs:
+      - build_code
+      - build_docs
+      - common_test
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -38,6 +149,13 @@ jobs:
             exit 1
           }
 
+      - name: Read gradle.properties
+        id: props
+        run: |
+          set -euo pipefail
+          version=$(grep -E '^mod_version\s*=' gradle.properties | sed 's/.*=\s*//')
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
       - name: Check if release already exists
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -48,60 +166,59 @@ jobs:
             exit 1
           fi
 
-      - name: Read gradle.properties
-        id: props
+      - name: Download built JARs
+        uses: actions/download-artifact@v7
+        with:
+          pattern: cmd-delete-release-*
+          path: release-builds
+          merge-multiple: false
+
+      - name: Locate built JARs
+        id: jars
         run: |
           set -euo pipefail
-          version=$(grep -E '^mod_version\s*=' gradle.properties | sed 's/.*=\s*//')
-          echo "version=$version" >> "$GITHUB_OUTPUT"
 
-      - name: Set up JDK
-        uses: actions/setup-java@v5
-        with:
-          java-version: 25
-          distribution: "microsoft"
-          cache: gradle
+          find_release_jar() {
+            local loader="$1"
+            local artifact_dir="release-builds/cmd-delete-release-${loader}"
+            mapfile -t jars < <(
+              find "$artifact_dir" -maxdepth 1 -type f -name "*.jar" \
+                ! -name "*-sources.jar" \
+                ! -name "*-javadoc.jar" \
+                ! -name "*-dev.jar" \
+                ! -name "*-dev-shadow.jar" \
+                ! -name "*-shadow.jar"
+            )
 
-      - name: Make gradlew executable
-        run: chmod +x gradlew
+            if [ "${#jars[@]}" -ne 1 ]; then
+              echo "ERROR: Expected exactly one ${loader} release JAR, found ${#jars[@]}."
+              printf ' - %s\n' "${jars[@]}"
+              exit 1
+            fi
 
-      - name: Build
-        run: ./gradlew clean build --stacktrace --no-daemon
+            printf '%s' "${jars[0]}"
+          }
 
-      - name: Sanity-test client load
-        run: xvfb-run ./gradlew runCiClient --no-daemon
+          echo "fabric=$(find_release_jar fabric)" >> "$GITHUB_OUTPUT"
+          echo "neoforge=$(find_release_jar neoforge)" >> "$GITHUB_OUTPUT"
 
-      - name: Upload built JARs as artifacts
-        uses: actions/upload-artifact@v7
-        with:
-          name: cmd-delete-release-builds
-          path: build/libs/*.jar
-
-      - name: Locate built JAR
-        id: jar
+      - name: Locate documentation archives
+        id: docs
         run: |
           set -euo pipefail
-          mapfile -t JARS < <(
-            find build/libs -maxdepth 1 -type f -name "*.jar" \
-              ! -name "*-sources.jar" \
-              ! -name "*-javadoc.jar" \
-              ! -name "*-dev.jar" \
-              ! -name "*-dev-shadow.jar" \
-              ! -name "*-shadow.jar"
-          )
-
-          if [ "${#JARS[@]}" -eq 0 ]; then
-            echo "ERROR: No release JAR found."
+          docs_dir="release-builds/cmd-delete-release-docs"
+          docs_zip="$docs_dir/cmd_delete-${{ steps.props.outputs.version }}-docs.zip"
+          site_zip="$docs_dir/cmd_delete-${{ steps.props.outputs.version }}-docs-site.zip"
+          test -f "$docs_zip" || {
+            echo "ERROR: Missing documentation archive: $docs_zip"
             exit 1
-          fi
-
-          if [ "${#JARS[@]}" -gt 1 ]; then
-            echo "ERROR: Multiple release JARs found:"
-            printf ' - %s\n' "${JARS[@]}"
+          }
+          test -f "$site_zip" || {
+            echo "ERROR: Missing documentation site archive: $site_zip"
             exit 1
-          fi
-
-          echo "path=${JARS[0]}" >> "$GITHUB_OUTPUT"
+          }
+          echo "docs=$docs_zip" >> "$GITHUB_OUTPUT"
+          echo "site=$site_zip" >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub release
         env:
@@ -114,20 +231,23 @@ jobs:
           fi
 
           gh release create "${{ steps.props.outputs.version }}" \
-            "${{ steps.jar.outputs.path }}" \
+            "${{ steps.jars.outputs.fabric }}" \
+            "${{ steps.jars.outputs.neoforge }}" \
+            "${{ steps.docs.outputs.docs }}" \
+            "${{ steps.docs.outputs.site }}" \
             --target "${{ github.sha }}" \
             --title "${{ inputs.release_title }}" \
             --notes-file changelog.md \
             $PRERELEASE_FLAG
 
-      - name: Publish to Modrinth & CurseForge
+      - name: Publish Fabric to Modrinth & CurseForge
         uses: Kira-NT/mc-publish@52307b03863581dec6b652b83e597aec02ebb075 # v3.3.1
         with:
           modrinth-id: xrOWVab9
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           curseforge-id: 1455987
           curseforge-token: ${{ secrets.CF_API_TOKEN }}
-          files: ${{ steps.jar.outputs.path }}
+          files: ${{ steps.jars.outputs.fabric }}
           name: ${{ inputs.release_title }}
           version: ${{ steps.props.outputs.version }}
           version-type: ${{ inputs.release_type }}
@@ -138,5 +258,24 @@ jobs:
           loaders: |
             fabric
             quilt
+          environment: client
+          fail-mode: skip
+
+      - name: Publish NeoForge to Modrinth & CurseForge
+        uses: Kira-NT/mc-publish@52307b03863581dec6b652b83e597aec02ebb075 # v3.3.1
+        with:
+          modrinth-id: xrOWVab9
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          curseforge-id: 1455987
+          curseforge-token: ${{ secrets.CF_API_TOKEN }}
+          files: ${{ steps.jars.outputs.neoforge }}
+          name: ${{ inputs.release_title }}
+          version: ${{ steps.props.outputs.version }}
+          version-type: ${{ inputs.release_type }}
+          changelog-file: changelog.md
+          java: 25
+          game-versions: |
+            >=26.1 <=26.2
+          loaders: neoforge
           environment: client
           fail-mode: skip
