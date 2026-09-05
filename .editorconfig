@@ -10,3 +10,80 @@ insert_final_newline = true
 
 [*.md]
 trim_trailing_whitespace = false
+
+[*.java]
+ij_visual_guides = none
+max_line_length = off
+ij_java_wrap_long_lines = false
+
+ij_continuation_indent_size = 8
+
+ij_java_class_brace_style = end_of_line
+ij_java_method_brace_style = end_of_line
+ij_java_lambda_brace_style = end_of_line
+ij_java_block_brace_style = end_of_line
+ij_java_else_on_new_line = false
+ij_java_catch_on_new_line = false
+ij_java_finally_on_new_line = false
+ij_java_special_else_if_treatment = true
+
+ij_java_if_brace_force = never
+ij_java_for_brace_force = never
+ij_java_while_brace_force = never
+ij_java_do_while_brace_force = never
+ij_java_keep_control_statement_in_one_line = false
+
+ij_java_keep_blank_lines_in_code = 2
+ij_java_keep_blank_lines_in_declarations = 2
+ij_java_keep_blank_lines_before_right_brace = 2
+ij_java_blank_lines_after_class_header = 0
+ij_java_blank_lines_after_imports = 1
+ij_java_blank_lines_after_package = 1
+ij_java_blank_lines_around_class = 1
+ij_java_blank_lines_around_method = 1
+ij_java_blank_lines_around_field = 0
+ij_java_blank_lines_before_method_body = 0
+
+ij_java_imports_layout = *,java.**,javax.**,$*
+ij_java_class_count_to_use_import_on_demand = 5
+ij_java_names_count_to_use_import_on_demand = 5
+ij_java_layout_static_imports_separately = true
+ij_java_use_single_class_imports = true
+ij_java_insert_inner_class_imports = false
+
+ij_java_space_before_method_parentheses = false
+ij_java_space_before_if_parentheses = true
+ij_java_space_before_for_parentheses = true
+ij_java_space_before_while_parentheses = true
+ij_java_space_before_catch_parentheses = true
+ij_java_space_before_switch_parentheses = true
+ij_java_space_before_synchronized_parentheses = true
+ij_java_space_after_comma = true
+ij_java_space_before_comma = false
+
+ij_java_align_multiline_parameters = true
+ij_java_align_multiline_parameters_in_calls = false
+ij_java_align_multiline_binary_operation = false
+ij_java_method_parameters_wrap = off
+ij_java_binary_operation_wrap = off
+ij_java_ternary_operation_wrap = off
+ij_java_call_parameters_wrap = off
+
+ij_java_generate_final_locals = true
+ij_java_generate_final_parameters = true
+
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+
+[*.{json,jsonc}]
+indent_style = space
+indent_size = 2
+
+[*.xml]
+indent_style = space
+indent_size = 4
+
+[*.gradle]
+indent_style = space
+indent_size = 4

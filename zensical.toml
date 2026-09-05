@@ -8,19 +8,19 @@ repo = "fontawesome/brands/git-alt"
 [project.theme]
 language = "en"
 features = [
-    "header.autohide",
-    "content.action.edit",
-    "content.action.view",
-    "navigation.tracking",
-    "navigation.path",
-    "toc.follow",
-    "toc.integrate",
-    "navigation.top",
-    "search.highlight",
-    "navigation.instant",
-    "navigation.instant.prefetch",
-    "navigation.instant.progress",
-    "navigation.prune",
+	"header.autohide",
+	"content.action.edit",
+	"content.action.view",
+	"navigation.tracking",
+	"navigation.path",
+	"toc.follow",
+	"toc.integrate",
+	"navigation.top",
+	"search.highlight",
+	"navigation.instant",
+	"navigation.instant.prefetch",
+	"navigation.instant.progress",
+	"navigation.prune",
 ]
 favicon = "resources/favicon.ico"
 logo = "resources/icon.png"
@@ -53,9 +53,9 @@ description = """
   make our documentation better.
 """
 actions = [
-    "accept",
-    "reject",
-    "manage",
+	"accept",
+	"reject",
+	"manage",
 ]
 
 [project.extra.consent.cookies]

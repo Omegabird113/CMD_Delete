@@ -92,10 +92,10 @@ processResources {
 
     filesMatching("fabric.mod.json") {
         expand "version": project.version,
-                "loader_version": project.loader_version,
-                "fabric_version": project.fabric_version,
-                "loader_min_version": project.loader_min_version,
-                "fabric_min_version": project.fabric_min_version
+            "loader_version": project.loader_version,
+            "fabric_version": project.fabric_version,
+            "loader_min_version": project.loader_min_version,
+            "fabric_min_version": project.fabric_min_version
     }
 }
 
@@ -130,36 +130,36 @@ loom {
 tasks.shadowJar {
     configurations.set([project.configurations.shadeOnly] as Set)
     relocators.add(new SimpleRelocator(
-            'org.apache.commons.codec',
-            'io.github.omegabird113.cmd_delete.libs.commons.codec',
-            [] as List<String>,
-            [] as List<String>,
-            false,
-            false
+        'org.apache.commons.codec',
+        'io.github.omegabird113.cmd_delete.libs.commons.codec',
+        [] as List<String>,
+        [] as List<String>,
+        false,
+        false
     ))
     relocators.add(new SimpleRelocator(
-            'com.google',
-            'io.github.omegabird113.cmd_delete.libs.google',
-            [] as List<String>,
-            [] as List<String>,
-            false,
-            false
+        'com.google',
+        'io.github.omegabird113.cmd_delete.libs.google',
+        [] as List<String>,
+        [] as List<String>,
+        false,
+        false
     ))
     relocators.add(new SimpleRelocator(
-            'org.jspecify',
-            'io.github.omegabird113.cmd_delete.libs.jspecify',
-            [] as List<String>,
-            [] as List<String>,
-            false,
-            false
+        'org.jspecify',
+        'io.github.omegabird113.cmd_delete.libs.jspecify',
+        [] as List<String>,
+        [] as List<String>,
+        false,
+        false
     ))
     relocators.add(new SimpleRelocator(
-            'org.jetbrains',
-            'io.github.omegabird113.cmd_delete.libs.jetbrains',
-            [] as List<String>,
-            [] as List<String>,
-            false,
-            false
+        'org.jetbrains',
+        'io.github.omegabird113.cmd_delete.libs.jetbrains',
+        [] as List<String>,
+        [] as List<String>,
+        false,
+        false
     ))
     from("${rootDir}/LICENSE") {
         rename { "LICENSE.txt" }

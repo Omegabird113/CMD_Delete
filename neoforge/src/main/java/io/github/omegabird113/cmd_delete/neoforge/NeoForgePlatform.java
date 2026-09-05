@@ -43,8 +43,8 @@ import java.util.function.BiConsumer;
 
 public final class NeoForgePlatform implements IPlatform {
     public static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(NeoForgePlatform.class);
-    private CommandRegistration<?> commandRegistration;
     private final @NonNull Path resourcePath = setupResourcePath();
+    private CommandRegistration<?> commandRegistration;
 
     public NeoForgePlatform() {
         NeoForge.EVENT_BUS.addListener(RegisterClientCommandsEvent.class, this::registerClientCommand);
