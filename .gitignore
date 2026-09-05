@@ -33,6 +33,9 @@ run/**
 *.ipr
 .idea/modules/*
 
+# Git
+*.patch
+
 # Zensical
 .venv/
 site/
