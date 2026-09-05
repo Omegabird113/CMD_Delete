@@ -119,7 +119,8 @@ public final class KeyNameRegistry {
             Map.entry("f21", SDL_SCANCODE_F21),
             Map.entry("f22", SDL_SCANCODE_F22),
             Map.entry("f23", SDL_SCANCODE_F23),
-            Map.entry("f24", SDL_SCANCODE_F24), // deprecated
+            Map.entry("f24", SDL_SCANCODE_F24),
+            // f25 is deprecated and not supported in SDL enviornments
 
             Map.entry("numpad_0", SDL_SCANCODE_KP_0),
             Map.entry("numpad_1", SDL_SCANCODE_KP_1),
