@@ -27,8 +27,8 @@
     "fabricloader": ">=${loader_min_version}",
     "fabric-api": ">=${fabric_min_version}",
     "minecraft": [
-      ">=26.3-alpha.4 <=26.3-alpha.8",
-      ">=26.3-snapshot.4 <=26.3-snapshot.8"
+      ">=26.3-snapshot.4 <=26.3-snapshot.10",
+      ">=26.3-pre.1 <=26.3-pre.2"
     ]
   },
   "breaks": {
