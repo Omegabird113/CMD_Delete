@@ -1,0 +1,133 @@
+/*
+ * Copyright (c) 2026 Omegabird113.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package io.github.omegabird113.cmd_delete.command;
+
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import io.github.omegabird113.cmd_delete.CmdDeleteClient;
+import io.github.omegabird113.cmd_delete.IPlatform;
+import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
+import io.github.omegabird113.cmd_delete.config.fileio.JsonParsingUtils;
+import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
+import io.github.omegabird113.cmd_delete.config.fileio.ShareCodeGenerator;
+import io.github.omegabird113.cmd_delete.mappings.MappingsType;
+import net.minecraft.client.Minecraft;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.network.chat.Component;
+import org.jspecify.annotations.NonNull;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+
+import static io.github.omegabird113.cmd_delete.command.NavMappingsCommand.LOGGER;
+
+final class NavMappingsCommandExecutionUtils {
+    private NavMappingsCommandExecutionUtils() {
+    }
+
+    static void exportShareCode(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context, final boolean custom) throws CommandSyntaxException {
+        final String idStr = StringArgumentType.getString(context, "id");
+
+        final String namespacedId = MappingsIdResolutionUtils.resolveNamespacedId(MappingsType.fromIfCustom(custom), idStr);
+        final String shareCode;
+        try {
+            shareCode = ShareCodeGenerator.encode(namespacedId);
+        } catch (IOException e) {
+            LOGGER.error("Failed to generate share code.", e);
+            throw CommandCreationUtils.INVALID_SHARE_CODE.create(idStr);
+        }
+
+        Minecraft.getInstance().keyboardHandler.setClipboard(shareCode);
+        IPlatform.sendCommandFeedback(context.getSource(), Component.translatable("commands.cmd_delete.export_sharecode", MappingsIdResolutionUtils.resolveNamespacedId(MappingsType.fromIfCustom(custom), idStr), shareCode));
+    }
+
+    static void exportMappings(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context, final boolean custom) throws CommandSyntaxException {
+        final String idStr = StringArgumentType.getString(context, "id");
+        final String locationStr = StringArgumentType.getString(context, "location");
+
+        final Path newPath = Path.of(locationStr);
+        final String typeCName = MappingsType.fromIfCustom(custom).commonName();
+        if (!newPath.isAbsolute()) {
+            LOGGER.error("New path \"{}\" for {} copy is not absolute", locationStr, typeCName);
+            if (custom)
+                throw CommandCreationUtils.UNKNOWN_CUSTOM_MAPPINGS.create(idStr);
+            else
+                throw CommandCreationUtils.UNKNOWN_BUILTIN_MAPPINGS.create(idStr);
+        }
+
+        try {
+            Files.createDirectories(newPath.getParent());
+            if (custom) {
+                final Path oldPath = PathConstants.getPathOf(MappingsType.CUSTOM, idStr);
+                if (!Files.isRegularFile(oldPath)) {
+                    LOGGER.error("Error while reading custom mappings. File does not exist: {}", oldPath.toAbsolutePath());
+                    throw CommandCreationUtils.UNKNOWN_CUSTOM_MAPPINGS.create(idStr);
+                }
+                Files.copy(oldPath, newPath, StandardCopyOption.REPLACE_EXISTING);
+            } else {
+                final String resourceSubPathStr = "/mappings/" + idStr + ".json";
+                try (InputStream resourceStream = NavMappingsCommand.class.getResourceAsStream(resourceSubPathStr)) {
+                    if (resourceStream == null) {
+                        LOGGER.error("Builtin mappings do not exist: {}", resourceSubPathStr);
+                        throw CommandCreationUtils.UNKNOWN_BUILTIN_MAPPINGS.create(idStr);
+                    }
+                    Files.copy(resourceStream, newPath, StandardCopyOption.REPLACE_EXISTING);
+                }
+            }
+        } catch (IOException e) {
+            LOGGER.error("Error while {} mappings exporting ", typeCName, e);
+            if (custom)
+                throw CommandCreationUtils.UNKNOWN_CUSTOM_MAPPINGS.create(idStr);
+            else
+                throw CommandCreationUtils.UNKNOWN_BUILTIN_MAPPINGS.create(idStr);
+        }
+
+        IPlatform.sendCommandFeedback(context.getSource(), Component.translatable("commands.cmd_delete.export_mappings", MappingsIdResolutionUtils.resolveNamespacedId(MappingsType.fromIfCustom(custom), idStr), newPath.toAbsolutePath()));
+    }
+
+    static void importShareCode(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context, final @NonNull String shareCode) throws CommandSyntaxException {
+        String decoded;
+        try {
+            decoded = ShareCodeGenerator.decode(shareCode.trim());
+
+            final JsonObject jsonObject = CmdDeleteClient.GSON.fromJson(decoded, JsonObject.class);
+            final JsonObject meta = JsonParsingUtils.requireObject(jsonObject, "meta");
+            final String idStr = JsonParsingUtils.requireFilenameSafeString(meta, "id");
+
+            final Path toCopyTo = PathConstants.getPathOf(MappingsType.CUSTOM, idStr);
+            try (FileWriter writer = new FileWriter(toCopyTo.toFile())) {
+                writer.write(new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject));
+            } catch (IOException e) {
+                LOGGER.error("Error while importing custom mappings", e);
+                throw CommandCreationUtils.FAILED_CUSTOM_MAPPINGS_IMPORT.create(idStr);
+            }
+
+            IPlatform.sendCommandFeedback(context.getSource(), Component.translatable("commands.cmd_delete.import_sharecode_success", idStr));
+        } catch (IllegalArgumentException | JsonParseException e) {
+            LOGGER.error("Invalid share code: {}", shareCode, e);
+            throw CommandCreationUtils.INVALID_SHARE_CODE.create(shareCode);
+        }
+    }
+}

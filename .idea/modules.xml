@@ -2,8 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/io.github.omegabird113.CMD_Delete.main.iml" filepath="$PROJECT_DIR$/.idea/modules/io.github.omegabird113.CMD_Delete.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/io.github.omegabird113.CMD_Delete.test.iml" filepath="$PROJECT_DIR$/.idea/modules/io.github.omegabird113.CMD_Delete.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/common/CMD_Delete.common.main.iml" filepath="$PROJECT_DIR$/.idea/modules/common/CMD_Delete.common.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/common/CMD_Delete.common.test.iml" filepath="$PROJECT_DIR$/.idea/modules/common/CMD_Delete.common.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fabric/CMD_Delete.fabric.main.iml" filepath="$PROJECT_DIR$/.idea/modules/fabric/CMD_Delete.fabric.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fabric/CMD_Delete.fabric.test.iml" filepath="$PROJECT_DIR$/.idea/modules/fabric/CMD_Delete.fabric.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/neoforge/CMD_Delete.neoforge.main.iml" filepath="$PROJECT_DIR$/.idea/modules/neoforge/CMD_Delete.neoforge.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/neoforge/CMD_Delete.neoforge.test.iml" filepath="$PROJECT_DIR$/.idea/modules/neoforge/CMD_Delete.neoforge.test.iml" />
     </modules>
   </component>
 </project>

@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "cmd_delete",
+  "version": "${version}",
+  "name": "CMD + Delete",
+  "description": "Fix macOS text navigation shortcuts in chat/books/signs/etc + allow custom shortcuts.",
+  "authors": [
+    "Omegabird113"
+  ],
+  "contact": {
+    "homepage": "https://omegabird113.github.io/CMD_Delete/",
+    "sources": "https://github.com/Omegabird113/CMD_Delete",
+    "issues": "https://github.com/Omegabird113/CMD_Delete/issues"
+  },
+  "license": "Apache-2.0",
+  "icon": "assets/cmd_delete/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "io.github.omegabird113.cmd_delete.fabric.FabricClient"
+    ]
+  },
+  "mixins": [
+    "cmd_delete.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_min_version}",
+    "fabric-api": ">=${fabric_min_version}",
+    "minecraft": [
+      ">=26.3-alpha.4 <=26.3-alpha.8",
+      ">=26.3-snapshot.4 <=26.3-snapshot.8"
+    ]
+  },
+  "breaks": {
+    "macos-chat-fixes": "*"
+  }
+}

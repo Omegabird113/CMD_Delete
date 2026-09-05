@@ -1,0 +1,98 @@
+[project]
+site_name = "CMD + Delete Documentation"
+copyright = "Copyright &copy; 2026 Omegabird113. The contents of this documentation is available under the CC BY 4.0 license unless otherwise stated."
+repo_url = "https://github.com/Omegabird113/CMD_Delete"
+repo_name = "Omegabird113/CMD_Delete"
+repo = "fontawesome/brands/git-alt"
+
+[project.theme]
+language = "en"
+features = [
+    "header.autohide",
+    "content.action.edit",
+    "content.action.view",
+    "navigation.tracking",
+    "navigation.path",
+    "toc.follow",
+    "toc.integrate",
+    "navigation.top",
+    "search.highlight",
+    "navigation.instant",
+    "navigation.instant.prefetch",
+    "navigation.instant.progress",
+    "navigation.prune",
+]
+favicon = "resources/favicon.ico"
+logo = "resources/icon.png"
+
+[project.extra.analytics]
+provider = "google"
+property = "G-4TM9B89H9C"
+
+[project.extra.analytics.feedback]
+title = "Was this page helpful?"
+
+[[project.extra.analytics.feedback.ratings]]
+icon = "material/thumb-up-outline"
+name = "This page was helpful"
+data = 1
+note = "Thanks for your feedback!"
+
+[[project.extra.analytics.feedback.ratings]]
+icon = "material/thumb-down-outline"
+name = "This page could be improved"
+data = 0
+note = "Thanks for your feedback!"
+
+[project.extra.consent]
+title = "Cookie consent"
+description = """
+  We use cookies to recognize your repeated visits and preferences, as well
+  as to measure the effectiveness of our documentation and whether users
+  find what they're searching for. With your consent, you're helping us to
+  make our documentation better.
+"""
+actions = [
+    "accept",
+    "reject",
+    "manage",
+]
+
+[project.extra.consent.cookies]
+analytics.name = "Google Analytics"
+analytics.checked = false
+
+[project.theme.icon]
+edit = "material/pencil"
+view = "material/eye"
+
+[[project.extra.social]]
+icon = "fontawesome/brands/github"
+link = "https://github.com/Omegabird113/CMD_Delete"
+name = "CMD + Delete GitHub Repository"
+
+# Palette toggle for automatic mode
+[[project.theme.palette]]
+media = "(prefers-color-scheme)"
+toggle.icon = "lucide/sun-moon"
+toggle.name = "Switch to light mode"
+primary = "blue"
+accent = "light blue"
+
+# Palette toggle for light mode
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "default"
+toggle.icon = "lucide/sun"
+toggle.name = "Switch to dark mode"
+primary = "blue"
+accent = "light blue"
+
+# Palette toggle for dark mode
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "slate"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to system preference"
+primary = "blue"
+accent = "light blue"

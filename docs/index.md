@@ -1,0 +1,30 @@
+# Index
+
+This is a file that explains the contents of the documentation sorted alphabetically:
+
+- [actions_list.md](actions_list.md) - a table of all NavAction values and their properties
+- [builtin_mappings.md](builtin_mappings.md) - provides samples of the JSONs and sharecodes of all builtin mappings
+- [changelog.md](changelog.md) - a combined master historical changelog of every version of CMD + Delete
+- [docs_license.md](docs_license.md) - a copy of the CC BY 4.0 license which these docs are licensed under
+- [friendly_keynames.md](friendly_keynames.md) - a list of every possible friendly keyname alongside its corresponding
+  raw GLFW keycode and SDL3 scancode
+- [jvm_arguments.md](jvm_arguments.md) - a list of every single JVM argument that affects the mod's behavior
+- [mappings_format_and_sharecodes.md](mappings_format_and_sharecodes.md) - explains the mappings format and sharecode
+  specifications
+- [navmappings_command.md](navmappings_command.md) - an explanation of every sub-command of the client /navmappings
+  command
+- [index.md](index.md) - this index
+
+## Where to Download
+
+You can click any of the platform links below to see CMD + Delete's page on that website and download it there or find
+more info:
+
+[![Modrinth](https://img.shields.io/badge/Modrinth-30B27B?logo=data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxNCIgdmlld0JveD0iMCAwIDUxMiA1MTQiIGZpbGw9IiMxMTExMTEiPgogIDxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNNTAzLjE2IDMyMy41NkM1MTQuNTUgMjgxLjQ3IDUxNS4zMiAyMzUuOTEgNTAzLjIgMTkwLjc2QzQ2Ni41NyA1NC4yMjk5IDMyNi4wNCAtMjYuODAwMSAxODkuMzMgOS43Nzk5MUM4My44MTAxIDM4LjAxOTkgMTEuMzg5OSAxMjguMDcgMC42ODk5NDEgMjMwLjQ3SDQzLjk5QzU0LjI5IDE0Ny4zMyAxMTMuNzQgNzQuNzI5OCAxOTkuNzUgNTEuNzA5OEMzMDYuMDUgMjMuMjU5OCA0MTUuMTMgODAuNjY5OSA0NTMuMTcgMTgxLjM4TDQxMS4wMyAxOTIuNjVDMzkxLjY0IDE0NS44IDM1Mi41NyAxMTEuNDUgMzA2LjMgOTYuODE5OEwyOTguNTYgMTQwLjY2QzMzNS4wOSAxNTQuMTMgMzY0LjcyIDE4NC41IDM3NS41NiAyMjQuOTFDMzkxLjM2IDI4My44IDM2MS45NCAzNDQuMTQgMzA4LjU2IDM2OS4xN0wzMjAuMDkgNDEyLjE2QzM5MC4yNSAzODMuMjEgNDMyLjQgMzEwLjMgNDIyLjQzIDIzNS4xNEw0NjQuNDEgMjIzLjkxQzQ2OC45MSAyNTIuNjIgNDY3LjM1IDI4MS4xNiA0NjAuNTUgMzA4LjA3TDUwMy4xNiAzMjMuNTZaIiBmaWxsPSIjMTExMTExIi8+CiAgPHBhdGggZD0iTTMyMS45OSA1MDQuMjJDMTg1LjI3IDU0MC44IDQ0Ljc1MDEgNDU5Ljc3IDguMTEwMTEgMzIzLjI0QzMuODQwMTEgMzA3LjMxIDEuMTcgMjkxLjMzIDAgMjc1LjQ2SDQzLjI3QzQ0LjM2IDI4Ny4zNyA0Ni40Njk5IDI5OS4zNSA0OS42Nzk5IDMxMS4yOUM1My4wMzk5IDMyMy44IDU3LjQ1IDMzNS43NSA2Mi43OSAzNDcuMDdMMTAxLjM4IDMyMy45MkM5OC4xMjk5IDMxNi40MiA5NS4zOSAzMDguNiA5My4yMSAzMDAuNDdDNjkuMTcgMjEwLjg3IDEyMi40MSAxMTguNzcgMjEyLjEzIDk0Ljc2MDFDMjI5LjEzIDkwLjIxMDEgMjQ2LjIzIDg4LjQ0MDEgMjYyLjkzIDg5LjE1MDFMMjU1LjE5IDEzM0MyNDQuNzMgMTMzLjA1IDIzNC4xMSAxMzQuNDIgMjIzLjUzIDEzNy4yNUMxNTcuMzEgMTU0Ljk4IDExOC4wMSAyMjIuOTUgMTM1Ljc1IDI4OS4wOUMxMzYuODUgMjkzLjE2IDEzOC4xMyAyOTcuMTMgMTM5LjU5IDMwMC45OUwxODguOTQgMjcxLjM4TDE3NC4wNyAyMzEuOTVMMjIwLjY3IDE4NC4wOEwyNzkuNTcgMTcxLjM5TDI5Ni42MiAxOTIuMzhMMjY5LjQ3IDIxOS44OEwyNDUuNzkgMjI3LjMzTDIyOC44NyAyNDQuNzJMMjM3LjE2IDI2Ny43OUMyMzcuMTYgMjY3Ljc5IDI1My45NSAyODUuNjMgMjUzLjk4IDI4NS42NEwyNzcuNyAyNzkuMzNMMjk0LjU4IDI2MC43OUwzMzEuNDQgMjQ5LjEyTDM0Mi40MiAyNzMuODJMMzA0LjM5IDMyMC40NUwyNDAuNjYgMzQwLjYzTDIxMi4wOCAzMDguODFMMTYyLjI2IDMzOC43QzE4Ny44IDM2Ny43OCAyMjYuMiAzODMuOTMgMjY2LjAxIDM4MC41NkwyNzcuNTQgNDIzLjU1QzIxOC4xMyA0MzEuNDEgMTYwLjEgNDA2LjgyIDEyNC4wNSAzNjEuNjRMODUuNjM5OSAzODQuNjhDMTM2LjI1IDQ1MS4xNyAyMjMuODQgNDg0LjExIDMwOS42MSA0NjEuMTZDMzcxLjM1IDQ0NC42NCA0MTkuNCA0MDIuNTYgNDQ1LjQyIDM0OS4zOEw0ODguMDYgMzY0Ljg4QzQ1Ny4xNyA0MzEuMTYgMzk4LjIyIDQ4My44MiAzMjEuOTkgNTA0LjIyWiIgZmlsbD0iIzExMTExMSIvPgo8L3N2Zz4K)](https://modrinth.com/mod/cmd-delete)
+[![CurseForge](https://img.shields.io/badge/-CurseForge-F16436?style=flat&logo=curseforge&logoColor=white)](https://www.curseforge.com/minecraft/mc-mods/cmd-delete)
+[![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/Omegabird113/CMD_Delete)
+
+**Note that these links are the ONLY official and safe places to download CMD + Delete. I do not have official accounts
+on other websites (excluding my MCreator.net account for my other project named LlamaBlocks). DO NOT DOWNLOAD IT FROM
+OTHER SOURCES. In fact, some untrustworthy modding websites or individuals impersonate real mod creators to gain money
+or even distribute malware, so be careful!!**
