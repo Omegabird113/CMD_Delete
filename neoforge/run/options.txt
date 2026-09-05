@@ -1,4 +1,4 @@
-version:4903
+version:5009
 ao:true
 biomeBlendRadius:2
 chunkSectionFadeInTime:0.75
@@ -20,6 +20,7 @@ fullscreen:true
 exclusiveFullscreen:false
 gamma:1.0
 guiScale:7
+debugGuiScale:0
 maxAnisotropyBit:2
 textureFiltering:0
 maxFps:260
@@ -89,8 +90,8 @@ mainHand:"right"
 attackIndicator:1
 tutorialStep:none
 mouseWheelSensitivity:1.0
-rawMouseInput:true
 allowCursorChanges:true
+quitShortcuts:true
 glDebugVerbosity:1
 skipMultiplayerWarning:true
 hideMatchedNames:true
@@ -170,6 +171,7 @@ key_key.debug.profilingChart:key.keyboard.1
 key_key.debug.fpsCharts:key.keyboard.2
 key_key.debug.networkCharts:key.keyboard.3
 key_key.debug.lightmapTexture:key.keyboard.4
+key_key.debug.improvedTransparency:key.keyboard.x
 soundCategory_master:1.0
 soundCategory_music:1.0
 soundCategory_record:1.0

@@ -28,12 +28,13 @@ public final class NeoForgeClient {
     private static boolean started;
 
     public NeoForgeClient() {
-        NeoForge.EVENT_BUS.addListener(ClientTickEvent.Post.class, _ -> {
-            //noinspection ConstantValue
-            if (!started && Minecraft.getInstance() != null) {
-                started = true;
-                CmdDeleteClient.start(new NeoForgePlatform());
-            }
-        });
+        throw new RuntimeException("NeoForge is not supported yet for this build...");
+//        NeoForge.EVENT_BUS.addListener(ClientTickEvent.Post.class, _ -> {
+//            //noinspection ConstantValue
+//            if (!started && Minecraft.getInstance() != null) {
+//                started = true;
+//                CmdDeleteClient.start(new NeoForgePlatform());
+//            }
+//        });
     }
 }
