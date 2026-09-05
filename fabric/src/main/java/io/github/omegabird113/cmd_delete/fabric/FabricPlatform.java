@@ -26,7 +26,6 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 
@@ -50,7 +49,7 @@ public final class FabricPlatform implements IPlatform {
     }
 
     @Override
-    public @NotNull String getPlatformName() {
+    public @NonNull String getPlatformName() {
         return "Fabric Platform";
     }
 
@@ -73,7 +72,7 @@ public final class FabricPlatform implements IPlatform {
     }
 
     @Override
-    public @NotNull Logger getPlatformLogger() {
+    public @NonNull Logger getPlatformLogger() {
         return LOGGER;
     }
 }

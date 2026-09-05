@@ -53,13 +53,13 @@ public final class CmdDeleteClient {
         return currentPlatform;
     }
 
-    public static void setPlatform(@NonNull IPlatform platform) {
+    public static void setPlatform(final @NonNull IPlatform platform) {
         CmdDeleteClient.platform = platform;
         LoggingManager.traceLog(platform.getPlatformLogger(), "Platform set...");
         LoggingManager.debugLog(LOGGER, "CmdDeleteClient platform set to \"{}\"", platform.getPlatformName());
     }
 
-    public static void start(IPlatform platform) {
+    public static void start(final @NonNull IPlatform platform) {
         LoadTimer.time(() -> CrashUtils.crashMinecraftOnFailure(() -> {
             LoadTimer.time(() -> setPlatform(platform), "Registering platform information", true);
 

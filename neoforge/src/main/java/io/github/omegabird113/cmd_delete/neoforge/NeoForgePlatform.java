@@ -30,7 +30,6 @@ import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 
@@ -69,7 +68,7 @@ public final class NeoForgePlatform implements IPlatform {
     }
 
     @Override
-    public @NotNull String getPlatformName() {
+    public @NonNull String getPlatformName() {
         return "NeoForge Platform";
     }
 
@@ -85,7 +84,7 @@ public final class NeoForgePlatform implements IPlatform {
         return FMLPaths.GAMEDIR.get();
     }
 
-    private @NotNull Path setupResourcePath() {
+    private @NonNull Path setupResourcePath() {
         final String devMappings = System.getProperty("cmd_delete.dev.mappings");
         if (devMappings != null) {
             final Path path = Paths.get(devMappings).resolve("mappings");
@@ -113,7 +112,7 @@ public final class NeoForgePlatform implements IPlatform {
     }
 
     @Override
-    public @NotNull Logger getPlatformLogger() {
+    public @NonNull Logger getPlatformLogger() {
         return LOGGER;
     }
 }

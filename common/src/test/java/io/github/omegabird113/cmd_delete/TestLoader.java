@@ -20,7 +20,6 @@ import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
 import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -63,7 +62,7 @@ public class TestLoader {
         }
 
         @Override
-        public @NotNull String getPlatformName() {
+        public @NonNull String getPlatformName() {
             return "Common Test Platform";
         }
 

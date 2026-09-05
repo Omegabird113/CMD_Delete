@@ -19,7 +19,6 @@ package io.github.omegabird113.cmd_delete;
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
@@ -46,9 +45,9 @@ public interface IPlatform {
 
     @Nullable BiConsumer<@NonNull SharedSuggestionProvider, @NonNull Component> getFeedbackMethod();
 
-    @NotNull String getPlatformName();
+    @NonNull String getPlatformName();
 
-    @NotNull Logger getPlatformLogger();
+    @NonNull Logger getPlatformLogger();
 
     @FunctionalInterface
     interface CommandRegistration<S extends SharedSuggestionProvider> {
