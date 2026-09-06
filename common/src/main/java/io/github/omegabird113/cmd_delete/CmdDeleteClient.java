@@ -35,7 +35,7 @@ import java.nio.file.Path;
 public final class CmdDeleteClient {
     public static final @NonNull String MODID = "cmd_delete";
     public static final @NonNull String ISSUE_TRACKER_URL_STRING = "https://github.com/Omegabird113/CMD_Delete/issues";
-    public static final int CURRENT_MAPPINGS_FORMAT_VERSION = 4;
+    public static final int CURRENT_MAPPINGS_FORMAT_VERSION = 5;
     public static final int MINIMUM_MAPPINGS_FORMAT_VERSION = 2;
     public static final int SHARECODE_FORMAT_VERSION = 1;
     public static final boolean FORCE_PREVENT_OVERRIDE_MODE = Boolean.getBoolean("cmd_delete.forcePreventOverrideMode");
