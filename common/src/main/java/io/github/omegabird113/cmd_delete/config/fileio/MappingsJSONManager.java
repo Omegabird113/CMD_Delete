@@ -73,7 +73,7 @@ public final class MappingsJSONManager {
 		try {
 			final MappingsRegistry registry = loadFromDir(id, custom);
 			return Optional.of(registry);
-		} catch (FileNotFoundException _) {
+		} catch (FileNotFoundException ignored) {
 			LOGGER.error("Could not access {} mapping file \"{}\" (at \"{}\") because it does not exist.", typeCName, id, PathConstants.getPathOf(MappingsType.fromIfCustom(custom), id));
 			return Optional.empty();
 		} catch (IOException | JsonParseException e) {

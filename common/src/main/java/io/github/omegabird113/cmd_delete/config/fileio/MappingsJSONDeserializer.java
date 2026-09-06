@@ -172,7 +172,7 @@ public final class MappingsJSONDeserializer {
 			final JsonObject flags;
 			try {
 				flags = requireObject(root, "flags");
-			} catch (JsonParseException _) {
+			} catch (JsonParseException ignored) {
 				return new FeatureFlags(false, true);
 			}
 			Boolean overrideVanillaNavigation = getNullableBoolean(flags, "overrideVanillaNavigation");

@@ -44,9 +44,9 @@ public final class CommandCreationUtils {
 	);
 
 	public static final @NonNull SuggestionProvider<@NonNull SharedSuggestionProvider> BUILTIN_SUGGESTIONS =
-			(_, builder) -> SharedSuggestionProvider.suggest(List.of("windows_linux", "mac", "emacs_windows_linux", "emacs_mac", "readline"), builder);
+			(ignored, builder) -> SharedSuggestionProvider.suggest(List.of("windows_linux", "mac", "emacs_windows_linux", "emacs_mac", "readline"), builder);
 	public static final @NonNull SuggestionProvider<@NonNull SharedSuggestionProvider> CUSTOM_SUGGESTIONS =
-			(_, builder) -> SharedSuggestionProvider.suggest(MappingsJSONManager.getAvailableOptions(false), builder);
+			(ignored, builder) -> SharedSuggestionProvider.suggest(MappingsJSONManager.getAvailableOptions(false), builder);
 
 	private CommandCreationUtils() {
 	}

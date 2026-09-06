@@ -17,7 +17,7 @@
 import com.github.jengelman.gradle.plugins.shadow.relocation.SimpleRelocator
 
 plugins {
-    id 'net.fabricmc.fabric-loom' version '1.17.20'
+    id 'fabric-loom' version '1.14.10'
     id 'com.gradleup.shadow' version '9.6.1'
     id 'maven-publish'
 }
@@ -47,11 +47,12 @@ sourceSets {
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     implementation project(":common")
 
-    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     shadeOnly 'com.google.code.gson:gson:2.14.0'
     shadeOnly 'org.jspecify:jspecify:1.0.1'
@@ -62,11 +63,11 @@ dependencies {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(25)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
-def targetJavaVersion = 25
+def targetJavaVersion = 21
 tasks.withType(JavaCompile).configureEach {
     it.options.encoding = "UTF-8"
     if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {

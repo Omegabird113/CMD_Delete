@@ -68,7 +68,7 @@ public record MappingsRegistry(
 
 		final Map<NavAction, ArrayList<KeyCombo>> local = new HashMap<>();
 		for (Map.Entry<KeyCombo, NavAction> entry : registry.entrySet())
-			local.computeIfAbsent(entry.getValue(), _ -> new ArrayList<>()).add(entry.getKey());
+			local.computeIfAbsent(entry.getValue(), ignored -> new ArrayList<>()).add(entry.getKey());
 
 		final ArrayList<String> stringEntries = new ArrayList<>();
 		for (Map.Entry<NavAction, ArrayList<KeyCombo>> entry : local.entrySet())

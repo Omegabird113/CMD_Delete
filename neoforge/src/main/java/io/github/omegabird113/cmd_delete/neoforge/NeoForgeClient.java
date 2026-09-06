@@ -28,7 +28,7 @@ public final class NeoForgeClient {
 	private static boolean started;
 
 	public NeoForgeClient() {
-		NeoForge.EVENT_BUS.addListener(ClientTickEvent.Post.class, _ -> {
+		NeoForge.EVENT_BUS.addListener(ClientTickEvent.Post.class, event -> {
 			//noinspection ConstantValue
 			if (!started && Minecraft.getInstance() != null) {
 				started = true;
