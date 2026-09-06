@@ -84,8 +84,8 @@ public final class MappingsJSONDeserializer {
         return new MappingsRegistry(localKeys, (disabledKeys.isEmpty() ? null : disabledKeys), List.copyOf(container.systems()), ff, inherits, container.name(), container.author(), container.description(), container.version(), container.id(), container.license(), container.credits());
     }
 
-    private static @NonNull String trimAndCaseIfNotStrict(final @NonNull String str, final boolean upper, final boolean strictMode) {
-        if (strictMode)
+    private static @NonNull String normalizeText(final @NonNull String str, final int fv, final boolean upper, final boolean strictMode) {
+        if (strictMode || fv >= 5)
             return str;
         if (upper)
             return str.trim().toUpperCase(Locale.ROOT);
@@ -94,7 +94,7 @@ public final class MappingsJSONDeserializer {
 
     private static void parseActions(final @NonNull JsonObject actions, final @NonNull HashMap<@NonNull KeyCombo, @NonNull NavAction> localKeys, final @NonNull HashMap<@NonNull KeyCombo, @NonNull NavAction> disabledKeys, final int fv, final boolean strictMode) {
         for (String actionName : actions.keySet()) {
-            final NavAction action = NAV_ACTION_MAP.get(trimAndCaseIfNotStrict(actionName, true, strictMode));
+            final NavAction action = NAV_ACTION_MAP.get(normalizeText(actionName, fv, true, strictMode));
             if (action == null || action == NavAction.NONE) {
                 logWarn(
                         "Invalid action specified by custom mappings: \"" + actionName + "\". All key-combos registered in this action skipped...",
@@ -208,7 +208,7 @@ public final class MappingsJSONDeserializer {
 		final String license = (fv == 5) ? getStringElse(meta, "license", "unknown") : null;
 
         final JsonArray systems = requireArray(meta, "systems");
-        final Set<Os> parsedSystems = parseSystems(systems, strictMode);
+        final Set<Os> parsedSystems = parseSystems(systems, fv, strictMode);
         if (parsedSystems.isEmpty())
             throw new JsonParseException("No systems found");
         return new MetadataContainer(name, author, version, description, id, parsedSystems, credits, license);
@@ -237,13 +237,13 @@ public final class MappingsJSONDeserializer {
         return results;
     }
 
-    private static @NonNull Set<Os> parseSystems(final @NonNull JsonArray systemsArray, final boolean strictMode) {
+    private static @NonNull Set<Os> parseSystems(final @NonNull JsonArray systemsArray, final int fv, final boolean strictMode) {
         final Set<Os> systems = new LinkedHashSet<>();
 
         for (JsonElement systemElement : systemsArray) {
             if (!systemElement.isJsonPrimitive() || !systemElement.getAsJsonPrimitive().isString())
                 throw new JsonParseException("Expected each entry in \"systems\" to be a string");
-            final String systemName = trimAndCaseIfNotStrict(systemElement.getAsString(), false, strictMode);
+            final String systemName = normalizeText(systemElement.getAsString(), fv, false, strictMode);
             final Os os = OS_MAP.get(systemName);
             if (os == null)
                 throw new JsonParseException("Unknown system: " + systemName);
