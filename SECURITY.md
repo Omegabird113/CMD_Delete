@@ -1,4 +1,5 @@
 # Security Report Rules
+
 - If you do not provide enough information, they will be closed.
 - Only one topic per issue/report.
 - Check that your issue/report has not already been reported.
