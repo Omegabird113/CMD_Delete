@@ -67,3 +67,8 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+tasks.shadowJar {
+    zip64 = true
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
