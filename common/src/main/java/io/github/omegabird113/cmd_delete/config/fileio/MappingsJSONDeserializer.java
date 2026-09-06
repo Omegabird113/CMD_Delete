@@ -118,7 +118,7 @@ public final class MappingsJSONDeserializer {
 
                 final int keyCode;
                 try {
-                    keyCode = requireKeyCode(binding, "key", strictMode);
+                    keyCode = requireKeyCode(binding, "key", fv, strictMode);
                 } catch (JsonParseException e) {
                     logWarn(
                             "Invalid key binding due to error: " + e.getMessage(),
