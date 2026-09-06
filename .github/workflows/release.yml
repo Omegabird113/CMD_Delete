@@ -290,7 +290,7 @@ jobs:
           changelog-file: changelog.md
           java: 25
           game-versions: |
-            >=1.21.9 <1.21.11
+            >=1.20.5 <1.21.6
           loaders: neoforge
           environment: client
           fail-mode: skip
