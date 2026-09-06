@@ -46,10 +46,10 @@ import java.util.Objects;
 @Mixin(value = AbstractSignEditScreen.class, priority = 2000)
 public abstract class SignEditScreenMixin {
 	@Unique
-	private static final Logger cmd_delete$LOGGER = LoggingManager.getLoggerFor(SignEditScreenMixin.class);
+	private static final Logger LOGGER = LoggingManager.getLoggerFor(SignEditScreenMixin.class);
 
 	static {
-		LoggingManager.debugLog(cmd_delete$LOGGER, "SignEditScreenMixin loaded");
+		LoggingManager.debugLog(LOGGER, "SignEditScreenMixin loaded");
 	}
 
 	@Shadow
@@ -225,7 +225,7 @@ public abstract class SignEditScreenMixin {
 			final int x2 = this.cmd_delete$getTextAtX(message, end);
 			final int y = workingLine * textLineHeight - yOffset;
 
-			guiGraphics.textHighlight(Math.min(x1, x2), y, Math.max(x1, x2), y + textLineHeight, true);
+			guiGraphics.textHighlight(Math.min(x1, x2), y, Math.max(x1, x2), y + textLineHeight);
 		}
 	}
 
