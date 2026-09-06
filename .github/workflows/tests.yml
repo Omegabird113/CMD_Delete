@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  common_test:
+  common_build:
     runs-on: ubuntu-latest
     permissions:
       contents: read
