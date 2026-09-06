@@ -25,7 +25,6 @@ import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.MultilineTextField;
 import net.minecraft.client.gui.components.Whence;
-import net.minecraft.client.input.KeyEvent;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
@@ -41,10 +40,10 @@ import java.util.List;
 @Mixin(value = MultilineTextField.class, priority = 2000)
 public abstract class MultilineTextFieldMixin {
 	@Unique
-	private static final Logger cmd_delete$LOGGER = LoggingManager.getLoggerFor(MultilineTextFieldMixin.class);
+	private static final Logger LOGGER = LoggingManager.getLoggerFor(MultilineTextFieldMixin.class);
 
 	static {
-		LoggingManager.debugLog(cmd_delete$LOGGER, "MultilineTextFieldMixin loaded");
+		LoggingManager.debugLog(LOGGER, "MultilineTextFieldMixin loaded");
 	}
 
 	@Shadow
@@ -79,8 +78,8 @@ public abstract class MultilineTextFieldMixin {
 	public abstract String getSelectedText();
 
 	@Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
-	private void cmd_delete$overrideMultilineNavigation(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
-		final NavAction action = CrashUtils.crashMinecraftOnFailure(() -> NavMappingsManager.getCurrentMappings().getAction(event, Minecraft.getInstance().getWindow()));
+	private void cmd_delete$overrideMultilineNavigation(int keyCode, CallbackInfoReturnable<Boolean> cir) {
+		final NavAction action = CrashUtils.crashMinecraftOnFailure(() -> NavMappingsManager.getCurrentMappings().getAction(keyCode, Minecraft.getInstance().getWindow()));
 		int direction = action != null ? action.offset().value() : NavActionOffset.INVALID.value();
 
 		switch (action) {
@@ -179,7 +178,7 @@ public abstract class MultilineTextFieldMixin {
 				this.selectCursor = 0;
 			}
 			case NONE -> {
-				if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation()) || CmdDeleteClient.FORCE_PREVENT_OVERRIDE_MODE || event.isEscape() || event.key() == GLFW.GLFW_KEY_ENTER || event.key() == GLFW.GLFW_KEY_KP_ENTER)
+				if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation()) || CmdDeleteClient.FORCE_PREVENT_OVERRIDE_MODE || keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER)
 					return;
 			}
 			case null -> {
@@ -192,7 +191,9 @@ public abstract class MultilineTextFieldMixin {
 
 	@Unique
 	private void cmd_delete$moveToLineEdge(int direction) {
-		this.seekCursor(Whence.ABSOLUTE, direction < 0 ? this.cmd_delete$getLineStart() : this.cmd_delete$getLineEnd());
+		this.seekCursor(Whence.ABSOLUTE, direction < 0
+				? this.cmd_delete$getLineStart()
+				: this.cmd_delete$getLineEnd());
 	}
 
 	@Unique
@@ -214,7 +215,10 @@ public abstract class MultilineTextFieldMixin {
 			if (this.cursor >= accessor.cmd_delete$getBeginIndex() && this.cursor <= accessor.cmd_delete$getEndIndex())
 				return accessor;
 		}
-		return this.displayLines.isEmpty() ? null : (MultilineTextFieldStringViewAccessor) this.displayLines.getLast();
+
+		return this.displayLines.isEmpty()
+				? null
+				: (MultilineTextFieldStringViewAccessor) this.displayLines.getLast();
 	}
 
 	@Unique

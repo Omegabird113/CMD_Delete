@@ -26,9 +26,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.font.TextFieldHelper;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractSignEditScreen;
-import net.minecraft.client.input.CharacterEvent;
-import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
@@ -79,17 +79,23 @@ public abstract class SignEditScreenMixin {
 	private int cmd_delete$selectionEndPos;
 
 	@Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
-	private void cmd_delete$overrideSignEditNavigation(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
-		final NavAction action = CrashUtils.crashMinecraftOnFailure(() -> NavMappingsManager.getCurrentMappings().getAction(event, Minecraft.getInstance().getWindow()));
-		final boolean shift = event.hasShiftDown();
+	private void cmd_delete$overrideSignEditNavigation(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+		NavAction action = CrashUtils.crashMinecraftOnFailure(() -> NavMappingsManager.getCurrentMappings().getAction(keyCode, Minecraft.getInstance().getWindow()));
+
+		boolean shift = Screen.hasShiftDown();
+
+		boolean left = keyCode == GLFW.GLFW_KEY_LEFT;
+		boolean right = keyCode == GLFW.GLFW_KEY_RIGHT;
+		boolean up = keyCode == GLFW.GLFW_KEY_UP;
+		boolean down = keyCode == GLFW.GLFW_KEY_DOWN;
 
 		// Reset selection if player moves w/o shift
-		if (!shift && (event.isUp() || event.isDown() || event.isLeft() || event.isRight() || Objects.requireNonNull(action).isMove()))
+		if (!shift && (up || down || left || right || Objects.requireNonNull(action).isMove())) {
 			this.cmd_delete$clearMultilineSelection();
+		}
 
-		if (action == NavAction.NONE && !shift && (event.isLeft() || event.isRight())) {
-			// If line changed, we handled it, else continue
-			final int sideDirection = event.isLeft() ? NavActionOffset.LEFT.value() : NavActionOffset.RIGHT.value();
+		if (action == NavAction.NONE && !shift && (left || right)) {
+			final int sideDirection = left ? NavActionOffset.LEFT.value() : NavActionOffset.RIGHT.value();
 			if (this.cmd_delete$tryMoveToNextLineByCharacter(sideDirection)) {
 				cir.setReturnValue(true);
 				return;
@@ -150,7 +156,7 @@ public abstract class SignEditScreenMixin {
 			case OVR_PASTE -> this.signField.paste();
 			case OVR_SELECT_ALL -> this.signField.selectAll();
 			case NONE -> {
-				if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation()) || CmdDeleteClient.FORCE_PREVENT_OVERRIDE_MODE || event.isEscape() || event.key() == GLFW.GLFW_KEY_ENTER || event.key() == GLFW.GLFW_KEY_KP_ENTER)
+				if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation()) || CmdDeleteClient.FORCE_PREVENT_OVERRIDE_MODE || keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER)
 					return;
 			}
 			case null -> {
@@ -200,7 +206,7 @@ public abstract class SignEditScreenMixin {
 
 	// Resets local selection after typing because typing changes it
 	@Inject(method = "charTyped", at = @At("HEAD"))
-	private void cmd_delete$onCharTyped(CharacterEvent event, CallbackInfoReturnable<Boolean> cir) {
+	private void cmd_delete$onCharTyped(char c, int modifiers, CallbackInfoReturnable<Boolean> cir) {
 		this.cmd_delete$selectionStartLine = -1;
 		this.cmd_delete$selectionEndLine = -1;
 	}
@@ -225,7 +231,7 @@ public abstract class SignEditScreenMixin {
 			final int x2 = this.cmd_delete$getTextAtX(message, end);
 			final int y = workingLine * textLineHeight - yOffset;
 
-			guiGraphics.textHighlight(Math.min(x1, x2), y, Math.max(x1, x2), y + textLineHeight);
+			guiGraphics.fill(RenderType.guiTextHighlight(), Math.min(x1, x2), y, Math.max(x1, x2), y + textLineHeight, -16776961);
 		}
 	}
 

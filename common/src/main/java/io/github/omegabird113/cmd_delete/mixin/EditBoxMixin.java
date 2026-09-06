@@ -24,7 +24,6 @@ import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
@@ -38,10 +37,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = EditBox.class, priority = 2000)
 public abstract class EditBoxMixin extends AbstractWidget {
 	@Unique
-	private static final Logger cmd_delete$LOGGER = LoggingManager.getLoggerFor(EditBoxMixin.class);
+	private static final Logger LOGGER = LoggingManager.getLoggerFor(EditBoxMixin.class);
 
 	static {
-		LoggingManager.debugLog(cmd_delete$LOGGER, "EditBoxMixin loaded");
+		LoggingManager.debugLog(LOGGER, "EditBoxMixin loaded");
 	}
 
 	public EditBoxMixin(int x, int y, int width, int height, Component message) {
@@ -49,7 +48,7 @@ public abstract class EditBoxMixin extends AbstractWidget {
 	}
 
 	@Shadow
-	protected abstract void deleteText(int dir, boolean wholeWord);
+	public abstract void deleteWords(int i);
 
 	@Shadow
 	public abstract void deleteCharsToPos(int pos);
@@ -79,17 +78,19 @@ public abstract class EditBoxMixin extends AbstractWidget {
 	public abstract void insertText(String input);
 
 	@Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
-	private void cmd_delete$overrideDelete(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
+	private void cmd_delete$overrideDelete(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
 		if (!this.isFocused() || !this.isActive()) // If field isn't focused/active, don't even try to find an action for it
 			return;
 
-		final NavAction action = CrashUtils.crashMinecraftOnFailure(() -> NavMappingsManager.getCurrentMappings().getAction(event, Minecraft.getInstance().getWindow()));
-
+		final NavAction action = CrashUtils.crashMinecraftOnFailure(() -> NavMappingsManager.getCurrentMappings()
+				.getAction(keyCode, Minecraft.getInstance().getWindow()));
+		if (action == null)
+			return;
+		int direction = action.offset().value();
 		switch (action) {
 			case DEL_LINE_LEFT -> this.deleteCharsToPos(0);
 			case DEL_LINE_RIGHT -> this.deleteCharsToPos(this.getValue().length());
-			case DEL_WORD_LEFT -> this.deleteText(-1, true);
-			case DEL_WORD_RIGHT -> this.deleteText(1, true);
+			case DEL_WORD_LEFT, DEL_WORD_RIGHT -> this.deleteWords(direction);
 			case NAV_LINE_LEFT, NAV_TEXT_START -> this.moveCursorTo(0, false);
 			case NAV_LINE_RIGHT, NAV_TEXT_END -> this.moveCursorTo(this.getValue().length(), false);
 			case SEL_LINE_LEFT, SEL_TEXT_START -> this.moveCursorTo(0, true);
@@ -128,11 +129,8 @@ public abstract class EditBoxMixin extends AbstractWidget {
 				return;
 			}
 			case NONE -> {
-				if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation()) || CmdDeleteClient.FORCE_PREVENT_OVERRIDE_MODE || event.isEscape() || event.key() == GLFW.GLFW_KEY_ENTER || event.key() == GLFW.GLFW_KEY_KP_ENTER)
+				if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation()) || CmdDeleteClient.FORCE_PREVENT_OVERRIDE_MODE || keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER)
 					return;
-			}
-			case null -> {
-				return;
 			}
 		}
 
