@@ -1,0 +1,61 @@
+name: Deploy Documentation
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths:
+      - 'docs/**'
+      - 'zensical.toml'
+      - '.github/workflows/docs_deployment.yml'
+
+concurrency:
+  group: docs-deployment
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Configure Pages
+        uses: actions/configure-pages@v6
+
+      - name: Checkout Repo
+        uses: actions/checkout@v7
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: 3.x
+
+      - name: Cache Pip Zensical Dependency
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-zensical
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install/Upgrade Zensical
+        run: pip install --upgrade zensical
+
+      - name: Build Docs
+        run: zensical build --clean
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: site
+
+      - name: Deploy to Pages
+        uses: actions/deploy-pages@v5
+        id: deployment

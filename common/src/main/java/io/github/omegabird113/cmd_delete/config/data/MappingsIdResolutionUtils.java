@@ -1,0 +1,55 @@
+/*
+ * Copyright (c) 2026 Omegabird113.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package io.github.omegabird113.cmd_delete.config.data;
+
+import io.github.omegabird113.cmd_delete.mappings.MappingsState;
+import io.github.omegabird113.cmd_delete.mappings.MappingsType;
+import org.jetbrains.annotations.Contract;
+import org.jspecify.annotations.NonNull;
+
+public final class MappingsIdResolutionUtils {
+	private MappingsIdResolutionUtils() {
+	}
+
+	@Contract(pure = true)
+	public static @NonNull String resolveNamespacedId(final @NonNull MappingsType mappingsType, final @NonNull String id) {
+		return mappingsType.prefix() + id;
+	}
+
+	@Contract(pure = true)
+	public static @NonNull String resolveNamespacedId(final @NonNull MappingsState mappingState) {
+		return resolveNamespacedId(mappingState.type(), mappingState.id());
+	}
+
+	@Contract(pure = true)
+	public static MappingsType resolveType(final @NonNull String namespacedId) {
+		if (namespacedId.startsWith(MappingsType.CUSTOM.prefix()))
+			return MappingsType.CUSTOM;
+		if (namespacedId.startsWith(MappingsType.BUILTIN.prefix()))
+			return MappingsType.BUILTIN;
+		return MappingsType.DEFAULT;
+	}
+
+	@Contract(pure = true)
+	public static @NonNull String removeNamespaceFromId(final @NonNull String namespacedId) {
+		if (namespacedId.startsWith(MappingsType.CUSTOM.prefix()))
+			return namespacedId.substring(MappingsType.CUSTOM.prefix().length());
+		if (namespacedId.startsWith(MappingsType.BUILTIN.prefix()))
+			return namespacedId.substring(MappingsType.BUILTIN.prefix().length());
+		return namespacedId;
+	}
+}
