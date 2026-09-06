@@ -8,11 +8,18 @@
 .classpath
 .project
 
+# Multiplatform setup ignores
+neoforge/runs/
+common/logs/
+**/run/**
+**/out/
+run/**
+!**/run/options.txt
+
 # IntelliJ IDEA
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/**/usage.statistics.xml
-.idea/**/dictionaries
 .idea/**/shelf*.iws
 .idea/**/aws.xml.idea/**/contentModel.xml.idea/**/dataSources/
 .idea/**/dataSources.ids
@@ -21,19 +28,22 @@
 .idea/**/dynamic.xml
 .idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
+.idea/copilotDiffState.xml
 *.iml
 *.ipr
 .idea/modules/*
-.idea/runConfigurations/*
+
+# Git
+*.patch
+
+# Zensical
+.venv/
+site/
 
 # Gradle build system ignores
 .gradle/
 build/
 out/**
-
-# Minecraft client/server files. Include options.txt to make it easier to have my settings when cloning.
-run/**
-!run/options.txt
 
 # ---- MacOS system files ----
 .DS_STORE
