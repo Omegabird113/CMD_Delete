@@ -120,7 +120,7 @@ public final class JsonParsingUtils {
         }
     }
 
-    public static int requireKeyCode(final @NonNull JsonObject parent, final @NonNull String fieldName, final boolean strictMode) throws JsonParseException {
+    public static int requireKeyCode(final @NonNull JsonObject parent, final @NonNull String fieldName, final int fv, final boolean strictMode) throws JsonParseException {
         final Map<String, Integer> keyMap = KeyNameRegistry.getKeyMap();
 
         if (!parent.has(fieldName))
@@ -134,10 +134,13 @@ public final class JsonParsingUtils {
 
         if (element.getAsJsonPrimitive().isString()) {
             if (keyString.equals("f25"))
-                MappingsJSONDeserializer.logWarn(
-                        "The deprecated friendly keyname \"f25\" was used. This keyname will not exist in fv5",
-                        strictMode
-                );
+				if (fv < 5)
+					MappingsJSONDeserializer.logWarn(
+							"The deprecated friendly keyname \"f25\" was used. This keyname will not exist in fv5",
+							strictMode
+					);
+				else
+					throw new JsonParseException("The deprecated friendly keyname \"f25\" was used. This keyname is explicitly not supported in fv5 and beyond.");
             final Integer keyCode = keyMap.get(keyString);
             if (keyCode == null)
                 throw new JsonParseException("Unknown key \"" + keyString + "\".");

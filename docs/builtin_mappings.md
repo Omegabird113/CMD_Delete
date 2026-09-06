@@ -8,127 +8,276 @@ JSON:
 
 ```json
 {
-  "fv": 4,
-  "strict": true,
-  "meta": {
-    "name": "Emacs (Mac)",
-    "author": "$$cmd_delete$$",
-    "description": "Pre-bundled Emacs-style mappings for macOS. Note that these may not perfectly mirror Emacs's behavior.",
-    "version": "$$cmd_delete$$",
-    "id": "emacs_mac",
-    "systems": [
-      "mac"
-    ]
-  },
-  "actions": {
-    "NAV_LINE_LEFT": [
-      {"key": "a", "control": true, "shift": false}
-    ],
-    "NAV_LINE_RIGHT": [
-      {"key": "e", "control": true, "shift": false}
-    ],
-    "NAV_WORD_LEFT": [
-      {"key": "b", "altOption": true, "shift": false}
-    ],
-    "NAV_WORD_RIGHT": [
-      {"key": "f", "altOption": true, "shift": false}
-    ],
-    "SEL_LINE_LEFT": [
-      {"key": "a", "control": true, "shift": true}
-    ],
-    "SEL_LINE_RIGHT": [
-      {"key": "e", "control": true, "shift": true}
-    ],
-    "SEL_WORD_LEFT": [
-      {"key": "b", "altOption": true, "shift": true}
-    ],
-    "SEL_WORD_RIGHT": [
-      {"key": "f", "altOption": true, "shift": true}
-    ],
-    "DEL_LINE_LEFT": [
-      {"key": "u", "control": true}
-    ],
-    "DEL_LINE_RIGHT": [
-      {"key": "k", "control": true}
-    ],
-    "DEL_WORD_LEFT": [
-      {"key": "backspace", "altOption": true}
-    ],
-    "DEL_WORD_RIGHT": [
-      {"key": "d", "altOption": true}
-    ],
-    "NAV_TEXT_START": [
-      {"key": "comma", "altOption": true, "shift": false}
-    ],
-    "NAV_TEXT_END": [
-      {"key": "period", "altOption": true, "shift": false}
-    ],
-    "SEL_TEXT_START": [
-      {"key": "comma", "altOption": true, "shift": true}
-    ],
-    "SEL_TEXT_END": [
-      {"key": "period", "altOption": true, "shift": true}
-    ],
-    "SEL_TEXT_UP": [
-      {"key": "p", "control": true, "shift": true}
-    ],
-    "SEL_TEXT_DOWN": [
-      {"key": "n", "control": true, "shift": true}
-    ],
-    "OVR_NAV_CHAR_LEFT": [
-      {"key": "b", "control": true, "shift": false, "altOption": false},
-      {"key": "left", "shift": false}
-    ],
-    "OVR_NAV_CHAR_RIGHT": [
-      {"key": "f", "control": true, "shift": false, "altOption": false},
-      {"key": "right", "shift": false}
-    ],
-    "OVR_SEL_CHAR_LEFT": [
-      {"key": "b", "control": true, "shift": true, "altOption": false},
-      {"key": "left", "shift": true}
-    ],
-    "OVR_SEL_CHAR_RIGHT": [
-      {"key": "f", "control": true, "shift": true, "altOption": false},
-      {"key": "right", "shift": true}
-    ],
-    "OVR_DEL_CHAR_LEFT": [
-      {"key": "h", "control": true, "altOption": false},
-      {"key": "backspace", "altOption": false, "shift": false}
-    ],
-    "OVR_DEL_CHAR_RIGHT": [
-      {"key": "d", "control": true, "altOption": false},
-      {"key": "delete"}
-    ],
-    "OVR_NAV_TEXT_UP": [
-      {"key": "p", "control": true, "shift": false, "altOption": false},
-      {"key": "up", "shift": false}
-    ],
-    "OVR_NAV_TEXT_DOWN": [
-      {"key": "n", "control": true, "shift": false, "altOption": false},
-      {"key": "down", "shift": false}
-    ],
-    "OVR_COPY": [
-      {"key": "w", "altOption": true, "control": false}
-    ],
-    "OVR_CUT": [
-      {"key": "w", "control": true, "altOption": false}
-    ],
-    "OVR_PASTE": [
-      {"key": "y", "control": true, "altOption": false}
-    ],
-    "OVR_SELECT_ALL": [
-      {"key": "a", "superCommand": true, "altOption": false, "control": false}
-    ]
-  },
-  "flags": {
-    "overrideVanillaNavigation": true,
-    "crossLineSignMovement": true
-  }
+	"fv": 5,
+	"strict": true,
+	"meta": {
+		"name": "Emacs (Mac)",
+		"author": "$$cmd_delete$$",
+		"description": "Pre-bundled Emacs-style mappings for macOS. Note that these may not perfectly mirror Emacs's behavior.",
+		"version": "$$cmd_delete$$",
+		"license": "Apache-2.0 OR CC-BY-4.0",
+		"credits": "The original program(s) and any contributors to CMD + Delete.",
+		"id": "emacs_mac",
+		"systems": [
+			"mac"
+		]
+	},
+	"actions": {
+		"NAV_LINE_LEFT": [
+			{
+				"key": "a",
+				"control": true,
+				"shift": false
+			}
+		],
+		"NAV_LINE_RIGHT": [
+			{
+				"key": "e",
+				"control": true,
+				"shift": false
+			}
+		],
+		"NAV_WORD_LEFT": [
+			{
+				"key": "b",
+				"altOption": true,
+				"shift": false
+			}
+		],
+		"NAV_WORD_RIGHT": [
+			{
+				"key": "f",
+				"altOption": true,
+				"shift": false
+			}
+		],
+		"SEL_LINE_LEFT": [
+			{
+				"key": "a",
+				"control": true,
+				"shift": true
+			}
+		],
+		"SEL_LINE_RIGHT": [
+			{
+				"key": "e",
+				"control": true,
+				"shift": true
+			}
+		],
+		"SEL_WORD_LEFT": [
+			{
+				"key": "b",
+				"altOption": true,
+				"shift": true
+			}
+		],
+		"SEL_WORD_RIGHT": [
+			{
+				"key": "f",
+				"altOption": true,
+				"shift": true
+			}
+		],
+		"DEL_LINE_LEFT": [
+			{
+				"key": "u",
+				"control": true
+			}
+		],
+		"DEL_LINE_RIGHT": [
+			{
+				"key": "k",
+				"control": true
+			}
+		],
+		"DEL_WORD_LEFT": [
+			{
+				"key": "backspace",
+				"altOption": true
+			}
+		],
+		"DEL_WORD_RIGHT": [
+			{
+				"key": "d",
+				"altOption": true
+			}
+		],
+		"NAV_TEXT_START": [
+			{
+				"key": "comma",
+				"altOption": true,
+				"shift": false
+			}
+		],
+		"NAV_TEXT_END": [
+			{
+				"key": "period",
+				"altOption": true,
+				"shift": false
+			}
+		],
+		"SEL_TEXT_START": [
+			{
+				"key": "comma",
+				"altOption": true,
+				"shift": true
+			}
+		],
+		"SEL_TEXT_END": [
+			{
+				"key": "period",
+				"altOption": true,
+				"shift": true
+			}
+		],
+		"SEL_TEXT_UP": [
+			{
+				"key": "p",
+				"control": true,
+				"shift": true
+			}
+		],
+		"SEL_TEXT_DOWN": [
+			{
+				"key": "n",
+				"control": true,
+				"shift": true
+			}
+		],
+		"OVR_NAV_CHAR_LEFT": [
+			{
+				"key": "b",
+				"control": true,
+				"shift": false,
+				"altOption": false
+			},
+			{
+				"key": "left",
+				"shift": false
+			}
+		],
+		"OVR_NAV_CHAR_RIGHT": [
+			{
+				"key": "f",
+				"control": true,
+				"shift": false,
+				"altOption": false
+			},
+			{
+				"key": "right",
+				"shift": false
+			}
+		],
+		"OVR_SEL_CHAR_LEFT": [
+			{
+				"key": "b",
+				"control": true,
+				"shift": true,
+				"altOption": false
+			},
+			{
+				"key": "left",
+				"shift": true
+			}
+		],
+		"OVR_SEL_CHAR_RIGHT": [
+			{
+				"key": "f",
+				"control": true,
+				"shift": true,
+				"altOption": false
+			},
+			{
+				"key": "right",
+				"shift": true
+			}
+		],
+		"OVR_DEL_CHAR_LEFT": [
+			{
+				"key": "h",
+				"control": true,
+				"altOption": false
+			},
+			{
+				"key": "backspace",
+				"altOption": false,
+				"shift": false
+			}
+		],
+		"OVR_DEL_CHAR_RIGHT": [
+			{
+				"key": "d",
+				"control": true,
+				"altOption": false
+			},
+			{
+				"key": "delete"
+			}
+		],
+		"OVR_NAV_TEXT_UP": [
+			{
+				"key": "p",
+				"control": true,
+				"shift": false,
+				"altOption": false
+			},
+			{
+				"key": "up",
+				"shift": false
+			}
+		],
+		"OVR_NAV_TEXT_DOWN": [
+			{
+				"key": "n",
+				"control": true,
+				"shift": false,
+				"altOption": false
+			},
+			{
+				"key": "down",
+				"shift": false
+			}
+		],
+		"OVR_COPY": [
+			{
+				"key": "w",
+				"altOption": true,
+				"control": false
+			}
+		],
+		"OVR_CUT": [
+			{
+				"key": "w",
+				"control": true,
+				"altOption": false
+			}
+		],
+		"OVR_PASTE": [
+			{
+				"key": "y",
+				"control": true,
+				"altOption": false
+			}
+		],
+		"OVR_SELECT_ALL": [
+			{
+				"key": "a",
+				"superCommand": true,
+				"altOption": false,
+				"control": false
+			}
+		]
+	},
+	"flags": {
+		"overrideVanillaNavigation": true,
+		"crossLineSignMovement": true
+	}
 }
 ```
 
 Sharecode:
-`CDS:EV1:LN3V2q115TUzfYUHNaCpyKJN6rHnYuTPyx2mbCCJfPUksuYpSjLjA4Az5ptnWxyVF4WaW1NY9KXZi9S5H1PorDCBqkYR3mX4bEcQNQBBzpkio5BZ8Yw5wcYhwztrhgpcZBJ98P42pJdUY4ujtX6zcF4XxAkh4ijc2Lz5KGfZEuvFqs3XSpLct7cLQVDy7LhLoXG5iGPFFueQAwGFhtFhvTAsTApRNfbhQBbjXuZCULDjiFTDJ7fvBUbAhqbevvXvMRYft8otffAz55s3yo8Ng5XuXEv8n9s6iQSyRFaDGb51MHVSRJLZpW5Rstb4ysYpVK3wB34RYq3HC1UR7triu1defKhtCCnNNSmhfmg8uqTY1jzYQsPmk6whJqGesDVncvvFsmuvQa1WEPKHKX898AaF4jptaHSTQWjSyP9ap3oEbcN1JWVF2Pp5ji9kHviqrSkR6pb4Yfuvv5wzzFDWkdcKnTGBnAqvK8iPNoje5s79nCsPLPrpYvAYF7VpzgXWzWuqA1pZeL5ZYnCHPr1wVUegSDLsQvB2AdhqKwpN8NWFd876aRB3P23bv1XjoMwA3tnukRGt8Gq8TfwGyp6Lb7KETCKbi4oVyq6zJfnhpqp9DoUSFh8BFNP9Uxtu62Ku4Q7nwbfRvNTMm4rp4fRqjzqLy99gikm9p96mSozeya3KrktjpLQVz5vXZHTo1HQgggRPsJFBC7TnC417LeWbjpsUmhcKCYkHxHJK48HpL4piDNkDy3G358y6cv3x36sQE3UpvPWrv4JJiZDinzhpAa7AtwKLtVHh4X9PGvSAd6tegKZozRg5G28PFFEFKZwC8gbyJwCXh:1101312380`
+`CDS:EV1:dSApxGKqukryZwu5CMwGyx7BRptTVwMUe9ohqM9UFoaA27QkF59B7m4hDpdjra97r5NDTqxkVtSMP23TrY6a7fgotB9qDm2JiTUioYaScq3e3nFxGHo9NC4HRtrZbeKqa9MGyjAvhgjCZH7TM6CC3R4h3EAuXx6uWZifWaXmjvmaBs8MTprCxDVhnAFhooEyECDLvqJRu62x5czYb9Rmi1Eu7fc2BcBniuUXP2CEuXsKXobYveowtRZEgwj8d5h3YJvFCPvpK2zUrapB7yVmzEY5v72USM769bdawRbbAbcuDPQBVUYNV1mjX7yzCnifPNLjE7rwGc4SvRuypjr4EAFYRUu42sS1hZCYqFkkEMDjZaZjMfSj5xEWV2kEKa7Wrw59GhTJPxUbHL84Z3geJrXqVFGzYE3eojhKJxRPUt1sDjuffLTkDPyMJVMz6ffHsxidkCueJsLoKpz9MWJeHFsQMKdfdcGkEzTP3n8s1Hk4FCo5NuY3ELC4tw5YKVs8pm9sMyu9qsaMDvoEa8Bwojbum5exeE2vQWJtfAqHWehtWNgZkLURtytC4CyuzTaWbZy938LupQf4upnQRTdyVncP2EtHJ6YWRkgcQPbM5MUUAJDVKwoQoupzzsjkxEQPJgUj6HcNXUUrLHcST4unaT4EFfReqxcimdzKQ3x6krHsJJRKDs8mAZSCB3tfBJgAz3zdZxn3s3y3rYansYudkVbch5axYLRZG8kiuJPGkVJ38SLTXc5mP3uVDgZR7Aph7XPzHTYWCbovWzTo1aZ9xnh97iAL9t6mB5xvNg1siKyvtEjF2GraKMXVd1Tuq2bWXCbDZyvpey68yTj3ALVJDKLDHn18PzEyp4oNLXPprAG3u7nbKydVeeV7tAt11nZr1fwEhPzzkDen8hp9bZxKHj8E6kjtaM9mGvqwz5DyURJEHxE93u:459580176`
 
 ## builtin:emacs_windows_linux
 
@@ -136,125 +285,268 @@ JSON:
 
 ```json
 {
-  "fv": 4,
-  "strict": true,
-  "meta": {
-    "name": "Emacs (Windows/Linux)",
-    "author": "$$cmd_delete$$",
-    "description": "Pre-bundled Emacs-style mappings for Windows and Linux. Note that these may not perfectly mirror Emacs's behavior.",
-    "version": "$$cmd_delete$$",
-    "id": "emacs_windows_linux",
-    "systems": [
-      "windows",
-      "linux"
-    ]
-  },
-  "actions": {
-    "NAV_LINE_LEFT": [
-      {"key": "a", "control": true, "shift": false}
-    ],
-    "NAV_LINE_RIGHT": [
-      {"key": "e", "control": true, "shift": false}
-    ],
-    "NAV_WORD_LEFT": [
-      {"key": "b", "altOption": true, "shift": false}
-    ],
-    "NAV_WORD_RIGHT": [
-      {"key": "f", "altOption": true, "shift": false}
-    ],
-    "SEL_LINE_LEFT": [
-      {"key": "a", "control": true, "shift": true}
-    ],
-    "SEL_LINE_RIGHT": [
-      {"key": "e", "control": true, "shift": true}
-    ],
-    "SEL_WORD_LEFT": [
-      {"key": "b", "altOption": true, "shift": true}
-    ],
-    "SEL_WORD_RIGHT": [
-      {"key": "f", "altOption": true, "shift": true}
-    ],
-    "DEL_LINE_LEFT": [
-      {"key": "u", "control": true}
-    ],
-    "DEL_LINE_RIGHT": [
-      {"key": "k", "control": true}
-    ],
-    "DEL_WORD_LEFT": [
-      {"key": "backspace", "altOption": true}
-    ],
-    "DEL_WORD_RIGHT": [
-      {"key": "d", "altOption": true}
-    ],
-    "NAV_TEXT_START": [
-      {"key": "comma", "altOption": true, "shift": false}
-    ],
-    "NAV_TEXT_END": [
-      {"key": "period", "altOption": true, "shift": false}
-    ],
-    "SEL_TEXT_START": [
-      {"key": "comma", "altOption": true, "shift": true}
-    ],
-    "SEL_TEXT_END": [
-      {"key": "period", "altOption": true, "shift": true}
-    ],
-    "SEL_TEXT_UP": [
-      {"key": "p", "control": true, "shift": true}
-    ],
-    "SEL_TEXT_DOWN": [
-      {"key": "n", "control": true, "shift": true}
-    ],
-    "OVR_NAV_CHAR_LEFT": [
-      {"key": "b", "control": true, "shift": false, "altOption": false},
-      {"key": "left", "shift": false}
-    ],
-    "OVR_NAV_CHAR_RIGHT": [
-      {"key": "f", "control": true, "shift": false, "altOption": false},
-      {"key": "right", "shift": false}
-    ],
-    "OVR_SEL_CHAR_LEFT": [
-      {"key": "b", "control": true, "shift": true, "altOption": false},
-      {"key": "left", "shift": true}
-    ],
-    "OVR_SEL_CHAR_RIGHT": [
-      {"key": "f", "control": true, "shift": true, "altOption": false},
-      {"key": "right", "shift": true}
-    ],
-    "OVR_DEL_CHAR_LEFT": [
-      {"key": "h", "control": true, "altOption": false},
-      {"key": "backspace", "altOption": false}
-    ],
-    "OVR_DEL_CHAR_RIGHT": [
-      {"key": "d", "control": true, "altOption": false},
-      {"key": "delete"}
-    ],
-    "OVR_NAV_TEXT_UP": [
-      {"key": "p", "control": true, "shift": false, "altOption": false},
-      {"key": "up", "shift": false}
-    ],
-    "OVR_NAV_TEXT_DOWN": [
-      {"key": "n", "control": true, "shift": false, "altOption": false},
-      {"key": "down", "shift": false}
-    ],
-    "OVR_COPY": [
-      {"key": "w", "altOption": true, "control": false}
-    ],
-    "OVR_CUT": [
-      {"key": "w", "control": true, "altOption": false}
-    ],
-    "OVR_PASTE": [
-      {"key": "y", "control": true, "altOption": false}
-    ]
-  },
-  "flags": {
-    "overrideVanillaNavigation": true,
-    "crossLineSignMovement": true
-  }
+	"fv": 5,
+	"strict": true,
+	"meta": {
+		"name": "Emacs (Windows/Linux)",
+		"author": "$$cmd_delete$$",
+		"description": "Pre-bundled Emacs-style mappings for Windows and Linux. Note that these may not perfectly mirror Emacs's behavior.",
+		"version": "$$cmd_delete$$",
+		"license": "Apache-2.0 OR CC-BY-4.0",
+		"credits": "The original program(s) and any contributors to CMD + Delete.",
+		"id": "emacs_windows_linux",
+		"systems": [
+			"windows",
+			"linux"
+		]
+	},
+	"actions": {
+		"NAV_LINE_LEFT": [
+			{
+				"key": "a",
+				"control": true,
+				"shift": false
+			}
+		],
+		"NAV_LINE_RIGHT": [
+			{
+				"key": "e",
+				"control": true,
+				"shift": false
+			}
+		],
+		"NAV_WORD_LEFT": [
+			{
+				"key": "b",
+				"altOption": true,
+				"shift": false
+			}
+		],
+		"NAV_WORD_RIGHT": [
+			{
+				"key": "f",
+				"altOption": true,
+				"shift": false
+			}
+		],
+		"SEL_LINE_LEFT": [
+			{
+				"key": "a",
+				"control": true,
+				"shift": true
+			}
+		],
+		"SEL_LINE_RIGHT": [
+			{
+				"key": "e",
+				"control": true,
+				"shift": true
+			}
+		],
+		"SEL_WORD_LEFT": [
+			{
+				"key": "b",
+				"altOption": true,
+				"shift": true
+			}
+		],
+		"SEL_WORD_RIGHT": [
+			{
+				"key": "f",
+				"altOption": true,
+				"shift": true
+			}
+		],
+		"DEL_LINE_LEFT": [
+			{
+				"key": "u",
+				"control": true
+			}
+		],
+		"DEL_LINE_RIGHT": [
+			{
+				"key": "k",
+				"control": true
+			}
+		],
+		"DEL_WORD_LEFT": [
+			{
+				"key": "backspace",
+				"altOption": true
+			}
+		],
+		"DEL_WORD_RIGHT": [
+			{
+				"key": "d",
+				"altOption": true
+			}
+		],
+		"NAV_TEXT_START": [
+			{
+				"key": "comma",
+				"altOption": true,
+				"shift": false
+			}
+		],
+		"NAV_TEXT_END": [
+			{
+				"key": "period",
+				"altOption": true,
+				"shift": false
+			}
+		],
+		"SEL_TEXT_START": [
+			{
+				"key": "comma",
+				"altOption": true,
+				"shift": true
+			}
+		],
+		"SEL_TEXT_END": [
+			{
+				"key": "period",
+				"altOption": true,
+				"shift": true
+			}
+		],
+		"SEL_TEXT_UP": [
+			{
+				"key": "p",
+				"control": true,
+				"shift": true
+			}
+		],
+		"SEL_TEXT_DOWN": [
+			{
+				"key": "n",
+				"control": true,
+				"shift": true
+			}
+		],
+		"OVR_NAV_CHAR_LEFT": [
+			{
+				"key": "b",
+				"control": true,
+				"shift": false,
+				"altOption": false
+			},
+			{
+				"key": "left",
+				"shift": false
+			}
+		],
+		"OVR_NAV_CHAR_RIGHT": [
+			{
+				"key": "f",
+				"control": true,
+				"shift": false,
+				"altOption": false
+			},
+			{
+				"key": "right",
+				"shift": false
+			}
+		],
+		"OVR_SEL_CHAR_LEFT": [
+			{
+				"key": "b",
+				"control": true,
+				"shift": true,
+				"altOption": false
+			},
+			{
+				"key": "left",
+				"shift": true
+			}
+		],
+		"OVR_SEL_CHAR_RIGHT": [
+			{
+				"key": "f",
+				"control": true,
+				"shift": true,
+				"altOption": false
+			},
+			{
+				"key": "right",
+				"shift": true
+			}
+		],
+		"OVR_DEL_CHAR_LEFT": [
+			{
+				"key": "h",
+				"control": true,
+				"altOption": false
+			},
+			{
+				"key": "backspace",
+				"altOption": false
+			}
+		],
+		"OVR_DEL_CHAR_RIGHT": [
+			{
+				"key": "d",
+				"control": true,
+				"altOption": false
+			},
+			{
+				"key": "delete"
+			}
+		],
+		"OVR_NAV_TEXT_UP": [
+			{
+				"key": "p",
+				"control": true,
+				"shift": false,
+				"altOption": false
+			},
+			{
+				"key": "up",
+				"shift": false
+			}
+		],
+		"OVR_NAV_TEXT_DOWN": [
+			{
+				"key": "n",
+				"control": true,
+				"shift": false,
+				"altOption": false
+			},
+			{
+				"key": "down",
+				"shift": false
+			}
+		],
+		"OVR_COPY": [
+			{
+				"key": "w",
+				"altOption": true,
+				"control": false
+			}
+		],
+		"OVR_CUT": [
+			{
+				"key": "w",
+				"control": true,
+				"altOption": false
+			}
+		],
+		"OVR_PASTE": [
+			{
+				"key": "y",
+				"control": true,
+				"altOption": false
+			}
+		]
+	},
+	"flags": {
+		"overrideVanillaNavigation": true,
+		"crossLineSignMovement": true
+	}
 }
 ```
 
 Sharecode:
-`CDS:EV1:3xdA1aMDAHdBoEw5G7VV2rSyLgnbpEz169GhAAtzRLv5i6ivHM2mseCHRv3UqeMVKoxSzfGS5azSpvexcjMxMMTuH4k7eidNbNaKAycRupCinTJ5WxUDnhyZSQjhv69vjL9jiDDc27DBCsUnUNsWYcdGJpJjBLnSej46yM9mscZN1jh14qNCijr4y7C8yTSchjJ1xAMch2BpwMrf6BNkBW2ZRvBvHNSH79cEhKEdE3FWNJvMDWvqQGrSGgpDJfaSFYGR22Gcf61zccSpUdWmkhoX3aWxTGUvkh4NWjKxeetRveViYE8euQowogZAjwT9P8eVtgy6nPBgzEUj7k7kHdSH9gqyzWDGV7xSE3X4uHyDdYRWFMJuXsuDQh9ksVuX8ieEL7jK1jRFu7xhESb4cDA8Yp1ftMgVEfrAtTjAjeoy8Ax9toQX1YLuHsWJbootiXT8TTonHamEH15LP7EgAFf65DrWT9W7Zv8V7okcsbZ3kFhMaGF1u7kzNqs2eq86jNhbMdenEcJpaZGfXTiUfeFgEX55jdjKaUmudXkqBdQC3SQ9BbMsLyvtfDve6jaLGVuatRyQnEoQMvaf5sRBKbQoKKM6tXszPEoGEBcL7eV7fcVjYxYLGGQrinZzjTHz7nUfLegzCMtQ2mHLmKtNH5PoE7SEuPU5rupVT94Ao45mWeQLV4Vux6hFh3Xqas75E6HLW9Ba6N26pK2ZBChfcFxcQX61TJrRLYEL2bYCqDdQTgB2A5TwtDN47D4cothdQ7dDQ4q91X2tFUZPSKCSS96YK4RsUvtMkCHMQq2h4VNTofKYPGVTyYg1skow2PA1LkQf:878752458`
+`CDS:EV1:HaS3XFfzNdU3NxCHF2zNXghSjQi4gsttApEocCcAjh41oLZyvKHH3spykzo941vdt6mhEqJZXQqyvmerp5KXihKAFwKUbLcUCgEPfXmm26mGLuuT1TAZpP1BBF2xNzHc3eqxPZVRmCrsc1VwveWgqqznciKTnKD59oW7S1T6NiFeuP6VR7ZqGCqSkufAQjExULQH9WNxE5ny29vNwjFcACwtzoJnDm9PigXC7vov5sU9fRkWXZ98D5i7aJ5mACVAPe3zji4jZoB1pUsDUPF9WB65Bab7jCoCxgvyYYUg6tQzdeQThESrPW4qar4QB2LiE7X4DAcyAd1SscFok3YuD3riMTCKGaPM4ePamBML4ueDFoTMh9nqx97XFX7wNbW9Q1VXzgKparg8ALKK2LGf5b2ukmPutS5oCZGK5wxatAGWL3TVk1uBHedhwVcoeb5ush1cdQGJhhGvDVMQChFj7G9YHv3xg9YR53qqcQNcckutZ6P4XCYUYWuzKUGUQFaxnnRy693TDLN37W8smyg6oUcFwXGs2d5MZaHgen7NGVr2LPCPAcYzA5LWqSCKedqiY8uGCiWb1a2ZUZh7hzHeVCRyBdemQ7TBeR7zHLKP6mZAXV3TnWRJ64pa2UnGbhyprYQz6ASV8TisVVhaAkkdcdYcqQNFAf3JwwuVnqi7GwXiuXT4iApLQ5HqiMyS2cMWWc189AQGgqNDz8twcDsU6gJTVxJtuuah4nNGTFMpMkv1X9BpXpEm2AJLiar5qbzJmAtgZ1UguRrSfa4tXPSeEfHi2Ge4FQoZLmRGpsKexXM1biKTEQJkpwyEKSS5RoFP3uB3zZirVPcdQmxsZYtZmukU6ifb9rJyPZZNQs6fRxvuLXKkYnXpRqJsDYF6HEwGtj7Ptcp5TRzo4QxLnWWd7oQJPmhKXLn3LwV1UWhkcP:2162629053`
 
 ## builtin:mac
 
@@ -262,119 +554,259 @@ JSON:
 
 ```json
 {
-  "fv": 4,
-  "strict": true,
-  "meta": {
-    "name": "Mac mappings",
-    "author": "$$cmd_delete$$",
-    "description": "Pre-bundled mappings for macOS.",
-    "version": "$$cmd_delete$$",
-    "id": "mac",
-    "systems": [
-      "mac"
-    ]
-  },
-  "actions": {
-    "NAV_TEXT_START": [
-      {"key": "up", "superCommand": true, "altOption": false, "shift": false}
-    ],
-    "SEL_TEXT_START": [
-      {"key": "up", "superCommand": true, "altOption": false, "shift": true}
-    ],
-    "NAV_TEXT_END": [
-      {"key": "down", "superCommand": true, "altOption": false, "shift": false}
-    ],
-    "SEL_TEXT_END": [
-      {"key": "down", "superCommand": true, "altOption": false, "shift": true}
-    ],
-    "NAV_LINE_LEFT": [
-      {"key": "left", "superCommand": true, "altOption": false, "shift": false}
-    ],
-    "SEL_LINE_LEFT": [
-      {"key": "left", "superCommand": true, "altOption": false, "shift": true}
-    ],
-    "NAV_LINE_RIGHT": [
-      {"key": "right", "superCommand": true, "altOption": false, "shift": false}
-    ],
-    "SEL_LINE_RIGHT": [
-      {"key": "right", "superCommand": true, "altOption": false, "shift": true}
-    ],
-    "NAV_WORD_LEFT": [
-      {"key": "left", "superCommand": false, "altOption": true, "shift": false}
-    ],
-    "SEL_WORD_LEFT": [
-      {"key": "left", "superCommand": false, "altOption": true, "shift": true}
-    ],
-    "NAV_WORD_RIGHT": [
-      {"key": "right", "superCommand": false, "altOption": true, "shift": false}
-    ],
-    "SEL_WORD_RIGHT": [
-      {"key": "right", "superCommand": false, "altOption": true, "shift": true}
-    ],
-    "DEL_LINE_LEFT": [
-      {"key": "backspace", "superCommand": true, "altOption": false}
-    ],
-    "DEL_LINE_RIGHT": [
-      {"key": "delete", "superCommand": true, "altOption": false}
-    ],
-    "DEL_WORD_LEFT": [
-      {"key": "backspace", "superCommand": false, "altOption": true}
-    ],
-    "DEL_WORD_RIGHT": [
-      {"key": "delete", "superCommand": false, "altOption": true}
-    ],
-    "SEL_TEXT_UP": [
-      {"key": "up", "superCommand": false, "altOption": false, "shift": true}
-    ],
-    "SEL_TEXT_DOWN": [
-      {"key": "down", "superCommand": false, "altOption": false, "shift": true}
-    ],
-    "OVR_NAV_CHAR_LEFT": [
-      {"key": "left", "superCommand": false, "altOption": false, "shift": false}
-    ],
-    "OVR_NAV_CHAR_RIGHT": [
-      {"key": "right", "superCommand": false, "altOption": false, "shift": false}
-    ],
-    "OVR_SEL_CHAR_LEFT": [
-      {"key": "left", "superCommand": false, "altOption": false, "shift": true}
-    ],
-    "OVR_SEL_CHAR_RIGHT": [
-      {"key": "right", "superCommand": false, "altOption": false, "shift": true}
-    ],
-    "OVR_DEL_CHAR_LEFT": [
-      {"key": "backspace", "superCommand": false, "altOption": false, "shift": false}
-    ],
-    "OVR_DEL_CHAR_RIGHT": [
-      {"key": "delete", "superCommand": false, "altOption": false, "shift": false}
-    ],
-    "OVR_NAV_TEXT_UP": [
-      {"key": "up", "superCommand": false, "altOption": false, "shift": false}
-    ],
-    "OVR_NAV_TEXT_DOWN": [
-      {"key": "down", "superCommand": false, "altOption": false, "shift": false}
-    ],
-    "OVR_COPY": [
-      {"key": "c", "superCommand": true}
-    ],
-    "OVR_CUT": [
-      {"key": "x", "superCommand": true}
-    ],
-    "OVR_PASTE": [
-      {"key": "v", "superCommand": true}
-    ],
-    "OVR_SELECT_ALL": [
-      {"key": "a", "superCommand": true}
-    ]
-  },
-  "flags": {
-    "overrideVanillaNavigation": true,
-    "crossLineSignMovement": true
-  }
+	"fv": 5,
+	"strict": true,
+	"meta": {
+		"name": "Mac mappings",
+		"author": "$$cmd_delete$$",
+		"description": "Pre-bundled mappings for macOS.",
+		"version": "$$cmd_delete$$",
+		"license": "Apache-2.0 OR CC-BY-4.0",
+		"credits": "Any contributors to CMD + Delete.",
+		"id": "mac",
+		"systems": [
+			"mac"
+		]
+	},
+	"actions": {
+		"NAV_TEXT_START": [
+			{
+				"key": "up",
+				"superCommand": true,
+				"altOption": false,
+				"shift": false
+			}
+		],
+		"SEL_TEXT_START": [
+			{
+				"key": "up",
+				"superCommand": true,
+				"altOption": false,
+				"shift": true
+			}
+		],
+		"NAV_TEXT_END": [
+			{
+				"key": "down",
+				"superCommand": true,
+				"altOption": false,
+				"shift": false
+			}
+		],
+		"SEL_TEXT_END": [
+			{
+				"key": "down",
+				"superCommand": true,
+				"altOption": false,
+				"shift": true
+			}
+		],
+		"NAV_LINE_LEFT": [
+			{
+				"key": "left",
+				"superCommand": true,
+				"altOption": false,
+				"shift": false
+			}
+		],
+		"SEL_LINE_LEFT": [
+			{
+				"key": "left",
+				"superCommand": true,
+				"altOption": false,
+				"shift": true
+			}
+		],
+		"NAV_LINE_RIGHT": [
+			{
+				"key": "right",
+				"superCommand": true,
+				"altOption": false,
+				"shift": false
+			}
+		],
+		"SEL_LINE_RIGHT": [
+			{
+				"key": "right",
+				"superCommand": true,
+				"altOption": false,
+				"shift": true
+			}
+		],
+		"NAV_WORD_LEFT": [
+			{
+				"key": "left",
+				"superCommand": false,
+				"altOption": true,
+				"shift": false
+			}
+		],
+		"SEL_WORD_LEFT": [
+			{
+				"key": "left",
+				"superCommand": false,
+				"altOption": true,
+				"shift": true
+			}
+		],
+		"NAV_WORD_RIGHT": [
+			{
+				"key": "right",
+				"superCommand": false,
+				"altOption": true,
+				"shift": false
+			}
+		],
+		"SEL_WORD_RIGHT": [
+			{
+				"key": "right",
+				"superCommand": false,
+				"altOption": true,
+				"shift": true
+			}
+		],
+		"DEL_LINE_LEFT": [
+			{
+				"key": "backspace",
+				"superCommand": true,
+				"altOption": false
+			}
+		],
+		"DEL_LINE_RIGHT": [
+			{
+				"key": "delete",
+				"superCommand": true,
+				"altOption": false
+			}
+		],
+		"DEL_WORD_LEFT": [
+			{
+				"key": "backspace",
+				"superCommand": false,
+				"altOption": true
+			}
+		],
+		"DEL_WORD_RIGHT": [
+			{
+				"key": "delete",
+				"superCommand": false,
+				"altOption": true
+			}
+		],
+		"SEL_TEXT_UP": [
+			{
+				"key": "up",
+				"superCommand": false,
+				"altOption": false,
+				"shift": true
+			}
+		],
+		"SEL_TEXT_DOWN": [
+			{
+				"key": "down",
+				"superCommand": false,
+				"altOption": false,
+				"shift": true
+			}
+		],
+		"OVR_NAV_CHAR_LEFT": [
+			{
+				"key": "left",
+				"superCommand": false,
+				"altOption": false,
+				"shift": false
+			}
+		],
+		"OVR_NAV_CHAR_RIGHT": [
+			{
+				"key": "right",
+				"superCommand": false,
+				"altOption": false,
+				"shift": false
+			}
+		],
+		"OVR_SEL_CHAR_LEFT": [
+			{
+				"key": "left",
+				"superCommand": false,
+				"altOption": false,
+				"shift": true
+			}
+		],
+		"OVR_SEL_CHAR_RIGHT": [
+			{
+				"key": "right",
+				"superCommand": false,
+				"altOption": false,
+				"shift": true
+			}
+		],
+		"OVR_DEL_CHAR_LEFT": [
+			{
+				"key": "backspace",
+				"superCommand": false,
+				"altOption": false,
+				"shift": false
+			}
+		],
+		"OVR_DEL_CHAR_RIGHT": [
+			{
+				"key": "delete",
+				"superCommand": false,
+				"altOption": false,
+				"shift": false
+			}
+		],
+		"OVR_NAV_TEXT_UP": [
+			{
+				"key": "up",
+				"superCommand": false,
+				"altOption": false,
+				"shift": false
+			}
+		],
+		"OVR_NAV_TEXT_DOWN": [
+			{
+				"key": "down",
+				"superCommand": false,
+				"altOption": false,
+				"shift": false
+			}
+		],
+		"OVR_COPY": [
+			{
+				"key": "c",
+				"superCommand": true
+			}
+		],
+		"OVR_CUT": [
+			{
+				"key": "x",
+				"superCommand": true
+			}
+		],
+		"OVR_PASTE": [
+			{
+				"key": "v",
+				"superCommand": true
+			}
+		],
+		"OVR_SELECT_ALL": [
+			{
+				"key": "a",
+				"superCommand": true
+			}
+		]
+	},
+	"flags": {
+		"overrideVanillaNavigation": true,
+		"crossLineSignMovement": true
+	}
 }
 ```
 
 Sharecode:
-`CDS:EV1:tMeXxZVB45VieA3HvggAeo3p5zjrCbj7crBL5PbmPwdWGpgx8nz6vXnqxX48Cgc5BHZX63EYegfSTth3sTL16tud1DU6KFQKQNLmEtrhaoojTDiqtcm88t2ePt3yKWY4NnfPEUBhPqMgmoFCZwkfgVMpmKr6L2QYWmtruBniZRgBG5hxpA95W2E3pn5dv9SnDhpQenXnr2cWvyENAGmNpTzpUyktLDQoEZGJZE8CKK84G8jXsTf81f1Kxojv88pF66AeMYEqMCYCki7jafgTDi4YspYGxLvqrd9eZPGUPy1JvV588pD6MFT13sYK2m5yiJk5qGwqMg17DSbXjEUzU3dLN322AqPDP4Xvm3n1nztxo2fuCeGPpmD7poJDbHCws7RNKtVcgnpas8EhxHDUBqZPwyDWjbUwqxNfmqSvKQwYQbU3jTt527Z89g1Li4QPBto4bNFc9Fr7jWYQVdu8k7PxahZEFjPes5YrufVoNtU1ZC8VuMreMQNeBUz9MH5qN3oDbdYu7L5Jupr6XBrpKMoVzGGS4ygdcBMfG7ZZF6ruzNjTGDjHvrNDGDuJXpXfnccn9ami1xM4SipedBHugVM56FyR26MsRcddBMwmnSr4LTrGT6hofbsGuapfVJZUNfgab6WvHDAgHMXFQD9reFnfuMQ3KNtzMFzPJXSyVLfbFYDjPxv94yB5:2419707130`
+`CDS:EV1:44JKjTG574eHakymgxNGJJeCrU7qET3qcqCUJQhj7UMzBzAoyc9tDXLLstz2FQyZXVLcPPN9KaYkNp3NQCX4yhyRRrLsgYEQFzakWDyGXoGm1RUFkwA53a8Zro4mZUptGYHgZYCewY1Fu9dMJR23woVRJRDRJbVSL8pwzoLm6NaavFcvN3MFPSjCVktNoU9bZJusvvAJZyS9R9PW7HTRvePD2XBcodT6hJT5wWhZ4fCUe6omugZ7XH6q4tzqZaEp4kwLboA9owdDAqaAHKsL3tSnNNHkFx2KN6w8Lw5WHzseuZLR4m5cKeABMsEtbgjQWFFbR1yiCjVq3mRgw3yNMkeKbzsgwgzrTvPZY4xSNrcuTSyYsy91AjgaXydsihEzsMMfHfH8BXyxdht681vMb9GMgq8e2L8az1rnGyGxboLacKoM96TTWamdUDKZnS4dpWNHEYArjAwqfddzGG5VCU8B4WYx6wQgHXjF4hcWV75Xi2wHppwgZh2tjgDQb1RyEnT6itwv3H8R4SQeCz22ZEaYc7so3nDUZfDnpHScSUAqk5Gd6mrRo4JgibzNqn32xZiXEHZ9QjnBPpXDqbLo6kP93Zc6yC8tG7ahFCHYGyPjrryh2nxVH2ZvY93v1WCtzVhdk6nH5TedtUwfRRy3tjqXQKWXZea7cyuUZPE8dWpRVLy9TqQvMmNLisr7Q9gpkkz64QeqSXrryjh5ptc5sXnzboTgTUbeDhRwCp9r3Azyjs95V5GwYZucYJ29m7CHs1wNAdZEWZWP:3421744520`
 
 ## builtin:readline
 
@@ -382,109 +814,231 @@ JSON:
 
 ```json
 {
-  "fv": 4,
-  "strict": true,
-  "meta": {
-    "name": "GNU Readline",
-    "author": "$$cmd_delete$$",
-    "description": "Pre-bundled GNU Readline-style mappings. Note that these may not perfectly mirror Readline's behavior.",
-    "version": "$$cmd_delete$$",
-    "id": "readline",
-    "systems": [
-      "mac",
-      "windows",
-      "linux"
-    ]
-  },
-  "actions": {
-    "NAV_LINE_LEFT": [
-      {"key": "a", "control": true, "shift": false}
-    ],
-    "NAV_LINE_RIGHT": [
-      {"key": "e", "control": true, "shift": false}
-    ],
-    "SEL_LINE_LEFT": [
-      {"key": "a", "control": true, "shift": true}
-    ],
-    "SEL_LINE_RIGHT": [
-      {"key": "e", "control": true, "shift": true}
-    ],
-    "NAV_WORD_LEFT": [
-      {"key": "b", "altOption": true, "shift": false}
-    ],
-    "NAV_WORD_RIGHT": [
-      {"key": "f", "altOption": true, "shift": false}
-    ],
-    "SEL_WORD_LEFT": [
-      {"key": "b", "altOption": true, "shift": true}
-    ],
-    "SEL_WORD_RIGHT": [
-      {"key": "f", "altOption": true, "shift": true}
-    ],
-    "DEL_LINE_LEFT": [
-      {"key": "u", "control": true}
-    ],
-    "DEL_LINE_RIGHT": [
-      {"key": "k", "control": true}
-    ],
-    "DEL_WORD_LEFT": [
-      {"key": "w", "control": true},
-      {"key": "backspace", "altOption": true}
-    ],
-    "DEL_WORD_RIGHT": [
-      {"key": "d", "altOption": true}
-    ],
-    "SEL_TEXT_UP": [
-      {"key": "p", "control": true, "shift": true}
-    ],
-    "SEL_TEXT_DOWN": [
-      {"key": "n", "control": true, "shift": true}
-    ],
-    "OVR_NAV_CHAR_LEFT": [
-      {"key": "b", "control": true, "shift": false, "altOption": false},
-      {"key": "left", "shift": false}
-    ],
-    "OVR_NAV_CHAR_RIGHT": [
-      {"key": "f", "control": true, "shift": false, "altOption": false},
-      {"key": "right", "shift": false}
-    ],
-    "OVR_SEL_CHAR_LEFT": [
-      {"key": "b", "control": true, "shift": true, "altOption": false},
-      {"key": "left", "shift": true}
-    ],
-    "OVR_SEL_CHAR_RIGHT": [
-      {"key": "f", "control": true, "shift": true, "altOption": false},
-      {"key": "right", "shift": true}
-    ],
-    "OVR_DEL_CHAR_LEFT": [
-      {"key": "h", "control": true, "altOption": false},
-      {"key": "backspace", "altOption": false}
-    ],
-    "OVR_DEL_CHAR_RIGHT": [
-      {"key": "d", "control": true, "altOption": false},
-      {"key": "delete"}
-    ],
-    "OVR_NAV_TEXT_UP": [
-      {"key": "p", "control": true, "shift": false, "altOption": false},
-      {"key": "up", "shift": false}
-    ],
-    "OVR_NAV_TEXT_DOWN": [
-      {"key": "n", "control": true, "shift": false, "altOption": false},
-      {"key": "down", "shift": false}
-    ],
-    "OVR_PASTE": [
-      {"key": "y", "control": true, "altOption": false}
-    ]
-  },
-  "flags": {
-    "overrideVanillaNavigation": true,
-    "crossLineSignMovement": true
-  }
+	"fv": 5,
+	"strict": true,
+	"meta": {
+		"name": "GNU Readline",
+		"author": "$$cmd_delete$$",
+		"description": "Pre-bundled GNU Readline-style mappings. Note that these may not perfectly mirror Readline's behavior.",
+		"version": "$$cmd_delete$$",
+		"license": "Apache-2.0 OR CC-BY-4.0",
+		"credits": "The original program(s) and any contributors to CMD + Delete.",
+		"id": "readline",
+		"systems": [
+			"mac",
+			"windows",
+			"linux"
+		]
+	},
+	"actions": {
+		"NAV_LINE_LEFT": [
+			{
+				"key": "a",
+				"control": true,
+				"shift": false
+			}
+		],
+		"NAV_LINE_RIGHT": [
+			{
+				"key": "e",
+				"control": true,
+				"shift": false
+			}
+		],
+		"SEL_LINE_LEFT": [
+			{
+				"key": "a",
+				"control": true,
+				"shift": true
+			}
+		],
+		"SEL_LINE_RIGHT": [
+			{
+				"key": "e",
+				"control": true,
+				"shift": true
+			}
+		],
+		"NAV_WORD_LEFT": [
+			{
+				"key": "b",
+				"altOption": true,
+				"shift": false
+			}
+		],
+		"NAV_WORD_RIGHT": [
+			{
+				"key": "f",
+				"altOption": true,
+				"shift": false
+			}
+		],
+		"SEL_WORD_LEFT": [
+			{
+				"key": "b",
+				"altOption": true,
+				"shift": true
+			}
+		],
+		"SEL_WORD_RIGHT": [
+			{
+				"key": "f",
+				"altOption": true,
+				"shift": true
+			}
+		],
+		"DEL_LINE_LEFT": [
+			{
+				"key": "u",
+				"control": true
+			}
+		],
+		"DEL_LINE_RIGHT": [
+			{
+				"key": "k",
+				"control": true
+			}
+		],
+		"DEL_WORD_LEFT": [
+			{
+				"key": "w",
+				"control": true
+			},
+			{
+				"key": "backspace",
+				"altOption": true
+			}
+		],
+		"DEL_WORD_RIGHT": [
+			{
+				"key": "d",
+				"altOption": true
+			}
+		],
+		"SEL_TEXT_UP": [
+			{
+				"key": "p",
+				"control": true,
+				"shift": true
+			}
+		],
+		"SEL_TEXT_DOWN": [
+			{
+				"key": "n",
+				"control": true,
+				"shift": true
+			}
+		],
+		"OVR_NAV_CHAR_LEFT": [
+			{
+				"key": "b",
+				"control": true,
+				"shift": false,
+				"altOption": false
+			},
+			{
+				"key": "left",
+				"shift": false
+			}
+		],
+		"OVR_NAV_CHAR_RIGHT": [
+			{
+				"key": "f",
+				"control": true,
+				"shift": false,
+				"altOption": false
+			},
+			{
+				"key": "right",
+				"shift": false
+			}
+		],
+		"OVR_SEL_CHAR_LEFT": [
+			{
+				"key": "b",
+				"control": true,
+				"shift": true,
+				"altOption": false
+			},
+			{
+				"key": "left",
+				"shift": true
+			}
+		],
+		"OVR_SEL_CHAR_RIGHT": [
+			{
+				"key": "f",
+				"control": true,
+				"shift": true,
+				"altOption": false
+			},
+			{
+				"key": "right",
+				"shift": true
+			}
+		],
+		"OVR_DEL_CHAR_LEFT": [
+			{
+				"key": "h",
+				"control": true,
+				"altOption": false
+			},
+			{
+				"key": "backspace",
+				"altOption": false
+			}
+		],
+		"OVR_DEL_CHAR_RIGHT": [
+			{
+				"key": "d",
+				"control": true,
+				"altOption": false
+			},
+			{
+				"key": "delete"
+			}
+		],
+		"OVR_NAV_TEXT_UP": [
+			{
+				"key": "p",
+				"control": true,
+				"shift": false,
+				"altOption": false
+			},
+			{
+				"key": "up",
+				"shift": false
+			}
+		],
+		"OVR_NAV_TEXT_DOWN": [
+			{
+				"key": "n",
+				"control": true,
+				"shift": false,
+				"altOption": false
+			},
+			{
+				"key": "down",
+				"shift": false
+			}
+		],
+		"OVR_PASTE": [
+			{
+				"key": "y",
+				"control": true,
+				"altOption": false
+			}
+		]
+	},
+	"flags": {
+		"overrideVanillaNavigation": true,
+		"crossLineSignMovement": true
+	}
 }
 ```
 
 Sharecode:
-`CDS:EV1:3Z15yMrwbyh3XwikdeDtaZqPW7xLFBxq9hLMky5CzDRNFF6XMYy5eN9zHvXRpwDQKLxkc436VgFDcRtsCKR95EsTAjjEZtBqLz6QkcTUU1CfwdfM9yiDktpXHxEe3Mr439ZndY6fu3QYCxVQfwHoJqoAcUB82gM1ZgQxjMbaMryePx2A3N2pTdh9KtqKqBKSikKt5sgJMvpqGj9FkedsUSbgsVF8iYvJUvuuGQkmeJLLCYqgmEqyAw9ofyygGX7cEPCCDgsHCnJRMFd6zAs6VDfEoyJRjDVZRTxAGngtGupAmtGJn6eucXnqNgoNgTL8nrgS4iTLtFcgv5JPt9F8CCk1155JGHFHxDE8o33dWV1MPdYNCRkefesWbwnHDPypufADgw5Hw9LMPo7TqvK7MXPhcP23e2kQmwsgfZ2qU42n93bWHfdFWCywGGeoW6cZN1KwXpWMQQ2mFd8RuKWaSJNhrLU9feBdHppWq6Jey5XDz1QcGnARCsbEMDz3ZhoJL8thes67p48PKPdzR9fQaBKiwLLzgSQfMnUqF1WvFr9ft4NuF1PLzYfBybxGXPWBxxdhYzxG2Cmg4kjhW2xnr55NUATCoed6mxgdLHPHMzW2AwirMwM6TMsTeA9Pf6VdL2PmN1pN2QEakz5ZgMW8phFyeL6ZZtug8ywfGxKjPfsVKTQswXRj3fRUKy7aQwoBtWL51wovjk5Mej21shwHuMe8UJ9c1UsiZMJD2YBQNwWHTM:3994342116`
+`CDS:EV1:266VBbBeNmAyPms1rPTbJUpCQRE4Lwb5HK61vgpSEYsoSgmPYNM2NS8ua1QrL43bfFVz2i5JQxSQUvKQg6dYNMxJz5njM1BVafjjf6t89kfjkgS3AwTGqeiRUA3VTtyBmULkCw65ceRY8qe7hGsXALitnTCq2img6Q76As59gTGafrUaUXjQor1ZcFh7sPK3PSbCb484B4ceJsdCyGBpRX5itAefuUJBTzhYsMntTm4Ma3Cb6BtD7MeDJGH11SFgCK5VT3jWnqGj3V4D4xD1GoAeAWuWeieWqL4mioCtLdSkMf1jgcRpBFtRKxL4CQ5CxxTAx2wE8CBvdQ2mHa5c6837aDyZTBKLasrXXM3pGwnXvXHM7EW29aCHpcf8i4S4vk6AZUZhcD2KJ3i7ixb44qjFkVM5wgr4avmm3EE3ASr8K5C8cP2bQBD8psxRocCM38Gqj99Pxud9XWoMmsLgZh2SvUXXRVMAmzwqB3iwPT4vhB72sEcrVbkYpTdPzvRrn8ikGdQVZP6uSMZa8R6qmPPTRqgzkaYVBMNxRzCsv4gn7yYytTaKa6HgHcrPRNRffdomWARzMJsqLTLQrehmEZ6ktqn9hWt2Cv7HaPdAfyXhaSYCWQdGES9qjHnxeGyBSKZ63u1vX4qKUHUdv7ebFNz9opGbBzXLAMCgKNtKoDgAHhFPRRT4e6sktkAQo26BviSLTfb6qX2cThVqmEYddFij3s7XQKmiGPktnLMmpbgpiAjVZMDpKkELRZeHTvii6onwRecJAdDAFzDW9q6JaBzwHPN37p5wBAJuJaEE3jPbppyVsoJsVgJBLxdHBt6rtrdE6SLRrTPScyzRGZHKK5:1703275242`
 
 ## builtin:windows_linux
 
@@ -492,113 +1046,215 @@ JSON:
 
 ```json
 {
-  "fv": 4,
-  "strict": true,
-  "meta": {
-    "name": "Windows/Linux mappings",
-    "author": "$$cmd_delete$$",
-    "description": "Pre-bundled mappings for Windows and Linux.",
-    "version": "$$cmd_delete$$",
-    "id": "windows_linux",
-    "systems": [
-      "windows",
-      "linux"
-    ]
-  },
-  "actions": {
-    "NAV_TEXT_START": [
-      {"key": "home", "control": true, "shift": false}
-    ],
-    "SEL_TEXT_START": [
-      {"key": "home", "control": true, "shift": true}
-    ],
-    "NAV_TEXT_END": [
-      {"key": "end", "control": true, "shift": false}
-    ],
-    "SEL_TEXT_END": [
-      {"key": "end", "control": true, "shift": true}
-    ],
-    "NAV_LINE_LEFT": [
-      {"key": "home", "control": false, "shift": false}
-    ],
-    "SEL_LINE_LEFT": [
-      {"key": "home", "control": false, "shift": true}
-    ],
-    "NAV_LINE_RIGHT": [
-      {"key": "end", "control": false, "shift": false}
-    ],
-    "SEL_LINE_RIGHT": [
-      {"key": "end", "control": false, "shift": true}
-    ],
-    "NAV_WORD_LEFT": [
-      {"key": "left", "control": true, "shift": false}
-    ],
-    "SEL_WORD_LEFT": [
-      {"key": "left", "control": true, "shift": true}
-    ],
-    "NAV_WORD_RIGHT": [
-      {"key": "right", "control": true, "shift": false}
-    ],
-    "SEL_WORD_RIGHT": [
-      {"key": "right", "control": true, "shift": true}
-    ],
-    "DEL_WORD_LEFT": [
-      {"key": "backspace", "control": true}
-    ],
-    "DEL_WORD_RIGHT": [
-      {"key": "delete", "control": true}
-    ],
-    "SEL_TEXT_UP": [
-      {"key": "up", "shift": true}
-    ],
-    "SEL_TEXT_DOWN": [
-      {"key": "down", "shift": true}
-    ],
-    "OVR_NAV_CHAR_LEFT": [
-      {"key": "left", "control": false, "shift": false}
-    ],
-    "OVR_NAV_CHAR_RIGHT": [
-      {"key": "right", "control": false, "shift": false}
-    ],
-    "OVR_SEL_CHAR_LEFT": [
-      {"key": "left", "control": false, "shift": true}
-    ],
-    "OVR_SEL_CHAR_RIGHT": [
-      {"key": "right", "control": false, "shift": true}
-    ],
-    "OVR_DEL_CHAR_LEFT": [
-      {"key": "backspace", "control": false, "shift": false}
-    ],
-    "OVR_DEL_CHAR_RIGHT": [
-      {"key": "delete", "control": false, "shift": false}
-    ],
-    "OVR_NAV_TEXT_UP": [
-      {"key": "up", "control": false, "shift": false}
-    ],
-    "OVR_NAV_TEXT_DOWN": [
-      {"key": "down", "control": false, "shift": false}
-    ],
-    "OVR_COPY": [
-      {"key": "c", "control": true}
-    ],
-    "OVR_CUT": [
-      {"key": "x", "control": true}
-    ],
-    "OVR_PASTE": [
-      {"key": "v", "control": true
-      }
-    ],
-    "OVR_SELECT_ALL": [
-      {"key": "a", "control": true
-      }
-    ]
-  },
-  "flags": {
-    "overrideVanillaNavigation": true,
-    "crossLineSignMovement": true
-  }
+	"fv": 5,
+	"strict": true,
+	"meta": {
+		"name": "Windows/Linux mappings",
+		"author": "$$cmd_delete$$",
+		"description": "Pre-bundled mappings for Windows and Linux.",
+		"version": "$$cmd_delete$$",
+		"id": "windows_linux",
+		"systems": [
+			"windows",
+			"linux"
+		]
+	},
+	"actions": {
+		"NAV_TEXT_START": [
+			{
+				"key": "home",
+				"control": true,
+				"shift": false
+			}
+		],
+		"SEL_TEXT_START": [
+			{
+				"key": "home",
+				"control": true,
+				"shift": true
+			}
+		],
+		"NAV_TEXT_END": [
+			{
+				"key": "end",
+				"control": true,
+				"shift": false
+			}
+		],
+		"SEL_TEXT_END": [
+			{
+				"key": "end",
+				"control": true,
+				"shift": true
+			}
+		],
+		"NAV_LINE_LEFT": [
+			{
+				"key": "home",
+				"control": false,
+				"shift": false
+			}
+		],
+		"SEL_LINE_LEFT": [
+			{
+				"key": "home",
+				"control": false,
+				"shift": true
+			}
+		],
+		"NAV_LINE_RIGHT": [
+			{
+				"key": "end",
+				"control": false,
+				"shift": false
+			}
+		],
+		"SEL_LINE_RIGHT": [
+			{
+				"key": "end",
+				"control": false,
+				"shift": true
+			}
+		],
+		"NAV_WORD_LEFT": [
+			{
+				"key": "left",
+				"control": true,
+				"shift": false
+			}
+		],
+		"SEL_WORD_LEFT": [
+			{
+				"key": "left",
+				"control": true,
+				"shift": true
+			}
+		],
+		"NAV_WORD_RIGHT": [
+			{
+				"key": "right",
+				"control": true,
+				"shift": false
+			}
+		],
+		"SEL_WORD_RIGHT": [
+			{
+				"key": "right",
+				"control": true,
+				"shift": true
+			}
+		],
+		"DEL_WORD_LEFT": [
+			{
+				"key": "backspace",
+				"control": true
+			}
+		],
+		"DEL_WORD_RIGHT": [
+			{
+				"key": "delete",
+				"control": true
+			}
+		],
+		"SEL_TEXT_UP": [
+			{
+				"key": "up",
+				"shift": true
+			}
+		],
+		"SEL_TEXT_DOWN": [
+			{
+				"key": "down",
+				"shift": true
+			}
+		],
+		"OVR_NAV_CHAR_LEFT": [
+			{
+				"key": "left",
+				"control": false,
+				"shift": false
+			}
+		],
+		"OVR_NAV_CHAR_RIGHT": [
+			{
+				"key": "right",
+				"control": false,
+				"shift": false
+			}
+		],
+		"OVR_SEL_CHAR_LEFT": [
+			{
+				"key": "left",
+				"control": false,
+				"shift": true
+			}
+		],
+		"OVR_SEL_CHAR_RIGHT": [
+			{
+				"key": "right",
+				"control": false,
+				"shift": true
+			}
+		],
+		"OVR_DEL_CHAR_LEFT": [
+			{
+				"key": "backspace",
+				"control": false,
+				"shift": false
+			}
+		],
+		"OVR_DEL_CHAR_RIGHT": [
+			{
+				"key": "delete",
+				"control": false,
+				"shift": false
+			}
+		],
+		"OVR_NAV_TEXT_UP": [
+			{
+				"key": "up",
+				"control": false,
+				"shift": false
+			}
+		],
+		"OVR_NAV_TEXT_DOWN": [
+			{
+				"key": "down",
+				"control": false,
+				"shift": false
+			}
+		],
+		"OVR_COPY": [
+			{
+				"key": "c",
+				"control": true
+			}
+		],
+		"OVR_CUT": [
+			{
+				"key": "x",
+				"control": true
+			}
+		],
+		"OVR_PASTE": [
+			{
+				"key": "v",
+				"control": true
+			}
+		],
+		"OVR_SELECT_ALL": [
+			{
+				"key": "a",
+				"control": true
+			}
+		]
+	},
+	"flags": {
+		"overrideVanillaNavigation": true,
+		"crossLineSignMovement": true
+	}
 }
 ```
 
 Sharecode:
-`CDS:EV1:3QhD4z2TSi865KBmD8aSoLrzAijpn9bpsazX68FTEXQxDHeAWSeua77UNrDUb7CVnV8jnCKtmxymuf6VmmRMtbiQPzYiytZfpPQn2iCAByovKoZC8BDFh2HhENmVq15ayjvR9AxvyVZNsHbfAU7ewin1g7NcT7jVpPRNktvAsBMnaEJiuTiqECRfjXSwSegGdDQ2GJgneHjW42tMUWKqSBsCKtVGk12rVh7CkP4DdKj3v53Ui3uPJu7eWz8ArF2mX9dcEf9gqni6MQG72qWpQdgLcXUjvQ2szVm2VUto8sGCsvviqXJJx8YmCwZMCiNQZKUzrqiwHqyBSLGWaPDb52rD4bj5wKqNHTp2myCYGQrsAaqKNcYz4JseJEynCwX6uU6simppPFFWGGYYUcd58bfbqounGm8evmCpE4BgyHhjSHKaHStXWSvHoZpZ6BAweVy8y6EwzTKW62jDk4u2WdY1Q4NmL6LQwXeJEdtYkrJuXrEVe3J4tkxSHbBvgH9yc8mGUnZdQ5hTDjbnPc3rt4QAhsj2GxYz7QKZfN3BgatoGGyZWJquoUHXg78R1SdkzEKPSHKV3b7HkRzNLeWjVBPZjfM9XLkzWj5G62VR5MxVJcEvvoD2Dnmkh3mLpW3sDcr9UzkjGRcVPdNyx5BNNN1nwhFhMCVPDwH7w4B:3121412833`
+`CDS:EV1:HhUEP3RV3ZNF57q9CSuvXzWm4o4ro4Nc9PFxdwQ7ykXecw7LoSYCdSHVbg6zWJCUapfZze6igszYTCTa8rXZ8RwNtRmK2pQ118pLEdJzJzRLzHHbsWS3fE4akKawB3uFrxg6yMFYm7Kgmkqa9V2hGx3Hk68ZExARozSHhTysSTGBnkrrXgtJ3xQZecBAaLfhgC8Yvaz9GpAEq2Q1SxX1bHkG8PnKPX4i9vxxGpo9TU6PuSjP6zYSUqA14GQDhWqhyV3Za5MPAzUMRgqdpyjMn4mwdV3hirH1UCr4eJcZYi49VJBYrFindM8pZyeNjQKSp84TLdJmRzsju9AR9M5hvXvyEv8Vf3trkC2gCAC4HGvdQk2ZigmipFU8uQDgdXhfMp6HbzBPAUqQRU9WgWvYjoe3VhRS51mxejW7uKiCihChqyuasbovju9uDu5CoLbhPUieD5YhkMTfnV7bKMFPiex54nAXVCwFuMLzQmzkfos1Vxsnncg99Q1yt6GWBERorFsPBBNjty6ffkjGecCFLe1EZqXBGAMYEUo2gsrU7v7m3vQSRrvwPtdb4qEkWtawjwyX3WjCxkJQB6ZHVpKdmJh6TYd2xm12bz2GA66trhN7XhqqsGhCYyDZ1S5UEwHLSmx85db6W3oDo5XNrL4XwN2bHUnMjK9ATRYLHRZJhFu4Us2gcLcFYSvvvk98kakFTVvGvPdFnCScGwbT6zqsQtnSZKQSPP1FYtD7RTLryvKfvVq8hM1:443250386`

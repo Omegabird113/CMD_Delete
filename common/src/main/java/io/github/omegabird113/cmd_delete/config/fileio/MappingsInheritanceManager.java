@@ -50,6 +50,6 @@ public final class MappingsInheritanceManager {
 
         final MappingsRegistry last = toMerge.getLast();
 
-        return new MappingsRegistry(localRegistry, null, last.systems(), currentFeatureFlags, "", last.name(), last.author(), last.description(), last.version(), last.id());
+        return new MappingsRegistry(localRegistry, null, last.systems(), currentFeatureFlags, "", last.name(), last.author(), last.description(), last.version(), last.id(), last.license(), last.credits());
     }
 }

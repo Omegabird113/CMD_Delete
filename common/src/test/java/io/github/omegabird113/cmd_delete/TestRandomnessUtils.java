@@ -104,7 +104,9 @@ public class TestRandomnessUtils {
         final String author = genRandomString(RANDOM.nextInt(7, 35));
         final String inherits = genRandomString(RANDOM.nextInt(6, 15));
         final String version = "" + RANDOM.nextLong(0, Long.MAX_VALUE);
+		final String credits = genRandomString(RANDOM.nextInt(24, 100));
+		final String license = genRandomString(RANDOM.nextInt(6, 15));
 
-        return new MappingsRegistry(enabled, disabled, systems, ff, inherits, name, author, description, version, id);
+        return new MappingsRegistry(enabled, disabled, systems, ff, inherits, name, author, description, version, id, license, credits);
     }
 }

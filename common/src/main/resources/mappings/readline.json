@@ -1,11 +1,13 @@
 {
-  "fv": 4,
+  "fv": 5,
   "strict": true,
   "meta": {
     "name": "GNU Readline",
     "author": "$$cmd_delete$$",
     "description": "Pre-bundled GNU Readline-style mappings. Note that these may not perfectly mirror Readline's behavior.",
     "version": "$$cmd_delete$$",
+    "license": "Apache-2.0 OR CC-BY-4.0",
+    "credits": "The original program(s) and any contributors to CMD + Delete.",
     "id": "readline",
     "systems": [
       "mac",
