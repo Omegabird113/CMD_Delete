@@ -45,6 +45,8 @@ public final class MappingsInfoCollectionUtils {
         final String namespacedId = MappingsIdResolutionUtils.resolveNamespacedId(mappingsState);
         final String version = mappingsState.mappings().registry().version();
         final String author = mappingsState.mappings().registry().author();
+		final String credits = mappingsState.mappings().registry().credits();
+		final String license = mappingsState.mappings().registry().license();
         final String[] systemStrings = Arrays.stream(mappingsState.mappings().getMappingsSupportedSystems())
                 .map(Os::name)
                 .toArray(String[]::new);
@@ -69,7 +71,8 @@ public final class MappingsInfoCollectionUtils {
                 Component.literal(displayName),
                 Component.literal(namespacedId),
                 Component.literal(version),
-                Component.literal(author)
+                Component.literal(author),
+				Component.literal(license != null ? license : "<unknown>")
         );
 
         final Component coverageComponent = Component.translatable(
@@ -86,8 +89,9 @@ public final class MappingsInfoCollectionUtils {
         if (includeDescription) {
             final Component descriptionComponent = Component.translatable(
                     "commands.cmd_delete.mappings_info.description",
-                    description
-            );
+                    description,
+					credits != null ? credits : "<unknown>"
+			);
             result.append("\n").append(descriptionComponent);
         }
 
