@@ -1,13 +1,13 @@
-### 1.5.0 Alpha 1
-
-This is a pre-release build of the multi-platform support branch
-(PR [#28](https://github.com/Omegabird113/CMD_Delete/pull/28)) designed to test the new architecture.
+### 1.5.0 Beta 1
 
 Changes:
 
-- CMD + Delete now has a NeoForge build alongside its Fabric/Quilt one. In the future, this will also allow NF1.21.1
-  support without Sinytra Connector and potentially an entire wave of NeoForge backports.
-- Added documentation (with its own [website](https://omegabird113.github.io/CMD_Delete/)) for CMD + Delete.
-- Internal code improvements
+- Increased the Mappings format version to `5`, which:
+	- Does not break compatibility this time, **because fv 2, 3, and 4 mappings still load**.
+	- Added support for the new optional `meta.credits` and `meta.license` fields.
+	- Case/whitespace normalization is no longer applied to strings in JSONs outside strict mode.
+	- The `f25` keyname throws an exception now.
+- CMD + Delete now uses a fully complete multi-platform architecture.
+- Internal code improvements.
 
-Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.4.3+mc26.1...1.5.0-alpha.1+mc26.1
+Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.5.0-alpha.1+mc26.1...1.5.0-beta.1+mc26.1
