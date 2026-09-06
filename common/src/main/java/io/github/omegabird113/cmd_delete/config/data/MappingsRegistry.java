@@ -37,7 +37,9 @@ public record MappingsRegistry(
         @NonNull String author,
         @NonNull String description,
         @NonNull String version,
-        @NonNull String id
+        @NonNull String id,
+		@Nullable String license,
+		@Nullable String credits
 ) {
     public MappingsRegistry {
         internalRegistry = Map.copyOf(internalRegistry);
@@ -88,6 +90,8 @@ public record MappingsRegistry(
                             author="%s",
                             description="%s",
                             version="%s",
+                            license="%s",
+                            credits="%s",
                             id="%s",
                             inherits="%s",
                             hashCode=%d,
@@ -99,6 +103,8 @@ public record MappingsRegistry(
                 author,
                 description,
                 version,
+				license,
+				credits,
                 id,
                 inherits,
                 hashCode(),

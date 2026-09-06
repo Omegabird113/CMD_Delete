@@ -6,6 +6,8 @@
     "author": "$$cmd_delete$$",
     "description": "Pre-bundled mappings for Windows and Linux.",
     "version": "$$cmd_delete$$",
+    "license": "Apache-2.0 OR CC-BY-4.0",
+    "credits": "Any contributors to CMD + Delete.",
     "id": "windows_linux",
     "systems": [
       "windows",

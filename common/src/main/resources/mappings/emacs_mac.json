@@ -6,6 +6,8 @@
     "author": "$$cmd_delete$$",
     "description": "Pre-bundled Emacs-style mappings for macOS. Note that these may not perfectly mirror Emacs's behavior.",
     "version": "$$cmd_delete$$",
+    "license": "Apache-2.0 OR CC-BY-4.0",
+    "credits": "The original program(s) and any contributors to CMD + Delete.",
     "id": "emacs_mac",
     "systems": [
       "mac"

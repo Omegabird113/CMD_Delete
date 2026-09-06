@@ -30,6 +30,7 @@ import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import io.github.omegabird113.cmd_delete.utils.Os;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.*;
@@ -73,14 +74,14 @@ public final class MappingsJSONDeserializer {
         final HashMap<KeyCombo, NavAction> disabledKeys = new HashMap<>();
         parseActions(actions, localKeys, disabledKeys, fv, strictMode);
 
-        final MetadataContainer container = parseMeta(requireObject(jsonObject, "meta"), strictMode, custom);
+        final MetadataContainer container = parseMeta(requireObject(jsonObject, "meta"), fv, strictMode, custom);
 
         if (!container.id().equals(fileName))
             throw new JsonParseException(MappingsType.fromIfCustom(custom).commonName() + " mappings id \"" + container.id() + "\" does not match filename \"" + fileName + "\"");
 
         final FeatureFlags ff = parseFlags(jsonObject, fv, inherits);
 
-        return new MappingsRegistry(localKeys, (disabledKeys.isEmpty() ? null : disabledKeys), List.copyOf(container.systems()), ff, inherits, container.name(), container.author(), container.description(), container.version(), container.id());
+        return new MappingsRegistry(localKeys, (disabledKeys.isEmpty() ? null : disabledKeys), List.copyOf(container.systems()), ff, inherits, container.name(), container.author(), container.description(), container.version(), container.id(), container.license(), container.credits());
     }
 
     private static @NonNull String trimAndCaseIfNotStrict(final @NonNull String str, final boolean upper, final boolean strictMode) {
@@ -191,8 +192,8 @@ public final class MappingsJSONDeserializer {
         return replaceWith;
     }
 
-    @Contract("_, _, _ -> new")
-    private static @NonNull MetadataContainer parseMeta(final @NonNull JsonObject meta, final boolean strictMode, final boolean custom) {
+    @Contract("_, _, _, _ -> new")
+    private static @NonNull MetadataContainer parseMeta(final @NonNull JsonObject meta, final int fv, final boolean strictMode, final boolean custom) {
         final String name = getStringElse(meta, "name", "Unnamed Custom Mappings");
         final String author = replacePlaceholderWithIfBuiltin(
                 getStringElse(meta, "author", "unknown"),
@@ -203,11 +204,14 @@ public final class MappingsJSONDeserializer {
                 CmdDeleteClient.getPlatform().getModVersion(), custom);
         final String id = requireFilenameSafeString(meta, "id");
 
+		final String credits = (fv == 5) ? getStringElse(meta, "credits", "No credits provided") : null;
+		final String license = (fv == 5) ? getStringElse(meta, "license", "unknown") : null;
+
         final JsonArray systems = requireArray(meta, "systems");
         final Set<Os> parsedSystems = parseSystems(systems, strictMode);
         if (parsedSystems.isEmpty())
             throw new JsonParseException("No systems found");
-        return new MetadataContainer(name, author, version, description, id, parsedSystems);
+        return new MetadataContainer(name, author, version, description, id, parsedSystems, credits, license);
     }
 
     private static @NonNull KeyCombo @NonNull [] expandKeyWildcards(final int key,
@@ -250,7 +254,8 @@ public final class MappingsJSONDeserializer {
     }
 
     private record MetadataContainer(@NonNull String name, @NonNull String author, @NonNull String version,
-                                     @NonNull String description, @NonNull String id,
-                                     @NonNull Set<Os> systems) {
+									 @NonNull String description, @NonNull String id,
+									 @NonNull Set<Os> systems,
+									 @Nullable String credits, @Nullable String license) {
     }
 }
