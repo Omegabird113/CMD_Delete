@@ -21,7 +21,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  common_test: # runs the tests for sanity
+  common_build:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -39,8 +39,15 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      - name: Test common
-        run: ./gradlew :common:test --no-daemon
+      - name: Build common
+        run: ./gradlew :common:clean :common:build --no-daemon
+
+      - name: Upload common JAR
+        uses: actions/upload-artifact@v7
+        with:
+          name: cmd-delete-release-common
+          path: common/build/libs/*.jar
+          if-no-files-found: error
 
   build_code:
     runs-on: ubuntu-latest
@@ -51,11 +58,11 @@ jobs:
       matrix:
         include:
           - loader: fabric
-            build_task: :fabric:build
+            build_task: :fabric:clean :fabric:build
             client_task: :fabric:runCiClient
             client_args: ""
           - loader: neoforge
-            build_task: :neoforge:build
+            build_task: :neoforge:clean :neoforge:build
             client_task: :neoforge:runClient
             client_args: -Dcmd_delete.ci.stopMinecraftAfterLoad=true
 
@@ -132,7 +139,7 @@ jobs:
     needs:
       - build_code
       - build_docs
-      - common_test
+      - common_build
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -179,8 +186,8 @@ jobs:
           set -euo pipefail
 
           find_release_jar() {
-            local loader="$1"
-            local artifact_dir="release-builds/cmd-delete-release-${loader}"
+            local module="$1"
+            local artifact_dir="release-builds/cmd-delete-release-${module}"
             mapfile -t jars < <(
               find "$artifact_dir" -maxdepth 1 -type f -name "*.jar" \
                 ! -name "*-sources.jar" \
@@ -191,7 +198,7 @@ jobs:
             )
 
             if [ "${#jars[@]}" -ne 1 ]; then
-              echo "ERROR: Expected exactly one ${loader} release JAR, found ${#jars[@]}."
+              echo "ERROR: Expected exactly one ${module} release JAR, found ${#jars[@]}."
               printf ' - %s\n' "${jars[@]}"
               exit 1
             fi
@@ -199,6 +206,7 @@ jobs:
             printf '%s' "${jars[0]}"
           }
 
+          echo "common=$(find_release_jar common)" >> "$GITHUB_OUTPUT"
           echo "fabric=$(find_release_jar fabric)" >> "$GITHUB_OUTPUT"
           echo "neoforge=$(find_release_jar neoforge)" >> "$GITHUB_OUTPUT"
 
@@ -231,6 +239,7 @@ jobs:
           fi
 
           gh release create "${{ steps.props.outputs.version }}" \
+            "${{ steps.jars.outputs.common }}" \
             "${{ steps.jars.outputs.fabric }}" \
             "${{ steps.jars.outputs.neoforge }}" \
             "${{ steps.docs.outputs.docs }}" \
