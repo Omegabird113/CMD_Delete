@@ -30,63 +30,63 @@ import java.util.List;
 import java.util.Optional;
 
 public final class NavMappingsManager {
-    private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(NavMappingsManager.class);
-    private static volatile @Nullable MappingsState currentMappingsState;
+	private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(NavMappingsManager.class);
+	private static volatile @Nullable MappingsState currentMappingsState;
 
-    private NavMappingsManager() {
-    }
+	private NavMappingsManager() {
+	}
 
-    public static @NonNull MappingsState getMappingsState() {
-        final MappingsState current = currentMappingsState;
-        if (current == null)
-            throw new IllegalStateException("No current mappings state has been set, but the mappings were accessed");
-        return current;
-    }
+	public static @NonNull MappingsState getMappingsState() {
+		final MappingsState current = currentMappingsState;
+		if (current == null)
+			throw new IllegalStateException("No current mappings state has been set, but the mappings were accessed");
+		return current;
+	}
 
-    public static @NonNull Optional<MappingsState> getOptionalMappingsState() {
-        return Optional.ofNullable(currentMappingsState);
-    }
+	public static @NonNull Optional<MappingsState> getOptionalMappingsState() {
+		return Optional.ofNullable(currentMappingsState);
+	}
 
-    public static @NonNull NavMappings getCurrentMappings() {
-        return getMappingsState().mappings();
-    }
+	public static @NonNull NavMappings getCurrentMappings() {
+		return getMappingsState().mappings();
+	}
 
-    public static @NonNull MappingsRegistry getCurrentMappingsRegistry() {
-        return getMappingsState().mappings().registry();
-    }
+	public static @NonNull MappingsRegistry getCurrentMappingsRegistry() {
+		return getMappingsState().mappings().registry();
+	}
 
-    public static @NonNull FeatureFlags getCurrentFeatureFlags() {
-        return getMappingsState().mappings().registry().featureFlags();
-    }
+	public static @NonNull FeatureFlags getCurrentFeatureFlags() {
+		return getMappingsState().mappings().registry().featureFlags();
+	}
 
-    private static void logMappings() {
-        LOGGER.info("Mappings id \"{}\" loaded with supported systems \"{}\" and Coverage of {}% with a registry size of {}. It supports the actions: {}", MappingsIdResolutionUtils.resolveNamespacedId(getMappingsState()), List.of(getCurrentMappings().getMappingsSupportedSystems()), getCurrentMappings().getCoverage() * 100, getCurrentMappings().registry().getSize(), getCurrentMappings().getPossibleActions());
-        LOGGER.info("The active mappings' info in \"/navmappings info\" without description/credits will show as: \"{}\"", MappingsInfoCollectionUtils.getInfoFrom(getMappingsState(), false).replace("\n", " "));
-        LoggingManager.traceLog(LOGGER, "Mappings state loaded: \"{}\"", currentMappingsState);
-    }
+	private static void logMappings() {
+		LOGGER.info("Mappings id \"{}\" loaded with supported systems \"{}\" and Coverage of {}% with a registry size of {}. It supports the actions: {}", MappingsIdResolutionUtils.resolveNamespacedId(getMappingsState()), List.of(getCurrentMappings().getMappingsSupportedSystems()), getCurrentMappings().getCoverage() * 100, getCurrentMappings().registry().getSize(), getCurrentMappings().getPossibleActions());
+		LOGGER.info("The active mappings' info in \"/navmappings info\" without description/credits will show as: \"{}\"", MappingsInfoCollectionUtils.getInfoFrom(getMappingsState(), false).replace("\n", " "));
+		LoggingManager.traceLog(LOGGER, "Mappings state loaded: \"{}\"", currentMappingsState);
+	}
 
-    public static void loadMappings() {
-        MappingsState toLoad = ActiveMappingsManager.tryGetMappings();
-        if (toLoad == null)
-            toLoad = ActiveMappingsManager.resolveMappingsWithDefaultFallback("");
-        currentMappingsState = toLoad;
-        ActiveMappingsManager.trySaveMappings(
-                MappingsIdResolutionUtils.resolveNamespacedId(toLoad)
-        );
-        logMappings();
-    }
+	public static void loadMappings() {
+		MappingsState toLoad = ActiveMappingsManager.tryGetMappings();
+		if (toLoad == null)
+			toLoad = ActiveMappingsManager.resolveMappingsWithDefaultFallback("");
+		currentMappingsState = toLoad;
+		ActiveMappingsManager.trySaveMappings(
+				MappingsIdResolutionUtils.resolveNamespacedId(toLoad)
+		);
+		logMappings();
+	}
 
-    public static boolean updateMappingsTo(final @NonNull MappingsType type, final @NonNull String id) {
-        final MappingsState newState = ActiveMappingsManager.resolveMappings(
-                MappingsIdResolutionUtils.resolveNamespacedId(type, id)
-        );
-        if (newState == null)
-            return false;
-        currentMappingsState = newState;
-        ActiveMappingsManager.trySaveMappings(
-                MappingsIdResolutionUtils.resolveNamespacedId(newState)
-        );
-        logMappings();
-        return true;
-    }
+	public static boolean updateMappingsTo(final @NonNull MappingsType type, final @NonNull String id) {
+		final MappingsState newState = ActiveMappingsManager.resolveMappings(
+				MappingsIdResolutionUtils.resolveNamespacedId(type, id)
+		);
+		if (newState == null)
+			return false;
+		currentMappingsState = newState;
+		ActiveMappingsManager.trySaveMappings(
+				MappingsIdResolutionUtils.resolveNamespacedId(newState)
+		);
+		logMappings();
+		return true;
+	}
 }

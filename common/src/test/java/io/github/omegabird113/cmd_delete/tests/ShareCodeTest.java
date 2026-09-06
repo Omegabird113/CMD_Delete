@@ -28,26 +28,26 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 
 public class ShareCodeTest {
-    private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(ShareCodeTest.class);
+	private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(ShareCodeTest.class);
 
-    @BeforeAll
-    static void beforeAll() {
-        TestLoader.setup();
-    }
+	@BeforeAll
+	static void beforeAll() {
+		TestLoader.setup();
+	}
 
-    @Test
-    void allSharecodesGenerateAndDecodeTest() {
-        for (final String namespacedId : MappingsInfoCollectionUtils.getMappingsList()) {
-            if (namespacedId.equals("default"))
-                continue;
-            Assertions.assertDoesNotThrow(() -> {
-                final String s = ShareCodeGenerator.encode(namespacedId);
-                if (s.equals("CDS:EV1::0"))
-                    Assertions.fail("Blank sharecode generated for mappings: " + namespacedId);
-                final String d = ShareCodeGenerator.decode(s);
-                Assertions.assertEquals(d, ShareCodeGenerator.collapseWhitespace(PathConstants.getPathOf(namespacedId)));
-                LOGGER.info("Sharecode of \"{}\" is \"{}\" decoded to \"{}\"", namespacedId, s, d);
-            });
-        }
-    }
+	@Test
+	void allSharecodesGenerateAndDecodeTest() {
+		for (final String namespacedId : MappingsInfoCollectionUtils.getMappingsList()) {
+			if (namespacedId.equals("default"))
+				continue;
+			Assertions.assertDoesNotThrow(() -> {
+				final String s = ShareCodeGenerator.encode(namespacedId);
+				if (s.equals("CDS:EV1::0"))
+					Assertions.fail("Blank sharecode generated for mappings: " + namespacedId);
+				final String d = ShareCodeGenerator.decode(s);
+				Assertions.assertEquals(d, ShareCodeGenerator.collapseWhitespace(PathConstants.getPathOf(namespacedId)));
+				LOGGER.info("Sharecode of \"{}\" is \"{}\" decoded to \"{}\"", namespacedId, s, d);
+			});
+		}
+	}
 }

@@ -28,26 +28,26 @@ import java.util.HashSet;
 import java.util.List;
 
 public class MappingsInfoCollectionUtilsTest {
-    @BeforeAll
-    static void beforeAll() {
-        TestLoader.setup();
-        NavMappingsManager.loadMappings();
-    }
+	@BeforeAll
+	static void beforeAll() {
+		TestLoader.setup();
+		NavMappingsManager.loadMappings();
+	}
 
-    @Test
-    void mappingsListContainsExpectedOptionsTest() {
-        final List<String> mappings = Arrays.asList(MappingsInfoCollectionUtils.getMappingsList());
+	@Test
+	void mappingsListContainsExpectedOptionsTest() {
+		final List<String> mappings = Arrays.asList(MappingsInfoCollectionUtils.getMappingsList());
 
-        Assertions.assertAll(
-                () -> Assertions.assertTrue(mappings.contains("default")),
-                () -> Assertions.assertTrue(mappings.contains("builtin:windows_linux")),
-                () -> Assertions.assertTrue(mappings.contains("builtin:mac")),
-                () -> Assertions.assertTrue(mappings.contains("builtin:emacs_windows_linux")),
-                () -> Assertions.assertTrue(mappings.contains("builtin:emacs_mac")),
-                () -> Assertions.assertTrue(mappings.contains("builtin:readline")),
-                () -> Assertions.assertTrue(mappings.contains("custom:sample")),
-                () -> Assertions.assertTrue(mappings.contains("custom:inherited")),
-                () -> Assertions.assertEquals(mappings.size(), new HashSet<>(mappings).size())
-        );
-    }
+		Assertions.assertAll(
+				() -> Assertions.assertTrue(mappings.contains("default")),
+				() -> Assertions.assertTrue(mappings.contains("builtin:windows_linux")),
+				() -> Assertions.assertTrue(mappings.contains("builtin:mac")),
+				() -> Assertions.assertTrue(mappings.contains("builtin:emacs_windows_linux")),
+				() -> Assertions.assertTrue(mappings.contains("builtin:emacs_mac")),
+				() -> Assertions.assertTrue(mappings.contains("builtin:readline")),
+				() -> Assertions.assertTrue(mappings.contains("custom:sample")),
+				() -> Assertions.assertTrue(mappings.contains("custom:inherited")),
+				() -> Assertions.assertEquals(mappings.size(), new HashSet<>(mappings).size())
+		);
+	}
 }

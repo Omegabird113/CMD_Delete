@@ -33,46 +33,46 @@ import java.nio.file.Path;
 import java.util.function.BiConsumer;
 
 public final class FabricPlatform implements IPlatform {
-    public static final @NonNull FabricLoader LOADER = FabricLoader.getInstance();
-    public static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(FabricPlatform.class);
+	public static final @NonNull FabricLoader LOADER = FabricLoader.getInstance();
+	public static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(FabricPlatform.class);
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public <S extends SharedSuggestionProvider> void registerClientCommand(final @NonNull CommandRegistration<S> registration) {
-        ClientCommandRegistrationCallback.EVENT.register((dispatcher, _) -> registration.register((CommandDispatcher<S>) dispatcher));
-    }
+	@Override
+	@SuppressWarnings("unchecked")
+	public <S extends SharedSuggestionProvider> void registerClientCommand(final @NonNull CommandRegistration<S> registration) {
+		ClientCommandRegistrationCallback.EVENT.register((dispatcher, _) -> registration.register((CommandDispatcher<S>) dispatcher));
+	}
 
-    @Contract(pure = true)
-    @Override
-    public @NonNull BiConsumer<SharedSuggestionProvider, Component> getFeedbackMethod() {
-        return (source, component) -> ((FabricClientCommandSource) source).sendFeedback(component);
-    }
+	@Contract(pure = true)
+	@Override
+	public @NonNull BiConsumer<SharedSuggestionProvider, Component> getFeedbackMethod() {
+		return (source, component) -> ((FabricClientCommandSource) source).sendFeedback(component);
+	}
 
-    @Override
-    public @NonNull String getPlatformName() {
-        return "Fabric Platform";
-    }
+	@Override
+	public @NonNull String getPlatformName() {
+		return "Fabric Platform";
+	}
 
-    @Override
-    public @NonNull String getModVersion() {
-        return LOADER.getModContainer(CmdDeleteClient.MODID)
-                .map(container -> container.getMetadata().getVersion().getFriendlyString())
-                .orElse("<unknown>");
-    }
+	@Override
+	public @NonNull String getModVersion() {
+		return LOADER.getModContainer(CmdDeleteClient.MODID)
+				.map(container -> container.getMetadata().getVersion().getFriendlyString())
+				.orElse("<unknown>");
+	}
 
-    @Override
-    public @NonNull Path getGamePath() {
-        return LOADER.getGameDir();
-    }
+	@Override
+	public @NonNull Path getGamePath() {
+		return LOADER.getGameDir();
+	}
 
-    @Override
-    public @NonNull Path getResourcePath() {
-        return LOADER.getModContainer(CmdDeleteClient.MODID).orElseThrow()
-                .findPath("mappings/").orElseThrow();
-    }
+	@Override
+	public @NonNull Path getResourcePath() {
+		return LOADER.getModContainer(CmdDeleteClient.MODID).orElseThrow()
+				.findPath("mappings/").orElseThrow();
+	}
 
-    @Override
-    public @NonNull Logger getPlatformLogger() {
-        return LOGGER;
-    }
+	@Override
+	public @NonNull Logger getPlatformLogger() {
+		return LOGGER;
+	}
 }

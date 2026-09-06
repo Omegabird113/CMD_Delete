@@ -23,21 +23,21 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class CmdDeleteClientConstantsTest {
-    @BeforeAll
-    static void beforeAll() {
-        TestLoader.setup();
-    }
+	@BeforeAll
+	static void beforeAll() {
+		TestLoader.setup();
+	}
 
-    @SuppressWarnings("ConstantValue")
-    @Test
-    void clientConstantsTest() {
-        Assertions.assertAll(
-                () -> Assertions.assertEquals("cmd_delete", CmdDeleteClient.MODID),
-                () -> Assertions.assertTrue(CmdDeleteClient.ISSUE_TRACKER_URL_STRING.startsWith("https://github.com/")),
-                () -> Assertions.assertTrue(CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION >= CmdDeleteClient.MINIMUM_MAPPINGS_FORMAT_VERSION),
-                () -> Assertions.assertNotNull(CmdDeleteClient.getPlatform().getModVersion()),
-                () -> Assertions.assertFalse(CmdDeleteClient.getPlatform().getModVersion().isBlank()),
-                () -> Assertions.assertNotEquals("<unknown>", CmdDeleteClient.getPlatform().getModVersion())
-        );
-    }
+	@SuppressWarnings("ConstantValue")
+	@Test
+	void clientConstantsTest() {
+		Assertions.assertAll(
+				() -> Assertions.assertEquals("cmd_delete", CmdDeleteClient.MODID),
+				() -> Assertions.assertTrue(CmdDeleteClient.ISSUE_TRACKER_URL_STRING.startsWith("https://github.com/")),
+				() -> Assertions.assertTrue(CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION >= CmdDeleteClient.MINIMUM_MAPPINGS_FORMAT_VERSION),
+				() -> Assertions.assertNotNull(CmdDeleteClient.getPlatform().getModVersion()),
+				() -> Assertions.assertFalse(CmdDeleteClient.getPlatform().getModVersion().isBlank()),
+				() -> Assertions.assertNotEquals("<unknown>", CmdDeleteClient.getPlatform().getModVersion())
+		);
+	}
 }

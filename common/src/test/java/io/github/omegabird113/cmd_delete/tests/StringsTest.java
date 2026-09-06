@@ -29,35 +29,35 @@ import org.slf4j.Logger;
 import java.util.Arrays;
 
 public class StringsTest {
-    private static final Logger LOGGER = LoggingManager.getLoggerFor(StringsTest.class);
+	private static final Logger LOGGER = LoggingManager.getLoggerFor(StringsTest.class);
 
-    @BeforeAll
-    static void beforeAll() {
-        TestLoader.setup();
-    }
+	@BeforeAll
+	static void beforeAll() {
+		TestLoader.setup();
+	}
 
-    @Test
-    void stringsTest() {
-        NavMappingsManager.loadMappings();
-        Assertions.assertDoesNotThrow(() -> {
-            final String[] strings = new String[]{
-                    KeyNameRegistry.getDumpString(),
-                    NavMappingsManager.getCurrentMappingsRegistry().toString(),
-                    NavMappingsManager.getMappingsState().toString(),
-                    NavAction.getDetailedActionDump()
-            };
-            Assertions.assertAll(
-                    Arrays.stream(strings)
-                            .map(s -> () -> {
-                                LOGGER.info("Testing string: {}", s);
-                                Assertions.assertFalse(s.isBlank());
-                            })
-            );
-            Assertions.assertAll(
-                    () -> Assertions.assertTrue(strings[1].contains(NavMappingsManager.getMappingsState().id())),
-                    () -> Assertions.assertTrue(strings[2].contains("Mappings state:")),
-                    () -> Assertions.assertTrue(strings[3].contains("Action"))
-            );
-        });
-    }
+	@Test
+	void stringsTest() {
+		NavMappingsManager.loadMappings();
+		Assertions.assertDoesNotThrow(() -> {
+			final String[] strings = new String[]{
+					KeyNameRegistry.getDumpString(),
+					NavMappingsManager.getCurrentMappingsRegistry().toString(),
+					NavMappingsManager.getMappingsState().toString(),
+					NavAction.getDetailedActionDump()
+			};
+			Assertions.assertAll(
+					Arrays.stream(strings)
+							.map(s -> () -> {
+								LOGGER.info("Testing string: {}", s);
+								Assertions.assertFalse(s.isBlank());
+							})
+			);
+			Assertions.assertAll(
+					() -> Assertions.assertTrue(strings[1].contains(NavMappingsManager.getMappingsState().id())),
+					() -> Assertions.assertTrue(strings[2].contains("Mappings state:")),
+					() -> Assertions.assertTrue(strings[3].contains("Action"))
+			);
+		});
+	}
 }

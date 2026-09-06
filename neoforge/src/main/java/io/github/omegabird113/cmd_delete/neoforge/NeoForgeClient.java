@@ -25,15 +25,15 @@ import net.neoforged.neoforge.common.NeoForge;
 
 @Mod(value = CmdDeleteClient.MODID, dist = Dist.CLIENT)
 public final class NeoForgeClient {
-    private static boolean started;
+	private static boolean started;
 
-    public NeoForgeClient() {
-        NeoForge.EVENT_BUS.addListener(ClientTickEvent.Post.class, _ -> {
-            //noinspection ConstantValue
-            if (!started && Minecraft.getInstance() != null) {
-                started = true;
-                CmdDeleteClient.start(new NeoForgePlatform());
-            }
-        });
-    }
+	public NeoForgeClient() {
+		NeoForge.EVENT_BUS.addListener(ClientTickEvent.Post.class, _ -> {
+			//noinspection ConstantValue
+			if (!started && Minecraft.getInstance() != null) {
+				started = true;
+				CmdDeleteClient.start(new NeoForgePlatform());
+			}
+		});
+	}
 }

@@ -23,18 +23,18 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class LoadTimerTest {
-    @BeforeAll
-    static void beforeAll() {
-        TestLoader.setup();
-    }
+	@BeforeAll
+	static void beforeAll() {
+		TestLoader.setup();
+	}
 
-    @Test
-    void timeRunnableRunTest() {
-        Assertions.assertDoesNotThrow(() -> LoadTimer.time(() -> {
-            int n = 0;
-            while (n < 100) {
-                n++;
-            }
-        }, "loop", true));
-    }
+	@Test
+	void timeRunnableRunTest() {
+		Assertions.assertDoesNotThrow(() -> LoadTimer.time(() -> {
+			int n = 0;
+			while (n < 100) {
+				n++;
+			}
+		}, "loop", true));
+	}
 }
