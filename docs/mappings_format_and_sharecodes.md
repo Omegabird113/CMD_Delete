@@ -22,7 +22,7 @@ Custom mappings can:
 
 Note that:
 
-- The format version `fv` is currently `4` and your mappings should match that (Though old mappings of format versions
+- The format version `fv` is currently `5` and your mappings should match that (Though old mappings of format versions
   `2` and `3` are still supported in-game).
 - The `meta.id` field must exactly match the filename without the `.json` extension
 - In some places, you'll see a mappings id of `""` (empty string), that refers to the default mappings behavior of
