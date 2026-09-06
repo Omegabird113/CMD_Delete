@@ -1,8 +1,8 @@
-# The Mappings Format & Sharecodes
+# The Mappings Format and Sharecodes
 
-You can define your own custom mappings in configuration files with the location & name:
+You can define your own custom mappings in configuration files with the location and name:
 `<minecraft install>/config/cmd_delete/mappings/<id>.json`. These allow you to customize the text navigation shortcut
-behavior in Minecraft for your own taste & configuration. You can also easily share your mappings via sharecodes!
+behavior in Minecraft for your own taste and configuration. You can also easily share your mappings via sharecodes!
 
 ## Mappings Format Features
 
@@ -13,7 +13,7 @@ Custom mappings can:
   not defined, you can still choose to use a raw GLFW keycode in your JSON.
 - Inherit keybinds from the builtin mappings or other custom mappings by setting the top-level `inherits` value to
   `custom:<id>` to inherit a custom JSON, or `builtin:<id>` or just `<id>` to inherit a builtin JSON.
-- Patch & override the mappings they inherit by setting the keybind to have `enabled` property as `false`. Note that
+- Patch and override the mappings they inherit by setting the keybind to have `enabled` property as `false`. Note that
   CMD + Delete always removes your disabled keybinds before adding your enabled keybinds, allowing a
   patch-then-reimplement pattern to be easily done.
 - Set certain boolean feature flags to control the mod's behavior.
@@ -36,18 +36,20 @@ Minimum possible mappings example of the `my-mappings.json` file
 
 ```json
 {
-  "fv": 4,
-  "meta": {
-    "id": "my-mappings",
-    "systems": ["mac"]
-  },
-  "actions": {
-    "NAV_TEXT_START": [
-      {
-        "key": "home"
-      }
-    ]
-  }
+	"fv": 2,
+	"meta": {
+		"id": "my-mappings",
+		"systems": [
+			"mac"
+		]
+	},
+	"actions": {
+		"NAV_TEXT_START": [
+			{
+				"key": "home"
+			}
+		]
+	}
 }
 ```
 
@@ -55,40 +57,44 @@ Complete example of the `sample.json` file:
 
 ```json
 {
-  "fv": 4,
-  "inherits": "builtin:mac",
-  "meta": {
-    "name": "Example custom mapping",
-    "author": "Omegabird113",
-    "description": "This example demonstrates inheritance, patching, and more! Though, these keybinds are made up and people wouldn't use these most likely...",
-    "version": "2.1.0",
-    "id": "sample",
-    "systems": [
-      "mac", "windows", "linux"
-    ]
-  },
-  "actions": {
-    "NAV_TEXT_START": [
-      {
-        "key": "up",
-        "superCommand": true,
-        "altOption": false,
-        "shift": false,
-        "enabled": false
-      },
-      {
-        "key": "e",
-        "superCommand": true
-      },
-      {
-        "key": "home"
-      }
-    ]
-  },
-  "flags": {
-    "overrideVanillaNavigation": true,
-    "crossLineSignMovement": false
-  }
+	"fv": 5,
+	"inherits": "builtin:mac",
+	"meta": {
+		"name": "Example custom mapping",
+		"author": "Omegabird113",
+		"description": "This example demonstrates inheritance, patching, and more! Though, these keybinds are made up, and people wouldn't use these most likely...",
+		"version": "2.1.0",
+		"license": "CC-BY-4.0",
+		"credits": "Thanks to you for Reading this!",
+		"id": "sample",
+		"systems": [
+			"mac",
+			"windows",
+			"linux"
+		]
+	},
+	"actions": {
+		"NAV_TEXT_START": [
+			{
+				"key": "up",
+				"superCommand": true,
+				"altOption": false,
+				"shift": false,
+				"enabled": false
+			},
+			{
+				"key": "e",
+				"superCommand": true
+			},
+			{
+				"key": "home"
+			}
+		]
+	},
+	"flags": {
+		"overrideVanillaNavigation": true,
+		"crossLineSignMovement": false
+	}
 }
 ```
 
@@ -98,7 +104,7 @@ disables that keybinding and replaces it with some new ones.
 
 ### Meta Fields
 
-Below is a table explaining each meta field and whether it is required:
+Below is a table explaining each `meta` field and whether it is required:
 
 | Field name    | Type           | Required                                   | Description                                                                                                                                                                                        |
 |:--------------|:---------------|:-------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -108,12 +114,14 @@ Below is a table explaining each meta field and whether it is required:
 | `author`      | `String`       | No (Defaults to `unknown`)                 | The creator(s) of the mappings JSON.                                                                                                                                                               |
 | `description` | `String`       | No (Defaults to `No description provided`) | A detailed description of the mappings set.                                                                                                                                                        |
 | `version`     | `String`       | No (Defaults to `unknown`)                 | The version/revision of the mappings set                                                                                                                                                           |
+| `credits`     | `String`       | No (Defaults to `No credits provided`)     | Credits to those who helped, inspired, or or were otherwise involved with the mappings set.                                                                                                        |
+| `license`     | `String`       | No (Defaults to `unknown`)                 | The SPDX license identifier of the mappings set.                                                                                                                                                   |
 
 ### Actions JSON Syntax
 
 The primary part of a Mappings JSON is the actual `actions` section mapping [NavActions](actions_list.md) to key combos.
 
-This is done using an actions sub-dictionary where an Action is a key and a list of KeyCombos is the value. You cannot
+This is done using an action sub-dictionary where an Action is a key and a list of KeyCombos is the value. You cannot
 use `NONE` as a key. Then each KeyCombo is a `key` value of a `String` [Friendly keyname](friendly_keynames.md) or an
 Integer GLFW keycode/SDL3 scancode (GLFW on any Minecraft version before `26.3 Snapshot 4` and SDL3 on any version
 after, due to Mojang's decision to change the game's input library in that version), and a set of optional boolean
@@ -121,67 +129,67 @@ modifier fields, where if excluded get treated as `true` or `false` via wildcard
 (Windows Key/Super/Command depending on platform), `altOption` (Alt/Option depending on platform).
 
 Keys can be disabled when inheritance is used by using an optional `boolean` field named `enabled` (which defaults to
-`true`) in key combo and setting it to `false` to disable the key.
+`true`) in the key combo and setting it to `false` to disable the key.
 
 The way wildcarding works is that the JSON deserializer expands the list<KeyCombos> where omitted values become `true`
 or `false` and it does it so that all combinations possible become keys in the key registry. In CMD + Delete code, a
 KeyCombo must have all values specified, so wildcarding expands in `2^n` KeyCombos where `n` is the number of
-unspecified modifiers. For example, a key combo leaving all 4 modifiers unspecified becomes `16` (`2^4`) key combo
+unspecified modifiers. For example, a key combo leaving all `4` modifiers unspecified becomes `16` (`2^4`) key combo
 registrations in the final registry.
 
 Syntax Template Example (This does not actually work because it uses fake actions, keycodes, and keynames):
 
 ```json
 {
-  "actions": {
-    "ACTION_1": [
-      {
-        "key": "friendly_name_1",
-        "shift": false
-      },
-      {
-        "key": "friendly_name_2"
-      },
-      {
-        "key": 100,
-        "shift": true,
-        "control": false,
-        "altOption": false,
-        "superCommand": false
-      }
-    ],
-    "ACTION_2": [
-      {
-        "key": 100,
-        "shift": true,
-        "control": true,
-        "altOption": false,
-        "superCommand": false
-      },
-      {
-        "key": 100,
-        "shift": true,
-        "control": false,
-        "altOption": true,
-        "superCommand": false
-      },
-      {
-        "key": 100,
-        "shift": true,
-        "control": true,
-        "altOption": true,
-        "superCommand": false
-      }
-    ]
-  }
+	"actions": {
+		"ACTION_1": [
+			{
+				"key": "friendly_name_1",
+				"shift": false
+			},
+			{
+				"key": "friendly_name_2"
+			},
+			{
+				"key": 100,
+				"shift": true,
+				"control": false,
+				"altOption": false,
+				"superCommand": false
+			}
+		],
+		"ACTION_2": [
+			{
+				"key": 100,
+				"shift": true,
+				"control": true,
+				"altOption": false,
+				"superCommand": false
+			},
+			{
+				"key": 100,
+				"shift": true,
+				"control": false,
+				"altOption": true,
+				"superCommand": false
+			},
+			{
+				"key": 100,
+				"shift": true,
+				"control": true,
+				"altOption": true,
+				"superCommand": false
+			}
+		]
+	}
 }
 ```
 
 ### Feature Flags
 
-Feature flags are configurable optional boolean values within a `flags` top-level JSON object that can be specified by
-mappings. Feature flags can be added/removed/name-changed without a change to the mappings format Version. These are the
-available feature flags to be used by mappings:
+Feature flags are configurable optional boolean values within a `flags` top-level JSON object that mappings can specify.
+Feature flags can be added/removed/name-changed without a change to the mappings format Version. These are the available
+feature flags to be used by mappings:
 
 | Feature flag name           | Default Value | Description                                                                                                                                                                                                                                                                       |
 |:----------------------------|:--------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -193,14 +201,14 @@ available feature flags to be used by mappings:
 Strict mode can be enabled by setting a top-level optional `boolean` field named `strict` to `true` and causes the
 deserializer to change its behavior on the following issues:
 
-| Issue                                                                                                | Behavior Outside of Strict Mode               | Behavior in Strict Mode |
-|:-----------------------------------------------------------------------------------------------------|:----------------------------------------------|:------------------------|
-| A duplicate action registration after wildcarding                                                    | Logs a warning                                | Throws an exception     |
-| Conflicts between different actions where a KeyCombo is registered twice after wildcarding           | Logs a warning                                | Throws an exception     |
-| An unknown friendly keyname is specified                                                             | Logs a warning                                | Throws an exception     |
-| An unknown action name is specified                                                                  | Logs a warning                                | Throws an exception     |
-| Action names or `systems` entries have leading/trailing whitespace or have the wrong capitalization. | Removes whitespace & corrects capitialization | Throws an exception     |
-| Numbers that don't adhere to the strict number RegEx but would pass `Integer.parseInt()`             | Number is accepted                            | Throws an exception     |
+| Issue                                                                                                | Behavior Outside of Strict Mode                                                                       | Behavior in Strict Mode |
+|:-----------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------|:------------------------|
+| A duplicate action registration after wildcarding                                                    | Logs a warning                                                                                        | Throws an exception     |
+| Conflicts between different actions where a KeyCombo is registered twice after wildcarding           | Logs a warning                                                                                        | Throws an exception     |
+| An unknown friendly keyname is specified                                                             | Logs a warning                                                                                        | Throws an exception     |
+| An unknown action name is specified                                                                  | Logs a warning                                                                                        | Throws an exception     |
+| Action names or `systems` entries have leading/trailing whitespace or have the wrong capitalization. | If FV `5` or higher, throw an exception. Before that, remove whitespaces and corrects capitialization | Throws an exception     |
+| Numbers that don't adhere to the strict number RegEx but would pass `Integer.parseInt()`             | Number is accepted                                                                                    | Throws an exception     |
 
 The strict number RegEx is `-?(0|[1-9]\d*)`.
 
