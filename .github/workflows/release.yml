@@ -155,7 +155,8 @@ jobs:
             echo "Missing changelog.md"
             exit 1
           }
-- name: Read gradle.properties
+
+      - name: Read gradle.properties
         id: props
         run: |
           set -euo pipefail
