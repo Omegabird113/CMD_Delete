@@ -20,6 +20,12 @@ plugins {
     id 'com.gradleup.shadow' version '9.6.1'
 }
 
+version = "${rootProject.version}-common"
+
+base {
+    archivesName = project.archives_base_name
+}
+
 def targetJavaVersion = 25
 tasks.withType(JavaCompile).configureEach {
     it.options.encoding = "UTF-8"
