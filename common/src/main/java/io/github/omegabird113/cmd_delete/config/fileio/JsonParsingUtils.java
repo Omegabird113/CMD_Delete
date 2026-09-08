@@ -120,7 +120,7 @@ public final class JsonParsingUtils {
 		}
 	}
 
-	public static int requireKeyCode(final @NonNull JsonObject parent, final @NonNull String fieldName, final int fv, final boolean strictMode) throws JsonParseException {
+	public static int requireKeyCode(final @NonNull JsonObject parent, final @NonNull String fieldName, final boolean strictMode) throws JsonParseException {
 		final Map<String, Integer> keyMap = KeyNameRegistry.getKeyMap();
 
 		if (!parent.has(fieldName))
@@ -134,13 +134,10 @@ public final class JsonParsingUtils {
 
 		if (element.getAsJsonPrimitive().isString()) {
 			if (keyString.equals("f25"))
-				if (fv < 5)
 					MappingsJSONDeserializer.logWarn(
 							"The deprecated friendly keyname \"f25\" was used. This keyname will not exist in fv5",
 							strictMode
 					);
-				else
-					throw new JsonParseException("The deprecated friendly keyname \"f25\" was used. This keyname is explicitly not supported in fv5 and beyond.");
 			final Integer keyCode = keyMap.get(keyString);
 			if (keyCode == null)
 				throw new JsonParseException("Unknown key \"" + keyString + "\".");
@@ -160,6 +157,7 @@ public final class JsonParsingUtils {
 		final int fv = requireInt(parent, "fv", true); // we don't know fv/strict so always use it
 		if (fv < CmdDeleteClient.MINIMUM_MAPPINGS_FORMAT_VERSION || fv > CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION)
 			throw new JsonParseException("Invalid format version number: " + fv + ". The current format version is: " + CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION);
+		//noinspection ConstantValue
 		if (fv != CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION)
 			MappingsJSONDeserializer.logWarn(
 					"Old mappings version (" + fv + ") used by custom mappings. Please update to version " + CmdDeleteClient.CURRENT_MAPPINGS_FORMAT_VERSION,
