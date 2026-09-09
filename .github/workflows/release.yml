@@ -263,8 +263,8 @@ jobs:
           curseforge-id: 1455987
           curseforge-token: ${{ secrets.CF_API_TOKEN }}
           files: ${{ steps.jars.outputs.fabric }}
-          name: ${{ inputs.release_title }}
-          version: ${{ steps.props.outputs.version }}
+          name: ${{ inputs.release_title }} (Fabric)
+          version: ${{ steps.props.outputs.version }}-fabric
           version-type: ${{ inputs.release_type }}
           changelog-file: changelog.md
           java: 25
@@ -284,8 +284,8 @@ jobs:
           curseforge-id: 1455987
           curseforge-token: ${{ secrets.CF_API_TOKEN }}
           files: ${{ steps.jars.outputs.neoforge }}
-          name: ${{ inputs.release_title }}
-          version: ${{ steps.props.outputs.version }}
+          name: ${{ inputs.release_title }} (NeoForge)
+          version: ${{ steps.props.outputs.version }}-neoforge
           version-type: ${{ inputs.release_type }}
           changelog-file: changelog.md
           java: 25
