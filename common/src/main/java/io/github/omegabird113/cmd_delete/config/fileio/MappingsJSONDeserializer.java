@@ -63,38 +63,29 @@ public final class MappingsJSONDeserializer {
 			throw new JsonParseException("Expected a JSON object at root");
 		final JsonObject jsonObject = json.getAsJsonObject();
 
-		final boolean strictModeVal = getOptionalBoolean(jsonObject, "strict");
-		final int fv = requireFv(jsonObject);
-		final boolean strictMode = strictModeVal && fv >= 4;
+		final boolean strictMode = getOptionalBoolean(jsonObject, "strict");
+		final int _ = requireFv(jsonObject);
 
 		final String inherits = getStringElse(jsonObject, "inherits", "");
 
 		final JsonObject actions = requireObject(jsonObject, "actions");
 		final HashMap<KeyCombo, NavAction> localKeys = new HashMap<>();
 		final HashMap<KeyCombo, NavAction> disabledKeys = new HashMap<>();
-		parseActions(actions, localKeys, disabledKeys, fv, strictMode);
+		parseActions(actions, localKeys, disabledKeys, strictMode);
 
-		final MetadataContainer container = parseMeta(requireObject(jsonObject, "meta"), fv, strictMode, custom);
+		final MetadataContainer container = parseMeta(requireObject(jsonObject, "meta"), custom);
 
 		if (!container.id().equals(fileName))
 			throw new JsonParseException(MappingsType.fromIfCustom(custom).commonName() + " mappings id \"" + container.id() + "\" does not match filename \"" + fileName + "\"");
 
-		final FeatureFlags ff = parseFlags(jsonObject, fv, inherits);
+		final FeatureFlags ff = parseFlags(jsonObject, inherits);
 
 		return new MappingsRegistry(localKeys, (disabledKeys.isEmpty() ? null : disabledKeys), List.copyOf(container.systems()), ff, inherits, container.name(), container.author(), container.description(), container.version(), container.id(), container.license(), container.credits());
 	}
 
-	private static @NonNull String normalizeText(final @NonNull String str, final int fv, final boolean upper, final boolean strictMode) {
-		if (strictMode || fv >= 5)
-			return str;
-		if (upper)
-			return str.trim().toUpperCase(Locale.ROOT);
-		return str.trim().toLowerCase(Locale.ROOT);
-	}
-
-	private static void parseActions(final @NonNull JsonObject actions, final @NonNull HashMap<@NonNull KeyCombo, @NonNull NavAction> localKeys, final @NonNull HashMap<@NonNull KeyCombo, @NonNull NavAction> disabledKeys, final int fv, final boolean strictMode) {
+	private static void parseActions(final @NonNull JsonObject actions, final @NonNull HashMap<@NonNull KeyCombo, @NonNull NavAction> localKeys, final @NonNull HashMap<@NonNull KeyCombo, @NonNull NavAction> disabledKeys, final boolean strictMode) {
 		for (String actionName : actions.keySet()) {
-			final NavAction action = NAV_ACTION_MAP.get(normalizeText(actionName, fv, true, strictMode));
+			final NavAction action = NAV_ACTION_MAP.get(actionName);
 			if (action == null || action == NavAction.NONE) {
 				logWarn(
 						"Invalid action specified by custom mappings: \"" + actionName + "\". All key-combos registered in this action skipped...",
@@ -102,11 +93,6 @@ public final class MappingsJSONDeserializer {
 				);
 				continue;
 			}
-
-			if (action.overrideMode() && fv == 2)
-				throw new JsonParseException("Format version 2 file specified actions of fv 3: " + actionName);
-			if (action.isOverrideEdit() && fv < 4)
-				throw new JsonParseException("Format version 2 or 3 file specified actions of fv 4: " + actionName);
 
 			final JsonArray bindings = requireArray(actions, actionName);
 
@@ -118,7 +104,7 @@ public final class MappingsJSONDeserializer {
 
 				final int keyCode;
 				try {
-					keyCode = requireKeyCode(binding, "key", fv, strictMode);
+					keyCode = requireKeyCode(binding, "key", strictMode);
 				} catch (JsonParseException e) {
 					logWarn(
 							"Invalid key binding due to error: " + e.getMessage(),
@@ -164,25 +150,21 @@ public final class MappingsJSONDeserializer {
 		}
 	}
 
-	@Contract("_, _, _ -> new")
-	private static @NonNull FeatureFlags parseFlags(final @NonNull JsonObject root, final int fv, final @NonNull String inherits) {
-		if (fv == 2)
+	@Contract("_, _ -> new")
+	private static @NonNull FeatureFlags parseFlags(final @NonNull JsonObject root, final @NonNull String inherits) {
+		final JsonObject flags;
+		try {
+			flags = requireObject(root, "flags");
+		} catch (JsonParseException _) {
 			return new FeatureFlags(false, true);
-		else {
-			final JsonObject flags;
-			try {
-				flags = requireObject(root, "flags");
-			} catch (JsonParseException _) {
-				return new FeatureFlags(false, true);
-			}
-			Boolean overrideVanillaNavigation = getNullableBoolean(flags, "overrideVanillaNavigation");
-			Boolean crossLineSignMovement = getNullableBoolean(flags, "crossLineSignMovement");
-			if (overrideVanillaNavigation == null && inherits.isEmpty())
-				overrideVanillaNavigation = false;
-			if (crossLineSignMovement == null && inherits.isEmpty())
-				crossLineSignMovement = true;
-			return new FeatureFlags(overrideVanillaNavigation, crossLineSignMovement);
 		}
+		Boolean overrideVanillaNavigation = getNullableBoolean(flags, "overrideVanillaNavigation");
+		Boolean crossLineSignMovement = getNullableBoolean(flags, "crossLineSignMovement");
+		if (overrideVanillaNavigation == null && inherits.isEmpty())
+			overrideVanillaNavigation = false;
+		if (crossLineSignMovement == null && inherits.isEmpty())
+			crossLineSignMovement = true;
+		return new FeatureFlags(overrideVanillaNavigation, crossLineSignMovement);
 	}
 
 	@Contract(pure = true)
@@ -192,8 +174,8 @@ public final class MappingsJSONDeserializer {
 		return replaceWith;
 	}
 
-	@Contract("_, _, _, _ -> new")
-	private static @NonNull MetadataContainer parseMeta(final @NonNull JsonObject meta, final int fv, final boolean strictMode, final boolean custom) {
+	@Contract("_, _ -> new")
+	private static @NonNull MetadataContainer parseMeta(final @NonNull JsonObject meta, final boolean custom) {
 		final String name = getStringElse(meta, "name", "Unnamed Custom Mappings");
 		final String author = replacePlaceholderWithIfBuiltin(
 				getStringElse(meta, "author", "unknown"),
@@ -204,11 +186,11 @@ public final class MappingsJSONDeserializer {
 				CmdDeleteClient.getPlatform().getModVersion(), custom);
 		final String id = requireFilenameSafeString(meta, "id");
 
-		final String credits = (fv == 5) ? getStringElse(meta, "credits", "No credits provided") : null;
-		final String license = (fv == 5) ? getStringElse(meta, "license", "unknown") : null;
+		final String credits = getStringElse(meta, "credits", "No credits provided");
+		final String license = getStringElse(meta, "license", "unknown");
 
 		final JsonArray systems = requireArray(meta, "systems");
-		final Set<Os> parsedSystems = parseSystems(systems, fv, strictMode);
+		final Set<Os> parsedSystems = parseSystems(systems);
 		if (parsedSystems.isEmpty())
 			throw new JsonParseException("No systems found");
 		return new MetadataContainer(name, author, version, description, id, parsedSystems, credits, license);
@@ -237,13 +219,13 @@ public final class MappingsJSONDeserializer {
 		return results;
 	}
 
-	private static @NonNull Set<Os> parseSystems(final @NonNull JsonArray systemsArray, final int fv, final boolean strictMode) {
+	private static @NonNull Set<Os> parseSystems(final @NonNull JsonArray systemsArray) {
 		final Set<Os> systems = new LinkedHashSet<>();
 
 		for (JsonElement systemElement : systemsArray) {
 			if (!systemElement.isJsonPrimitive() || !systemElement.getAsJsonPrimitive().isString())
 				throw new JsonParseException("Expected each entry in \"systems\" to be a string");
-			final String systemName = normalizeText(systemElement.getAsString(), fv, false, strictMode);
+			final String systemName = systemElement.getAsString();
 			final Os os = OS_MAP.get(systemName);
 			if (os == null)
 				throw new JsonParseException("Unknown system: " + systemName);

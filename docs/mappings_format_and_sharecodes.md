@@ -22,8 +22,7 @@ Custom mappings can:
 
 Note that:
 
-- The format version `fv` is currently `5` and your mappings should match that (Though old mappings of format versions
-  `2` and `3` are still supported in-game).
+- The format version `fv` is currently `5` and your mappings should match that.
 - The `meta.id` field must exactly match the filename without the `.json` extension
 - In some places, you'll see a mappings id of `""` (empty string), that refers to the default mappings behavior of
   loading either `builtin:windows_linux` or `builtin:mac` depending on the user's OS. Note that `"inherits": ""` means a
@@ -36,7 +35,7 @@ Minimum possible mappings example of the `my-mappings.json` file
 
 ```json
 {
-	"fv": 2,
+	"fv": 5,
 	"meta": {
 		"id": "my-mappings",
 		"systems": [
@@ -241,4 +240,4 @@ themselves be a complete source of truth.
 ### Example
 
 `builtin:mac` sharecode:
-`CDS:EV1:tMeXxZVB45VieA3HvggAeo3p5zjrCbj7crBL5PbmPwdWGpgx8nz6vXnqxX48Cgc5BHZX63EYegfSTth3sTL16tud1DU6KFQKQNLmEtrhaoojTDiqtcm88t2ePt3yKWY4NnfPEUBhPqMgmoFCZwkfgVMpmKr6L2QYWmtruBniZRgBG5hxpA95W2E3pn5dv9SnDhpQenXnr2cWvyENAGmNpTzpUyktLDQoEZGJZE8CKK84G8jXsTf81f1Kxojv88pF66AeMYEqMCYCki7jafgTDi4YspYGxLvqrd9eZPGUPy1JvV588pD6MFT13sYK2m5yiJk5qGwqMg17DSbXjEUzU3dLN322AqPDP4Xvm3n1nztxo2fuCeGPpmD7poJDbHCws7RNKtVcgnpas8EhxHDUBqZPwyDWjbUwqxNfmqSvKQwYQbU3jTt527Z89g1Li4QPBto4bNFc9Fr7jWYQVdu8k7PxahZEFjPes5YrufVoNtU1ZC8VuMreMQNeBUz9MH5qN3oDbdYu7L5Jupr6XBrpKMoVzGGS4ygdcBMfG7ZZF6ruzNjTGDjHvrNDGDuJXpXfnccn9ami1xM4SipedBHugVM56FyR26MsRcddBMwmnSr4LTrGT6hofbsGuapfVJZUNfgab6WvHDAgHMXFQD9reFnfuMQ3KNtzMFzPJXSyVLfbFYDjPxv94yB5:2419707130`
+`CDS:EV1:44JKjTG574eHakymgxNGJJeCrU7qET3qcqCUJQhj7UMzBzAoyc9tDXLLstz2FQyZXVLcPPN9KaYkNp3NQCX4yhyRRrLsgYEQFzakWDyGXoGm1RUFkwA53a8Zro4mZUptGYHgZYCewY1Fu9dMJR23woVRJRDRJbVSL8pwzoLm6NaavFcvN3MFPSjCVktNoU9bZJusvvAJZyS9R9PW7HTRvePD2XBcodT6hJT5wWhZ4fCUe6omugZ7XH6q4tzqZaEp4kwLboA9owdDAqaAHKsL3tSnNNHkFx2KN6w8Lw5WHzseuZLR4m5cKeABMsEtbgjQWFFbR1yiCjVq3mRgw3yNMkeKbzsgwgzrTvPZY4xSNrcuTSyYsy91AjgaXydsihEzsMMfHfH8BXyxdht681vMb9GMgq8e2L8az1rnGyGxboLacKoM96TTWamdUDKZnS4dpWNHEYArjAwqfddzGG5VCU8B4WYx6wQgHXjF4hcWV75Xi2wHppwgZh2tjgDQb1RyEnT6itwv3H8R4SQeCz22ZEaYc7so3nDUZfDnpHScSUAqk5Gd6mrRo4JgibzNqn32xZiXEHZ9QjnBPpXDqbLo6kP93Zc6yC8tG7ahFCHYGyPjrryh2nxVH2ZvY93v1WCtzVhdk6nH5TedtUwfRRy3tjqXQKWXZea7cyuUZPE8dWpRVLy9TqQvMmNLisr7Q9gpkkz64QeqSXrryjh5ptc5sXnzboTgTUbeDhRwCp9r3Azyjs95V5GwYZucYJ29m7CHs1wNAdZEWZWP:3421744520`
