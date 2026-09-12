@@ -33,62 +33,62 @@ import org.spongepowered.asm.mixin.MixinEnvironment;
 import java.nio.file.Path;
 
 public final class CmdDeleteClient {
-    public static final @NonNull String MODID = "cmd_delete";
-    public static final @NonNull String ISSUE_TRACKER_URL_STRING = "https://github.com/Omegabird113/CMD_Delete/issues";
-    public static final int CURRENT_MAPPINGS_FORMAT_VERSION = 4;
-    public static final int MINIMUM_MAPPINGS_FORMAT_VERSION = 2;
-    public static final int SHARECODE_FORMAT_VERSION = 1;
-    public static final boolean FORCE_PREVENT_OVERRIDE_MODE = Boolean.getBoolean("cmd_delete.forcePreventOverrideMode");
-    public static final @NonNull Gson GSON = new GsonBuilder().create();
-    private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(CmdDeleteClient.class);
-    private static volatile @Nullable IPlatform platform;
+	public static final @NonNull String MODID = "cmd_delete";
+	public static final @NonNull String ISSUE_TRACKER_URL_STRING = "https://github.com/Omegabird113/CMD_Delete/issues";
+	public static final int CURRENT_MAPPINGS_FORMAT_VERSION = 5;
+	public static final int MINIMUM_MAPPINGS_FORMAT_VERSION = 2;
+	public static final int SHARECODE_FORMAT_VERSION = 1;
+	public static final boolean FORCE_PREVENT_OVERRIDE_MODE = Boolean.getBoolean("cmd_delete.forcePreventOverrideMode");
+	public static final @NonNull Gson GSON = new GsonBuilder().create();
+	private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(CmdDeleteClient.class);
+	private static volatile @Nullable IPlatform platform;
 
-    private CmdDeleteClient() {
-    }
+	private CmdDeleteClient() {
+	}
 
-    public static @NonNull IPlatform getPlatform() {
-        final IPlatform currentPlatform = platform;
-        if (currentPlatform == null)
-            throw new IllegalStateException("No CmdDeleteClient class instance defined");
-        return currentPlatform;
-    }
+	public static @NonNull IPlatform getPlatform() {
+		final IPlatform currentPlatform = platform;
+		if (currentPlatform == null)
+			throw new IllegalStateException("No CmdDeleteClient class instance defined");
+		return currentPlatform;
+	}
 
-    public static void setPlatform(@NonNull IPlatform platform) {
-        CmdDeleteClient.platform = platform;
-        LoggingManager.traceLog(platform.getPlatformLogger(), "Platform set...");
-        LoggingManager.debugLog(LOGGER, "CmdDeleteClient platform set to \"{}\"", platform.getPlatformName());
-    }
+	public static void setPlatform(final @NonNull IPlatform platform) {
+		CmdDeleteClient.platform = platform;
+		LoggingManager.traceLog(platform.getPlatformLogger(), "Platform set...");
+		LoggingManager.debugLog(LOGGER, "CmdDeleteClient platform set to \"{}\"", platform.getPlatformName());
+	}
 
-    public static void start(IPlatform platform) {
-        LoadTimer.time(() -> CrashUtils.crashMinecraftOnFailure(() -> {
-            LoadTimer.time(() -> setPlatform(platform), "Registering platform information", true);
+	public static void start(final @NonNull IPlatform platform) {
+		LoadTimer.time(() -> CrashUtils.crashMinecraftOnFailure(() -> {
+			LoadTimer.time(() -> setPlatform(platform), "Registering platform information", true);
 
-            LoadTimer.time(() -> {
-                LOGGER.info("Initializing client mod \"{}\" (version: {}, mappings format version: {}, minimum mappings compatible version: {}, sharecode encoding version: {})... You can report any issues at {}.", MODID, platform.getModVersion(), CURRENT_MAPPINGS_FORMAT_VERSION, MINIMUM_MAPPINGS_FORMAT_VERSION, SHARECODE_FORMAT_VERSION, ISSUE_TRACKER_URL_STRING);
-                LOGGER.info("User appears to be running system: {}", Os.USING);
+			LoadTimer.time(() -> {
+				LOGGER.info("Initializing client mod \"{}\" (version: {}, mappings format version: {}, minimum mappings compatible version: {}, sharecode encoding version: {})... You can report any issues at {}.", MODID, platform.getModVersion(), CURRENT_MAPPINGS_FORMAT_VERSION, MINIMUM_MAPPINGS_FORMAT_VERSION, SHARECODE_FORMAT_VERSION, ISSUE_TRACKER_URL_STRING);
+				LOGGER.info("User appears to be running system: {}", Os.USING);
 
-                final MixinEnvironment mixinEnv = MixinEnvironment.getCurrentEnvironment();
-                LoggingManager.traceLog(LOGGER, "Mixin version {} with obfuscation \"{}\" and compatibility level \"{}\" in phase \"{}\" on side \"{}\"", mixinEnv.getVersion(), mixinEnv.getObfuscationContext(), MixinEnvironment.getCompatibilityLevel(), mixinEnv.getPhase(), mixinEnv.getSide());
+				final MixinEnvironment mixinEnv = MixinEnvironment.getCurrentEnvironment();
+				LoggingManager.traceLog(LOGGER, "Mixin version {} with obfuscation \"{}\" and compatibility level \"{}\" in phase \"{}\" on side \"{}\"", mixinEnv.getVersion(), mixinEnv.getObfuscationContext(), MixinEnvironment.getCompatibilityLevel(), mixinEnv.getPhase(), mixinEnv.getSide());
 
-                CrashUtils.sendLoadInfo();
+				CrashUtils.sendLoadInfo();
 
-                if (FORCE_PREVENT_OVERRIDE_MODE)
-                    LOGGER.warn("Override mode is not allowed for any mappings set due to the \"cmd_delete.forcePreventOverrideMode\" JVM property being set to true. This prevents any mappings set from using override actions even if it enables the Feature Flag. This mode is not recommended unless you are actively troubleshooting an issue with override mode.");
-            }, "initial logging & CrashUtils info", true);
+				if (FORCE_PREVENT_OVERRIDE_MODE)
+					LOGGER.warn("Override mode is not allowed for any mappings set due to the \"cmd_delete.forcePreventOverrideMode\" JVM property being set to true. This prevents any mappings set from using override actions even if it enables the Feature Flag. This mode is not recommended unless you are actively troubleshooting an issue with override mode.");
+			}, "initial logging & CrashUtils info", true);
 
-            LoadTimer.time(() -> {
-                final Path gameDir = platform.getGamePath();
-                final Path resourceMappingsDir = platform.getResourcePath();
-                PathConstants.init(gameDir, resourceMappingsDir);
-            }, "path initialization", true);
+			LoadTimer.time(() -> {
+				final Path gameDir = platform.getGamePath();
+				final Path resourceMappingsDir = platform.getResourcePath();
+				PathConstants.init(gameDir, resourceMappingsDir);
+			}, "path initialization", true);
 
-            LoadTimer.time(NavMappingsManager::loadMappings, "loading mappings", true);
-            LoadTimer.time(() -> platform.registerClientCommand(NavMappingsCommand::register), "registering /navmappings", true);
-        }), "full load", false);
+			LoadTimer.time(NavMappingsManager::loadMappings, "loading mappings", true);
+			LoadTimer.time(() -> platform.registerClientCommand(NavMappingsCommand::register), "registering /navmappings", true);
+		}), "full load", false);
 
-        if (Boolean.getBoolean("cmd_delete.ci.stopMinecraftAfterLoad")) {
-            LOGGER.info("Stopping Minecraft client due to set \"cmd_delete.ci.stopMinecraftAfterLoad\" jvm property...");
-            System.exit(0);
-        }
-    }
+		if (Boolean.getBoolean("cmd_delete.ci.stopMinecraftAfterLoad")) {
+			LOGGER.info("Stopping Minecraft client due to set \"cmd_delete.ci.stopMinecraftAfterLoad\" jvm property...");
+			System.exit(0);
+		}
+	}
 }

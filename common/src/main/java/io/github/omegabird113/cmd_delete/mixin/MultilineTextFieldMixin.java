@@ -40,200 +40,200 @@ import java.util.List;
 
 @Mixin(value = MultilineTextField.class, priority = 2000)
 public abstract class MultilineTextFieldMixin {
-    @Unique
-    private static final Logger LOGGER = LoggingManager.getLoggerFor(MultilineTextFieldMixin.class);
+	@Unique
+	private static final Logger cmd_delete$LOGGER = LoggingManager.getLoggerFor(MultilineTextFieldMixin.class);
 
-    static {
-        LoggingManager.debugLog(LOGGER, "MultilineTextFieldMixin loaded");
-    }
+	static {
+		LoggingManager.debugLog(cmd_delete$LOGGER, "MultilineTextFieldMixin loaded");
+	}
 
-    @Shadow
-    private String value;
+	@Shadow
+	private String value;
 
-    @Shadow
-    private int cursor;
+	@Shadow
+	private int cursor;
 
-    @Final
-    @Shadow
-    private List<?> displayLines;
+	@Final
+	@Shadow
+	private List<?> displayLines;
 
-    @Shadow
-    private int selectCursor;
+	@Shadow
+	private int selectCursor;
 
-    @Shadow
-    public abstract void setSelecting(boolean selecting);
+	@Shadow
+	public abstract void setSelecting(boolean selecting);
 
-    @Shadow
-    public abstract void insertText(String input);
+	@Shadow
+	public abstract void insertText(String input);
 
-    @Shadow
-    public abstract void deleteText(int dir);
+	@Shadow
+	public abstract void deleteText(int dir);
 
-    @Shadow
-    public abstract void seekCursor(Whence whence, int cursor);
+	@Shadow
+	public abstract void seekCursor(Whence whence, int cursor);
 
-    @Shadow
-    public abstract void seekCursorLine(int lineOffset);
+	@Shadow
+	public abstract void seekCursorLine(int lineOffset);
 
-    @Shadow
-    public abstract String getSelectedText();
+	@Shadow
+	public abstract String getSelectedText();
 
-    @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
-    private void cmd_delete$overrideMultilineNavigation(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
-        final NavAction action = CrashUtils.crashMinecraftOnFailure(() -> NavMappingsManager.getCurrentMappings().getAction(event));
-        int direction = action != null ? action.offset().value() : NavActionOffset.INVALID.value();
+	@Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
+	private void cmd_delete$overrideMultilineNavigation(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
+		final NavAction action = CrashUtils.crashMinecraftOnFailure(() -> NavMappingsManager.getCurrentMappings().getAction(event));
+		int direction = action != null ? action.offset().value() : NavActionOffset.INVALID.value();
 
-        switch (action) {
-            case DEL_LINE_LEFT, DEL_LINE_RIGHT -> {
-                this.setSelecting(true);
-                this.cmd_delete$moveToLineEdge(direction);
-                this.insertText("");
-                this.setSelecting(false);
-            }
-            case DEL_WORD_LEFT -> {
-                int previousWord = this.cmd_delete$getPreviousWordStart();
-                this.deleteText(previousWord - this.cursor);
-            }
-            case DEL_WORD_RIGHT -> {
-                int nextWord = this.cmd_delete$getNextWordStart();
-                this.deleteText(nextWord - this.cursor);
-            }
-            case NAV_LINE_LEFT, NAV_LINE_RIGHT -> {
-                this.setSelecting(false);
-                this.cmd_delete$moveToLineEdge(direction);
-            }
-            case SEL_LINE_LEFT, SEL_LINE_RIGHT -> {
-                this.setSelecting(true);
-                this.cmd_delete$moveToLineEdge(direction);
-            }
-            case NAV_WORD_LEFT -> {
-                this.setSelecting(false);
-                this.seekCursor(Whence.ABSOLUTE, this.cmd_delete$getPreviousWordStart());
-            }
-            case NAV_WORD_RIGHT -> {
-                this.setSelecting(false);
-                this.seekCursor(Whence.ABSOLUTE, this.cmd_delete$getNextWordStart());
-            }
-            case SEL_WORD_LEFT -> {
-                this.setSelecting(true);
-                this.seekCursor(Whence.ABSOLUTE, this.cmd_delete$getPreviousWordStart());
-            }
-            case SEL_WORD_RIGHT -> {
-                this.setSelecting(true);
-                this.seekCursor(Whence.ABSOLUTE, this.cmd_delete$getNextWordStart());
-            }
-            case NAV_TEXT_START -> {
-                this.setSelecting(false);
-                this.seekCursor(Whence.ABSOLUTE, 0);
-            }
-            case NAV_TEXT_END -> {
-                this.setSelecting(false);
-                this.seekCursor(Whence.END, 0);
-            }
-            case SEL_TEXT_START -> {
-                this.setSelecting(true);
-                this.seekCursor(Whence.ABSOLUTE, 0);
-            }
-            case SEL_TEXT_END -> {
-                this.setSelecting(true);
-                this.seekCursor(Whence.END, 0);
-            }
-            case SEL_TEXT_UP, SEL_TEXT_DOWN -> {
-                this.setSelecting(true);
-                this.seekCursorLine(direction);
-            }
-            case OVR_NAV_CHAR_LEFT -> {
-                this.setSelecting(false);
-                this.seekCursor(Whence.RELATIVE, -1);
-            }
-            case OVR_NAV_CHAR_RIGHT -> {
-                this.setSelecting(false);
-                this.seekCursor(Whence.RELATIVE, 1);
-            }
-            case OVR_SEL_CHAR_LEFT -> {
-                this.setSelecting(true);
-                this.seekCursor(Whence.RELATIVE, -1);
-            }
-            case OVR_SEL_CHAR_RIGHT -> {
-                this.setSelecting(true);
-                this.seekCursor(Whence.RELATIVE, 1);
-            }
-            case OVR_DEL_CHAR_LEFT -> this.deleteText(-1);
-            case OVR_DEL_CHAR_RIGHT -> this.deleteText(1);
-            case OVR_NAV_TEXT_UP -> {
-                this.setSelecting(false);
-                this.seekCursorLine(-1);
-            }
-            case OVR_NAV_TEXT_DOWN -> {
-                this.setSelecting(false);
-                this.seekCursorLine(1);
-            }
-            case OVR_COPY -> Minecraft.getInstance().keyboardHandler.setClipboard(this.getSelectedText());
-            case OVR_CUT -> {
-                Minecraft.getInstance().keyboardHandler.setClipboard(this.getSelectedText());
-                this.insertText("");
-            }
-            case OVR_PASTE -> this.insertText(Minecraft.getInstance().keyboardHandler.getClipboard());
-            case OVR_SELECT_ALL -> {
-                this.cursor = this.value.length();
-                this.selectCursor = 0;
-            }
-            case NONE -> {
-                if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation()) || CmdDeleteClient.FORCE_PREVENT_OVERRIDE_MODE || event.isEscape() || event.key() == SDLScancode.SDL_SCANCODE_RETURN || event.key() == SDLScancode.SDL_SCANCODE_KP_ENTER)
-                    return;
-            }
-            case null -> {
-                return;
-            }
-        }
+		switch (action) {
+			case DEL_LINE_LEFT, DEL_LINE_RIGHT -> {
+				this.setSelecting(true);
+				this.cmd_delete$moveToLineEdge(direction);
+				this.insertText("");
+				this.setSelecting(false);
+			}
+			case DEL_WORD_LEFT -> {
+				int previousWord = this.cmd_delete$getPreviousWordStart();
+				this.deleteText(previousWord - this.cursor);
+			}
+			case DEL_WORD_RIGHT -> {
+				int nextWord = this.cmd_delete$getNextWordStart();
+				this.deleteText(nextWord - this.cursor);
+			}
+			case NAV_LINE_LEFT, NAV_LINE_RIGHT -> {
+				this.setSelecting(false);
+				this.cmd_delete$moveToLineEdge(direction);
+			}
+			case SEL_LINE_LEFT, SEL_LINE_RIGHT -> {
+				this.setSelecting(true);
+				this.cmd_delete$moveToLineEdge(direction);
+			}
+			case NAV_WORD_LEFT -> {
+				this.setSelecting(false);
+				this.seekCursor(Whence.ABSOLUTE, this.cmd_delete$getPreviousWordStart());
+			}
+			case NAV_WORD_RIGHT -> {
+				this.setSelecting(false);
+				this.seekCursor(Whence.ABSOLUTE, this.cmd_delete$getNextWordStart());
+			}
+			case SEL_WORD_LEFT -> {
+				this.setSelecting(true);
+				this.seekCursor(Whence.ABSOLUTE, this.cmd_delete$getPreviousWordStart());
+			}
+			case SEL_WORD_RIGHT -> {
+				this.setSelecting(true);
+				this.seekCursor(Whence.ABSOLUTE, this.cmd_delete$getNextWordStart());
+			}
+			case NAV_TEXT_START -> {
+				this.setSelecting(false);
+				this.seekCursor(Whence.ABSOLUTE, 0);
+			}
+			case NAV_TEXT_END -> {
+				this.setSelecting(false);
+				this.seekCursor(Whence.END, 0);
+			}
+			case SEL_TEXT_START -> {
+				this.setSelecting(true);
+				this.seekCursor(Whence.ABSOLUTE, 0);
+			}
+			case SEL_TEXT_END -> {
+				this.setSelecting(true);
+				this.seekCursor(Whence.END, 0);
+			}
+			case SEL_TEXT_UP, SEL_TEXT_DOWN -> {
+				this.setSelecting(true);
+				this.seekCursorLine(direction);
+			}
+			case OVR_NAV_CHAR_LEFT -> {
+				this.setSelecting(false);
+				this.seekCursor(Whence.RELATIVE, -1);
+			}
+			case OVR_NAV_CHAR_RIGHT -> {
+				this.setSelecting(false);
+				this.seekCursor(Whence.RELATIVE, 1);
+			}
+			case OVR_SEL_CHAR_LEFT -> {
+				this.setSelecting(true);
+				this.seekCursor(Whence.RELATIVE, -1);
+			}
+			case OVR_SEL_CHAR_RIGHT -> {
+				this.setSelecting(true);
+				this.seekCursor(Whence.RELATIVE, 1);
+			}
+			case OVR_DEL_CHAR_LEFT -> this.deleteText(-1);
+			case OVR_DEL_CHAR_RIGHT -> this.deleteText(1);
+			case OVR_NAV_TEXT_UP -> {
+				this.setSelecting(false);
+				this.seekCursorLine(-1);
+			}
+			case OVR_NAV_TEXT_DOWN -> {
+				this.setSelecting(false);
+				this.seekCursorLine(1);
+			}
+			case OVR_COPY -> Minecraft.getInstance().keyboardHandler.setClipboard(this.getSelectedText());
+			case OVR_CUT -> {
+				Minecraft.getInstance().keyboardHandler.setClipboard(this.getSelectedText());
+				this.insertText("");
+			}
+			case OVR_PASTE -> this.insertText(Minecraft.getInstance().keyboardHandler.getClipboard());
+			case OVR_SELECT_ALL -> {
+				this.cursor = this.value.length();
+				this.selectCursor = 0;
+			}
+			case NONE -> {
+				if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation()) || CmdDeleteClient.FORCE_PREVENT_OVERRIDE_MODE || event.isEscape() || event.key() == SDLScancode.SDL_SCANCODE_RETURN || event.key() == SDLScancode.SDL_SCANCODE_KP_ENTER)
+					return;
+			}
+			case null -> {
+				return;
+			}
+		}
 
-        cir.setReturnValue(true);
-    }
+		cir.setReturnValue(true);
+	}
 
-    @Unique
-    private void cmd_delete$moveToLineEdge(int direction) {
-        this.seekCursor(Whence.ABSOLUTE, direction < 0 ? this.cmd_delete$getLineStart() : this.cmd_delete$getLineEnd());
-    }
+	@Unique
+	private void cmd_delete$moveToLineEdge(int direction) {
+		this.seekCursor(Whence.ABSOLUTE, direction < 0 ? this.cmd_delete$getLineStart() : this.cmd_delete$getLineEnd());
+	}
 
-    @Unique
-    private int cmd_delete$getLineStart() {
-        final MultilineTextFieldStringViewAccessor lineView = this.cmd_delete$getCursorLineView();
-        return lineView == null ? 0 : lineView.cmd_delete$getBeginIndex();
-    }
+	@Unique
+	private int cmd_delete$getLineStart() {
+		final MultilineTextFieldStringViewAccessor lineView = this.cmd_delete$getCursorLineView();
+		return lineView == null ? 0 : lineView.cmd_delete$getBeginIndex();
+	}
 
-    @Unique
-    private int cmd_delete$getLineEnd() {
-        final MultilineTextFieldStringViewAccessor lineView = this.cmd_delete$getCursorLineView();
-        return lineView == null ? this.value.length() : lineView.cmd_delete$getEndIndex();
-    }
+	@Unique
+	private int cmd_delete$getLineEnd() {
+		final MultilineTextFieldStringViewAccessor lineView = this.cmd_delete$getCursorLineView();
+		return lineView == null ? this.value.length() : lineView.cmd_delete$getEndIndex();
+	}
 
-    @Unique
-    private MultilineTextFieldStringViewAccessor cmd_delete$getCursorLineView() {
-        for (Object lineView : this.displayLines) {
-            final MultilineTextFieldStringViewAccessor accessor = (MultilineTextFieldStringViewAccessor) lineView;
-            if (this.cursor >= accessor.cmd_delete$getBeginIndex() && this.cursor <= accessor.cmd_delete$getEndIndex())
-                return accessor;
-        }
-        return this.displayLines.isEmpty() ? null : (MultilineTextFieldStringViewAccessor) this.displayLines.getLast();
-    }
+	@Unique
+	private MultilineTextFieldStringViewAccessor cmd_delete$getCursorLineView() {
+		for (Object lineView : this.displayLines) {
+			final MultilineTextFieldStringViewAccessor accessor = (MultilineTextFieldStringViewAccessor) lineView;
+			if (this.cursor >= accessor.cmd_delete$getBeginIndex() && this.cursor <= accessor.cmd_delete$getEndIndex())
+				return accessor;
+		}
+		return this.displayLines.isEmpty() ? null : (MultilineTextFieldStringViewAccessor) this.displayLines.getLast();
+	}
 
-    @Unique
-    private int cmd_delete$getPreviousWordStart() {
-        int pos = Math.clamp(this.cursor, 0, this.value.length());
-        while (pos > 0 && Character.isWhitespace(this.value.charAt(pos - 1)))
-            pos--;
-        while (pos > 0 && !Character.isWhitespace(this.value.charAt(pos - 1)))
-            pos--;
-        return pos;
-    }
+	@Unique
+	private int cmd_delete$getPreviousWordStart() {
+		int pos = Math.clamp(this.cursor, 0, this.value.length());
+		while (pos > 0 && Character.isWhitespace(this.value.charAt(pos - 1)))
+			pos--;
+		while (pos > 0 && !Character.isWhitespace(this.value.charAt(pos - 1)))
+			pos--;
+		return pos;
+	}
 
-    @Unique
-    private int cmd_delete$getNextWordStart() {
-        int pos = Math.clamp(this.cursor, 0, this.value.length());
-        while (pos < this.value.length() && !Character.isWhitespace(this.value.charAt(pos)))
-            pos++;
-        while (pos < this.value.length() && Character.isWhitespace(this.value.charAt(pos)))
-            pos++;
-        return pos;
-    }
+	@Unique
+	private int cmd_delete$getNextWordStart() {
+		int pos = Math.clamp(this.cursor, 0, this.value.length());
+		while (pos < this.value.length() && !Character.isWhitespace(this.value.charAt(pos)))
+			pos++;
+		while (pos < this.value.length() && Character.isWhitespace(this.value.charAt(pos)))
+			pos++;
+		return pos;
+	}
 }

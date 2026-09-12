@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-    <configuration default="false" name="fabric - Client" type="GradleRunConfiguration" factoryName="Gradle">
+    <configuration default="false" name="common - Test" type="GradleRunConfiguration" factoryName="Gradle">
         <ExternalSystemSettings>
             <option name="executionName"/>
             <option name="externalProjectPath" value="$PROJECT_DIR$/fabric"/>
@@ -10,7 +10,7 @@
             </option>
             <option name="taskNames">
                 <list>
-                    <option value=":fabric:runClient"/>
+                    <option value=":common:test"/>
                 </list>
             </option>
             <option name="vmOptions"/>

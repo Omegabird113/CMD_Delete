@@ -21,12 +21,12 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 public record FeatureFlags(@Nullable Boolean overrideVanillaNavigation,
-                           @Nullable Boolean crossLineSignMovement) {
-    @Contract("_, _ -> new")
-    public static @NonNull FeatureFlags merge(final @NonNull FeatureFlags parent, final @NonNull FeatureFlags child) {
-        return new FeatureFlags(
-                child.overrideVanillaNavigation() != null ? child.overrideVanillaNavigation() : parent.overrideVanillaNavigation(),
-                child.crossLineSignMovement() != null ? child.crossLineSignMovement() : parent.crossLineSignMovement()
-        );
-    }
+						   @Nullable Boolean crossLineSignMovement) {
+	@Contract("_, _ -> new")
+	public static @NonNull FeatureFlags merge(final @NonNull FeatureFlags parent, final @NonNull FeatureFlags child) {
+		return new FeatureFlags(
+				child.overrideVanillaNavigation() != null ? child.overrideVanillaNavigation() : parent.overrideVanillaNavigation(),
+				child.crossLineSignMovement() != null ? child.crossLineSignMovement() : parent.crossLineSignMovement()
+		);
+	}
 }

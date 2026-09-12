@@ -26,59 +26,59 @@ import org.slf4j.Logger;
 import java.nio.file.Path;
 
 public final class PathConstants {
-    private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(PathConstants.class);
+	private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(PathConstants.class);
 
-    private static @Nullable Path mappingsResourcePath;
-    private static @Nullable Path activeMappingsFilePath;
-    private static @Nullable Path mappingsJSONPath;
-    private static boolean initialized = false;
+	private static @Nullable Path mappingsResourcePath;
+	private static @Nullable Path activeMappingsFilePath;
+	private static @Nullable Path mappingsJSONPath;
+	private static boolean initialized = false;
 
-    private PathConstants() {
-    }
+	private PathConstants() {
+	}
 
-    public static void init(final @NonNull Path gamePath, final @NonNull Path builtinMappingsPath) {
-        if (initialized)
-            throw new IllegalStateException("PathConstants has already been initialized");
+	public static void init(final @NonNull Path gamePath, final @NonNull Path builtinMappingsPath) {
+		if (initialized)
+			throw new IllegalStateException("PathConstants has already been initialized");
 
-        PathConstants.mappingsResourcePath = builtinMappingsPath;
-        PathConstants.activeMappingsFilePath = gamePath.resolve("config/cmd_delete/.active_mappings");
-        PathConstants.mappingsJSONPath = gamePath.resolve("config/cmd_delete/mappings/");
+		PathConstants.mappingsResourcePath = builtinMappingsPath;
+		PathConstants.activeMappingsFilePath = gamePath.resolve("config/cmd_delete/.active_mappings");
+		PathConstants.mappingsJSONPath = gamePath.resolve("config/cmd_delete/mappings/");
 
-        MappingsJSONManager.tryMakeConfigFiles();
-        LoggingManager.debugLog(LOGGER, "Initialized paths locations for the mod... (mappingsResourcePath=\"{}\", mappingsJSONPath=\"{}\", activeMappingsFilePath=\"{}\", gamePath=\"{}\")", PathConstants.mappingsResourcePath, PathConstants.mappingsJSONPath, PathConstants.activeMappingsFilePath, gamePath);
+		MappingsJSONManager.tryMakeConfigFiles();
+		LoggingManager.debugLog(LOGGER, "Initialized paths locations for the mod... (mappingsResourcePath=\"{}\", mappingsJSONPath=\"{}\", activeMappingsFilePath=\"{}\", gamePath=\"{}\")", PathConstants.mappingsResourcePath, PathConstants.mappingsJSONPath, PathConstants.activeMappingsFilePath, gamePath);
 
-        initialized = true;
-    }
+		initialized = true;
+	}
 
-    public static @NonNull Path getMappingsResourcePath() {
-        if (mappingsResourcePath == null)
-            throw new IllegalStateException("Mappings resource path has not been set");
-        return mappingsResourcePath;
-    }
+	public static @NonNull Path getMappingsResourcePath() {
+		if (mappingsResourcePath == null)
+			throw new IllegalStateException("Mappings resource path has not been set");
+		return mappingsResourcePath;
+	}
 
-    public static @NonNull Path getActiveMappingsFilePath() {
-        if (activeMappingsFilePath == null)
-            throw new IllegalStateException("Active mappings file path has not been set");
-        return activeMappingsFilePath;
-    }
+	public static @NonNull Path getActiveMappingsFilePath() {
+		if (activeMappingsFilePath == null)
+			throw new IllegalStateException("Active mappings file path has not been set");
+		return activeMappingsFilePath;
+	}
 
-    public static @NonNull Path getMappingsJSONPath() {
-        if (mappingsJSONPath == null)
-            throw new IllegalStateException("Mappings JSON path has not been set");
-        return mappingsJSONPath;
-    }
+	public static @NonNull Path getMappingsJSONPath() {
+		if (mappingsJSONPath == null)
+			throw new IllegalStateException("Mappings JSON path has not been set");
+		return mappingsJSONPath;
+	}
 
-    public static @NonNull Path getPathOf(final @NonNull MappingsType mappingsType, final @NonNull String id) {
-        final Path path = (mappingsType == MappingsType.CUSTOM)
-                ? getMappingsJSONPath()
-                : getMappingsResourcePath();
-        return path.resolve(id + ".json");
-    }
+	public static @NonNull Path getPathOf(final @NonNull MappingsType mappingsType, final @NonNull String id) {
+		final Path path = (mappingsType == MappingsType.CUSTOM)
+				? getMappingsJSONPath()
+				: getMappingsResourcePath();
+		return path.resolve(id + ".json");
+	}
 
-    public static @NonNull Path getPathOf(final @NonNull String namespacedId) {
-        return getPathOf(
-                MappingsIdResolutionUtils.resolveType(namespacedId),
-                MappingsIdResolutionUtils.removeNamespaceFromId(namespacedId)
-        );
-    }
+	public static @NonNull Path getPathOf(final @NonNull String namespacedId) {
+		return getPathOf(
+				MappingsIdResolutionUtils.resolveType(namespacedId),
+				MappingsIdResolutionUtils.removeNamespaceFromId(namespacedId)
+		);
+	}
 }

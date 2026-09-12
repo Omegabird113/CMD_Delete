@@ -37,105 +37,105 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = EditBox.class, priority = 2000)
 public abstract class EditBoxMixin extends AbstractWidget {
-    @Unique
-    private static final Logger LOGGER = LoggingManager.getLoggerFor(EditBoxMixin.class);
+	@Unique
+	private static final Logger cmd_delete$LOGGER = LoggingManager.getLoggerFor(EditBoxMixin.class);
 
-    static {
-        LoggingManager.debugLog(LOGGER, "EditBoxMixin loaded");
-    }
+	static {
+		LoggingManager.debugLog(cmd_delete$LOGGER, "EditBoxMixin loaded");
+	}
 
-    public EditBoxMixin(int x, int y, int width, int height, Component message) {
-        super(x, y, width, height, message);
-    }
+	public EditBoxMixin(int x, int y, int width, int height, Component message) {
+		super(x, y, width, height, message);
+	}
 
-    @Shadow
-    protected abstract void deleteText(int dir, boolean wholeWord);
+	@Shadow
+	protected abstract void deleteText(int dir, boolean wholeWord);
 
-    @Shadow
-    public abstract void deleteCharsToPos(int pos);
+	@Shadow
+	public abstract void deleteCharsToPos(int pos);
 
-    @Shadow
-    public abstract void moveCursorTo(int dir, boolean extendSelection);
+	@Shadow
+	public abstract void moveCursorTo(int dir, boolean extendSelection);
 
-    @Shadow
-    public abstract String getValue();
+	@Shadow
+	public abstract String getValue();
 
-    @Shadow
-    public abstract int getWordPosition(int dir);
+	@Shadow
+	public abstract int getWordPosition(int dir);
 
-    @Shadow
-    public abstract void moveCursor(int dir, boolean hasShiftDown);
+	@Shadow
+	public abstract void moveCursor(int dir, boolean hasShiftDown);
 
-    @Shadow
-    public abstract void deleteChars(int dir);
+	@Shadow
+	public abstract void deleteChars(int dir);
 
-    @Shadow
-    protected abstract boolean isEditable();
+	@Shadow
+	protected abstract boolean isEditable();
 
-    @Shadow
-    public abstract String getHighlighted();
+	@Shadow
+	public abstract String getHighlighted();
 
-    @Shadow
-    public abstract void insertText(String input);
+	@Shadow
+	public abstract void insertText(String input);
 
-    @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
-    private void cmd_delete$overrideDelete(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
-        if (!this.isFocused() || !this.isActive()) // If field isn't focused/active, don't even try to find an action for it
-            return;
+	@Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
+	private void cmd_delete$overrideDelete(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
+		if (!this.isFocused() || !this.isActive()) // If field isn't focused/active, don't even try to find an action for it
+			return;
 
-        final NavAction action = CrashUtils.crashMinecraftOnFailure(() -> NavMappingsManager.getCurrentMappings().getAction(event));
+		final NavAction action = CrashUtils.crashMinecraftOnFailure(() -> NavMappingsManager.getCurrentMappings().getAction(event));
 
-        switch (action) {
-            case DEL_LINE_LEFT -> this.deleteCharsToPos(0);
-            case DEL_LINE_RIGHT -> this.deleteCharsToPos(this.getValue().length());
-            case DEL_WORD_LEFT -> this.deleteText(-1, true);
-            case DEL_WORD_RIGHT -> this.deleteText(1, true);
-            case NAV_LINE_LEFT, NAV_TEXT_START -> this.moveCursorTo(0, false);
-            case NAV_LINE_RIGHT, NAV_TEXT_END -> this.moveCursorTo(this.getValue().length(), false);
-            case SEL_LINE_LEFT, SEL_TEXT_START -> this.moveCursorTo(0, true);
-            case SEL_LINE_RIGHT, SEL_TEXT_END -> this.moveCursorTo(this.getValue().length(), true);
-            case NAV_WORD_LEFT -> this.moveCursorTo(this.getWordPosition(-1), false);
-            case NAV_WORD_RIGHT -> this.moveCursorTo(this.getWordPosition(1), false);
-            case SEL_WORD_LEFT -> this.moveCursorTo(this.getWordPosition(-1), true);
-            case SEL_WORD_RIGHT -> this.moveCursorTo(this.getWordPosition(1), true);
-            case OVR_NAV_CHAR_LEFT -> this.moveCursor(-1, false);
-            case OVR_NAV_CHAR_RIGHT -> this.moveCursor(1, false);
-            case OVR_SEL_CHAR_LEFT -> this.moveCursor(-1, true);
-            case OVR_SEL_CHAR_RIGHT -> this.moveCursor(1, true);
-            case OVR_DEL_CHAR_LEFT -> {
-                if (this.isEditable())
-                    this.deleteChars(-1);
-            }
-            case OVR_DEL_CHAR_RIGHT -> {
-                if (this.isEditable())
-                    this.deleteChars(1);
-            }
-            case OVR_COPY -> Minecraft.getInstance().keyboardHandler.setClipboard(this.getHighlighted());
-            case OVR_CUT -> {
-                Minecraft.getInstance().keyboardHandler.setClipboard(this.getHighlighted());
-                if (this.isEditable())
-                    this.insertText("");
-            }
-            case OVR_PASTE -> {
-                if (this.isEditable())
-                    this.insertText(Minecraft.getInstance().keyboardHandler.getClipboard());
-            }
-            case OVR_SELECT_ALL -> {
-                this.moveCursorTo(0, false);
-                this.moveCursorTo(this.getValue().length(), true);
-            }
-            case SEL_TEXT_UP, SEL_TEXT_DOWN, OVR_NAV_TEXT_UP, OVR_NAV_TEXT_DOWN -> {
-                return;
-            }
-            case NONE -> {
-                if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation()) || CmdDeleteClient.FORCE_PREVENT_OVERRIDE_MODE || event.isEscape() || event.key() == SDLScancode.SDL_SCANCODE_RETURN || event.key() == SDLScancode.SDL_SCANCODE_KP_ENTER)
-                    return;
-            }
-            case null -> {
-                return;
-            }
-        }
+		switch (action) {
+			case DEL_LINE_LEFT -> this.deleteCharsToPos(0);
+			case DEL_LINE_RIGHT -> this.deleteCharsToPos(this.getValue().length());
+			case DEL_WORD_LEFT -> this.deleteText(-1, true);
+			case DEL_WORD_RIGHT -> this.deleteText(1, true);
+			case NAV_LINE_LEFT, NAV_TEXT_START -> this.moveCursorTo(0, false);
+			case NAV_LINE_RIGHT, NAV_TEXT_END -> this.moveCursorTo(this.getValue().length(), false);
+			case SEL_LINE_LEFT, SEL_TEXT_START -> this.moveCursorTo(0, true);
+			case SEL_LINE_RIGHT, SEL_TEXT_END -> this.moveCursorTo(this.getValue().length(), true);
+			case NAV_WORD_LEFT -> this.moveCursorTo(this.getWordPosition(-1), false);
+			case NAV_WORD_RIGHT -> this.moveCursorTo(this.getWordPosition(1), false);
+			case SEL_WORD_LEFT -> this.moveCursorTo(this.getWordPosition(-1), true);
+			case SEL_WORD_RIGHT -> this.moveCursorTo(this.getWordPosition(1), true);
+			case OVR_NAV_CHAR_LEFT -> this.moveCursor(-1, false);
+			case OVR_NAV_CHAR_RIGHT -> this.moveCursor(1, false);
+			case OVR_SEL_CHAR_LEFT -> this.moveCursor(-1, true);
+			case OVR_SEL_CHAR_RIGHT -> this.moveCursor(1, true);
+			case OVR_DEL_CHAR_LEFT -> {
+				if (this.isEditable())
+					this.deleteChars(-1);
+			}
+			case OVR_DEL_CHAR_RIGHT -> {
+				if (this.isEditable())
+					this.deleteChars(1);
+			}
+			case OVR_COPY -> Minecraft.getInstance().keyboardHandler.setClipboard(this.getHighlighted());
+			case OVR_CUT -> {
+				Minecraft.getInstance().keyboardHandler.setClipboard(this.getHighlighted());
+				if (this.isEditable())
+					this.insertText("");
+			}
+			case OVR_PASTE -> {
+				if (this.isEditable())
+					this.insertText(Minecraft.getInstance().keyboardHandler.getClipboard());
+			}
+			case OVR_SELECT_ALL -> {
+				this.moveCursorTo(0, false);
+				this.moveCursorTo(this.getValue().length(), true);
+			}
+			case SEL_TEXT_UP, SEL_TEXT_DOWN, OVR_NAV_TEXT_UP, OVR_NAV_TEXT_DOWN -> {
+				return;
+			}
+			case NONE -> {
+				if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation()) || CmdDeleteClient.FORCE_PREVENT_OVERRIDE_MODE || event.isEscape() || event.key() == SDLScancode.SDL_SCANCODE_RETURN || event.key() == SDLScancode.SDL_SCANCODE_KP_ENTER)
+					return;
+			}
+			case null -> {
+				return;
+			}
+		}
 
-        cir.setReturnValue(true);
-    }
+		cir.setReturnValue(true);
+	}
 }

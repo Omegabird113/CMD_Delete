@@ -25,10 +25,10 @@ import net.neoforged.neoforge.common.NeoForge;
 
 @Mod(value = CmdDeleteClient.MODID, dist = Dist.CLIENT)
 public final class NeoForgeClient {
-    private static boolean started;
+	private static boolean started;
 
-    public NeoForgeClient() {
-        throw new RuntimeException("NeoForge is not supported yet for this build...");
+	public NeoForgeClient() {
+		throw new RuntimeException("NeoForge is not supported yet for this build...");
 //        NeoForge.EVENT_BUS.addListener(ClientTickEvent.Post.class, _ -> {
 //            //noinspection ConstantValue
 //            if (!started && Minecraft.getInstance() != null) {

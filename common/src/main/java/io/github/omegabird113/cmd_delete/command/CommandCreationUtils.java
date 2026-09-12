@@ -30,34 +30,34 @@ import org.jspecify.annotations.NonNull;
 import java.util.List;
 
 public final class CommandCreationUtils {
-    public static final @NonNull DynamicCommandExceptionType UNKNOWN_CUSTOM_MAPPINGS = new DynamicCommandExceptionType(
-            id -> Component.translatable("commands.cmd_delete.error.unknown_custom_mappings", id)
-    );
-    public static final @NonNull DynamicCommandExceptionType UNKNOWN_BUILTIN_MAPPINGS = new DynamicCommandExceptionType(
-            id -> Component.translatable("commands.cmd_delete.error.unknown_builtin_mappings", id)
-    );
-    public static final @NonNull DynamicCommandExceptionType FAILED_CUSTOM_MAPPINGS_IMPORT = new DynamicCommandExceptionType(
-            location -> Component.translatable("commands.cmd_delete.error.failed_custom_mappings_import", location)
-    );
-    public static final @NonNull DynamicCommandExceptionType INVALID_SHARE_CODE = new DynamicCommandExceptionType(
-            shareCode -> Component.translatable("commands.cmd_delete.error.invalid_share_code", shareCode)
-    );
+	public static final @NonNull DynamicCommandExceptionType UNKNOWN_CUSTOM_MAPPINGS = new DynamicCommandExceptionType(
+			id -> Component.translatable("commands.cmd_delete.error.unknown_custom_mappings", id)
+	);
+	public static final @NonNull DynamicCommandExceptionType UNKNOWN_BUILTIN_MAPPINGS = new DynamicCommandExceptionType(
+			id -> Component.translatable("commands.cmd_delete.error.unknown_builtin_mappings", id)
+	);
+	public static final @NonNull DynamicCommandExceptionType FAILED_CUSTOM_MAPPINGS_IMPORT = new DynamicCommandExceptionType(
+			location -> Component.translatable("commands.cmd_delete.error.failed_custom_mappings_import", location)
+	);
+	public static final @NonNull DynamicCommandExceptionType INVALID_SHARE_CODE = new DynamicCommandExceptionType(
+			shareCode -> Component.translatable("commands.cmd_delete.error.invalid_share_code", shareCode)
+	);
 
-    public static final @NonNull SuggestionProvider<@NonNull SharedSuggestionProvider> BUILTIN_SUGGESTIONS =
-            (_, builder) -> SharedSuggestionProvider.suggest(List.of("windows_linux", "mac", "emacs_windows_linux", "emacs_mac", "readline"), builder);
-    public static final @NonNull SuggestionProvider<@NonNull SharedSuggestionProvider> CUSTOM_SUGGESTIONS =
-            (_, builder) -> SharedSuggestionProvider.suggest(MappingsJSONManager.getAvailableOptions(false), builder);
+	public static final @NonNull SuggestionProvider<@NonNull SharedSuggestionProvider> BUILTIN_SUGGESTIONS =
+			(_, builder) -> SharedSuggestionProvider.suggest(List.of("windows_linux", "mac", "emacs_windows_linux", "emacs_mac", "readline"), builder);
+	public static final @NonNull SuggestionProvider<@NonNull SharedSuggestionProvider> CUSTOM_SUGGESTIONS =
+			(_, builder) -> SharedSuggestionProvider.suggest(MappingsJSONManager.getAvailableOptions(false), builder);
 
-    private CommandCreationUtils() {
-    }
+	private CommandCreationUtils() {
+	}
 
-    @Contract(value = "_ -> new", pure = true)
-    public static @NonNull LiteralArgumentBuilder<@NonNull SharedSuggestionProvider> literal(final @NonNull String name) {
-        return LiteralArgumentBuilder.literal(name);
-    }
+	@Contract(value = "_ -> new", pure = true)
+	public static @NonNull LiteralArgumentBuilder<@NonNull SharedSuggestionProvider> literal(final @NonNull String name) {
+		return LiteralArgumentBuilder.literal(name);
+	}
 
-    @Contract(value = "_, _ -> new", pure = true)
-    public static <T> @NonNull RequiredArgumentBuilder<@NonNull SharedSuggestionProvider, T> argument(final @NonNull String name, final @NonNull ArgumentType<T> type) {
-        return RequiredArgumentBuilder.argument(name, type);
-    }
+	@Contract(value = "_, _ -> new", pure = true)
+	public static <T> @NonNull RequiredArgumentBuilder<@NonNull SharedSuggestionProvider, T> argument(final @NonNull String name, final @NonNull ArgumentType<T> type) {
+		return RequiredArgumentBuilder.argument(name, type);
+	}
 }

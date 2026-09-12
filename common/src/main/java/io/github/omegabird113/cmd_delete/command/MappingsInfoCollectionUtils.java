@@ -32,91 +32,95 @@ import java.util.List;
 import java.util.Locale;
 
 public final class MappingsInfoCollectionUtils {
-    private MappingsInfoCollectionUtils() {
-    }
+	private MappingsInfoCollectionUtils() {
+	}
 
-    @Contract(pure = true)
-    public static @NonNull Component getInfoComponentFrom(final @NonNull MappingsState mappingsState, final boolean includeDescription) {
-        final double coverage = mappingsState.mappings().getCoverage();
+	@Contract(pure = true)
+	public static @NonNull Component getInfoComponentFrom(final @NonNull MappingsState mappingsState, final boolean includeDescription) {
+		final double coverage = mappingsState.mappings().getCoverage();
 
-        String displayName = "";
-        String description = "";
+		String displayName = "";
+		String description = "";
 
-        final String namespacedId = MappingsIdResolutionUtils.resolveNamespacedId(mappingsState);
-        final String version = mappingsState.mappings().registry().version();
-        final String author = mappingsState.mappings().registry().author();
-        final String[] systemStrings = Arrays.stream(mappingsState.mappings().getMappingsSupportedSystems())
-                .map(Os::name)
-                .toArray(String[]::new);
+		final String namespacedId = MappingsIdResolutionUtils.resolveNamespacedId(mappingsState);
+		final String version = mappingsState.mappings().registry().version();
+		final String author = mappingsState.mappings().registry().author();
+		final String credits = mappingsState.mappings().registry().credits();
+		final String license = mappingsState.mappings().registry().license();
+		final String[] systemStrings = Arrays.stream(mappingsState.mappings().getMappingsSupportedSystems())
+				.map(Os::name)
+				.toArray(String[]::new);
 
-        switch (mappingsState.type()) {
-            case CUSTOM -> {
-                displayName = "\"" + mappingsState.mappings().registry().name() + "\"";
-                description = mappingsState.mappings().registry().description();
-            }
-            case BUILTIN -> {
-                displayName = mappingsState.mappings().registry().name();
-                description = mappingsState.mappings().registry().description();
-            }
-            case DEFAULT -> {
-                displayName = "Default Mappings (Resolved to " + String.join(" and ", systemStrings) + ")";
-                description = "The hard-coded default behaviour to set the mappings to the pre-bundled mappings for the OS of the system when the client is loaded.";
-            }
-        }
+		switch (mappingsState.type()) {
+			case CUSTOM -> {
+				displayName = "\"" + mappingsState.mappings().registry().name() + "\"";
+				description = mappingsState.mappings().registry().description();
+			}
+			case BUILTIN -> {
+				displayName = mappingsState.mappings().registry().name();
+				description = mappingsState.mappings().registry().description();
+			}
+			case DEFAULT -> {
+				displayName = "Default Mappings (Resolved to " + String.join(" and ", systemStrings) + ")";
+				description = "The hard-coded default behaviour to set the mappings to the pre-bundled mappings for the OS of the system when the client is loaded.";
+			}
+		}
 
-        final MutableComponent baseComponent = Component.translatable(
-                "commands.cmd_delete.mappings_info.base",
-                Component.literal(displayName),
-                Component.literal(namespacedId),
-                Component.literal(version),
-                Component.literal(author)
-        );
+		final MutableComponent baseComponent = Component.translatable(
+				"commands.cmd_delete.mappings_info.base",
+				Component.literal(displayName),
+				Component.literal(namespacedId),
+				Component.literal(version),
+				Component.literal(author),
+				Component.literal(license != null ? license : "<unknown>")
+		);
 
-        final Component coverageComponent = Component.translatable(
-                "commands.cmd_delete.mappings_info.coverage",
-                String.format(Locale.ROOT, "%.2f", coverage * 100),
-                String.valueOf(mappingsState.mappings().registry().getSize()),
-                String.join(" and ", systemStrings)
-        );
+		final Component coverageComponent = Component.translatable(
+				"commands.cmd_delete.mappings_info.coverage",
+				String.format(Locale.ROOT, "%.2f", coverage * 100),
+				String.valueOf(mappingsState.mappings().registry().getSize()),
+				String.join(" and ", systemStrings)
+		);
 
-        final MutableComponent result = baseComponent
-                .append("\n")
-                .append(coverageComponent);
+		final MutableComponent result = baseComponent
+				.append("\n")
+				.append(coverageComponent);
 
-        if (includeDescription) {
-            final Component descriptionComponent = Component.translatable(
-                    "commands.cmd_delete.mappings_info.description",
-                    description
-            );
-            result.append("\n").append(descriptionComponent);
-        }
+		if (includeDescription) {
+			final Component descriptionComponent = Component.translatable(
+					"commands.cmd_delete.mappings_info.description",
+					description,
+					credits != null ? credits : "<unknown>"
+			);
+			result.append("\n").append(descriptionComponent);
+		}
 
-        return result;
-    }
+		return result;
+	}
 
-    @Contract(pure = true)
-    public static @NonNull String getInfoFrom(final @NonNull MappingsState mappingsState, final boolean includeDescription) {
-        return getInfoComponentFrom(mappingsState, includeDescription).getString();
-    }
+	@Contract(pure = true)
+	public static @NonNull String getInfoFrom(final @NonNull MappingsState mappingsState, final boolean includeDescription) {
+		return getInfoComponentFrom(mappingsState, includeDescription).getString();
+	}
 
-    @SuppressWarnings("unused")
-    @Contract(pure = true)
-    public static @NonNull @Unmodifiable List<String> getBuiltinMappingsNamespacedIdsList() {
-        return List.of(
-                "builtin:windows_linux",
-                "builtin:mac",
-                "builtin:emacs_windows_linux",
-                "builtin:emacs_mac",
-                "builtin:readline"
-        );
-    }
+	@SuppressWarnings("unused")
+	@Contract(pure = true)
+	public static @NonNull @Unmodifiable List<String> getBuiltinMappingsNamespacedIdsList() {
+		return List.of(
+				"builtin:windows_linux",
+				"builtin:mac",
+				"builtin:emacs_windows_linux",
+				"builtin:emacs_mac",
+				"builtin:readline"
+		);
+	}
 
-    @Contract(pure = true)
-    public static @NonNull String @NonNull [] getMappingsList() {
-        final List<String> internal = new ArrayList<>();
-        internal.add("default");
-        internal.addAll(getBuiltinMappingsNamespacedIdsList());
-        internal.addAll(MappingsJSONManager.getAvailableOptions(true));
-        return internal.toArray(String[]::new);
-    }
+	@Contract(pure = true)
+	public static @NonNull String @NonNull [] getMappingsList() {
+		final List<String> internal = new ArrayList<>();
+		internal.add("default");
+		internal.addAll(getBuiltinMappingsNamespacedIdsList());
+		internal.addAll(MappingsJSONManager.getAvailableOptions(true));
+		return internal.toArray(String[]::new);
+	}
 }

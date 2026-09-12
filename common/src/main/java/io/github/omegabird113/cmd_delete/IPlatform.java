@@ -19,7 +19,6 @@ package io.github.omegabird113.cmd_delete;
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
@@ -28,30 +27,30 @@ import java.nio.file.Path;
 import java.util.function.BiConsumer;
 
 public interface IPlatform {
-    static void sendCommandFeedback(final @NonNull SharedSuggestionProvider source,
-                                    final @NonNull Component component) {
-        final BiConsumer<SharedSuggestionProvider, Component> feedback = CmdDeleteClient.getPlatform().getFeedbackMethod();
-        if (feedback == null)
-            throw new IllegalStateException("Client command feedback was requested before platform initialization or in tests");
-        feedback.accept(source, component);
-    }
+	static void sendCommandFeedback(final @NonNull SharedSuggestionProvider source,
+									final @NonNull Component component) {
+		final BiConsumer<SharedSuggestionProvider, Component> feedback = CmdDeleteClient.getPlatform().getFeedbackMethod();
+		if (feedback == null)
+			throw new IllegalStateException("Client command feedback was requested before platform initialization or in tests");
+		feedback.accept(source, component);
+	}
 
-    @NonNull String getModVersion();
+	@NonNull String getModVersion();
 
-    @NonNull Path getGamePath();
+	@NonNull Path getGamePath();
 
-    @NonNull Path getResourcePath();
+	@NonNull Path getResourcePath();
 
-    <S extends SharedSuggestionProvider> void registerClientCommand(@NonNull CommandRegistration<S> registration);
+	<S extends SharedSuggestionProvider> void registerClientCommand(@NonNull CommandRegistration<S> registration);
 
-    @Nullable BiConsumer<@NonNull SharedSuggestionProvider, @NonNull Component> getFeedbackMethod();
+	@Nullable BiConsumer<@NonNull SharedSuggestionProvider, @NonNull Component> getFeedbackMethod();
 
-    @NotNull String getPlatformName();
+	@NonNull String getPlatformName();
 
-    @NotNull Logger getPlatformLogger();
+	@NonNull Logger getPlatformLogger();
 
-    @FunctionalInterface
-    interface CommandRegistration<S extends SharedSuggestionProvider> {
-        void register(@NonNull CommandDispatcher<S> dispatcher);
-    }
+	@FunctionalInterface
+	interface CommandRegistration<S extends SharedSuggestionProvider> {
+		void register(@NonNull CommandDispatcher<S> dispatcher);
+	}
 }

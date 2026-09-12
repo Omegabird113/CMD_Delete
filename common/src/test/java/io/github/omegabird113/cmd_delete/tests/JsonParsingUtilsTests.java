@@ -25,24 +25,24 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class JsonParsingUtilsTests {
-    @BeforeAll
-    static void beforeAll() {
-        TestLoader.setup();
-    }
+	@BeforeAll
+	static void beforeAll() {
+		TestLoader.setup();
+	}
 
-    @Test
-    void requireFileSafeStringAcceptsPlainIds() {
-        final JsonObject json = new JsonObject();
-        json.addProperty("id", "sample_mapping");
+	@Test
+	void requireFileSafeStringAcceptsPlainIds() {
+		final JsonObject json = new JsonObject();
+		json.addProperty("id", "sample_mapping");
 
-        Assertions.assertEquals("sample_mapping", JsonParsingUtils.requireFilenameSafeString(json, "id"));
-    }
+		Assertions.assertEquals("sample_mapping", JsonParsingUtils.requireFilenameSafeString(json, "id"));
+	}
 
-    @Test
-    void requireFileSafeStringRejectsPathSeparators() {
-        final JsonObject json = new JsonObject();
-        json.addProperty("id", "../sample");
+	@Test
+	void requireFileSafeStringRejectsPathSeparators() {
+		final JsonObject json = new JsonObject();
+		json.addProperty("id", "../sample");
 
-        Assertions.assertThrows(JsonParseException.class, () -> JsonParsingUtils.requireFilenameSafeString(json, "id"));
-    }
+		Assertions.assertThrows(JsonParseException.class, () -> JsonParsingUtils.requireFilenameSafeString(json, "id"));
+	}
 }

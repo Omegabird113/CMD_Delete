@@ -22,26 +22,26 @@ import org.jspecify.annotations.NonNull;
 import java.util.Locale;
 
 public enum Os {
-    WINDOWS,
-    LINUX,
-    MAC;
+	WINDOWS,
+	LINUX,
+	MAC;
 
-    public static final @NonNull Os USING = getCurrent();
-    public static final boolean IS_USING_MAC = USING == MAC;
+	public static final @NonNull Os USING = getCurrent();
+	public static final boolean IS_USING_MAC = USING == MAC;
 
-    @Contract(pure = true)
-    public static @NonNull Os getCurrent() {
-        return Os.get(System.getProperty("os.name"));
-    }
+	@Contract(pure = true)
+	public static @NonNull Os getCurrent() {
+		return Os.get(System.getProperty("os.name"));
+	}
 
-    @Contract(value = "_ -> new", pure = true)
-    public static @NonNull Os get(final @NonNull String osName) {
-        final String osNameLower = osName.toLowerCase(Locale.ROOT);
-        if (osNameLower.contains("mac"))
-            return MAC;
-        else if (osNameLower.contains("win"))
-            return WINDOWS;
-        else
-            return LINUX;
-    }
+	@Contract(value = "_ -> new", pure = true)
+	public static @NonNull Os get(final @NonNull String osName) {
+		final String osNameLower = osName.toLowerCase(Locale.ROOT);
+		if (osNameLower.contains("mac"))
+			return MAC;
+		else if (osNameLower.contains("win"))
+			return WINDOWS;
+		else
+			return LINUX;
+	}
 }

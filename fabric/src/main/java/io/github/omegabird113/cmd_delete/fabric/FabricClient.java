@@ -20,8 +20,8 @@ import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import net.fabricmc.api.ClientModInitializer;
 
 public final class FabricClient implements ClientModInitializer {
-    @Override
-    public void onInitializeClient() {
-        CmdDeleteClient.start(new FabricPlatform());
-    }
+	@Override
+	public void onInitializeClient() {
+		CmdDeleteClient.start(new FabricPlatform());
+	}
 }

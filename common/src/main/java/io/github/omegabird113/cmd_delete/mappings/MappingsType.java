@@ -19,27 +19,27 @@ package io.github.omegabird113.cmd_delete.mappings;
 import org.jspecify.annotations.NonNull;
 
 public enum MappingsType {
-    CUSTOM("custom:", "Custom"),
-    BUILTIN("builtin:", "Builtin"),
-    DEFAULT("", "Default");
+	CUSTOM("custom:", "Custom"),
+	BUILTIN("builtin:", "Builtin"),
+	DEFAULT("", "Default");
 
-    private final @NonNull String prefix;
-    private final @NonNull String commonName;
+	private final @NonNull String prefix;
+	private final @NonNull String commonName;
 
-    MappingsType(final @NonNull String prefix, final @NonNull String commonName) {
-        this.prefix = prefix;
-        this.commonName = commonName;
-    }
+	MappingsType(final @NonNull String prefix, final @NonNull String commonName) {
+		this.prefix = prefix;
+		this.commonName = commonName;
+	}
 
-    public static @NonNull MappingsType fromIfCustom(final boolean custom) {
-        return custom ? MappingsType.CUSTOM : MappingsType.BUILTIN;
-    }
+	public static @NonNull MappingsType fromIfCustom(final boolean custom) {
+		return custom ? MappingsType.CUSTOM : MappingsType.BUILTIN;
+	}
 
-    public @NonNull String prefix() {
-        return prefix;
-    }
+	public @NonNull String prefix() {
+		return prefix;
+	}
 
-    public @NonNull String commonName() {
-        return commonName;
-    }
+	public @NonNull String commonName() {
+		return commonName;
+	}
 }
