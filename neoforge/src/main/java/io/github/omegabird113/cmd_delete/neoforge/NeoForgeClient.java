@@ -24,7 +24,7 @@ import net.neoforged.neoforge.common.NeoForge;
 
 @Mod(value = CmdDeleteClient.MODID, dist = Dist.CLIENT)
 public final class NeoForgeClient {
-	private static boolean started;
+	private static volatile boolean started;
 
 	public NeoForgeClient() {
 		NeoForge.EVENT_BUS.addListener(ClientTickEvent.Post.class, _ -> {
