@@ -31,6 +31,7 @@ import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 import org.joml.Vector2f;
+import org.jspecify.annotations.NonNull;
 import org.lwjgl.sdl.SDLScancode;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
@@ -58,7 +59,7 @@ public abstract class SignEditScreenMixin {
 	protected SignBlockEntity sign;
 
 	@Final
-    @Shadow
+	@Shadow
 	private TextFieldHelper signField;
 
 	@Shadow
@@ -81,7 +82,7 @@ public abstract class SignEditScreenMixin {
 	private int cmd_delete$selectionEndPos;
 
 	@Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
-	private void cmd_delete$overrideSignEditNavigation(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
+	private void cmd_delete$overrideSignEditNavigation(@NonNull KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
 		final NavAction action = CrashUtils.crashMinecraftOnFailure(() -> NavMappingsManager.getCurrentMappings().getAction(event));
 		final boolean shift = event.hasShiftDown();
 

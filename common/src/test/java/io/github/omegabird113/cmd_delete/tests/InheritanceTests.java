@@ -33,7 +33,7 @@ import org.slf4j.Logger;
 import java.util.List;
 import java.util.Objects;
 
-public class InheritanceTests {
+public final class InheritanceTests {
 	private static final Logger LOGGER = LoggingManager.getLoggerFor(InheritanceTests.class);
 
 	@BeforeAll

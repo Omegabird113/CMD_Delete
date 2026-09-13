@@ -25,7 +25,7 @@ import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import org.junit.jupiter.api.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class MappingsLoadTests {
+public final class MappingsLoadTests {
 	@BeforeAll
 	static void beforeAll() {
 		TestLoader.setup();
@@ -68,7 +68,7 @@ public class MappingsLoadTests {
 	@Order(3)
 	void sampleLoadTest() {
 		final MappingsState before = NavMappingsManager.getMappingsState();
-		boolean success = NavMappingsManager.updateMappingsTo(MappingsType.CUSTOM, "sample");
+		final boolean success = NavMappingsManager.updateMappingsTo(MappingsType.CUSTOM, "sample");
 		final MappingsState after = NavMappingsManager.getMappingsState();
 		Assertions.assertNotEquals(before, after, "sample mappings failed to load");
 		Assertions.assertEquals(MappingsType.CUSTOM, after.type());
