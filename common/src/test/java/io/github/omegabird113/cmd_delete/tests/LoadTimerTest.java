@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class LoadTimerTest {
+public final class LoadTimerTest {
 	@BeforeAll
 	static void beforeAll() {
 		TestLoader.setup();

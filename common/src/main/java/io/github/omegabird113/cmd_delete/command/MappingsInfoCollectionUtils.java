@@ -39,9 +39,6 @@ public final class MappingsInfoCollectionUtils {
 	public static @NonNull Component getInfoComponentFrom(final @NonNull MappingsState mappingsState, final boolean includeDescription) {
 		final double coverage = mappingsState.mappings().getCoverage();
 
-		String displayName = "";
-		String description = "";
-
 		final String namespacedId = MappingsIdResolutionUtils.resolveNamespacedId(mappingsState);
 		final String version = mappingsState.mappings().registry().version();
 		final String author = mappingsState.mappings().registry().author();
@@ -51,20 +48,15 @@ public final class MappingsInfoCollectionUtils {
 				.map(Os::name)
 				.toArray(String[]::new);
 
-		switch (mappingsState.type()) {
-			case CUSTOM -> {
-				displayName = "\"" + mappingsState.mappings().registry().name() + "\"";
-				description = mappingsState.mappings().registry().description();
-			}
-			case BUILTIN -> {
-				displayName = mappingsState.mappings().registry().name();
-				description = mappingsState.mappings().registry().description();
-			}
-			case DEFAULT -> {
-				displayName = "Default Mappings (Resolved to " + String.join(" and ", systemStrings) + ")";
-				description = "The hard-coded default behaviour to set the mappings to the pre-bundled mappings for the OS of the system when the client is loaded.";
-			}
-		}
+		final String displayName = switch (mappingsState.type()) {
+			case CUSTOM -> "\"" + mappingsState.mappings().registry().name() + "\"";
+			case BUILTIN -> mappingsState.mappings().registry().name();
+			case DEFAULT -> "Default Mappings (Resolved to " + String.join(" and ", systemStrings) + ")";
+		};
+		final String description = switch (mappingsState.type()) {
+			case CUSTOM, BUILTIN -> mappingsState.mappings().registry().description();
+			case DEFAULT -> "The hard-coded default behaviour to set the mappings to the pre-bundled mappings for the OS of the system when the client is loaded.";
+		};
 
 		final MutableComponent baseComponent = Component.translatable(
 				"commands.cmd_delete.mappings_info.base",

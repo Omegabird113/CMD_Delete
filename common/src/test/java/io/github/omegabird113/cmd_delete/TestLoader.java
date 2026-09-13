@@ -20,7 +20,9 @@ import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
 import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.slf4j.Logger;
@@ -33,7 +35,7 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
-public class TestLoader {
+public final class TestLoader {
 	private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(TestLoader.class);
 	private static final Path tempDir;
 	private static final IPlatform TEST_PLATFORM = new IPlatform() {
@@ -53,11 +55,12 @@ public class TestLoader {
 		}
 
 		@Override
-		public <S extends SharedSuggestionProvider> void registerClientCommand(@NonNull CommandRegistration<S> registration) {
+		public <S extends SharedSuggestionProvider> void registerClientCommand(@NonNull ICommandRegistration<S> registration) {
 		}
 
+		@Contract(pure = true)
 		@Override
-		public BiConsumer<SharedSuggestionProvider, Component> getFeedbackMethod() {
+		public @Nullable BiConsumer<SharedSuggestionProvider, Component> getFeedbackMethod() {
 			return null;
 		}
 
@@ -79,6 +82,9 @@ public class TestLoader {
 		} catch (IOException e) {
 			throw new ExceptionInInitializerError(e);
 		}
+	}
+
+	private TestLoader() {
 	}
 
 	public static synchronized void setup() {

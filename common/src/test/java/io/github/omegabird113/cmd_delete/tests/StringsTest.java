@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 
 import java.util.Arrays;
 
-public class StringsTest {
+public final class StringsTest {
 	private static final Logger LOGGER = LoggingManager.getLoggerFor(StringsTest.class);
 
 	@BeforeAll
