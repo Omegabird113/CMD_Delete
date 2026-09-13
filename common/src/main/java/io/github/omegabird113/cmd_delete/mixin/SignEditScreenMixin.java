@@ -32,7 +32,7 @@ import net.minecraft.client.input.KeyEvent;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 import org.joml.Vector2f;
 import org.jspecify.annotations.NonNull;
-import org.lwjgl.glfw.GLFW;
+import org.lwjgl.sdl.SDLScancode;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -58,6 +58,7 @@ public abstract class SignEditScreenMixin {
 	@Final
 	protected SignBlockEntity sign;
 
+	@Final
 	@Shadow
 	private TextFieldHelper signField;
 
@@ -82,7 +83,7 @@ public abstract class SignEditScreenMixin {
 
 	@Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
 	private void cmd_delete$overrideSignEditNavigation(@NonNull KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
-		final NavAction action = CrashUtils.crashMinecraftOnFailure(() -> NavMappingsManager.getCurrentMappings().getAction(event, Minecraft.getInstance().getWindow()));
+		final NavAction action = CrashUtils.crashMinecraftOnFailure(() -> NavMappingsManager.getCurrentMappings().getAction(event));
 		final boolean shift = event.hasShiftDown();
 
 		// Reset selection if player moves w/o shift
@@ -152,7 +153,7 @@ public abstract class SignEditScreenMixin {
 			case OVR_PASTE -> this.signField.paste();
 			case OVR_SELECT_ALL -> this.signField.selectAll();
 			case NONE -> {
-				if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation()) || CmdDeleteClient.FORCE_PREVENT_OVERRIDE_MODE || event.isEscape() || event.key() == GLFW.GLFW_KEY_ENTER || event.key() == GLFW.GLFW_KEY_KP_ENTER)
+				if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().overrideVanillaNavigation()) || CmdDeleteClient.FORCE_PREVENT_OVERRIDE_MODE || event.isEscape() || event.key() == SDLScancode.SDL_SCANCODE_RETURN || event.key() == SDLScancode.SDL_SCANCODE_KP_ENTER)
 					return;
 			}
 			case null -> {
