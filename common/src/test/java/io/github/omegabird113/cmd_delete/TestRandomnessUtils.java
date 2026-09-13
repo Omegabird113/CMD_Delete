@@ -27,11 +27,14 @@ import org.jspecify.annotations.Nullable;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-public class TestRandomnessUtils {
+public final class TestRandomnessUtils {
 	public static final @NonNull Random RANDOM = new Random(288923614);
 
+	private TestRandomnessUtils() {
+	}
+
 	public static @Nullable Boolean nextRandNullableBoolean() {
-		int choose = RANDOM.nextInt(0, 3);
+		final int choose = RANDOM.nextInt(0, 3);
 		if (choose == 0)
 			return null;
 		if (choose == 1)
@@ -79,19 +82,19 @@ public class TestRandomnessUtils {
 	public static @NonNull MappingsRegistry genRandomRegistry() {
 		final Map<KeyCombo, NavAction> enabled = new HashMap<>();
 		final Map<KeyCombo, NavAction> disabled = new HashMap<>();
-		final NavAction[] NavActions = Arrays.stream(NavAction.values()).toArray(NavAction[]::new);
+		final NavAction[] navActions = Arrays.stream(NavAction.values()).toArray(NavAction[]::new);
 
 		final int n1 = RANDOM.nextInt(30, 1001);
 		for (int i = 0; i < n1; i++) {
-			KeyCombo key = genRandomKeyCombo();
-			NavAction na = NavActions[RANDOM.nextInt(0, NavActions.length)];
+			final KeyCombo key = genRandomKeyCombo();
+			final NavAction na = navActions[RANDOM.nextInt(0, navActions.length)];
 			enabled.put(key, na);
 		}
 
 		final int n2 = RANDOM.nextInt(30, 1001);
 		for (int i = 0; i < n2; i++) {
-			KeyCombo key = genRandomKeyCombo();
-			NavAction na = NavActions[RANDOM.nextInt(0, NavActions.length)];
+			final KeyCombo key = genRandomKeyCombo();
+			final NavAction na = navActions[RANDOM.nextInt(0, navActions.length)];
 			disabled.put(key, na);
 		}
 

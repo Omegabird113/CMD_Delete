@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-public class MappingsInfoCollectionUtilsTest {
+public final class MappingsInfoCollectionUtilsTest {
 	@BeforeAll
 	static void beforeAll() {
 		TestLoader.setup();

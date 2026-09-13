@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-public class KeyComboTest {
+public final class KeyComboTest {
 	@BeforeAll
 	static void beforeAll() {
 		TestLoader.setup();
@@ -66,5 +66,4 @@ public class KeyComboTest {
 		Assertions.assertNull(mmap.get(different), "Different KeyCombo should not be present in map");
 	}
 }
-
 

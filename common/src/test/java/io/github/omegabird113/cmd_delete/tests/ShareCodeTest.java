@@ -27,7 +27,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 
-public class ShareCodeTest {
+public final class ShareCodeTest {
 	private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(ShareCodeTest.class);
 
 	@BeforeAll

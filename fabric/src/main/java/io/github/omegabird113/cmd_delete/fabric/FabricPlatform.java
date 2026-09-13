@@ -38,7 +38,7 @@ public final class FabricPlatform implements IPlatform {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <S extends SharedSuggestionProvider> void registerClientCommand(final @NonNull CommandRegistration<S> registration) {
+	public <S extends SharedSuggestionProvider> void registerClientCommand(final @NonNull ICommandRegistration<S> registration) {
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, _) -> registration.register((CommandDispatcher<S>) dispatcher));
 	}
 

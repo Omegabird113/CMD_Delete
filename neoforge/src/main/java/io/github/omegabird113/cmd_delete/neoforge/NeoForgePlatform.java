@@ -43,7 +43,7 @@ import java.util.function.BiConsumer;
 public final class NeoForgePlatform implements IPlatform {
 	public static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(NeoForgePlatform.class);
 	private final @NonNull Path resourcePath = setupResourcePath();
-	private CommandRegistration<?> commandRegistration;
+	private ICommandRegistration<?> commandRegistration;
 
 	public NeoForgePlatform() {
 		NeoForge.EVENT_BUS.addListener(RegisterClientCommandsEvent.class, this::registerClientCommand);
@@ -53,11 +53,11 @@ public final class NeoForgePlatform implements IPlatform {
 	private <S extends SharedSuggestionProvider> void registerClientCommand(final RegisterClientCommandsEvent event) {
 		if (commandRegistration == null)
 			throw new IllegalStateException("Client command registration was requested before the platform was initialized");
-		((CommandRegistration<S>) commandRegistration).register((CommandDispatcher<S>) event.getDispatcher());
+		((ICommandRegistration<S>) commandRegistration).register((CommandDispatcher<S>) event.getDispatcher());
 	}
 
 	@Override
-	public <S extends SharedSuggestionProvider> void registerClientCommand(final @NonNull CommandRegistration<S> registration) {
+	public <S extends SharedSuggestionProvider> void registerClientCommand(final @NonNull ICommandRegistration<S> registration) {
 		commandRegistration = registration;
 	}
 

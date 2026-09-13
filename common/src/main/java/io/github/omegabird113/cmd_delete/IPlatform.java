@@ -41,7 +41,7 @@ public interface IPlatform {
 
 	@NonNull Path getResourcePath();
 
-	<S extends SharedSuggestionProvider> void registerClientCommand(@NonNull CommandRegistration<S> registration);
+	<S extends SharedSuggestionProvider> void registerClientCommand(@NonNull ICommandRegistration<S> registration);
 
 	@Nullable BiConsumer<@NonNull SharedSuggestionProvider, @NonNull Component> getFeedbackMethod();
 
@@ -50,7 +50,7 @@ public interface IPlatform {
 	@NonNull Logger getPlatformLogger();
 
 	@FunctionalInterface
-	interface CommandRegistration<S extends SharedSuggestionProvider> {
+	interface ICommandRegistration<S extends SharedSuggestionProvider> {
 		void register(@NonNull CommandDispatcher<S> dispatcher);
 	}
 }

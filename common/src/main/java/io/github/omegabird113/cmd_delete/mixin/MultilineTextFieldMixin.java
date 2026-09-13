@@ -26,6 +26,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.MultilineTextField;
 import net.minecraft.client.gui.components.Whence;
 import net.minecraft.client.input.KeyEvent;
+import org.jspecify.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
@@ -208,7 +209,7 @@ public abstract class MultilineTextFieldMixin {
 	}
 
 	@Unique
-	private MultilineTextFieldStringViewAccessor cmd_delete$getCursorLineView() {
+	private @Nullable MultilineTextFieldStringViewAccessor cmd_delete$getCursorLineView() {
 		for (Object lineView : this.displayLines) {
 			final MultilineTextFieldStringViewAccessor accessor = (MultilineTextFieldStringViewAccessor) lineView;
 			if (this.cursor >= accessor.cmd_delete$getBeginIndex() && this.cursor <= accessor.cmd_delete$getEndIndex())

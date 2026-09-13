@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MappingsRegistryTest {
+public final class MappingsRegistryTest {
 	@BeforeAll
 	static void beforeAll() {
 		TestLoader.setup();
@@ -67,4 +67,3 @@ public class MappingsRegistryTest {
 		Assertions.assertTrue(s.contains(k1.toString()) || s.contains(k2.toString()));
 	}
 }
-
