@@ -1,5 +1,5 @@
 {
-  "fv": 2,
+  "fv": 5,
   "inherits": "custom:inherited",
   "meta": {
     "name": "Example custom mapping",

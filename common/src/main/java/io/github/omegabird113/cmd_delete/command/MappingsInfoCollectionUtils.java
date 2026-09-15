@@ -64,7 +64,7 @@ public final class MappingsInfoCollectionUtils {
 				Component.literal(namespacedId),
 				Component.literal(version),
 				Component.literal(author),
-				Component.literal(license != null ? license : "<unknown>")
+				Component.literal(license)
 		);
 
 		final Component coverageComponent = Component.translatable(
@@ -82,7 +82,7 @@ public final class MappingsInfoCollectionUtils {
 			final Component descriptionComponent = Component.translatable(
 					"commands.cmd_delete.mappings_info.description",
 					description,
-					credits != null ? credits : "<unknown>"
+					credits
 			);
 			result.append("\n").append(descriptionComponent);
 		}
