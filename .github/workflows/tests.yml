@@ -65,11 +65,21 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
+      - name: Install Mesa software rendering
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgl1-mesa-dri libglx-mesa0 mesa-utils xvfb
+
       - name: Build ${{ matrix.loader }}
         run: ./gradlew ${{ matrix.build_task }} --no-daemon
 
       - name: Test ${{ matrix.loader }} client load
-        run: xvfb-run ./gradlew ${{ matrix.client_args }} ${{ matrix.client_task }} --no-daemon
+        env:
+          LIBGL_ALWAYS_SOFTWARE: "1"
+          MESA_GL_VERSION_OVERRIDE: "4.5"
+        run: >
+          xvfb-run --server-args="-screen 0 1920x1080x24 +extension GLX +render -noreset"
+          ./gradlew ${{ matrix.client_args }} ${{ matrix.client_task }} --no-daemon
 
       - name: Upload jar
         uses: actions/upload-artifact@v7
