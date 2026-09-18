@@ -25,7 +25,6 @@ import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.MultilineTextField;
 import net.minecraft.client.gui.components.Whence;
-import net.minecraft.client.input.KeyEvent;
 import org.jspecify.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
