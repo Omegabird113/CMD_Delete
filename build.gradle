@@ -16,7 +16,7 @@
 
 plugins {
     id 'maven-publish'
-    id "dev.architectury.loom" version "1.17.491" apply false
+    id "dev.architectury.loom" version "1.17.493" apply false
 }
 
 subprojects {

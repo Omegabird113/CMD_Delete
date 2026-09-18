@@ -81,6 +81,8 @@ public final class NavMappingsCommand {
 						.then(literal("dumpRegistry").executes(NavMappingsCommand::dumpRegistry))
 						.then(literal("dumpKeymap").executes(NavMappingsCommand::dumpKeyMap))
 						.then(literal("dumpMappingsState").executes(NavMappingsCommand::dumpMappingsState))
+						.then(literal("sendDocsLink").executes(NavMappingsCommand::sendDocsLink))
+						.then(literal("sendIssuesLink").executes(NavMappingsCommand::sendIssuesLink))
 				)
 				.then(literal("export")
 						.then(literal("builtin")
@@ -284,6 +286,16 @@ public final class NavMappingsCommand {
 				CmdDeleteClient.SHARECODE_FORMAT_VERSION,
 				CmdDeleteClient.ISSUE_TRACKER_URL_STRING
 		));
+		return 1;
+	}
+
+	private static int sendDocsLink(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) {
+		IPlatform.sendCommandFeedback(context.getSource(), Component.translatable("commands.cmd_delete.docs_link", "https://omegabird113.github.io/CMD_Delete/"));
+		return 1;
+	}
+
+	private static int sendIssuesLink(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) {
+		IPlatform.sendCommandFeedback(context.getSource(), Component.translatable("commands.cmd_delete.issues_link", CmdDeleteClient.ISSUE_TRACKER_URL_STRING));
 		return 1;
 	}
 }

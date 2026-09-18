@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class MappingsIdResolutionTests {
+public final class MappingsIdResolutionTests {
 	@BeforeAll
 	static void beforeAll() {
 		TestLoader.setup();
