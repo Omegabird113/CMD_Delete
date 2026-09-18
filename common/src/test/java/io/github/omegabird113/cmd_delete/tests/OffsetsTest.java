@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 
 import java.util.List;
 
-public class OffsetsTest {
+public final class OffsetsTest {
 	private static final Logger LOGGER = LoggingManager.getLoggerFor(OffsetsTest.class);
 
 	@BeforeAll
@@ -60,10 +60,10 @@ public class OffsetsTest {
 
 			LOGGER.info("Tested offset ({}) of: {}", offset, action.name());
 
-			boolean isOvr = action.overrideMode();
+			final boolean isOvr = action.overrideMode();
 			Assertions.assertEquals(isOvr, action.name().contains("OVR"));
 
-			boolean isMove = action.isMove();
+			final boolean isMove = action.isMove();
 			Assertions.assertEquals(isMove, action.name().contains("NAV"));
 		}
 	}

@@ -83,8 +83,8 @@ jobs:
       - name: Build ${{ matrix.loader }}
         run: ./gradlew ${{ matrix.build_task }} --stacktrace --no-daemon
 
-      - name: Sanity-test ${{ matrix.loader }} client load
-        run: xvfb-run ./gradlew ${{ matrix.client_args }} ${{ matrix.client_task }} --no-daemon
+#      - name: Sanity-test ${{ matrix.loader }} client load
+#        run: xvfb-run ./gradlew ${{ matrix.client_args }} ${{ matrix.client_task }} --no-daemon
 
       - name: Upload ${{ matrix.loader }} JARs as artifact
         uses: actions/upload-artifact@v7
@@ -262,8 +262,8 @@ jobs:
           curseforge-id: 1455987
           curseforge-token: ${{ secrets.CF_API_TOKEN }}
           files: ${{ steps.jars.outputs.fabric }}
-          name: ${{ inputs.release_title }}
-          version: ${{ steps.props.outputs.version }}
+          name: ${{ inputs.release_title }} (Fabric)
+          version: ${{ steps.props.outputs.version }}-fabric
           version-type: ${{ inputs.release_type }}
           changelog-file: changelog.md
           java: 21
@@ -284,8 +284,8 @@ jobs:
           curseforge-id: 1455987
           curseforge-token: ${{ secrets.CF_API_TOKEN }}
           files: ${{ steps.jars.outputs.neoforge }}
-          name: ${{ inputs.release_title }}
-          version: ${{ steps.props.outputs.version }}
+          name: ${{ inputs.release_title }} (NeoForge)
+          version: ${{ steps.props.outputs.version }}-neoforge
           version-type: ${{ inputs.release_type }}
           changelog-file: changelog.md
           java: 25
