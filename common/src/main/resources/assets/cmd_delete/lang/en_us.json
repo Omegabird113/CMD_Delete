@@ -26,5 +26,7 @@
   "commands.cmd_delete.mappings_info.default_description": "The hard-coded default behaviour to set the mappings to the pre-bundled mappings for the OS of the system when the client is loaded.",
   "commands.cmd_delete.mappings_info.base": "%s (id: \"%s\") v%s by %s with the %s license.",
   "commands.cmd_delete.mappings_info.coverage": "These mappings have %s%% action coverage with %s key combinations registered with support for %s.",
-  "commands.cmd_delete.mappings_info.description": "Description:\n%s\nCredits:\n%s"
+  "commands.cmd_delete.mappings_info.description": "Description:\n%s\nCredits:\n%s",
+  "commands.cmd_delete.docs_link": "Documentation link:\n%s",
+  "commands.cmd_delete.issues_link": "GitHub Issues link:\n%s"
 }
