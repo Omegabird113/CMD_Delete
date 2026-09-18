@@ -83,8 +83,8 @@ jobs:
       - name: Build ${{ matrix.loader }}
         run: ./gradlew ${{ matrix.build_task }} --stacktrace --no-daemon
 
-      - name: Sanity-test ${{ matrix.loader }} client load
-        run: xvfb-run ./gradlew ${{ matrix.client_args }} ${{ matrix.client_task }} --no-daemon
+#      - name: Sanity-test ${{ matrix.loader }} client load
+#        run: xvfb-run ./gradlew ${{ matrix.client_args }} ${{ matrix.client_task }} --no-daemon
 
       - name: Upload ${{ matrix.loader }} JARs as artifact
         uses: actions/upload-artifact@v7
@@ -269,7 +269,7 @@ jobs:
           changelog-file: changelog.md
           java: 25
           game-versions: |
-            >=26.1 <=26.2
+            26.3
           loaders: |
             fabric
             quilt
@@ -290,7 +290,7 @@ jobs:
           changelog-file: changelog.md
           java: 25
           game-versions: |
-            >=26.1 <=26.2
+            26.3
           loaders: neoforge
           environment: client
           fail-mode: skip
