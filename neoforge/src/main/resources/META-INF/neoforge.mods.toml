@@ -25,7 +25,7 @@ side = "CLIENT"
 [[dependencies.cmd_delete]]
 modId = "minecraft"
 type = "required"
-versionRange = "[26.3]"
+versionRange = "[26.1,26.3)"
 ordering = "NONE"
 side = "CLIENT"
 
