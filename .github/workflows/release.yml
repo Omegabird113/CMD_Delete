@@ -272,7 +272,6 @@ jobs:
           loaders: |
             fabric
             quilt
-            neoforge
           environment: client
           fail-mode: skip
 
