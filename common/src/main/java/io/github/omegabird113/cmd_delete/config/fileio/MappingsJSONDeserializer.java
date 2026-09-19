@@ -154,7 +154,7 @@ public final class MappingsJSONDeserializer {
 				for (KeyCombo key : keys) {
 					if (toAdd.containsKey(key))
 						logWarn(
-								"Duplicate key binding in custom binding with action of \"" + actionName + "\" and key \"" + key + "\". 2nd registration skipped...",
+								"Duplicate key binding in custom binding with action of \"" + actionName + "\" and key \"" + key + "\". Second registration skipped...",
 								strictMode
 						);
 					else

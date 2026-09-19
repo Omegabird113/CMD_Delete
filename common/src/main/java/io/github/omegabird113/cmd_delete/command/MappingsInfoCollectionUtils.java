@@ -55,7 +55,7 @@ public final class MappingsInfoCollectionUtils {
 		};
 		final String description = switch (mappingsState.type()) {
 			case CUSTOM, BUILTIN -> mappingsState.mappings().registry().description();
-			case DEFAULT -> "The hard-coded default behaviour to set the mappings to the pre-bundled mappings for the OS of the system when the client is loaded.";
+			case DEFAULT -> "The hard-coded default behavior to set the mappings to the pre-bundled mappings for the OS of the system when the client is loaded.";
 		};
 
 		final MutableComponent baseComponent = Component.translatable(

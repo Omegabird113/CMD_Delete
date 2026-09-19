@@ -97,7 +97,7 @@ final class NavMappingsCommandExecutionUtils {
 				}
 			}
 		} catch (IOException e) {
-			LOGGER.error("Error while {} mappings exporting ", typeCName, e);
+			LOGGER.error("Error while exporting {} mappings.", typeCName, e);
 			if (custom)
 				throw CommandCreationUtils.UNKNOWN_CUSTOM_MAPPINGS.create(idStr);
 			else
