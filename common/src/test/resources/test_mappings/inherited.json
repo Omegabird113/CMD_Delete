@@ -1,5 +1,5 @@
 {
-  "fv": 3,
+  "fv": 5,
   "inherits": "builtin:mac",
   "meta": {
     "name": "Example custom mapping",
