@@ -59,7 +59,7 @@ Changes:
 
 Release notes:
 
-- This version is not available for the primary (26.1-26.2) build of the mod.
+- This version is not available for the primary (26.1–26.2) build of the mod.
 
 Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.4.3a+mc1.21.11...1.4.3b+mc1.21.11
 
@@ -86,11 +86,11 @@ Changes:
 
 - Sharecode generation should now produce more explicit error messages on failure instead of silently catching them and
   generating broken sharecodes like `CDS:EV1::0`.
-- Properly error on invalid types for boolean values in mappings JSONs in all cases.
+- Error properly on invalid types for boolean values in mappings JSONs in all cases.
 - Make the strings for the `/navmappings info` command actually translatable.
 - Make some improvements to various strings across the mod.
 - The mappings loader now throws for the file not being found if it is a folder/directory instead of a file.
-- The licenses of 3rd-party libraries redistributed with CMD + Delete are now properly included in the mod jar.
+- The licenses of third-party libraries redistributed with CMD + Delete are now properly included in the mod jar.
 - Internal code improvements.
 
 Release notes:
@@ -106,7 +106,7 @@ Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.4.2+mc26.1.
 
 Changes:
 
-- Fix an exploit where sharecodes and files could contain ids that would cause them to be placed in a sub-folder of or
+- Fix an exploit where sharecodes and files could contain ids that would cause them to be placed in a subfolder of or
   outside the custom mappings folder when imported. Path separation characters are now not allowed in ids.
 - Make many strings for the `/navmappings` command translatable.
 - Use less technical description for the mod's about information.
@@ -125,7 +125,7 @@ Changes:
   active.
 - Fixed a bug where the cut functionally might not work properly in some places.
 - Add a `cmd_delete.forcePreventOverrideMode` JVM property that can be used to force the mod to prevent override mode,
-  even if a user's custom mappings set or a builtin mappings set has enabled. Note that this option is intended for
+  even if a user's custom mappings set or a builtin mappings set has it enabled. Note that this option is intended for
   debug purposes and not recommended for normal use.
 - Internal code improvements.
 
@@ -151,13 +151,14 @@ Changes:
 		  would be accepted not in strict mode.
 	- It is now a requirement that all builtin mappings load successfully in strict mode.
 - Added a sharecode system for generating long encoded strings of mappings files that are easier to work with than raw
-  JSON and the mod can automatically import for you.
+  JSON, and the mod can automatically import for you.
 - Added the following new builtin mappings sets: `builtin:emacs_windows_linux`, `builtin:emacs_mac`, and
   `builtin:readline`.
 - Add the `/navmappings debug dumpDetailedActions` and `/navmappings debug dumpMappingsState` sub-commands.
 - Improved the `/navmappings debug aboutCmdDelete` sub-command’s generated text.
 - When you switch mappings, and your new mappings fail to load, the previously active mappings will be used instead of
-  always switching to default mappings. This comes with other stability & robustness improvements to mappings switching.
+  always switching to default mappings. This comes with other stability and robustness improvements to mappings
+  switching.
 - Added a verbose logging mode which promotes `TRACE`/`DEBUG` level logs to `INFO` for inclusion in `latest.log` in all
   environments (especially for the vanilla launcher) for easier bug reports. This mode is only enabled if the
   `cmd_delete.allowVerboseLogs` JVM argument is set to `true`.
@@ -182,11 +183,11 @@ Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.3.1+mc26.1.
 Changes:
 
 - When you switch mappings, and your previous mappings fail to load, the previously active mappings will be used instead
-  of always switching to default mappings. This comes with other stability & robustness improvements to mappings
+  of always switching to default mappings. This comes with other stability and robustness improvements to mappings
   switching.
 - Added a `/navmappings debug dumpMappingsState` sub-command.
 - Added a hard-coded warning that the builtin mappings `emacs_mac`, `emacs_windows_linux`, and `readline` are
-  incomplete & not fully accurate emulates of those pieces of software.
+  incomplete and not fully accurate emulates of those applications.
 - Added a verbose logging mode which promotes `TRACE`/`DEBUG` level logs to `INFO` for inclusion in `latest.log` in all
   environments (especially for the vanilla launcher) for easier bug reports. This mode is only enabled if the
   `cmd_delete.allowVerboseLogs` JVM argument is set to `true`.
@@ -226,14 +227,14 @@ Changes:
 
 Some notes on Minecraft 26.3 Snapshot 4/5 and above:
 
-- Beta 1 added a separate build for this version, because it breaks compatibility due to the fact that Mojang moved from
-  `GLFW` to `SDL3` for the game's input library.
+- Beta 1 added a separate build for this version because it breaks compatibility because Mojang moved from`GLFW` to
+  `SDL3` for the game's input library.
 - As a result of this, mappings that use integers instead of friendly keynames will be treated differently on different
   versions (They'll be `GLFW keycodes` on `1.16`-`26.3-snapshot.3` and `SDL3 scancodes` on `26.3-snapshot.4` and above).
   Also, the friendly keyname `f25` only works on GLFW. In a future mappings format version, `f25` will be removed as a
   friendly keyname.
 - If you only use friendly keynames in your mappings, (excluding `f25`) they will work fine across versions.
-- After 26.3 full release, the primary build of the mod will become the 26.3 build and the 26.1-26.2 build will become
+- After 26.3 full release, the primary build of the mod will become the 26.3 build and the 26.1–26.2 build will become
   the secondary build. At this point, the previous 1.21.11 secondary build will lose support and no longer be made. Note
   that the builds for `1.20`-`1.20.1` and `1.20.5`-`1.21.5` are considered LTS builds and will not lose support any time
   soon.
@@ -260,7 +261,7 @@ Changes:
 		  would be accepted not in strict mode.
 	- It is now a requirement that all builtin mappings load successfully in strict mode.
 - Added a sharecode system for generating long encoded strings of mappings files that are easier to work with than raw
-  JSON and the mod can automatically import for you.
+  JSON, and the mod can automatically import for you.
 - Added the following new builtin mappings sets: `builtin:emacs_windows_linux`, `builtin:emacs_mac`, and
   `builtin:readline`.
 - Internal code improvements.
@@ -392,19 +393,19 @@ Full Changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.1.0+mc26.1.
 Changes:
 
 - Added support for the new 26.2 update
-- Improved the details & formatting of `/navmappings info`
+- Improved the details and formatting of `/navmappings info`
 - `/navmappings set builtin windows` and `/navmappings set builtin linux` are no longer allowed (you must use
   `/navmappings set builtin windows_linux`)
 - Improve logging
 - Improve the validation of custom mappings JSONs
 - Fixed a bug where non-json files were shown in `/navmappings list`
-- Made improvements which should help the mod's performance & file size
+- Made improvements which should help the mod's performance and file size
 - Internal code improvements
 - Made a wave of one-time backport builds which eventually got as far back as 1.14.4
 
 Release notes:
 
-- The 1.14.4, 1.15-1.15.2, and 1.16-1.16.4 builds of this update do not have working command suggestions (the
+- The 1.14.4, 1.15–1.15.2, and 1.16–1.16.4 builds of this update do not have working command suggestions (the
   /navmappings command works, but it'll appear highlighted in red as if it didn't exist).
 - At the time of this release, changelogs were input as a comma-separated single-line list into a GitHub Actions
   workflow. Due to an issue with this workflow's formatting not allowing the ` character, a very broken version of this
@@ -446,8 +447,8 @@ Changes:
 
 - There's a new logo
 - CMD + Delete now uses an actions/mapping system internally
-- CMD + Delete now supports user-defined custom mappings (there is currently no way to switch between mappings in game,
-  you have to edit .active_mappings to change mappings)
+- CMD + Delete now supports user-defined custom mappings (there is currently no way to switch between mappings within
+  the game, you have to edit .active_mappings to change mappings)
 - Moved back to the old `cmd_delete` modid
 - internal code improvements
 
@@ -551,7 +552,7 @@ Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.0-alpha1...
 
 Changes:
 
-- This is the 1st release of CMD + Delete.
+- This is the first release of CMD + Delete.
 
 Release notes:
 
