@@ -55,7 +55,7 @@ public final class CmdDeleteClient {
 
 	public static void setPlatform(final @NonNull IPlatform platform) {
 		CmdDeleteClient.platform = platform;
-		LoggingManager.traceLog(platform.getPlatformLogger(), "Platform set...");
+		LoggingManager.traceLog(platform.getPlatformLogger(), "Platform set... Using the provided platform logger to send this.");
 		LoggingManager.debugLog(LOGGER, "CmdDeleteClient platform set to \"{}\"", platform.getPlatformName());
 	}
 
@@ -65,7 +65,7 @@ public final class CmdDeleteClient {
 
 			LoadTimer.time(() -> {
 				LOGGER.info("Initializing client mod \"{}\" (version: {}, mappings format version: {}, minimum mappings compatible version: {}, sharecode encoding version: {})... You can report any issues at {}.", MODID, platform.getModVersion(), CURRENT_MAPPINGS_FORMAT_VERSION, MINIMUM_MAPPINGS_FORMAT_VERSION, SHARECODE_FORMAT_VERSION, ISSUE_TRACKER_URL_STRING);
-				LOGGER.info("User appears to be running system: {}", Os.USING);
+				LOGGER.info("User appears to be running OS: {}", Os.USING);
 
 				final MixinEnvironment mixinEnv = MixinEnvironment.getCurrentEnvironment();
 				LoggingManager.traceLog(LOGGER, "Mixin version {} with obfuscation \"{}\" and compatibility level \"{}\" in phase \"{}\" on side \"{}\"", mixinEnv.getVersion(), mixinEnv.getObfuscationContext(), MixinEnvironment.getCompatibilityLevel(), mixinEnv.getPhase(), mixinEnv.getSide());
