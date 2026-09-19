@@ -4,6 +4,19 @@ This is a collection of all historical CMD + Delete changelogs for every release
 notes were retroactively added and the formatting was retroactively changed in some versions to fix issues and make
 inter-version formatting consistent.
 
+### 1.5.0 Beta 2
+
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.5.0-beta.2%2Bmc26.3) on September 18th, 2026.
+
+Changes:
+
+- Updated the main branch to Minecraft 26.3.
+- Added a `/navmappings debug sendDocsLink` sub-command.
+- Added a `/navmappings debug sendIssuesLink` sub-command.
+- Internal code improvements.
+
+Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.5.0-beta.1+mc26.1...1.5.0-beta.2+mc26.3
+
 ### 1.5.0 Beta 1
 
 [Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.5.0-beta.1%2Bmc26.1) on September 6th, 2026.
