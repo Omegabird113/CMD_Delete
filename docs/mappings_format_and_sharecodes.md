@@ -9,7 +9,8 @@ behavior in Minecraft for your own taste and configuration. You can also easily 
 Custom mappings can:
 
 - Use wildcard expansion where any modifier not included in a key combo is treated as `true` OR `false`.
-- Use [friendly keyname strings](friendly_keynames.md) defined by CMD + Delete instead of GLFW/SDL3 keycodes. If a keyname is
+- Use [friendly keyname strings](friendly_keynames.md) defined by CMD + Delete instead of GLFW/SDL3 keycodes. If a
+  keyname is
   not defined, you can still choose to use a raw keycode in your JSON.
 - Inherit keybinds from the builtin mappings or other custom mappings by setting the top-level `inherits` value to
   `custom:<id>` to inherit a custom JSON, or `builtin:<id>` or just `<id>` to inherit a builtin JSON.
