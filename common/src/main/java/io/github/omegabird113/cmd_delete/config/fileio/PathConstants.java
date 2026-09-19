@@ -38,7 +38,7 @@ public final class PathConstants {
 
 	public static void init(final @NonNull Path gamePath, final @NonNull Path builtinMappingsPath) {
 		if (initialized)
-			throw new IllegalStateException("PathConstants has already been initialized");
+			throw new IllegalStateException("PathConstants info has already been initialized");
 
 		PathConstants.mappingsResourcePath = builtinMappingsPath;
 		PathConstants.activeMappingsFilePath = gamePath.resolve("config/cmd_delete/.active_mappings");

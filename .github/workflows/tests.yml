@@ -47,10 +47,10 @@ jobs:
             build_task: :fabric:build
             client_task: :fabric:runCiClient
             client_args: ""
-#          - loader: neoforge
-#            build_task: :neoforge:build
-#            client_task: :neoforge:runClient
-#            client_args: -Dcmd_delete.ci.stopMinecraftAfterLoad=true
+    #          - loader: neoforge
+    #            build_task: :neoforge:build
+    #            client_task: :neoforge:runClient
+    #            client_args: -Dcmd_delete.ci.stopMinecraftAfterLoad=true
 
     steps:
       - uses: actions/checkout@v7
