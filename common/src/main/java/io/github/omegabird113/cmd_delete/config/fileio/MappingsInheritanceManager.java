@@ -45,11 +45,19 @@ public final class MappingsInheritanceManager {
 				disabledMap.forEach(localRegistry::remove);
 			final Map<KeyCombo, NavAction> enabledMap = currentRegistry.internalRegistry();
 			localRegistry.putAll(enabledMap);
-			currentFeatureFlags = FeatureFlags.merge(currentFeatureFlags, currentRegistry.featureFlags());
+			currentFeatureFlags = mergeFeatureFlags(currentFeatureFlags, currentRegistry.featureFlags());
 		}
 
 		final MappingsRegistry last = toMerge.getLast();
 
 		return new MappingsRegistry(localRegistry, null, last.systems(), currentFeatureFlags, "", last.name(), last.author(), last.description(), last.version(), last.id(), last.license(), last.credits());
+	}
+
+	@Contract("_, _ -> new")
+	public static @NonNull FeatureFlags mergeFeatureFlags(final @NonNull FeatureFlags parent, final @NonNull FeatureFlags child) {
+		return new FeatureFlags(
+				child.overrideVanillaNavigation() != null ? child.overrideVanillaNavigation() : parent.overrideVanillaNavigation(),
+				child.crossLineSignMovement() != null ? child.crossLineSignMovement() : parent.crossLineSignMovement()
+		);
 	}
 }

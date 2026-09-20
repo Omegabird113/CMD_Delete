@@ -51,7 +51,7 @@ public final class InheritanceTests {
 			FeatureFlags beforeMergeParent = ff;
 			FeatureFlags beforeMergeChild = featureFlags[i];
 
-			ff = FeatureFlags.merge(ff, featureFlags[i]);
+			ff = MappingsInheritanceManager.mergeFeatureFlags(ff, featureFlags[i]);
 			LOGGER.info("{} - Merged {} into {}", i, beforeMergeChild, beforeMergeParent);
 
 			Boolean expected1 = beforeMergeChild.overrideVanillaNavigation() != null
