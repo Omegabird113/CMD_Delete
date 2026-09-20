@@ -48,18 +48,18 @@ public final class InheritanceTests {
 		for (int i = 0; i < featureFlags.length; i++) {
 			featureFlags[i] = TestRandomnessUtils.nextRandFeatureFlags();
 
-			FeatureFlags beforeMergeParent = ff;
-			FeatureFlags beforeMergeChild = featureFlags[i];
+			final FeatureFlags beforeMergeParent = ff;
+			final FeatureFlags beforeMergeChild = featureFlags[i];
 
 			ff = MappingsInheritanceManager.mergeFeatureFlags(ff, featureFlags[i]);
 			LOGGER.info("{} - Merged {} into {}", i, beforeMergeChild, beforeMergeParent);
 
-			Boolean expected1 = beforeMergeChild.overrideVanillaNavigation() != null
+			final Boolean expected1 = beforeMergeChild.overrideVanillaNavigation() != null
 					? beforeMergeChild.overrideVanillaNavigation()
 					: beforeMergeParent.overrideVanillaNavigation();
 			Assertions.assertEquals(expected1, ff.overrideVanillaNavigation());
 
-			Boolean expected2 = beforeMergeChild.crossLineSignMovement() != null
+			final Boolean expected2 = beforeMergeChild.crossLineSignMovement() != null
 					? beforeMergeChild.crossLineSignMovement()
 					: beforeMergeParent.crossLineSignMovement();
 			Assertions.assertEquals(expected2, ff.crossLineSignMovement());
@@ -76,7 +76,7 @@ public final class InheritanceTests {
 		LOGGER.info("Generated to-merge list of {} mappings registries", n1);
 		final MappingsRegistry mr = MappingsInheritanceManager.merge(List.of(mappingsRegistries));
 
-		NavMappings mappings = new NavMappings(mr);
+		final NavMappings mappings = new NavMappings(mr);
 		LOGGER.info("Merged mappings registries into one of size: {}, hashCode: {}, and with coverage: {}", mr.getSize(), mr.hashCode(), mappings.getCoverage());
 		Assertions.assertEquals(1.0f, mappings.getCoverage(), 0.0001f);
 
@@ -100,8 +100,8 @@ public final class InheritanceTests {
 		final int n2 = TestRandomnessUtils.RANDOM.nextInt(8000, 12001);
 		LOGGER.info("Testing {} NavAction lookups in generated mappings", n2);
 		for (int i = 0; i < n2; i++) {
-			KeyCombo rkey = TestRandomnessUtils.genRandomKeyCombo();
-			NavAction na = mappings.getAction(rkey);
+			final KeyCombo rkey = TestRandomnessUtils.genRandomKeyCombo();
+			final NavAction na = mappings.getAction(rkey);
 			Assertions.assertNotNull(na);
 			if (!Objects.requireNonNullElse(mr.get(rkey), NavAction.NONE).overrideMode() || mr.featureFlags().overrideVanillaNavigation())
 				Assertions.assertEquals(
