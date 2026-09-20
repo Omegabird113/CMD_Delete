@@ -28,7 +28,7 @@ import java.util.function.BiConsumer;
 
 public interface IPlatform {
 	default void sendCommandFeedback(final @NonNull SharedSuggestionProvider source,
-									final @NonNull Component component) {
+									 final @NonNull Component component) {
 		final BiConsumer<SharedSuggestionProvider, Component> feedback = this.getFeedbackMethod();
 		if (feedback == null)
 			throw new IllegalStateException("Client command feedback was requested before platform initialization or in tests");
