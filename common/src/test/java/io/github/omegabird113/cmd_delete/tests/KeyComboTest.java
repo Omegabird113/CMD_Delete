@@ -58,7 +58,7 @@ public final class KeyComboTest {
 		Assertions.assertTrue(s.contains(expectedKeyName), () -> "Expected key name " + expectedKeyName + " in " + s);
 
 		final KeyCombo kc2 = new KeyCombo(leftKey, true, true, true, true);
-		Map<KeyCombo, String> mmap = new HashMap<>();
+		final Map<KeyCombo, String> mmap = new HashMap<>();
 		mmap.put(kc, "value");
 		Assertions.assertEquals("value", mmap.get(kc2), "KeyCombo equals/hashCode should allow lookup with an equal instance");
 

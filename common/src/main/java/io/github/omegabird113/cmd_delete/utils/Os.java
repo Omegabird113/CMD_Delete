@@ -28,6 +28,8 @@ public enum Os {
 
 	public static final @NonNull Os USING = getCurrent();
 	public static final boolean IS_USING_MAC = USING == MAC;
+	public static final boolean IS_USING_WINDOWS = USING == WINDOWS;
+	public static final boolean IS_USING_LINUX = USING == LINUX;
 
 	@Contract(pure = true)
 	public static @NonNull Os getCurrent() {
