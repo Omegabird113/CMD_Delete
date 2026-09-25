@@ -7,7 +7,7 @@ preserve_hierarchy: true
 
 files:
   - source: '/common/src/main/resources/assets/*/lang/en_us.json'
-    translation: '%original_path%/%locale%.json'
+    translation: '/common/src/main/resources/assets/*/lang/%locale%.json'
     languages_mapping:
       locale:
         af: af
