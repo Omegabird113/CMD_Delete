@@ -1,0 +1,10 @@
+project_id_env: 'CROWDIN_PROJECT_ID'
+api_token_env: 'CROWDIN_API_TOKEN'
+base_path: '.'
+
+commit_message: '[Crowdin] Update source files (%original_file_name%)'
+preserve_hierarchy: true
+
+files:
+  - source: '/common/src/main/resources/assets/*/lang/en_us.json'
+    translation: '/%original_path%/%locale_with_underscore%.json'
