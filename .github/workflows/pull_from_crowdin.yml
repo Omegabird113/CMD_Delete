@@ -21,6 +21,10 @@ jobs:
           upload_translations: false
           download_translations: true
           push_translations: false
+          github_user_name: "github-actions"
+          github_user_email: "actions@github.com"
+          commit_message: "New Crowdin translations"
+          localization_branch_name: "localization"
           create_pull_request: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
