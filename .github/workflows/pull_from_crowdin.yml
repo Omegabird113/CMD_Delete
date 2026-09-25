@@ -52,14 +52,32 @@ jobs:
             fi
           done
 
-      - name: Commit and push changes to localization branch
+      - name: Commit changes locally
         if: success()
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "actions@github.com"
           git add common/src/main/resources/assets/**/lang/*.json
           git diff --quiet && git diff --staged --quiet || git commit -m "Rename language files to lowercase"
-          git push
+          # no git push here — create-pull-request handles branching + pushing
+
+      - name: Create Pull Request
+        if: success()
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 #v8.1.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-title: "New Crowdin translations"
+          title: "New Crowdin translations"
+          body: |
+            Updated translations from Crowdin.
+
+            This PR was automatically created by GitHub Actions from the Crowdin Pull workflow.
+          branch: "localization"
+          base: "master"
+          labels: "translations"
+          reviewers: "Omegabird113"
+          assignees: "Omegabird113"
+          delete-branch: true
 
       - name: Create Pull Request
         if: success()
