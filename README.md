@@ -20,6 +20,7 @@ This mod also functions as a fully configurable text editing/navigation shortcut
    Requests are very much welcome! :)
 3. For technical information about custom mappings and how the mod works, you should go to
    the [CMD + Delete documentation](https://omegabird113.github.io/CMD_Delete/).
+4. CMD + Delete has portions of the mod localized to many other languages. Currently, this has been done using machine translation. If you would like to help support a new language or improve translations for your own language, please help out on the [CMD + Delete Crowdin Project](https://crowdin.com/project/cmd-delete-mcmod).
 
 > [!Note]
 >
