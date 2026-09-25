@@ -5,7 +5,7 @@ on:
     branches: [ master ]
     paths:
       - 'src/main/resources/assets/**/lang/en_us.json'
-      - `.github/workflows/push_to_crowdin.yml`
+      - '.github/workflows/push_to_crowdin.yml'
   workflow_dispatch: { }
 
 jobs:
