@@ -1,0 +1,78 @@
+name: Crowdin Pull Weekly
+
+on:
+  schedule:
+    - cron: '0 0 * * 6'
+      timezone: 'America/New_York'
+  workflow_dispatch: {}
+
+jobs:
+  crowdin-pull:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Pull translations from Crowdin
+        uses: crowdin/github-action@9c23991700c0ec5256fd41089b9d9d7d540e424e #v3.3.0
+        with:
+          config: crowdin.yml
+          crowdin_branch_name: master
+          upload_sources: false
+          upload_translations: false
+          download_translations: true
+          github_user_name: "github-actions"
+          github_user_email: "actions@github.com"
+          commit_message: "New Crowdin translations"
+          localization_branch_name: localization
+          pull_request_base_branch_name: master
+          create_pull_request: true
+          pull_request_title: "New Crowdin translations"
+          pull_request_body: "Updated translations from Crowdin. This PR was automatically created by GitHub Actions."
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+
+      - name: Rename files to lowercase
+        if: success()
+        run: |
+          # Install rename utility
+          sudo apt-get install -y rename
+
+          # Rename all language files to lowercase
+          find src/main/resources/assets -type f -name "*.json" | while read file; do
+            dir=$(dirname "$file")
+            filename=$(basename "$file")
+            new_filename=$(echo "$filename" | tr '[:upper:]' '[:lower:]')
+            if [ "$filename" != "$new_filename" ]; then
+              mv "$file" "$dir/$new_filename"
+              echo "Renamed: $file -> $dir/$new_filename"
+            fi
+          done
+
+      - name: Commit and push changes to localization branch
+        if: success()
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          git add src/main/resources/assets/**/lang/*.json
+          git diff --quiet && git diff --staged --quiet || git commit -m "chore: Rename language files to lowercase"
+          git push
+
+      - name: Create Pull Request
+        if: success()
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 #v8.1.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Update translations from Crowdin"
+          title: "New Crowdin translations"
+          body: |
+            Updated translations from Crowdin.
+
+            This PR was automatically created by GitHub Actions from the Crowdin Pull workflow.
+          branch: "localization"
+          base: "master"
+          labels: "translations, automated"
+          reviewers: "Omegabird113"
+          assignees: "Omegabird113"
+          delete-branch: true
