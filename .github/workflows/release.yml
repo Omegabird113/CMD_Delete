@@ -80,11 +80,14 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x gradlew
 
+      - name: Install software for Vulkan rendering
+        run: sudo apt-get install xvfb mesa-vulkan-drivers
+
       - name: Build ${{ matrix.loader }}
         run: ./gradlew ${{ matrix.build_task }} --stacktrace --no-daemon
 
-      #      - name: Sanity-test ${{ matrix.loader }} client load
-      #        run: xvfb-run ./gradlew ${{ matrix.client_args }} ${{ matrix.client_task }} --no-daemon
+      - name: Sanity test ${{ matrix.loader }} client load
+        run: xvfb-run ./gradlew ${{ matrix.client_args }} ${{ matrix.client_task }} --no-daemon
 
       - name: Upload ${{ matrix.loader }} JARs as artifact
         uses: actions/upload-artifact@v7
