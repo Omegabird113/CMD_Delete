@@ -65,6 +65,9 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
+      - name: Install software for Vulkan rendering
+        run: sudo apt-get install xvfb mesa-vulkan-drivers
+
       - name: Build ${{ matrix.loader }}
         run: ./gradlew ${{ matrix.build_task }} --no-daemon
 
