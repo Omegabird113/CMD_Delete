@@ -34,8 +34,6 @@ run/**
 *.iml
 *.ipr
 .idea/modules/*
-
-# Git
 *.patch
 
 # Zensical
