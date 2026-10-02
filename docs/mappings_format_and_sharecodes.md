@@ -23,8 +23,7 @@ Custom mappings can:
 
 Note that:
 
-- The format version `fv` is currently `5` and your mappings should match that (Though old mappings of format versions
-  `2` and `3` are still supported in-game).
+- The format version `fv` is currently `5` and your mappings should match that.
 - The `meta.id` field must exactly match the filename without the `.json` extension
 - In some places, you'll see a mappings id of `""` (empty string), that refers to the default mappings behavior of
   loading either `builtin:windows_linux` or `builtin:mac` depending on the user's OS. Note that `"inherits": ""` means a
@@ -37,7 +36,7 @@ Minimum possible mappings example of the `my-mappings.json` file
 
 ```json
 {
-	"fv": 2,
+	"fv": 5,
 	"meta": {
 		"id": "my-mappings",
 		"systems": [
