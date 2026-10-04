@@ -20,11 +20,12 @@ This mod also functions as a fully configurable text editing/navigation shortcut
    Requests are very much welcome! :)
 3. For technical information about custom mappings and how the mod works, you should go to
    the [CMD + Delete documentation](https://omegabird113.github.io/CMD_Delete/).
+4. CMD + Delete has portions of the mod localized to many other languages. Currently, this has been done using machine translation. If you would like to help support a new language or improve translations for your own language, please help out on the [CMD + Delete Crowdin Project](https://crowdin.com/project/cmd-delete-mcmod).
 
 > [!Note]
 >
 > **Compatibility**:
-> CMD + Delete is a multi-platform mod that supports for Minecraft Fabric/Quilt `1.14.4` to the latest version, NeoForge `26.1`–`26.2`/`1.21.11`/`1.19.9`-`1.21.10`/`1.20.5`-`1.21.5` natively, and Forge `1.20.1` via [Sinytra Connector](https://modrinth.com/mod/connector).
+> CMD + Delete is a multi-platform mod that supports for Minecraft Fabric/Quilt `1.14.4` to the latest version, NeoForge `1.21.9` to `26.3` and the LTS `1.20.5`-`1.21.5` build natively, and Forge `1.20.1` via [Sinytra Connector](https://modrinth.com/mod/connector).
 
 ![A showcase of opt/cmd + backspace in chat.](./docs/resources/showcase.gif)
 
@@ -64,6 +65,24 @@ CMD + Delete also now provides these other builtin mappings:
   (they're not perfect).
 - `builtin:readline` the standard shortcuts for text navigation in GNU Readline to the best replication I can make
   (they're not perfect).
+
+## Comparison to Other Similar Mods
+
+| Feature                                          | CMD + Delete | [macOS Chat Fixes](https://modrinth.com/mod/macos-chat-fixes) |
+|:-------------------------------------------------|:-------------|:--------------------------------------------------------------|
+| Works in chat                                    | ✓           | ✓                                                            |
+| Works in signs                                   | ✓           | ✘                                                            |
+| Works in books                                   | ✓           | ✘                                                            |
+| Works on any OS                                  | ✓           | ✓                                                            |
+| Native macOS-style word-boundary detection       | ✘           | ✓                                                            |
+| Custom mappings JSON support                     | ✓           | ✘                                                            |
+| Can use shortcuts from a different OS if wanted  | ✓           | ✘                                                            |
+| Supports sharing custom shortcuts via sharecodes | ✓           | ✘                                                            |
+| Supports NeoForge, Fabric, and Quilt natively    | ✓           | ✘                                                            |
+| Supports Minecraft versions before 26.1          | ✓           | ✘                                                            |
+| Open source                                      | ✓           | ✓                                                            |
+| Open source license                              | `Apache-2.0` | `LGPL-3.0-only`                                               |
+| Public technical documentation                   | ✓           | ✘                                                            |
 
 ## Licensing
 

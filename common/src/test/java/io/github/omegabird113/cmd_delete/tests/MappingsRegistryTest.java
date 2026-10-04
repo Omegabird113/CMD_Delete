@@ -54,7 +54,7 @@ public final class MappingsRegistryTest {
 		Assertions.assertEquals(NavAction.NAV_LINE_LEFT, mr.get(k1));
 		Assertions.assertEquals(2, mr.getSize());
 
-		NavAction[] values = mr.getValues();
+		final NavAction[] values = mr.getValues();
 		Assertions.assertEquals(2, values.length);
 		Assertions.assertTrue(List.of(values).contains(NavAction.NAV_LINE_LEFT));
 		Assertions.assertTrue(List.of(values).contains(NavAction.SEL_WORD_RIGHT));

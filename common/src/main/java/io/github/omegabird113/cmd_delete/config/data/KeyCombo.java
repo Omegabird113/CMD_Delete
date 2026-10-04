@@ -25,7 +25,7 @@ public record KeyCombo(int key, boolean shift, boolean altOption, boolean contro
 	public @NonNull String toString() {
 		return "<"
 				+ (control ? "ctrl+" : "")
-				+ (superCommand ? (Os.IS_USING_MAC ? "cmd+" : "sup+") : "")
+				+ (superCommand ? (Os.IS_USING_MAC ? "cmd+" : (Os.IS_USING_WINDOWS ? "win+" : "sup+")) : "")
 				+ (altOption ? (Os.IS_USING_MAC ? "opt+" : "alt+") : "")
 				+ (shift ? "shift+" : "")
 				+ (KeyNameRegistry.getReverseKeyMap().getOrDefault(key, Integer.toString(key)))

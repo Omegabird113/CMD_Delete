@@ -1,10 +1,9 @@
-### 1.5.0 Beta 2
+### 1.5.0 Beta 3
 
 Changes:
 
-- Updated the main branch to Minecraft 26.3.
-- Added a `/navmappings debug sendDocsLink` sub-command.
-- Added a `/navmappings debug sendIssuesLink` sub-command.
+- Add machine-translated [Crowdin translations](https://crowdin.com/project/cmd-delete-mcmod).
+- Use `win` instead of `sup` for more native terminology in KeyCombo names on Windows.
 - Internal code improvements.
 
-Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.5.0-beta.1+mc26.1...1.5.0-beta.2+mc26.3
+Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.5.0-beta.2+mc26.3...1.5.0-beta.3+mc26.3
