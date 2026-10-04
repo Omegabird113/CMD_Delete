@@ -59,7 +59,7 @@ public final class TestRandomnessUtils {
 		return new KeyCombo(key, shift, altOption, ctrl, superCommand);
 	}
 
-	static @NonNull String genRandomString(int length) {
+	static @NonNull String genRandomString(final int length) {
 		final byte[] strBytes = new byte[length];
 		RANDOM.nextBytes(strBytes);
 		return new String(strBytes, StandardCharsets.UTF_8);

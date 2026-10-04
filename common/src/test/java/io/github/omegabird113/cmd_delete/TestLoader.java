@@ -38,7 +38,7 @@ import java.util.stream.Stream;
 public final class TestLoader {
 	private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(TestLoader.class);
 	private static final Path tempDir;
-	private static final IPlatform TEST_PLATFORM = new IPlatform() {
+	private static final @NonNull IPlatform TEST_PLATFORM = new IPlatform() {
 		@Override
 		public @NonNull String getModVersion() {
 			return "test";
@@ -74,7 +74,7 @@ public final class TestLoader {
 			return LOGGER;
 		}
 	};
-	private static boolean initialized = false;
+	private static volatile boolean initialized = false;
 
 	static {
 		try {
