@@ -4,6 +4,18 @@ This is a collection of all historical CMD + Delete changelogs for every release
 notes were retroactively added and the formatting was retroactively changed in some versions to fix issues and make
 inter-version formatting consistent.
 
+### 1.5.0 Beta 3
+
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.5.0-beta.3%2Bmc26.3) on October 4th, 2026.
+
+Changes:
+
+- Add machine-translated [Crowdin translations](https://crowdin.com/project/cmd-delete-mcmod).
+- Use `win` instead of `sup` for more native terminology in KeyCombo names on Windows.
+- Internal code improvements.
+
+Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.5.0-beta.2+mc26.3...1.5.0-beta.3+mc26.3
+
 ### 1.5.0 Beta 2
 
 [Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.5.0-beta.2%2Bmc26.3) on September 18th, 2026.
