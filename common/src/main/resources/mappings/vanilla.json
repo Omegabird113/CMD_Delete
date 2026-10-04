@@ -18,6 +18,7 @@
   "actions": {},
   "flags": {
     "overrideVanillaNavigation": false,
-    "crossLineSignMovement": false
+    "crossLineSignMovement": false,
+    "nativeStyleWordBoundaries": false
   }
 }

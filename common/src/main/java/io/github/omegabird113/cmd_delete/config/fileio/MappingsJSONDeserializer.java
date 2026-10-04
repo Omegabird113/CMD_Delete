@@ -167,21 +167,24 @@ public final class MappingsJSONDeserializer {
 	@Contract("_, _, _ -> new")
 	private static @NonNull FeatureFlags parseFlags(final @NonNull JsonObject root, final int fv, final @NonNull String inherits) {
 		if (fv == 2)
-			return new FeatureFlags(false, true);
+			return new FeatureFlags(false, true, false);
 		else {
 			final JsonObject flags;
 			try {
 				flags = requireObject(root, "flags");
 			} catch (JsonParseException _) {
-				return new FeatureFlags(false, true);
+				return new FeatureFlags(false, true, false);
 			}
 			Boolean overrideVanillaNavigation = getNullableBoolean(flags, "overrideVanillaNavigation");
 			Boolean crossLineSignMovement = getNullableBoolean(flags, "crossLineSignMovement");
+			Boolean nativeStyleWordBoundaries = getNullableBoolean(flags, "nativeStyleWordBoundaries");
 			if (overrideVanillaNavigation == null && inherits.isEmpty())
 				overrideVanillaNavigation = false;
 			if (crossLineSignMovement == null && inherits.isEmpty())
 				crossLineSignMovement = true;
-			return new FeatureFlags(overrideVanillaNavigation, crossLineSignMovement);
+			if (nativeStyleWordBoundaries == null && inherits.isEmpty())
+				nativeStyleWordBoundaries = false;
+			return new FeatureFlags(overrideVanillaNavigation, crossLineSignMovement, nativeStyleWordBoundaries);
 		}
 	}
 

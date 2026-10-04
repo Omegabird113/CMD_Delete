@@ -159,7 +159,7 @@ public final class NavMappingsCommand {
 	private static int dumpFeatureFlags(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) {
 		CmdDeleteClient.getPlatform().sendCommandFeedback(context.getSource(), Component.translatable(
 				"commands.cmd_delete.feature_flags_dump",
-				"overrideVanillaNavigation - default false\ncrossLineSignMovement - default true"
+				"overrideVanillaNavigation - default false\ncrossLineSignMovement - default true\nnativeStyleWordBoundaries - default false"
 		));
 		return 1;
 	}

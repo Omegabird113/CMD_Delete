@@ -74,7 +74,7 @@ CMD + Delete also now provides these other builtin mappings:
 | Works in signs                                   | ✓           | ✘                                                            |
 | Works in books                                   | ✓           | ✘                                                            |
 | Works on any OS                                  | ✓           | ✓                                                            |
-| Native macOS-style word-boundary detection       | ✘           | ✓                                                            |
+| Native macOS-style word-boundary detection       | ✓           | ✓                                                            |
 | Custom mappings JSON support                     | ✓           | ✘                                                            |
 | Can use shortcuts from a different OS if wanted  | ✓           | ✘                                                            |
 | Supports sharing custom shortcuts via sharecodes | ✓           | ✘                                                            |
