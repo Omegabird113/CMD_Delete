@@ -59,6 +59,11 @@ public final class CmdDeleteClient {
 		LoggingManager.debugLog(LOGGER, "CmdDeleteClient platform set to \"{}\"", platform.getPlatformName());
 	}
 
+	@SuppressWarnings("unused")
+	public static @Nullable IPlatform getNullablePlatform() {
+		return platform;
+	}
+
 	public static void start(final @NonNull IPlatform platform) {
 		LoadTimer.time(() -> CrashUtils.crashMinecraftOnFailure(() -> {
 			LoadTimer.time(() -> setPlatform(platform), "registering platform information", true);
