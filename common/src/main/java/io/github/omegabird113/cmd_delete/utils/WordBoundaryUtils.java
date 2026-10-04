@@ -23,7 +23,7 @@ public final class WordBoundaryUtils {
 	private WordBoundaryUtils () {
 	}
 
-	public static int getMacSingleLineBoundary(final @NonNull String text, int pos, final int dir) {
+	public static int getMacBoundary(final @NonNull String text, int pos, final int dir) {
 		final int len = text.length();
 		if (dir > 0) {
 			while (pos < len) {
@@ -65,7 +65,7 @@ public final class WordBoundaryUtils {
 		return pos;
 	}
 
-	public static int getWindowsLinuxSingleLineBoundary(final @NonNull String text, int pos, final int dir) {
+	public static int getWindowsLinuxBoundary(final @NonNull String text, int pos, final int dir) {
 		final int len = text.length();
 		if (dir > 0) {
 			if (pos < len && !Character.isWhitespace(text.codePointAt(pos))) {
@@ -106,9 +106,9 @@ public final class WordBoundaryUtils {
 		return pos;
 	}
 
-	public static int getSingleLineBoundary(final String text, final int pos, final int dir) {
+	public static int getBoundary(final @NonNull String text, final int pos, final int dir) {
 		return Boolean.TRUE.equals(NavMappingsManager.getCurrentFeatureFlags().macStyleWordBoundaries())
-				? getMacSingleLineBoundary(text, pos, dir)
-				: getWindowsLinuxSingleLineBoundary(text, pos, dir);
+				? getMacBoundary(text, pos, dir)
+				: getWindowsLinuxBoundary(text, pos, dir);
 	}
 }
