@@ -84,6 +84,10 @@ CMD + Delete also now provides these other builtin mappings:
 | Open source license                              | `Apache-2.0` | `LGPL-3.0-only`                                               |
 | Public technical documentation                   | ✓           | ✘                                                            |
 
+> [!Note]
+>
+> The description of macOS chat fixes says it supports signs, but after conducting a source code review, I determined that it did not have a mixin to actually support signs. Note that all claims were made as of October 4th, 2026. Also, I got the idea of native OS style word boundary detection from macOS chat fixes, though I did not reuse any code.
+
 ## Licensing
 
 - The CMD + Delete mod itself is licensed under
