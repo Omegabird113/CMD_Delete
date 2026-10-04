@@ -58,7 +58,7 @@ public final class MappingsJSONManager {
 		final Optional<MappingsRegistry> registry = getRegistryFrom(id, custom);
 		if (registry.isPresent())
 			try {
-				final MappingsRegistry resolved = resolveInheritance(registry.get());
+				final MappingsRegistry resolved = resolveInheritance(registry.get(), custom);
 				return Optional.of(new NavMappings(resolved));
 			} catch (IOException e) {
 				LOGGER.error("Failed to resolve {} mappings inheritance for \"{}\"", MappingsType.fromIfCustom(custom).commonName(), id, e);
@@ -82,11 +82,11 @@ public final class MappingsJSONManager {
 		}
 	}
 
-	public static @NonNull MappingsRegistry resolveInheritance(final @NonNull MappingsRegistry startRegistry) throws IOException {
+	public static @NonNull MappingsRegistry resolveInheritance(final @NonNull MappingsRegistry startRegistry, final boolean custom) throws IOException {
 		final List<MappingsRegistry> registries = new ArrayList<>();
 		final List<String> ids = new ArrayList<>();
 		MappingsRegistry current = startRegistry;
-		String namespacePrefix = MappingsType.CUSTOM.prefix();
+		String namespacePrefix = MappingsType.fromIfCustom(custom).prefix();
 		while (true) {
 			registries.add(current);
 			ids.add(namespacePrefix + current.id());
