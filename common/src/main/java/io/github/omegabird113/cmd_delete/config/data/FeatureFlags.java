@@ -20,5 +20,5 @@ import org.jspecify.annotations.Nullable;
 
 public record FeatureFlags(@Nullable Boolean overrideVanillaNavigation,
 						   @Nullable Boolean crossLineSignMovement,
-						   @Nullable Boolean macStyleWordBoundaries) {
+						   @Nullable Boolean nativeStyleWordBoundaries) {
 }

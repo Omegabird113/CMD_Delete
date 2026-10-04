@@ -177,14 +177,16 @@ public final class MappingsJSONDeserializer {
 			}
 			Boolean overrideVanillaNavigation = getNullableBoolean(flags, "overrideVanillaNavigation");
 			Boolean crossLineSignMovement = getNullableBoolean(flags, "crossLineSignMovement");
-			Boolean macStyleWordBoundaries = getNullableBoolean(flags, "macStyleWordBoundaries");
+			Boolean nativeStyleWordBoundaries = getNullableBoolean(flags, "nativeStyleWordBoundaries");
+			if (nativeStyleWordBoundaries == null)
+				nativeStyleWordBoundaries = getNullableBoolean(flags, "macStyleWordBoundaries");
 			if (overrideVanillaNavigation == null && inherits.isEmpty())
 				overrideVanillaNavigation = false;
 			if (crossLineSignMovement == null && inherits.isEmpty())
 				crossLineSignMovement = true;
-			if (macStyleWordBoundaries == null && inherits.isEmpty())
-				macStyleWordBoundaries = false;
-			return new FeatureFlags(overrideVanillaNavigation, crossLineSignMovement, macStyleWordBoundaries);
+			if (nativeStyleWordBoundaries == null && inherits.isEmpty())
+				nativeStyleWordBoundaries = false;
+			return new FeatureFlags(overrideVanillaNavigation, crossLineSignMovement, nativeStyleWordBoundaries);
 		}
 	}
 

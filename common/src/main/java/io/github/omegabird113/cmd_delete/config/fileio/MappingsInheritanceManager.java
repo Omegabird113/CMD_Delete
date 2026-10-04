@@ -58,7 +58,7 @@ public final class MappingsInheritanceManager {
 		return new FeatureFlags(
 				child.overrideVanillaNavigation() != null ? child.overrideVanillaNavigation() : parent.overrideVanillaNavigation(),
 				child.crossLineSignMovement() != null ? child.crossLineSignMovement() : parent.crossLineSignMovement(),
-				child.macStyleWordBoundaries() != null ? child.macStyleWordBoundaries() : parent.macStyleWordBoundaries()
+				child.nativeStyleWordBoundaries() != null ? child.nativeStyleWordBoundaries() : parent.nativeStyleWordBoundaries()
 		);
 	}
 }

@@ -263,6 +263,6 @@
   "flags": {
     "overrideVanillaNavigation": true,
     "crossLineSignMovement": true,
-    "macStyleWordBoundaries": true
+    "nativeStyleWordBoundaries": true
   }
 }

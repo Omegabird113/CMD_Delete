@@ -65,6 +65,23 @@ public final class WordBoundaryUtils {
 		return pos;
 	}
 
+	public static int getVanillaBoundary(final @NonNull String text, int pos, final int dir) {
+		final int len = text.length();
+		if (dir > 0) {
+			pos = text.indexOf(' ', pos);
+			if (pos == -1)
+				return len;
+			while (pos < len && text.charAt(pos) == ' ')
+				pos++;
+		} else {
+			while (pos > 0 && text.charAt(pos - 1) == ' ')
+				pos--;
+			while (pos > 0 && text.charAt(pos - 1) != ' ')
+				pos--;
+		}
+		return pos;
+	}
+
 	public static int getWindowsLinuxBoundary(final @NonNull String text, int pos, final int dir) {
 		final int len = text.length();
 		if (dir > 0) {
@@ -107,7 +124,9 @@ public final class WordBoundaryUtils {
 	}
 
 	public static int getBoundary(final @NonNull String text, final int pos, final int dir) {
-		return Boolean.TRUE.equals(NavMappingsManager.getCurrentFeatureFlags().macStyleWordBoundaries())
+		if (!Boolean.TRUE.equals(NavMappingsManager.getCurrentFeatureFlags().nativeStyleWordBoundaries()))
+			return getVanillaBoundary(text, pos, dir);
+		return Os.IS_USING_MAC
 				? getMacBoundary(text, pos, dir)
 				: getWindowsLinuxBoundary(text, pos, dir);
 	}
