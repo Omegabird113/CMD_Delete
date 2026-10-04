@@ -57,7 +57,8 @@ public final class MappingsInheritanceManager {
 	public static @NonNull FeatureFlags mergeFeatureFlags(final @NonNull FeatureFlags parent, final @NonNull FeatureFlags child) {
 		return new FeatureFlags(
 				child.overrideVanillaNavigation() != null ? child.overrideVanillaNavigation() : parent.overrideVanillaNavigation(),
-				child.crossLineSignMovement() != null ? child.crossLineSignMovement() : parent.crossLineSignMovement()
+				child.crossLineSignMovement() != null ? child.crossLineSignMovement() : parent.crossLineSignMovement(),
+				child.macStyleWordBoundaries() != null ? child.macStyleWordBoundaries() : parent.macStyleWordBoundaries()
 		);
 	}
 }

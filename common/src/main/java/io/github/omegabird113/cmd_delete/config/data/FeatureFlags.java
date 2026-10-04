@@ -19,5 +19,6 @@ package io.github.omegabird113.cmd_delete.config.data;
 import org.jspecify.annotations.Nullable;
 
 public record FeatureFlags(@Nullable Boolean overrideVanillaNavigation,
-						   @Nullable Boolean crossLineSignMovement) {
+						   @Nullable Boolean crossLineSignMovement,
+						   @Nullable Boolean macStyleWordBoundaries) {
 }
