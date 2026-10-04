@@ -39,7 +39,7 @@ public final class WordBoundaryUtils {
 			final int kind = (Character.isLetterOrDigit(cp1) || cp1 == '_') ? 0 : 1;
 			while (pos < len) {
 				final int cp = text.codePointAt(pos);
-				if (Character.isWhitespace(cp) || ((Character.isLetterOrDigit(cp) || cp == '_') ? 0 : 1) != kind)
+				if (Character.isWhitespace(cp) || (classifyCodePoint(cp)) != kind)
 					break;
 				pos += Character.charCount(cp);
 			}
@@ -57,7 +57,7 @@ public final class WordBoundaryUtils {
 			final int kind = (Character.isLetterOrDigit(cp1) || cp1 == '_') ? 0 : 1;
 			while (pos > 0) {
 				final int cp = text.codePointBefore(pos);
-				if (Character.isWhitespace(cp) || ((Character.isLetterOrDigit(cp) || cp == '_') ? 0 : 1) != kind)
+				if (Character.isWhitespace(cp) || (classifyCodePoint(cp)) != kind)
 					break;
 				pos -= Character.charCount(cp);
 			}
@@ -73,7 +73,7 @@ public final class WordBoundaryUtils {
 				final int kind = (Character.isLetterOrDigit(cp1) || cp1 == '_') ? 0 : 1;
 				while (pos < len) {
 					final int cp = text.codePointAt(pos);
-					if (Character.isWhitespace(cp) || ((Character.isLetterOrDigit(cp) || cp == '_') ? 0 : 1) != kind)
+					if (Character.isWhitespace(cp) || (classifyCodePoint(cp)) != kind)
 						break;
 					pos += Character.charCount(cp);
 				}
@@ -98,7 +98,7 @@ public final class WordBoundaryUtils {
 			final int kind = (Character.isLetterOrDigit(cp1) || cp1 == '_') ? 0 : 1;
 			while (pos > 0) {
 				final int cp = text.codePointBefore(pos);
-				if (Character.isWhitespace(cp) || ((Character.isLetterOrDigit(cp) || cp == '_') ? 0 : 1) != kind)
+				if (Character.isWhitespace(cp) || (classifyCodePoint(cp)) != kind)
 					break;
 				pos -= Character.charCount(cp);
 			}
@@ -129,5 +129,9 @@ public final class WordBoundaryUtils {
 		return Os.IS_USING_MAC
 				? getMacBoundary(text, pos, dir)
 				: getWindowsLinuxBoundary(text, pos, dir);
+	}
+
+	public static int classifyCodePoint(final int cp) {
+		return (Character.isLetterOrDigit(cp) || cp == '_') ? 0 : 1;
 	}
 }
