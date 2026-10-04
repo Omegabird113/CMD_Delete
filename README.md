@@ -66,6 +66,24 @@ CMD + Delete also now provides these other builtin mappings:
 - `builtin:readline` the standard shortcuts for text navigation in GNU Readline to the best replication I can make
   (they're not perfect).
 
+## Comparison to Other Similar Mods
+
+| Feature                                          | CMD + Delete | [macOS Chat Fixes](https://modrinth.com/mod/macos-chat-fixes) |
+|:-------------------------------------------------|:-------------|:--------------------------------------------------------------|
+| Works in chat                                    | ✓           | ✓                                                            |
+| Works in signs                                   | ✓           | ✘                                                            |
+| Works in books                                   | ✓           | ✘                                                            |
+| Works on any OS                                  | ✓           | ✓                                                            |
+| Native macOS-style word-boundary detection       | ✘           | ✓                                                            |
+| Custom mappings JSON support                     | ✓           | ✘                                                            |
+| Can use shortcuts from a different OS if wanted  | ✓           | ✘                                                            |
+| Supports sharing custom shortcuts via sharecodes | ✓           | ✘                                                            |
+| Supports NeoForge, Fabric, and Quilt natively    | ✓           | ✘                                                            |
+| Supports Minecraft versions before 26.1          | ✓           | ✘                                                            |
+| Open source                                      | ✓           | ✓                                                            |
+| Open source license                              | `Apache-2.0` | `LGPL-3.0-only`                                               |
+| Public technical documentation                   | ✓           | ✘                                                            |
+
 ## Licensing
 
 - The CMD + Delete mod itself is licensed under
