@@ -99,11 +99,12 @@ public final class MappingsInfoCollectionUtils {
 	@Contract(pure = true)
 	public static @NonNull @Unmodifiable List<String> getBuiltinMappingsNamespacedIdsList() {
 		return List.of(
-				"builtin:windows_linux",
-				"builtin:mac",
 				"builtin:emacs_windows_linux",
 				"builtin:emacs_mac",
-				"builtin:readline"
+				"builtin:mac",
+				"builtin:vanilla",
+				"builtin:readline",
+				"builtin:windows_linux"
 		);
 	}
 
