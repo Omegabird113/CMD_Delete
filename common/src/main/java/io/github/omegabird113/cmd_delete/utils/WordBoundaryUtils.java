@@ -36,7 +36,7 @@ public final class WordBoundaryUtils {
 				return len;
 
 			final int cp1 = text.codePointAt(pos);
-			final int kind = (Character.isLetterOrDigit(cp1) || cp1 == '_') ? 0 : 1;
+			final int kind = (classifyCodePoint(cp1));
 			while (pos < len) {
 				final int cp = text.codePointAt(pos);
 				if (Character.isWhitespace(cp) || (classifyCodePoint(cp)) != kind)
@@ -54,7 +54,7 @@ public final class WordBoundaryUtils {
 				return 0;
 
 			final int cp1 = text.codePointBefore(pos);
-			final int kind = (Character.isLetterOrDigit(cp1) || cp1 == '_') ? 0 : 1;
+			final int kind = (classifyCodePoint(cp1));
 			while (pos > 0) {
 				final int cp = text.codePointBefore(pos);
 				if (Character.isWhitespace(cp) || (classifyCodePoint(cp)) != kind)
@@ -70,7 +70,7 @@ public final class WordBoundaryUtils {
 		if (dir > 0) {
 			if (pos < len && !Character.isWhitespace(text.codePointAt(pos))) {
 				final int cp1 = text.codePointAt(pos);
-				final int kind = (Character.isLetterOrDigit(cp1) || cp1 == '_') ? 0 : 1;
+				final int kind = (classifyCodePoint(cp1));
 				while (pos < len) {
 					final int cp = text.codePointAt(pos);
 					if (Character.isWhitespace(cp) || (classifyCodePoint(cp)) != kind)
@@ -95,7 +95,7 @@ public final class WordBoundaryUtils {
 				return 0;
 
 			final int cp1 = text.codePointBefore(pos);
-			final int kind = (Character.isLetterOrDigit(cp1) || cp1 == '_') ? 0 : 1;
+			final int kind = (classifyCodePoint(cp1));
 			while (pos > 0) {
 				final int cp = text.codePointBefore(pos);
 				if (Character.isWhitespace(cp) || (classifyCodePoint(cp)) != kind)
