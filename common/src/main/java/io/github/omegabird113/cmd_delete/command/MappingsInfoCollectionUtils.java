@@ -113,7 +113,7 @@ public final class MappingsInfoCollectionUtils {
 		final List<String> internal = new ArrayList<>();
 		internal.add("default");
 		internal.addAll(getBuiltinMappingsNamespacedIdsList());
-		internal.addAll(MappingsJSONManager.getAvailableOptions(true));
+		internal.addAll(MappingsJSONManager.getAvailableOptions(true).stream().sorted().toList());
 		return internal.toArray(String[]::new);
 	}
 }
