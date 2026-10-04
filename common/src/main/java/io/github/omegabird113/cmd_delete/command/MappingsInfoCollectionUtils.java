@@ -90,11 +90,6 @@ public final class MappingsInfoCollectionUtils {
 		return result;
 	}
 
-	@Contract(pure = true)
-	public static @NonNull String getInfoFrom(final @NonNull MappingsState mappingsState, final boolean includeDescription) {
-		return getInfoComponentFrom(mappingsState, includeDescription).getString();
-	}
-
 	@SuppressWarnings("unused")
 	@Contract(pure = true)
 	public static @NonNull @Unmodifiable List<String> getBuiltinMappingsNamespacedIdsList() {
