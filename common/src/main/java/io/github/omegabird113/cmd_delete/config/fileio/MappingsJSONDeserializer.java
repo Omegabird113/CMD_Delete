@@ -178,8 +178,6 @@ public final class MappingsJSONDeserializer {
 			Boolean overrideVanillaNavigation = getNullableBoolean(flags, "overrideVanillaNavigation");
 			Boolean crossLineSignMovement = getNullableBoolean(flags, "crossLineSignMovement");
 			Boolean nativeStyleWordBoundaries = getNullableBoolean(flags, "nativeStyleWordBoundaries");
-			if (nativeStyleWordBoundaries == null)
-				nativeStyleWordBoundaries = getNullableBoolean(flags, "macStyleWordBoundaries");
 			if (overrideVanillaNavigation == null && inherits.isEmpty())
 				overrideVanillaNavigation = false;
 			if (crossLineSignMovement == null && inherits.isEmpty())
