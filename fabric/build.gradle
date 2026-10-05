@@ -114,11 +114,13 @@ loom {
     runs {
         client {
             client()
+            getJvmArguments().add("-Dcmd_delete.allowVerboseLogs=true")
         }
 
         ciClient {
             client()
             getJvmArguments().add("-Dcmd_delete.ci.stopMinecraftAfterLoad=true")
+            getJvmArguments().add("-Dcmd_delete.allowVerboseLogs=true")
         }
 
         server {
