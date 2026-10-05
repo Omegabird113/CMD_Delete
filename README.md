@@ -10,7 +10,7 @@ In Minecraft on macOS, pressing `option` + `backspace` deletes a single characte
 deletes a word. **This is completely inconsistent with the native OS**, so I fixed it...
 
 This mod also functions as a fully configurable text editing/navigation shortcut framework for Minecraft with custom
- mappings, JSONs and sharecodes, in-game switching, and more!
+mappings, JSONs and sharecodes, in-game switching, and more!
 
 ## Some Context
 
@@ -20,12 +20,16 @@ This mod also functions as a fully configurable text editing/navigation shortcut
    Requests are very much welcome! :)
 3. For technical information about custom mappings and how the mod works, you should go to
    the [CMD + Delete documentation](https://omegabird113.github.io/CMD_Delete/).
-4. CMD + Delete has portions of the mod localized to many other languages. Currently, this has been done using machine translation. If you would like to help support a new language or improve translations for your own language, please help out on the [CMD + Delete Crowdin Project](https://crowdin.com/project/cmd-delete-mcmod).
+4. CMD + Delete has portions of the mod localized to many other languages. Currently, this has been done using machine
+   translation. If you would like to help support a new language or improve translations for your own language, please
+   help out on the [CMD + Delete Crowdin Project](https://crowdin.com/project/cmd-delete-mcmod).
 
 > [!Note]
 >
 > **Compatibility**:
-> CMD + Delete is a multi-platform mod that supports for Minecraft Fabric/Quilt `1.14.4` to the latest version, NeoForge `1.21.9` to `26.3` and the LTS `1.20.5`-`1.21.5` build natively, and Forge `1.20.1` via [Sinytra Connector](https://modrinth.com/mod/connector).
+> CMD + Delete is a multi-platform mod that supports for Minecraft Fabric/Quilt `1.14.4` to the latest version, NeoForge
+`1.21.9` to `26.3` and the LTS `1.20.5`-`1.21.5` build natively, and Forge `1.20.1`
+via [Sinytra Connector](https://modrinth.com/mod/connector).
 
 ![A showcase of opt/cmd + backspace in chat.](./docs/resources/showcase.gif)
 
@@ -74,7 +78,7 @@ CMD + Delete also now provides these other builtin mappings:
 | Works in signs                                   | ✓           | ✘                                                            |
 | Works in books                                   | ✓           | ✘                                                            |
 | Works on any OS                                  | ✓           | ✓                                                            |
-| Native macOS-style word-boundary detection       | ✘           | ✓                                                            |
+| Native macOS-style word-boundary detection       | ✓           | ✓                                                            |
 | Custom mappings JSON support                     | ✓           | ✘                                                            |
 | Can use shortcuts from a different OS if wanted  | ✓           | ✘                                                            |
 | Supports sharing custom shortcuts via sharecodes | ✓           | ✘                                                            |
@@ -84,6 +88,12 @@ CMD + Delete also now provides these other builtin mappings:
 | Open source license                              | `Apache-2.0` | `LGPL-3.0-only`                                               |
 | Public technical documentation                   | ✓           | ✘                                                            |
 
+> [!Note]
+>
+> The description of macOS chat fixes says it supports signs, but after conducting a source code review, I determined
+that it did not have a mixin to actually support signs. Note that all claims were made as of October 4th, 2026. Also, I
+got the idea of native OS style word boundary detection from macOS chat fixes, though I did not reuse any code.
+
 ## Licensing
 
 - The CMD + Delete mod itself is licensed under
@@ -92,6 +102,7 @@ CMD + Delete also now provides these other builtin mappings:
   the [CC BY 4.0 license](https://creativecommons.org/licenses/by/4.0/legalcode.en).
 - All builtin mappings JSON files are available under either
   the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0.html) or
-  the [CC BY 4.0 license](https://creativecommons.org/licenses/by/4.0/legalcode.en) (You may choose to comply with either
+  the [CC BY 4.0 license](https://creativecommons.org/licenses/by/4.0/legalcode.en) (You may choose to comply with
+  either
   license).
 - You may include CMD + Delete in any CurseForge and/or Modrinth modpack.

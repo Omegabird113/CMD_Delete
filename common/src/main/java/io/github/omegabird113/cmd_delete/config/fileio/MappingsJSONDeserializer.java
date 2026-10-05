@@ -156,15 +156,18 @@ public final class MappingsJSONDeserializer {
 		try {
 			flags = requireObject(root, "flags");
 		} catch (JsonParseException _) {
-			return new FeatureFlags(false, true);
+			return new FeatureFlags(false, true, false);
 		}
 		Boolean overrideVanillaNavigation = getNullableBoolean(flags, "overrideVanillaNavigation");
 		Boolean crossLineSignMovement = getNullableBoolean(flags, "crossLineSignMovement");
+		Boolean nativeStyleWordBoundaries = getNullableBoolean(flags, "nativeStyleWordBoundaries");
 		if (overrideVanillaNavigation == null && inherits.isEmpty())
 			overrideVanillaNavigation = false;
 		if (crossLineSignMovement == null && inherits.isEmpty())
 			crossLineSignMovement = true;
-		return new FeatureFlags(overrideVanillaNavigation, crossLineSignMovement);
+		if (nativeStyleWordBoundaries == null && inherits.isEmpty())
+			nativeStyleWordBoundaries = false;
+		return new FeatureFlags(overrideVanillaNavigation, crossLineSignMovement, nativeStyleWordBoundaries);
 	}
 
 	@Contract(pure = true)

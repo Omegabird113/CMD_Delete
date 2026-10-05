@@ -22,6 +22,7 @@ import io.github.omegabird113.cmd_delete.actions.NavActionOffset;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import io.github.omegabird113.cmd_delete.utils.CrashUtils;
 import io.github.omegabird113.cmd_delete.utils.LoggingManager;
+import io.github.omegabird113.cmd_delete.utils.WordBoundaryUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -244,18 +245,24 @@ public abstract class SignEditScreenMixin {
 	@Unique
 	private void cmd_delete$deleteByWords(int direction) {
 		this.cmd_delete$moveToNextWordLineIfNeeded(direction);
-		this.signField.removeWordsFromCursor(direction);
+		final int boundary = WordBoundaryUtils.getBoundary(this.cmd_delete$currentLineMessage(), this.signField.getCursorPos(), direction);
+		this.signField.setCursorPos(boundary, true);
+		this.signField.insertText("");
 	}
 
 	@Unique
 	private void cmd_delete$moveByWords(int direction, boolean extendSelection) {
 		this.cmd_delete$moveToNextWordLineIfNeeded(direction);
-		this.signField.moveByWords(direction, extendSelection);
+		final int boundary = WordBoundaryUtils.getBoundary(this.cmd_delete$currentLineMessage(), this.signField.getCursorPos(), direction);
+		this.signField.setCursorPos(boundary, extendSelection);
 	}
 
 	@Unique
 	private void cmd_delete$moveToNextWordLineIfNeeded(int direction) {
 		if (Boolean.FALSE.equals(NavMappingsManager.getCurrentFeatureFlags().crossLineSignMovement()))
+			return;
+		final int boundary = WordBoundaryUtils.getBoundary(this.cmd_delete$currentLineMessage(), this.signField.getCursorPos(), direction);
+		if (boundary != this.signField.getCursorPos())
 			return;
 		final int nextLine = this.cmd_delete$getNextWordLine(direction);
 		if (direction == NavActionOffset.LEFT.value() && this.signField.getCursorPos() == 0 && nextLine != this.line) {

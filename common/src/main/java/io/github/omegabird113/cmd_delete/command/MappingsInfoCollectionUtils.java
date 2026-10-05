@@ -90,20 +90,16 @@ public final class MappingsInfoCollectionUtils {
 		return result;
 	}
 
-	@Contract(pure = true)
-	public static @NonNull String getInfoFrom(final @NonNull MappingsState mappingsState, final boolean includeDescription) {
-		return getInfoComponentFrom(mappingsState, includeDescription).getString();
-	}
-
 	@SuppressWarnings("unused")
 	@Contract(pure = true)
 	public static @NonNull @Unmodifiable List<String> getBuiltinMappingsNamespacedIdsList() {
 		return List.of(
-				"builtin:windows_linux",
-				"builtin:mac",
-				"builtin:emacs_windows_linux",
 				"builtin:emacs_mac",
-				"builtin:readline"
+				"builtin:emacs_windows_linux",
+				"builtin:mac",
+				"builtin:vanilla",
+				"builtin:readline",
+				"builtin:windows_linux"
 		);
 	}
 
@@ -112,7 +108,7 @@ public final class MappingsInfoCollectionUtils {
 		final List<String> internal = new ArrayList<>();
 		internal.add("default");
 		internal.addAll(getBuiltinMappingsNamespacedIdsList());
-		internal.addAll(MappingsJSONManager.getAvailableOptions(true));
+		internal.addAll(MappingsJSONManager.getAvailableOptions(true).stream().sorted().toList());
 		return internal.toArray(String[]::new);
 	}
 }

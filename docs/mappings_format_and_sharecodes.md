@@ -195,6 +195,7 @@ feature flags to be used by mappings:
 |:----------------------------|:--------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `overrideVanillaNavigation` | `false`       | This feature flag controls whether it is possible to produce override mode actions. The reason this is a feature flag is because override actions aren't needed if you're willing to let vanilla Minecraft handle them, but if you want to override vanilla's shortcuts, you can. |
 | `crossLineSignMovement`     | `true`        | When true, this changes signs from isolating each line into being a better multi-line text editor. For example, with this true, you can go to the end of a line and press the right arrow and it will take you to the next line.                                                  |
+| `nativeStyleWordBoundaries` | `false`       | When true, this makes the mod use the OS's native word boundary conventions in a custom implementation instead of vanilla Minecraft's space-only boundaries for all platforms.                                                                                                    |
 
 ### Strict Mode
 

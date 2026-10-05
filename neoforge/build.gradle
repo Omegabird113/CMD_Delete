@@ -57,6 +57,7 @@ neoForge {
     runs {
         client {
             client()
+            getJvmArguments().add("-Dcmd_delete.allowVerboseLogs=true")
             systemProperty 'cmd_delete.ci.stopMinecraftAfterLoad', System.getProperty('cmd_delete.ci.stopMinecraftAfterLoad', 'false')
         }
     }
