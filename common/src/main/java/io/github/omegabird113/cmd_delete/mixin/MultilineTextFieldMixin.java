@@ -93,11 +93,11 @@ public abstract class MultilineTextFieldMixin {
 				this.setSelecting(false);
 			}
 			case DEL_WORD_LEFT -> {
-				int previousWord = WordBoundaryUtils.getBoundary(this.value, this.cursor, -1);
+				int previousWord = WordBoundaryUtils.getBoundary(this.value, this.cursor, NavActionOffset.LEFT.value());
 				this.deleteText(previousWord - this.cursor);
 			}
 			case DEL_WORD_RIGHT -> {
-				int nextWord = WordBoundaryUtils.getBoundary(this.value, this.cursor, 1);
+				int nextWord = WordBoundaryUtils.getBoundary(this.value, this.cursor, NavActionOffset.RIGHT.value());
 				this.deleteText(nextWord - this.cursor);
 			}
 			case NAV_LINE_LEFT, NAV_LINE_RIGHT -> {
@@ -110,19 +110,19 @@ public abstract class MultilineTextFieldMixin {
 			}
 			case NAV_WORD_LEFT -> {
 				this.setSelecting(false);
-				this.seekCursor(Whence.ABSOLUTE, WordBoundaryUtils.getBoundary(this.value, this.cursor, -1));
+				this.seekCursor(Whence.ABSOLUTE, WordBoundaryUtils.getBoundary(this.value, this.cursor, NavActionOffset.LEFT.value()));
 			}
 			case NAV_WORD_RIGHT -> {
 				this.setSelecting(false);
-				this.seekCursor(Whence.ABSOLUTE, WordBoundaryUtils.getBoundary(this.value, this.cursor, 1));
+				this.seekCursor(Whence.ABSOLUTE, WordBoundaryUtils.getBoundary(this.value, this.cursor, NavActionOffset.RIGHT.value()));
 			}
 			case SEL_WORD_LEFT -> {
 				this.setSelecting(true);
-				this.seekCursor(Whence.ABSOLUTE, WordBoundaryUtils.getBoundary(this.value, this.cursor, -1));
+				this.seekCursor(Whence.ABSOLUTE, WordBoundaryUtils.getBoundary(this.value, this.cursor, NavActionOffset.LEFT.value()));
 			}
 			case SEL_WORD_RIGHT -> {
 				this.setSelecting(true);
-				this.seekCursor(Whence.ABSOLUTE, WordBoundaryUtils.getBoundary(this.value, this.cursor, 1));
+				this.seekCursor(Whence.ABSOLUTE, WordBoundaryUtils.getBoundary(this.value, this.cursor, NavActionOffset.RIGHT.value()));
 			}
 			case NAV_TEXT_START -> {
 				this.setSelecting(false);
@@ -146,29 +146,29 @@ public abstract class MultilineTextFieldMixin {
 			}
 			case OVR_NAV_CHAR_LEFT -> {
 				this.setSelecting(false);
-				this.seekCursor(Whence.RELATIVE, -1);
+				this.seekCursor(Whence.RELATIVE, NavActionOffset.LEFT.value());
 			}
 			case OVR_NAV_CHAR_RIGHT -> {
 				this.setSelecting(false);
-				this.seekCursor(Whence.RELATIVE, 1);
+				this.seekCursor(Whence.RELATIVE, NavActionOffset.RIGHT.value());
 			}
 			case OVR_SEL_CHAR_LEFT -> {
 				this.setSelecting(true);
-				this.seekCursor(Whence.RELATIVE, -1);
+				this.seekCursor(Whence.RELATIVE, NavActionOffset.LEFT.value());
 			}
 			case OVR_SEL_CHAR_RIGHT -> {
 				this.setSelecting(true);
-				this.seekCursor(Whence.RELATIVE, 1);
+				this.seekCursor(Whence.RELATIVE, NavActionOffset.RIGHT.value());
 			}
-			case OVR_DEL_CHAR_LEFT -> this.deleteText(-1);
-			case OVR_DEL_CHAR_RIGHT -> this.deleteText(1);
+			case OVR_DEL_CHAR_LEFT -> this.deleteText(NavActionOffset.LEFT.value());
+			case OVR_DEL_CHAR_RIGHT -> this.deleteText(NavActionOffset.RIGHT.value());
 			case OVR_NAV_TEXT_UP -> {
 				this.setSelecting(false);
-				this.seekCursorLine(-1);
+				this.seekCursorLine(NavActionOffset.UP.value());
 			}
 			case OVR_NAV_TEXT_DOWN -> {
 				this.setSelecting(false);
-				this.seekCursorLine(1);
+				this.seekCursorLine(NavActionOffset.DOWN.value());
 			}
 			case OVR_COPY -> Minecraft.getInstance().keyboardHandler.setClipboard(this.getSelectedText());
 			case OVR_CUT -> {
