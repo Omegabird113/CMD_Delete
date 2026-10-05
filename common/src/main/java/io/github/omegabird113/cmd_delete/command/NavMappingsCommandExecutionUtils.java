@@ -107,9 +107,8 @@ final class NavMappingsCommandExecutionUtils {
 	}
 
 	static void importShareCode(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context, final @NonNull String shareCode) throws CommandSyntaxException {
-		String decoded;
 		try {
-			decoded = ShareCodeGenerator.decode(shareCode.trim());
+			final String decoded = ShareCodeGenerator.decode(shareCode.trim());
 
 			final JsonObject jsonObject = CmdDeleteClient.GSON.fromJson(decoded, JsonObject.class);
 			final JsonObject meta = JsonParsingUtils.requireObject(jsonObject, "meta");
