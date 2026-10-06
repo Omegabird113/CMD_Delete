@@ -16,7 +16,6 @@
 
 package io.github.omegabird113.cmd_delete.mappings;
 
-import io.github.omegabird113.cmd_delete.command.MappingsInfoCollectionUtils;
 import io.github.omegabird113.cmd_delete.config.data.FeatureFlags;
 import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
@@ -75,6 +74,7 @@ public final class NavMappingsManager {
 		logMappings();
 	}
 
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	public static boolean updateMappingsTo(final @NonNull MappingsType type, final @NonNull String id) {
 		final MappingsState newState = ActiveMappingsManager.resolveMappings(
 				MappingsIdResolutionUtils.resolveNamespacedId(type, id)
