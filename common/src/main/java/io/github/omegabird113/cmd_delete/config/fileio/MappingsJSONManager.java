@@ -54,7 +54,7 @@ public final class MappingsJSONManager {
 		}
 	}
 
-	public static @NonNull Optional<NavMappings> tryLoadMappings(final @NonNull String id, final boolean custom) {
+	public static @NonNull Optional<@NonNull NavMappings> tryLoadMappings(final @NonNull String id, final boolean custom) {
 		final Optional<MappingsRegistry> registry = getRegistryFrom(id, custom);
 		if (registry.isPresent())
 			try {
@@ -68,7 +68,7 @@ public final class MappingsJSONManager {
 			return Optional.empty();
 	}
 
-	public static @NonNull Optional<MappingsRegistry> getRegistryFrom(final @NonNull String id, final boolean custom) {
+	public static @NonNull Optional<@NonNull MappingsRegistry> getRegistryFrom(final @NonNull String id, final boolean custom) {
 		final String typeCName = MappingsType.fromIfCustom(custom).commonName();
 		try {
 			final MappingsRegistry registry = loadFromDir(id, custom);
@@ -135,7 +135,7 @@ public final class MappingsJSONManager {
 	}
 
 	@Contract(pure = true)
-	public static @NonNull List<String> getAvailableOptions(final boolean namespacedIds) {
+	public static @NonNull List<@NonNull String> getAvailableOptions(final boolean namespacedIds) {
 		final List<String> options = new ArrayList<>();
 
 		final File configDirectory = PathConstants.getMappingsJSONPath().toFile();
