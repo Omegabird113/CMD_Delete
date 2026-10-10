@@ -91,7 +91,7 @@ public final class ShareCodeGenerator {
 	}
 
 	@Contract("_ -> new")
-	public static String @NonNull [] getShareCodeStringArray(final @NonNull String shareCode) {
+	public static @NonNull String @NonNull [] getShareCodeStringArray(final @NonNull String shareCode) {
 		final String[] split = shareCode.split(":");
 
 		if (split.length != 4)

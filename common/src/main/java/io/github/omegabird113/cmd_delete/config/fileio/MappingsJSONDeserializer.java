@@ -41,7 +41,7 @@ import static io.github.omegabird113.cmd_delete.config.fileio.JsonParsingUtils.*
 
 public final class MappingsJSONDeserializer {
 	private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(MappingsJSONManager.class);
-	private static final @NonNull Map<String, Os> OS_MAP = Map.of(
+	private static final @NonNull Map<@NonNull String, @NonNull Os> OS_MAP = Map.of(
 			"windows", Os.WINDOWS,
 			"mac", Os.MAC,
 			"linux", Os.LINUX
@@ -58,7 +58,7 @@ public final class MappingsJSONDeserializer {
 		LOGGER.warn(message);
 	}
 
-	public static @NonNull MappingsRegistry deserialize(final @NonNull JsonElement json, final String fileName, final boolean custom) throws JsonParseException {
+	public static @NonNull MappingsRegistry deserialize(final @NonNull JsonElement json, final @NonNull String fileName, final boolean custom) throws JsonParseException {
 		if (!json.isJsonObject())
 			throw new JsonParseException("Expected a JSON object at root");
 		final JsonObject jsonObject = json.getAsJsonObject();

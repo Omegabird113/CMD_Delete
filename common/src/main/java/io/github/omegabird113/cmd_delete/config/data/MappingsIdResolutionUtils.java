@@ -36,7 +36,7 @@ public final class MappingsIdResolutionUtils {
 	}
 
 	@Contract(pure = true)
-	public static MappingsType resolveType(final @NonNull String namespacedId) {
+	public static @NonNull MappingsType resolveType(final @NonNull String namespacedId) {
 		if (namespacedId.startsWith(MappingsType.CUSTOM.prefix()))
 			return MappingsType.CUSTOM;
 		if (namespacedId.startsWith(MappingsType.BUILTIN.prefix()))

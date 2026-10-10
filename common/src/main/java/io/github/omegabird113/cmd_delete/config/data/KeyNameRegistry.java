@@ -147,7 +147,7 @@ public final class KeyNameRegistry {
 			Map.entry("scroll_lock", SDL_SCANCODE_SCROLLLOCK)
 	);
 
-	private static final @NonNull Map<Integer, String> REVERSED_KEY_MAP = KEY_MAP.entrySet().stream().collect(
+	private static final @NonNull Map<@NonNull Integer, @NonNull String> REVERSED_KEY_MAP = KEY_MAP.entrySet().stream().collect(
 			Collectors.toUnmodifiableMap(Map.Entry::getValue, Map.Entry::getKey));
 
 	private KeyNameRegistry() {

@@ -60,7 +60,7 @@ public record MappingsRegistry(
 	}
 
 	@Contract(pure = true)
-	private @NonNull String getInternalRegistryString(final @Nullable Map<@NonNull KeyCombo, @NonNull NavAction> registry) {
+	public @NonNull String getInternalRegistryString(final @Nullable Map<@NonNull KeyCombo, @NonNull NavAction> registry) {
 		if (registry == null)
 			return "null";
 		if (registry.isEmpty())
