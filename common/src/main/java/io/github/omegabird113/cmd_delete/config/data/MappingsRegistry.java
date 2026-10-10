@@ -60,7 +60,7 @@ public record MappingsRegistry(
 	}
 
 	@Contract(pure = true)
-	private @NonNull String registryStringUtil(final @Nullable Map<@NonNull KeyCombo, @NonNull NavAction> registry) {
+	private @NonNull String getInternalRegistryString(final @Nullable Map<@NonNull KeyCombo, @NonNull NavAction> registry) {
 		if (registry == null)
 			return "null";
 		if (registry.isEmpty())
@@ -108,8 +108,8 @@ public record MappingsRegistry(
 				id,
 				inherits,
 				hashCode(),
-				registryStringUtil(internalRegistry),
-				registryStringUtil(internalDisabledRegistry),
+				getInternalRegistryString(internalRegistry),
+				getInternalRegistryString(internalDisabledRegistry),
 				featureFlags);
 	}
 }
