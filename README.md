@@ -73,7 +73,7 @@ CMD + Delete also now provides these other builtin mappings:
 
 | Feature                                           | CMD + Delete | [macOS Chat Fixes](https://modrinth.com/mod/macos-chat-fixes) |
 |:--------------------------------------------------|:-------------|:--------------------------------------------------------------|
-| Works in chat                                     | ✓           | ✓                                                            |
+| Works in chat & most other single-line textboxes  | ✓           | ✓                                                            |
 | Works in signs                                    | ✓           | ✘                                                            |
 | Works in books                                    | ✓           | ✘                                                            |
 | Works on any OS                                   | ✓           | ✓                                                            |
