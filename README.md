@@ -63,13 +63,11 @@ it will set you to use Windows/Linux shortcuts.
 
 CMD + Delete also now provides these other builtin mappings:
 
+- `builtin:emacs_mac` the standard macOS Cocoa shortcuts for text navigation in Emacs to the best replication I can make.
 - `builtin:emacs_windows_linux` the standard Windows/Linux shortcuts for text navigation in Emacs to the best
-  replication I can make (they're not perfect).
-- `builtin:emacs_mac` the standard macOS Cocoa shortcuts for text navigation in Emacs to the best replication I can make
-  (they're not perfect).
-- `builtin:readline` the standard shortcuts for text navigation in GNU Readline to the best replication I can make
-  (they're not perfect).
-
+  replication I can make.
+- `builtin:readline` the standard shortcuts for text navigation in GNU Readline to the best replication I can make.
+- `builtin:vanilla` a set of mappings that functionally disables the mod and allows vanilla Minecraft behavior.
 ## Comparison to Other Similar Mods
 
 | Feature                                          | CMD + Delete | [macOS Chat Fixes](https://modrinth.com/mod/macos-chat-fixes) |
