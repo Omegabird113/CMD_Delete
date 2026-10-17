@@ -16,7 +16,6 @@
 
 package io.github.omegabird113.cmd_delete.mappings;
 
-import io.github.omegabird113.cmd_delete.command.MappingsInfoCollectionUtils;
 import io.github.omegabird113.cmd_delete.config.data.FeatureFlags;
 import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
@@ -61,7 +60,6 @@ public final class NavMappingsManager {
 
 	private static void logMappings() {
 		LOGGER.info("Mappings id \"{}\" loaded with supported systems \"{}\" and Coverage of {}% with a registry size of {}. It supports the actions: {}", MappingsIdResolutionUtils.resolveNamespacedId(getMappingsState()), List.of(getCurrentMappings().getMappingsSupportedSystems()), getCurrentMappings().getCoverage() * 100, getCurrentMappings().registry().getSize(), getCurrentMappings().getPossibleActions());
-		LOGGER.info("The active mappings' info in \"/navmappings info\" without description/credits will show as: \"{}\"", MappingsInfoCollectionUtils.getInfoFrom(getMappingsState(), false).replace("\n", " "));
 		LoggingManager.traceLog(LOGGER, "Mappings state loaded: \"{}\"", currentMappingsState);
 	}
 
@@ -76,6 +74,7 @@ public final class NavMappingsManager {
 		logMappings();
 	}
 
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	public static boolean updateMappingsTo(final @NonNull MappingsType type, final @NonNull String id) {
 		final MappingsState newState = ActiveMappingsManager.resolveMappings(
 				MappingsIdResolutionUtils.resolveNamespacedId(type, id)

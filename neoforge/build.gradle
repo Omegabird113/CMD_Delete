@@ -17,7 +17,7 @@
 import com.github.jengelman.gradle.plugins.shadow.relocation.SimpleRelocator
 
 plugins {
-    id 'net.neoforged.moddev' version '2.0.147'
+    id 'net.neoforged.moddev' version '2.0.148'
     id 'com.gradleup.shadow' version '9.6.1'
     id 'maven-publish'
 }
@@ -48,7 +48,7 @@ sourceSets {
 dependencies {
     shadeOnly 'com.google.code.gson:gson:2.14.0'
     shadeOnly 'org.jspecify:jspecify:1.0.1'
-    shadeOnly 'commons-codec:commons-codec:1.22.1'
+    shadeOnly 'commons-codec:commons-codec:1.23.0'
 }
 
 neoForge {
@@ -57,6 +57,7 @@ neoForge {
     runs {
         client {
             client()
+            getJvmArguments().add("-Dcmd_delete.allowVerboseLogs=true")
             systemProperty 'cmd_delete.ci.stopMinecraftAfterLoad', System.getProperty('cmd_delete.ci.stopMinecraftAfterLoad', 'false')
         }
     }

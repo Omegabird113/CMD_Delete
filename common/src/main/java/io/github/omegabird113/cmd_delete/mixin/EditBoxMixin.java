@@ -18,9 +18,11 @@ package io.github.omegabird113.cmd_delete.mixin;
 
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
+import io.github.omegabird113.cmd_delete.actions.NavActionOffset;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import io.github.omegabird113.cmd_delete.utils.CrashUtils;
 import io.github.omegabird113.cmd_delete.utils.LoggingManager;
+import io.github.omegabird113.cmd_delete.utils.WordBoundaryUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
@@ -43,6 +45,9 @@ public abstract class EditBoxMixin extends AbstractWidget {
 		LoggingManager.debugLog(LOGGER, "EditBoxMixin loaded");
 	}
 
+	@Shadow
+	private int cursorPos;
+
 	public EditBoxMixin(int x, int y, int width, int height, Component message) {
 		super(x, y, width, height, message);
 	}
@@ -58,9 +63,6 @@ public abstract class EditBoxMixin extends AbstractWidget {
 
 	@Shadow
 	public abstract String getValue();
-
-	@Shadow
-	public abstract int getWordPosition(int dir);
 
 	@Shadow
 	public abstract void moveCursor(int dir, boolean hasShiftDown);
@@ -90,26 +92,27 @@ public abstract class EditBoxMixin extends AbstractWidget {
 		switch (action) {
 			case DEL_LINE_LEFT -> this.deleteCharsToPos(0);
 			case DEL_LINE_RIGHT -> this.deleteCharsToPos(this.getValue().length());
-			case DEL_WORD_LEFT, DEL_WORD_RIGHT -> this.deleteWords(direction);
+			case DEL_WORD_LEFT -> this.deleteCharsToPos(WordBoundaryUtils.getBoundary(this.getValue(), this.cursorPos, NavActionOffset.LEFT.value()));
+			case DEL_WORD_RIGHT -> this.deleteCharsToPos(WordBoundaryUtils.getBoundary(this.getValue(), this.cursorPos, NavActionOffset.RIGHT.value()));
 			case NAV_LINE_LEFT, NAV_TEXT_START -> this.moveCursorTo(0, false);
 			case NAV_LINE_RIGHT, NAV_TEXT_END -> this.moveCursorTo(this.getValue().length(), false);
 			case SEL_LINE_LEFT, SEL_TEXT_START -> this.moveCursorTo(0, true);
 			case SEL_LINE_RIGHT, SEL_TEXT_END -> this.moveCursorTo(this.getValue().length(), true);
-			case NAV_WORD_LEFT -> this.moveCursorTo(this.getWordPosition(-1), false);
-			case NAV_WORD_RIGHT -> this.moveCursorTo(this.getWordPosition(1), false);
-			case SEL_WORD_LEFT -> this.moveCursorTo(this.getWordPosition(-1), true);
-			case SEL_WORD_RIGHT -> this.moveCursorTo(this.getWordPosition(1), true);
-			case OVR_NAV_CHAR_LEFT -> this.moveCursor(-1, false);
-			case OVR_NAV_CHAR_RIGHT -> this.moveCursor(1, false);
-			case OVR_SEL_CHAR_LEFT -> this.moveCursor(-1, true);
-			case OVR_SEL_CHAR_RIGHT -> this.moveCursor(1, true);
+			case NAV_WORD_LEFT -> this.moveCursorTo(WordBoundaryUtils.getBoundary(this.getValue(), this.cursorPos, NavActionOffset.LEFT.value()), false);
+			case NAV_WORD_RIGHT -> this.moveCursorTo(WordBoundaryUtils.getBoundary(this.getValue(), this.cursorPos, NavActionOffset.RIGHT.value()), false);
+			case SEL_WORD_LEFT -> this.moveCursorTo(WordBoundaryUtils.getBoundary(this.getValue(), this.cursorPos, NavActionOffset.LEFT.value()), true);
+			case SEL_WORD_RIGHT -> this.moveCursorTo(WordBoundaryUtils.getBoundary(this.getValue(), this.cursorPos, NavActionOffset.RIGHT.value()), true);
+			case OVR_NAV_CHAR_LEFT -> this.moveCursor(NavActionOffset.LEFT.value(), false);
+			case OVR_NAV_CHAR_RIGHT -> this.moveCursor(NavActionOffset.RIGHT.value(), false);
+			case OVR_SEL_CHAR_LEFT -> this.moveCursor(NavActionOffset.LEFT.value(), true);
+			case OVR_SEL_CHAR_RIGHT -> this.moveCursor(NavActionOffset.RIGHT.value(), true);
 			case OVR_DEL_CHAR_LEFT -> {
 				if (this.isEditable())
-					this.deleteChars(-1);
+					this.deleteChars(NavActionOffset.LEFT.value());
 			}
 			case OVR_DEL_CHAR_RIGHT -> {
 				if (this.isEditable())
-					this.deleteChars(1);
+					this.deleteChars(NavActionOffset.RIGHT.value());
 			}
 			case OVR_COPY -> Minecraft.getInstance().keyboardHandler.setClipboard(this.getHighlighted());
 			case OVR_CUT -> {

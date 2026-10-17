@@ -20,4 +20,7 @@ This is a table of the /navmnappings sub-commands and what they do:
 | `/navmappings debug dumpDetailedActions`                                  | Dumps a table of all NavActions and their properties.                                                                                 |
 | `/navmappings debug dumpFeatureFlags`                                     | Sends a hard-coded string explaining all the feature flags available in chat.                                                         |
 | `/navmappings debug dumpRegistry`                                         | Dumps a detailed string representation of the currently used MappingsRegistry.                                                        |
+| `/navmappings debug dumpKeyMap`                                           | Dumps a map of all friendly keyname and their raw GLFW keycodes or SDL3 scancodes.                                                    |
 | `/navmappings debug dumpMappingsState`                                    | Dumps a string interpration of the current MappingsState in chat.                                                                     |
+| `/navmappings debug sendDocsLink`                                         | Sends the URL to the website for this documentation in chat.                                                                          |
+| `/navmappings debug sendIssuesLink`                                       | Sends the URL to the GitHub Issues tracker for this mod in chat.                                                                      |

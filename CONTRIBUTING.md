@@ -5,14 +5,14 @@
 All issues, pull requests (PRs), security reports, and other contributions must follow these rules:
 
 - Be reasonable:
-    - Follow GitHub's guidelines.
-    - Follow the law.
-    - Treat people humanely.
-    - Be appropriate.
-    - No spam.
-    - No unnecessary self-promotion.
-    - No unrelated/off-topic conversations.
-    - etc.
+	- Follow GitHub's guidelines.
+	- Follow the law.
+	- Treat people humanely.
+	- Be appropriate.
+	- No spam.
+	- No unnecessary self-promotion.
+	- No unrelated/off-topic conversations.
+	- etc.
 - Response times may vary, as this is a personal project.
 
 ## Issue & Security Report Rules
@@ -32,13 +32,13 @@ All issues, pull requests (PRs), security reports, and other contributions must 
 - PRs should follow the project's existing code style, including following these rules in the Code Style Rules section.
 - By making a PR, you agree that you have the legal rights to your contribution and that it will be licensed under this
   set of terms for each type of contribution:
-    - Code contributions are licensed under the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0.html).
-    - CMD + Delete wiki/documentation contributions are licensed under
-      the [CC BY 4.0 license](https://creativecommons.org/licenses/by/4.0/legalcode.en).
-    - All builtin mappings JSON file contributions are licensed under either
-      the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0.html) or
-      the [CC BY 4.0 license](https://creativecommons.org/licenses/by/4.0/legalcode.en) (You may choose to comply with
-      either license).
+	- Code contributions are licensed under the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0.html).
+	- CMD + Delete wiki/documentation contributions are licensed under
+	  the [CC BY 4.0 license](https://creativecommons.org/licenses/by/4.0/legalcode.en).
+	- All builtin mappings JSON file contributions are licensed under either
+	  the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0.html) or
+	  the [CC BY 4.0 license](https://creativecommons.org/licenses/by/4.0/legalcode.en) (You may choose to comply with
+	  either license).
 
 ## Code Style Rules
 

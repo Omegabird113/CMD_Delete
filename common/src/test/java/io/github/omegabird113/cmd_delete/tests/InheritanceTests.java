@@ -43,7 +43,7 @@ public final class InheritanceTests {
 
 	@Test
 	void featureFlagsMergeTest() {
-		FeatureFlags ff = new FeatureFlags(null, null);
+		FeatureFlags ff = new FeatureFlags(null, null, null);
 		final FeatureFlags[] featureFlags = new FeatureFlags[TestRandomnessUtils.RANDOM.nextInt(50, 150)];
 		for (int i = 0; i < featureFlags.length; i++) {
 			featureFlags[i] = TestRandomnessUtils.nextRandFeatureFlags();
