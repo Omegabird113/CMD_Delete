@@ -38,8 +38,8 @@ public record MappingsRegistry(
 		@NonNull String description,
 		@NonNull String version,
 		@NonNull String id,
-		@Nullable String license,
-		@Nullable String credits
+		@NonNull String license,
+		@NonNull String credits
 ) {
 	public MappingsRegistry {
 		internalRegistry = Map.copyOf(internalRegistry);
