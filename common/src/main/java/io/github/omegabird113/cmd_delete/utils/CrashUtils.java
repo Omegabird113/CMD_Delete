@@ -65,6 +65,6 @@ public final class CrashUtils {
 			);
 			Minecraft.getInstance().emergencySaveAndCrash(CrashReport.forThrowable(e, "CMD + Delete encountered an irrecoverable exception. Please report this at: " + CmdDeleteClient.ISSUE_TRACKER_URL_STRING));
 		} else
-			LOGGER.error("A fatal error occurred and CMD + Delete was prevented from crashing...");
+			LOGGER.error("A fatal error occurred, and CMD + Delete was prevented from crashing...");
 	}
 }

@@ -3,7 +3,7 @@
   "id": "cmd_delete",
   "version": "${version}",
   "name": "CMD + Delete",
-  "description": "Fix macOS text navigation shortcuts in chat/books/signs/etc + allow custom shortcuts.",
+  "description": "Fix macOS text navigation shortcuts in chat/books/signs/etc & allows custom shortcuts: get native cmd + backspace, option + delete, cmd + arrows, and more!",
   "authors": [
     "Omegabird113"
   ],

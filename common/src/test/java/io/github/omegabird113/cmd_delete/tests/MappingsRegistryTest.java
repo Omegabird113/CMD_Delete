@@ -49,12 +49,12 @@ public final class MappingsRegistryTest {
 		registry.put(k1, NavAction.NAV_LINE_LEFT);
 		registry.put(k2, NavAction.SEL_WORD_RIGHT);
 
-		final MappingsRegistry mr = new MappingsRegistry(registry, null, List.of(Os.LINUX), new FeatureFlags(true, false), "", "TestName", "Author", "Description", "1.0", "testid", "my license", "credits");
+		final MappingsRegistry mr = new MappingsRegistry(registry, null, List.of(Os.LINUX), new FeatureFlags(true, false, true), "", "TestName", "Author", "Description", "1.0", "testid", "my license", "credits");
 
 		Assertions.assertEquals(NavAction.NAV_LINE_LEFT, mr.get(k1));
 		Assertions.assertEquals(2, mr.getSize());
 
-		NavAction[] values = mr.getValues();
+		final NavAction[] values = mr.getValues();
 		Assertions.assertEquals(2, values.length);
 		Assertions.assertTrue(List.of(values).contains(NavAction.NAV_LINE_LEFT));
 		Assertions.assertTrue(List.of(values).contains(NavAction.SEL_WORD_RIGHT));

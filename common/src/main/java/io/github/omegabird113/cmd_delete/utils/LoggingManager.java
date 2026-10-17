@@ -28,7 +28,7 @@ public final class LoggingManager {
 
 	static {
 		if (VERBOSE_LOGGING_ALLOWED)
-			debugLog(LOGGER, "LoggingManager initialized. Verbose logging is enabled with the \"cmd_delete.allowVerboseLogs\" JVM argument... This means messages from TRACE and DEBUG levels will be bumped to INFO for users to be able to reasonably obtain these detailed messages in their latest.log file for bug reports without messing with Log4j configurations and/or downloading 3rd-party launchers.");
+			debugLog(LOGGER, "LoggingManager initialized. Verbose logging is enabled with the \"cmd_delete.allowVerboseLogs\" JVM argument... This means messages from TRACE and DEBUG levels will be bumped to INFO for users to be able to reasonably see these detailed messages in their latest.log file for bug reports without messing with Log4j configurations and/or downloading third-party launchers.");
 		else
 			debugLog(LOGGER, "LoggingManager initialized. Verbose logging is disabled. If you're debugging, consider setting the \"cmd_delete.allowVerboseLogs\" JVM argument to true...");
 	}

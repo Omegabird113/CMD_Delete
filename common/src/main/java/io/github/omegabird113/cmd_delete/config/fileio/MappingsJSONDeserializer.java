@@ -41,7 +41,7 @@ import static io.github.omegabird113.cmd_delete.config.fileio.JsonParsingUtils.*
 
 public final class MappingsJSONDeserializer {
 	private static final @NonNull Logger LOGGER = LoggingManager.getLoggerFor(MappingsJSONManager.class);
-	private static final @NonNull Map<String, Os> OS_MAP = Map.of(
+	private static final @NonNull Map<@NonNull String, @NonNull Os> OS_MAP = Map.of(
 			"windows", Os.WINDOWS,
 			"mac", Os.MAC,
 			"linux", Os.LINUX
@@ -58,7 +58,7 @@ public final class MappingsJSONDeserializer {
 		LOGGER.warn(message);
 	}
 
-	public static @NonNull MappingsRegistry deserialize(final @NonNull JsonElement json, final String fileName, final boolean custom) throws JsonParseException {
+	public static @NonNull MappingsRegistry deserialize(final @NonNull JsonElement json, final @NonNull String fileName, final boolean custom) throws JsonParseException {
 		if (!json.isJsonObject())
 			throw new JsonParseException("Expected a JSON object at root");
 		final JsonObject jsonObject = json.getAsJsonObject();
@@ -154,7 +154,7 @@ public final class MappingsJSONDeserializer {
 				for (KeyCombo key : keys) {
 					if (toAdd.containsKey(key))
 						logWarn(
-								"Duplicate key binding in custom binding with action of \"" + actionName + "\" and key \"" + key + "\". 2nd registration skipped...",
+								"Duplicate key binding in custom binding with action of \"" + actionName + "\" and key \"" + key + "\". Second registration skipped...",
 								strictMode
 						);
 					else
@@ -167,21 +167,24 @@ public final class MappingsJSONDeserializer {
 	@Contract("_, _, _ -> new")
 	private static @NonNull FeatureFlags parseFlags(final @NonNull JsonObject root, final int fv, final @NonNull String inherits) {
 		if (fv == 2)
-			return new FeatureFlags(false, true);
+			return new FeatureFlags(false, true, false);
 		else {
 			final JsonObject flags;
 			try {
 				flags = requireObject(root, "flags");
 			} catch (JsonParseException ignored) {
-				return new FeatureFlags(false, true);
+				return new FeatureFlags(false, true, false);
 			}
 			Boolean overrideVanillaNavigation = getNullableBoolean(flags, "overrideVanillaNavigation");
 			Boolean crossLineSignMovement = getNullableBoolean(flags, "crossLineSignMovement");
+			Boolean nativeStyleWordBoundaries = getNullableBoolean(flags, "nativeStyleWordBoundaries");
 			if (overrideVanillaNavigation == null && inherits.isEmpty())
 				overrideVanillaNavigation = false;
 			if (crossLineSignMovement == null && inherits.isEmpty())
 				crossLineSignMovement = true;
-			return new FeatureFlags(overrideVanillaNavigation, crossLineSignMovement);
+			if (nativeStyleWordBoundaries == null && inherits.isEmpty())
+				nativeStyleWordBoundaries = false;
+			return new FeatureFlags(overrideVanillaNavigation, crossLineSignMovement, nativeStyleWordBoundaries);
 		}
 	}
 

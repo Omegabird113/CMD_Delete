@@ -22,6 +22,7 @@ import io.github.omegabird113.cmd_delete.actions.NavActionOffset;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
 import io.github.omegabird113.cmd_delete.utils.CrashUtils;
 import io.github.omegabird113.cmd_delete.utils.LoggingManager;
+import io.github.omegabird113.cmd_delete.utils.WordBoundaryUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.MultilineTextField;
 import net.minecraft.client.gui.components.Whence;
@@ -92,11 +93,11 @@ public abstract class MultilineTextFieldMixin {
 				this.setSelecting(false);
 			}
 			case DEL_WORD_LEFT -> {
-				int previousWord = this.cmd_delete$getPreviousWordStart();
+				int previousWord = WordBoundaryUtils.getBoundary(this.value, this.cursor, NavActionOffset.LEFT.value());
 				this.deleteText(previousWord - this.cursor);
 			}
 			case DEL_WORD_RIGHT -> {
-				int nextWord = this.cmd_delete$getNextWordStart();
+				int nextWord = WordBoundaryUtils.getBoundary(this.value, this.cursor, NavActionOffset.RIGHT.value());
 				this.deleteText(nextWord - this.cursor);
 			}
 			case NAV_LINE_LEFT, NAV_LINE_RIGHT -> {
@@ -109,19 +110,19 @@ public abstract class MultilineTextFieldMixin {
 			}
 			case NAV_WORD_LEFT -> {
 				this.setSelecting(false);
-				this.seekCursor(Whence.ABSOLUTE, this.cmd_delete$getPreviousWordStart());
+				this.seekCursor(Whence.ABSOLUTE, WordBoundaryUtils.getBoundary(this.value, this.cursor, NavActionOffset.LEFT.value()));
 			}
 			case NAV_WORD_RIGHT -> {
 				this.setSelecting(false);
-				this.seekCursor(Whence.ABSOLUTE, this.cmd_delete$getNextWordStart());
+				this.seekCursor(Whence.ABSOLUTE, WordBoundaryUtils.getBoundary(this.value, this.cursor, NavActionOffset.RIGHT.value()));
 			}
 			case SEL_WORD_LEFT -> {
 				this.setSelecting(true);
-				this.seekCursor(Whence.ABSOLUTE, this.cmd_delete$getPreviousWordStart());
+				this.seekCursor(Whence.ABSOLUTE, WordBoundaryUtils.getBoundary(this.value, this.cursor, NavActionOffset.LEFT.value()));
 			}
 			case SEL_WORD_RIGHT -> {
 				this.setSelecting(true);
-				this.seekCursor(Whence.ABSOLUTE, this.cmd_delete$getNextWordStart());
+				this.seekCursor(Whence.ABSOLUTE, WordBoundaryUtils.getBoundary(this.value, this.cursor, NavActionOffset.RIGHT.value()));
 			}
 			case NAV_TEXT_START -> {
 				this.setSelecting(false);
@@ -145,29 +146,29 @@ public abstract class MultilineTextFieldMixin {
 			}
 			case OVR_NAV_CHAR_LEFT -> {
 				this.setSelecting(false);
-				this.seekCursor(Whence.RELATIVE, -1);
+				this.seekCursor(Whence.RELATIVE, NavActionOffset.LEFT.value());
 			}
 			case OVR_NAV_CHAR_RIGHT -> {
 				this.setSelecting(false);
-				this.seekCursor(Whence.RELATIVE, 1);
+				this.seekCursor(Whence.RELATIVE, NavActionOffset.RIGHT.value());
 			}
 			case OVR_SEL_CHAR_LEFT -> {
 				this.setSelecting(true);
-				this.seekCursor(Whence.RELATIVE, -1);
+				this.seekCursor(Whence.RELATIVE, NavActionOffset.LEFT.value());
 			}
 			case OVR_SEL_CHAR_RIGHT -> {
 				this.setSelecting(true);
-				this.seekCursor(Whence.RELATIVE, 1);
+				this.seekCursor(Whence.RELATIVE, NavActionOffset.RIGHT.value());
 			}
-			case OVR_DEL_CHAR_LEFT -> this.deleteText(-1);
-			case OVR_DEL_CHAR_RIGHT -> this.deleteText(1);
+			case OVR_DEL_CHAR_LEFT -> this.deleteText(NavActionOffset.LEFT.value());
+			case OVR_DEL_CHAR_RIGHT -> this.deleteText(NavActionOffset.RIGHT.value());
 			case OVR_NAV_TEXT_UP -> {
 				this.setSelecting(false);
-				this.seekCursorLine(-1);
+				this.seekCursorLine(NavActionOffset.UP.value());
 			}
 			case OVR_NAV_TEXT_DOWN -> {
 				this.setSelecting(false);
-				this.seekCursorLine(1);
+				this.seekCursorLine(NavActionOffset.DOWN.value());
 			}
 			case OVR_COPY -> Minecraft.getInstance().keyboardHandler.setClipboard(this.getSelectedText());
 			case OVR_CUT -> {
@@ -216,25 +217,5 @@ public abstract class MultilineTextFieldMixin {
 				return accessor;
 		}
 		return this.displayLines.isEmpty() ? null : (MultilineTextFieldStringViewAccessor) this.displayLines.getLast();
-	}
-
-	@Unique
-	private int cmd_delete$getPreviousWordStart() {
-		int pos = Math.clamp(this.cursor, 0, this.value.length());
-		while (pos > 0 && Character.isWhitespace(this.value.charAt(pos - 1)))
-			pos--;
-		while (pos > 0 && !Character.isWhitespace(this.value.charAt(pos - 1)))
-			pos--;
-		return pos;
-	}
-
-	@Unique
-	private int cmd_delete$getNextWordStart() {
-		int pos = Math.clamp(this.cursor, 0, this.value.length());
-		while (pos < this.value.length() && !Character.isWhitespace(this.value.charAt(pos)))
-			pos++;
-		while (pos < this.value.length() && Character.isWhitespace(this.value.charAt(pos)))
-			pos++;
-		return pos;
 	}
 }
