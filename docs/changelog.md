@@ -4,6 +4,20 @@ This is a collection of all historical CMD + Delete changelogs for every release
 notes were retroactively added and the formatting was retroactively changed in some versions to fix issues and make
 inter-version formatting consistent.
 
+### 1.5.0 Beta 4
+
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.5.0-beta.4%2Bmc26.3) on October 17th, 2026.
+
+Changes:
+
+- Added a new `builtin:vanilla` mappings set.
+- Added a `nativeStyleWordBoundaries` feature flag that allows support for using native OS style detection of where word boundaries are.
+- Mappings should now always be sorted in alphabetical order when listed.
+- Improve logging and fix some issues with inaccurate logging.
+- Internal code improvements.
+
+Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.5.0-beta.3+mc26.3...1.5.0-beta.4+mc26.3
+
 ### 1.5.0 Beta 3
 
 [Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.5.0-beta.3%2Bmc26.3) on October 4th, 2026.
