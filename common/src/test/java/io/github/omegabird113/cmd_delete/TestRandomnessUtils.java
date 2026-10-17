@@ -47,7 +47,8 @@ public final class TestRandomnessUtils {
 	public static @NonNull FeatureFlags nextRandFeatureFlags() {
 		final Boolean overrideVanillaNavigation = nextRandNullableBoolean();
 		final Boolean crossLineSignMovement = nextRandNullableBoolean();
-		return new FeatureFlags(overrideVanillaNavigation, crossLineSignMovement);
+		final Boolean nativeStyleWordBoundaries = nextRandNullableBoolean();
+		return new FeatureFlags(overrideVanillaNavigation, crossLineSignMovement, nativeStyleWordBoundaries);
 	}
 
 	public static @NonNull KeyCombo genRandomKeyCombo() {

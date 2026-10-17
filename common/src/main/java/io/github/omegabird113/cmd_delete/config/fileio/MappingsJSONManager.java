@@ -54,11 +54,11 @@ public final class MappingsJSONManager {
 		}
 	}
 
-	public static @NonNull Optional<NavMappings> tryLoadMappings(final @NonNull String id, final boolean custom) {
+	public static @NonNull Optional<@NonNull NavMappings> tryLoadMappings(final @NonNull String id, final boolean custom) {
 		final Optional<MappingsRegistry> registry = getRegistryFrom(id, custom);
 		if (registry.isPresent())
 			try {
-				final MappingsRegistry resolved = resolveInheritance(registry.get());
+				final MappingsRegistry resolved = resolveInheritance(registry.get(), custom);
 				return Optional.of(new NavMappings(resolved));
 			} catch (IOException e) {
 				LOGGER.error("Failed to resolve {} mappings inheritance for \"{}\"", MappingsType.fromIfCustom(custom).commonName(), id, e);
@@ -68,7 +68,7 @@ public final class MappingsJSONManager {
 			return Optional.empty();
 	}
 
-	public static @NonNull Optional<MappingsRegistry> getRegistryFrom(final @NonNull String id, final boolean custom) {
+	public static @NonNull Optional<@NonNull MappingsRegistry> getRegistryFrom(final @NonNull String id, final boolean custom) {
 		final String typeCName = MappingsType.fromIfCustom(custom).commonName();
 		try {
 			final MappingsRegistry registry = loadFromDir(id, custom);
@@ -82,11 +82,11 @@ public final class MappingsJSONManager {
 		}
 	}
 
-	public static @NonNull MappingsRegistry resolveInheritance(final @NonNull MappingsRegistry startRegistry) throws IOException {
+	public static @NonNull MappingsRegistry resolveInheritance(final @NonNull MappingsRegistry startRegistry, final boolean custom) throws IOException {
 		final List<MappingsRegistry> registries = new ArrayList<>();
 		final List<String> ids = new ArrayList<>();
 		MappingsRegistry current = startRegistry;
-		String namespacePrefix = MappingsType.CUSTOM.prefix();
+		String namespacePrefix = MappingsType.fromIfCustom(custom).prefix();
 		while (true) {
 			registries.add(current);
 			ids.add(namespacePrefix + current.id());
@@ -135,7 +135,7 @@ public final class MappingsJSONManager {
 	}
 
 	@Contract(pure = true)
-	public static @NonNull List<String> getAvailableOptions(final boolean namespacedIds) {
+	public static @NonNull List<@NonNull String> getAvailableOptions(final boolean namespacedIds) {
 		final List<String> options = new ArrayList<>();
 
 		final File configDirectory = PathConstants.getMappingsJSONPath().toFile();
