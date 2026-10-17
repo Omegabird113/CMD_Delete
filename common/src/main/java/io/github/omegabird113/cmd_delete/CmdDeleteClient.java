@@ -35,6 +35,7 @@ import java.nio.file.Path;
 public final class CmdDeleteClient {
 	public static final @NonNull String MODID = "cmd_delete";
 	public static final @NonNull String ISSUE_TRACKER_URL_STRING = "https://github.com/Omegabird113/CMD_Delete/issues";
+	public static final @NonNull String CROWDIN_PROJECT_URL_STRING = "https://crowdin.com/project/cmd-delete-mcmod";
 	public static final int CURRENT_MAPPINGS_FORMAT_VERSION = 5;
 	public static final int MINIMUM_MAPPINGS_FORMAT_VERSION = 2;
 	public static final int SHARECODE_FORMAT_VERSION = 1;
@@ -55,17 +56,22 @@ public final class CmdDeleteClient {
 
 	public static void setPlatform(final @NonNull IPlatform platform) {
 		CmdDeleteClient.platform = platform;
-		LoggingManager.traceLog(platform.getPlatformLogger(), "Platform set...");
+		LoggingManager.traceLog(platform.getPlatformLogger(), "Platform set... Using the provided platform logger to send this.");
 		LoggingManager.debugLog(LOGGER, "CmdDeleteClient platform set to \"{}\"", platform.getPlatformName());
+	}
+
+	@SuppressWarnings("unused")
+	public static @Nullable IPlatform getNullablePlatform() {
+		return platform;
 	}
 
 	public static void start(final @NonNull IPlatform platform) {
 		LoadTimer.time(() -> CrashUtils.crashMinecraftOnFailure(() -> {
-			LoadTimer.time(() -> setPlatform(platform), "Registering platform information", true);
+			LoadTimer.time(() -> setPlatform(platform), "registering platform information", true);
 
 			LoadTimer.time(() -> {
-				LOGGER.info("Initializing client mod \"{}\" (version: {}, mappings format version: {}, minimum mappings compatible version: {}, sharecode encoding version: {})... You can report any issues at {}.", MODID, platform.getModVersion(), CURRENT_MAPPINGS_FORMAT_VERSION, MINIMUM_MAPPINGS_FORMAT_VERSION, SHARECODE_FORMAT_VERSION, ISSUE_TRACKER_URL_STRING);
-				LOGGER.info("User appears to be running system: {}", Os.USING);
+				LOGGER.info("Initializing client mod \"{}\" (version: {}, mappings format version: {}, minimum mappings compatible version: {}, sharecode encoding version: {})... You can report any issues at {} or help translate at {}.", MODID, platform.getModVersion(), CURRENT_MAPPINGS_FORMAT_VERSION, MINIMUM_MAPPINGS_FORMAT_VERSION, SHARECODE_FORMAT_VERSION, ISSUE_TRACKER_URL_STRING, CROWDIN_PROJECT_URL_STRING);
+				LOGGER.info("User appears to be running OS: {}", Os.USING);
 
 				final MixinEnvironment mixinEnv = MixinEnvironment.getCurrentEnvironment();
 				LoggingManager.traceLog(LOGGER, "Mixin version {} with obfuscation \"{}\" and compatibility level \"{}\" in phase \"{}\" on side \"{}\"", mixinEnv.getVersion(), mixinEnv.getObfuscationContext(), MixinEnvironment.getCompatibilityLevel(), mixinEnv.getPhase(), mixinEnv.getSide());

@@ -49,7 +49,10 @@ public final class KeyComboTest {
 			Assertions.assertTrue(s.contains("cmd+"), "On mac, superCommand should appear as cmd+");
 			Assertions.assertTrue(s.contains("opt+"), "On mac, altOption should appear as opt+");
 		} else {
-			Assertions.assertTrue(s.contains("sup+"), "On non-mac, superCommand should appear as sup+");
+			if (Os.IS_USING_LINUX)
+				Assertions.assertTrue(s.contains("sup+"), "On Linux, superCommand should appear as sup+");
+			else
+				Assertions.assertTrue(s.contains("win+"), "On Windows, superCommand should appear as sup+");
 			Assertions.assertTrue(s.contains("alt+"), "On non-mac, altOption should appear as alt+");
 		}
 
@@ -58,7 +61,7 @@ public final class KeyComboTest {
 		Assertions.assertTrue(s.contains(expectedKeyName), () -> "Expected key name " + expectedKeyName + " in " + s);
 
 		final KeyCombo kc2 = new KeyCombo(leftKey, true, true, true, true);
-		Map<KeyCombo, String> mmap = new HashMap<>();
+		final Map<KeyCombo, String> mmap = new HashMap<>();
 		mmap.put(kc, "value");
 		Assertions.assertEquals("value", mmap.get(kc2), "KeyCombo equals/hashCode should allow lookup with an equal instance");
 

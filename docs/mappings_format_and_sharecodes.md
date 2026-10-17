@@ -9,8 +9,9 @@ behavior in Minecraft for your own taste and configuration. You can also easily 
 Custom mappings can:
 
 - Use wildcard expansion where any modifier not included in a key combo is treated as `true` OR `false`.
-- Use [friendly keyname strings](friendly_keynames.md) defined by CMD + Delete instead of GLFW keycodes. If a keyname is
-  not defined, you can still choose to use a raw GLFW keycode in your JSON.
+- Use [friendly keyname strings](friendly_keynames.md) defined by CMD + Delete instead of GLFW/SDL3 keycodes. If a
+  keyname is
+  not defined, you can still choose to use a raw keycode in your JSON.
 - Inherit keybinds from the builtin mappings or other custom mappings by setting the top-level `inherits` value to
   `custom:<id>` to inherit a custom JSON, or `builtin:<id>` or just `<id>` to inherit a builtin JSON.
 - Patch and override the mappings they inherit by setting the keybind to have `enabled` property as `false`. Note that
@@ -195,6 +196,7 @@ feature flags to be used by mappings:
 |:----------------------------|:--------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `overrideVanillaNavigation` | `false`       | This feature flag controls whether it is possible to produce override mode actions. The reason this is a feature flag is because override actions aren't needed if you're willing to let vanilla Minecraft handle them, but if you want to override vanilla's shortcuts, you can. |
 | `crossLineSignMovement`     | `true`        | When true, this changes signs from isolating each line into being a better multi-line text editor. For example, with this true, you can go to the end of a line and press the right arrow and it will take you to the next line.                                                  |
+| `nativeStyleWordBoundaries` | `false`       | When true, this makes the mod use the OS's native word boundary conventions in a custom implementation instead of vanilla Minecraft's space-only boundaries for all platforms.                                                                                                    |
 
 ### Strict Mode
 
@@ -241,4 +243,4 @@ themselves be a complete source of truth.
 ### Example
 
 `builtin:mac` sharecode:
-`CDS:EV1:tMeXxZVB45VieA3HvggAeo3p5zjrCbj7crBL5PbmPwdWGpgx8nz6vXnqxX48Cgc5BHZX63EYegfSTth3sTL16tud1DU6KFQKQNLmEtrhaoojTDiqtcm88t2ePt3yKWY4NnfPEUBhPqMgmoFCZwkfgVMpmKr6L2QYWmtruBniZRgBG5hxpA95W2E3pn5dv9SnDhpQenXnr2cWvyENAGmNpTzpUyktLDQoEZGJZE8CKK84G8jXsTf81f1Kxojv88pF66AeMYEqMCYCki7jafgTDi4YspYGxLvqrd9eZPGUPy1JvV588pD6MFT13sYK2m5yiJk5qGwqMg17DSbXjEUzU3dLN322AqPDP4Xvm3n1nztxo2fuCeGPpmD7poJDbHCws7RNKtVcgnpas8EhxHDUBqZPwyDWjbUwqxNfmqSvKQwYQbU3jTt527Z89g1Li4QPBto4bNFc9Fr7jWYQVdu8k7PxahZEFjPes5YrufVoNtU1ZC8VuMreMQNeBUz9MH5qN3oDbdYu7L5Jupr6XBrpKMoVzGGS4ygdcBMfG7ZZF6ruzNjTGDjHvrNDGDuJXpXfnccn9ami1xM4SipedBHugVM56FyR26MsRcddBMwmnSr4LTrGT6hofbsGuapfVJZUNfgab6WvHDAgHMXFQD9reFnfuMQ3KNtzMFzPJXSyVLfbFYDjPxv94yB5:2419707130`
+`CDS:EV1:3UGK1GyFWsodDsztQa3ykFDDL2yT8xgaAPjLxohNtxVCcGCeVV6nanhjz1uU1SzyXMcZ1qNEdMzZ7ZYFtYwGqPe27FeUWXbuHHQGibgZHqkpa9EzihPnaKr6atWPW1TkpspyYZdsW2HMWrSwRd6dVpB5RTb2uAKDgyL5w4f6ncZRwGvwnpHAr4k6BdXZiZrAvF6DqrmLeQ1d2Q2CnfpkU1BVmJNFyarC63wYYoAMRSkxh3z3pxMacamDdcbzdLfDVyoTN7iS3JYxHXYPjJAvsYZgYh4LK9v6ejzUNdWRnS8R4kfUA5vZJJuANKUvWKjRyP1jJ4rSoemLZA1qN9cSXNtYHJRxR9zMf2AbH4VcrGAgAHjavM9CGKDSC1PHWGLyVSzwtLBKjeovTcKqGJgNCNPxjmgGTbWqxdX1bEcWy3m6ErLwf1oVsD4JeXNVR84QM9MHtrVHzNE5AABvCusmjyY1b6b1c8aDLSFqE2vGDMffnVya4yR6bigcj7kPhJfUr8p7n4HRZqWgfs8n1xJq7AGBFcYzP4znbaUU8yktpmZzfWZjG3RrghVawa9131nZ5MaM1TCikLNsZqHhKqyRwvuDJeD6UXbnUrjkPxYcMNSg8HtRF9ZUpnhuQe9Yk2auXUw1mEDbMZTfSxoBM5iNkxBppDzXddQmnh13vXDn2CuXUBR2wexQrJdtWpcPxmuad6RZh57ru6oqMce5BbhELtzQe8hy2mcXB29JaXeGVcwQLUAz3DoZ7fLpidsPT9583LTomFwyBoLvcHNZnbA1xeXbD7HHhcQAiWJSxo:4099694340`
