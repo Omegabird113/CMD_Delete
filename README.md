@@ -12,15 +12,17 @@ deletes a word. **This is completely inconsistent with the native OS**, so I fix
 This mod also functions as a fully configurable text editing/navigation shortcut framework for Minecraft with custom
 mappings, JSONs and sharecodes, in-game switching, and more!
 
+![A showcase of opt/cmd + backspace in chat.](./docs/resources/showcase.gif)
+
 ## Some Context
 
-1. If you use this mod on Windows or Linux, and you don't use custom mappings, nothing will change from vanilla
-   Minecraft.
-2. If you have any problems with this mod, **please report them as Issues on GitHub**. This mod is Open Source, and Pull
+1. This mod is useful even on Windows or Linux as it improves sign navigation to make using left/right arrow keys between the lines of signs possible and it improves word boundary detection to be closer to the native OS.
+2. You can basically disable the mod, if need be, by running the command `/navmappings set builtin vanilla`.
+3. If you have any problems with this mod, **please report them as Issues on GitHub**. This mod is Open Source, and Pull
    Requests are very much welcome! :)
-3. For technical information about custom mappings and how the mod works, you should go to
+4. For technical information about custom mappings and how the mod works, you should go to
    the [CMD + Delete documentation](https://omegabird113.github.io/CMD_Delete/).
-4. CMD + Delete has portions of the mod localized to many other languages. Currently, this has been done using machine
+5. CMD + Delete has portions of the mod localized to many other languages. Currently, this has been done using machine
    translation. If you would like to help support a new language or improve translations for your own language, please
    help out on the [CMD + Delete Crowdin Project](https://crowdin.com/project/cmd-delete-mcmod).
 
@@ -30,8 +32,6 @@ mappings, JSONs and sharecodes, in-game switching, and more!
 > CMD + Delete is a multi-platform mod that supports for Minecraft Fabric/Quilt `1.14.4` to the latest version, NeoForge
 `1.21.9` to `26.3` and the LTS `1.20.5`-`1.21.5` build natively, and Forge `1.20.1`
 via [Sinytra Connector](https://modrinth.com/mod/connector).
-
-![A showcase of opt/cmd + backspace in chat.](./docs/resources/showcase.gif)
 
 ## Builtin Mappings' Shortcuts
 
