@@ -29,7 +29,7 @@ mappings, JSONs and sharecodes, in-game switching, and more!
 > [!Note]
 >
 > **Compatibility**:
-> CMD + Delete is a multi-platform mod that supports for Minecraft Fabric/Quilt `1.14.4` to the latest version, NeoForge
+> CMD + Delete is a multi-platform mod that supports for Minecraft Fabric/Quilt `1.14.4`-`26.3`, NeoForge
 `1.21.9` to `26.3` and the LTS `1.20.5`-`1.21.5` build natively, and Forge `1.20.1`
 via [Sinytra Connector](https://modrinth.com/mod/connector).
 
