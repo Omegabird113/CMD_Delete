@@ -1,8 +1,21 @@
 # Changelog
 
 This is a collection of all historical CMD + Delete changelogs for every release of the mod. Note that some release
-notes were retroactively added and the formatting was retroactively changed in some versions to fix issues and make
-inter-version formatting consistent.
+notes were retroactively added and the formatting was retroactively changed in some versions to fix typos and other issues and make inter-version formatting more consistent.
+
+### 1.5.0 Beta 4
+
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.5.0-beta.4%2Bmc26.3) on October 17th, 2026.
+
+Changes:
+
+- Added a new `builtin:vanilla` mappings set.
+- Added a `nativeStyleWordBoundaries` feature flag that allows support for using native OS style detection of where word boundaries are.
+- Mappings should now always be sorted in alphabetical order when listed.
+- Improve logging and fix some issues with inaccurate logging.
+- Internal code improvements.
+
+Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.5.0-beta.3+mc26.3...1.5.0-beta.4+mc26.3
 
 ### 1.5.0 Beta 3
 
@@ -246,10 +259,6 @@ Some notes on Minecraft 26.3 Snapshot 4/5 and above:
   Also, the friendly keyname `f25` only works on GLFW. In a future mappings format version, `f25` will be removed as a
   friendly keyname.
 - If you only use friendly keynames in your mappings, (excluding `f25`) they will work fine across versions.
-- After 26.3 full release, the primary build of the mod will become the 26.3 build and the 26.1–26.2 build will become
-  the secondary build. At this point, the previous 1.21.11 secondary build will lose support and no longer be made. Note
-  that the builds for `1.20`-`1.20.1` and `1.20.5`-`1.21.5` are considered LTS builds and will not lose support any time
-  soon.
 
 Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.4.0-beta.1+mc26.1...1.4.0-beta.2+mc26.1
 
@@ -305,12 +314,12 @@ Changes:
 	  `overrideVanillaNavigation` is `true`): `OVR_NAV_CHAR_LEFT`, `OVR_NAV_CHAR_RIGHT`, `OVR_SEL_CHAR_LEFT`,
 	  `OVR_SEL_CHAR_RIGHT`, `OVR_DEL_CHAR_LEFT`, `OVR_DEL_CHAR_RIGHT`, `OVR_NAV_TEXT_UP`, and `OVR_NAV_TEXT_DOWN`.
 	- Note that, in the future, any new actions will cause an `fv` bump, but new feature flags will not.
-- Added the `/navmappings debug dumpActions` and `/navmappings debug dumpFeatureFlags` subcommands
+- Added the `/navmappings debug dumpActions` and `/navmappings debug dumpFeatureFlags` subcommands.
 - Internal code improvements
 
 Changes since RC 1:
 
-- Internal code improvements
+- Internal code improvements.
 
 Release notes:
 
@@ -333,8 +342,8 @@ Changes:
 	  `overrideVanillaNavigation` is `true`): `OVR_NAV_CHAR_LEFT`, `OVR_NAV_CHAR_RIGHT`, `OVR_SEL_CHAR_LEFT`,
 	  `OVR_SEL_CHAR_RIGHT`, `OVR_DEL_CHAR_LEFT`, `OVR_DEL_CHAR_RIGHT`, `OVR_NAV_TEXT_UP`, and `OVR_NAV_TEXT_DOWN`.
 	- Note that, in the future, any new actions will cause an `fv` bump, but new feature flags will not.
-- Added the `/navmappings debug dumpActions` and `/navmappings debug dumpFeatureFlags` subcommands
-- Internal code improvements
+- Added the `/navmappings debug dumpActions` and `/navmappings debug dumpFeatureFlags` subcommands.
+- Internal code improvements.
 
 Release notes:
 
@@ -350,21 +359,21 @@ Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.2.0+mc26.1.
 Changes:
 
 - Increased the Mappings format version to `2`, which:
-	- **Breaks compatibility with previous mappings**
-	- Allows custom mappings to now inherit from other mappings
-	- Mappings now must have an `id` field within the `meta` object which must match their filename
+	- **Breaks compatibility with previous mappings**.
+	- Allows custom mappings to now inherit from other mappings.
+	- Mappings now must have an `id` field within the `meta` object which must match their filename.
 	- Mappings can now set the `key` value in a key registration to an integer of the GLFW keycode instead of only
 	  allowing CMD + Delete's custom friendly keynames.
-- Added the `/navmappings reload`, `/navmappings debug`, `/navmappings import`, and `/navmappings export` subcommands
-- Improved logging significantly
-- Builtin mappings are now stored in the JSON format
-- Added more links and a better description to the mod's about info
-- Internal code improvements
+- Added the `/navmappings reload`, `/navmappings debug`, `/navmappings import`, and `/navmappings export` subcommands.
+- Improved logging significantly.
+- Builtin mappings are now stored in the JSON format.
+- Added more links and a better description to the mod's about info.
+- Internal code improvements.
 
 Changes since RC2:
 
-- Improved some error messages
-- Internal code improvements
+- Improved some error messages.
+- Internal code improvements.
 
 Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.1.0+mc26.1...1.2.0+mc26.1
 
@@ -374,10 +383,10 @@ Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.1.0+mc26.1.
 
 Changes:
 
-- Add dedicated subcommands for `/navammpings import` and `/navmappings export`
-- Add `/navmappings debug aboutCmdDelete`
-- Improve the mod's marketing materials
-- Internal code improvements
+- Added dedicated subcommands for `/navmappings import` and `/navmappings export`.
+- Added `/navmappings debug aboutCmdDelete`.
+- Improved the mod's marketing materials.
+- Internal code improvements.
 
 Full Changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.2.0-rc1+mc26.1...1.2.0-rc2+mc26.1
 
@@ -387,33 +396,33 @@ Full Changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.2.0-rc1+mc2
 
 Changes:
 
-- Increased the Mappings format version to `2` which breaks compatibility with previous mappings
-	- Custom mappings can now inherit from other mappings
-	- Mappings now must have a `meta.id` field which must match their filename
-- Added `/navmappings reload` and `/navmappings debug` sub-commands
-- Improved logging significantly
-- Builtin mappings are now stored in the JSON format
-- Added more links to the mod's about info
-- Internal code improvements
+- Increased the Mappings format version to `2` which breaks compatibility with previous mappings:
+	- Custom mappings can now inherit from other mappings.
+	- Mappings now must have a `meta.id` field which must match their filename.
+- Added `/navmappings reload` and `/navmappings debug` sub-commands.
+- Improved logging significantly.
+- Builtin mappings are now stored in the JSON format.
+- Added more links to the mod's about info.
+- Internal code improvements.
 
 Full Changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.1.0+mc26.1...1.2.0-rc1+mc26.1
 
 ### 1.1.0
 
-[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.1.0%2Bmc26.1) on June 16th. 2026.
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.1.0%2Bmc26.1) on June 16th, 2026.
 
 Changes:
 
-- Added support for the new 26.2 update
+- Added support for the new 26.2 update.
 - Improved the details and formatting of `/navmappings info`
 - `/navmappings set builtin windows` and `/navmappings set builtin linux` are no longer allowed (you must use
-  `/navmappings set builtin windows_linux`)
-- Improve logging
-- Improve the validation of custom mappings JSONs
-- Fixed a bug where non-json files were shown in `/navmappings list`
-- Made improvements which should help the mod's performance and file size
-- Internal code improvements
-- Made a wave of one-time backport builds which eventually got as far back as 1.14.4
+  `/navmappings set builtin windows_linux`).
+- Improve logging.
+- Improve the validation of custom mappings JSONs.
+- Fixed a bug where non-json files were shown in `/navmappings list`.
+- Made improvements which should help the mod's performance and file size.
+- Internal code improvements.
+- Made a wave of one-time backport builds which eventually got as far back as 1.14.4.
 
 Release notes:
 
@@ -432,12 +441,12 @@ Full Changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.0.0+mc26.1.
 
 Changes:
 
-- The initial public full release of CMD + Delete
+- The initial public full release of CMD + Delete.
 
 Changes since RC1:
 
-- Some logging improvements
-- Internal code improvements
+- Some logging improvements.
+- Internal code improvements.
 
 ### 1.0.0 Release Candidate 1
 
@@ -445,9 +454,9 @@ Changes since RC1:
 
 Changes:
 
-- Added book support
-- Added a /navmappings command to handle switching out the mappings
-- Internal code improvements
+- Added book support.
+- Added a /navmappings command to handle switching out the mappings.
+- Internal code improvements.
 
 Full Changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.0.0-beta4+mc26.1.x...1.0.0-rc1+mc26.1
 
@@ -457,12 +466,12 @@ Full Changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.0.0-beta4+m
 
 Changes:
 
-- There's a new logo
-- CMD + Delete now uses an actions/mapping system internally
+- There's a new logo.
+- CMD + Delete now uses an actions/mapping system internally.
 - CMD + Delete now supports user-defined custom mappings (there is currently no way to switch between mappings within
-  the game, you have to edit .active_mappings to change mappings)
-- Moved back to the old `cmd_delete` modid
-- internal code improvements
+  the game, you have to edit .active_mappings to change mappings).
+- Moved back to the old `cmd_delete` modid.
+- Internal code improvements.
 
 Release notes:
 
@@ -476,8 +485,8 @@ Full Changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.0.0-beta3+m
 
 Changes:
 
-- Added support for signs
-- Internal code improvements
+- Added support for signs.
+- Internal code improvements.
 
 Release notes:
 
@@ -491,9 +500,9 @@ Full Changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.0.0-beta2+m
 
 Changes:
 
-- CMD + Delete now supports Minecraft `26.1`, `26.1.1`, and `26.1.2`
-- Make the mod match its new ID (`cmd-delete`) in more places
-- Internal code improvements
+- CMD + Delete now supports Minecraft `26.1`, `26.1.1`, and `26.1.2`.
+- Make the mod match its new ID (`cmd-delete`) in more places.
+- Internal code improvements.
 
 Release notes:
 
@@ -507,11 +516,11 @@ Full Changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.0.0-beta1+m
 
 Changes:
 
-- Updated to Minecraft 26.1
-- Changed the license from the `MIT` license to the `Apache 2.0` license
-- Change the Mod ID to `cmd-delete` from `cmd_delete`
-- Internal code improvements
-- Removed a lot of debug logging
+- Updated to Minecraft 26.1.
+- Changed the license from the `MIT` license to the `Apache 2.0` license.
+- Change the Mod ID to `cmd-delete` from `cmd_delete`.
+- Internal code improvements.
+- Removed a lot of debug logging.
 
 Release notes:
 
@@ -525,9 +534,9 @@ Full Changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.0-alpha3+mc
 
 Changes:
 
-- The mod has now been exported properly, so it actually works
-- It supports `Mod Menu`
-- Internal Code Improvements
+- The mod has now been exported properly, so it actually works.
+- It supports `Mod Menu`.
+- Internal Code Improvements.
 
 Release notes:
 
@@ -543,10 +552,10 @@ Full Changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.0-alpha2...
 
 Changes:
 
-- Made internal code improvements
-- Adding logging *(this includes logging all presses of `arrow` or `backspace`/`delete` keys in chat if debug logging is
-  enabled)*
-- The logo has been compressed more to reduce the final jar's size
+- Made internal code improvements.
+- Added logging *(this includes logging all presses of `arrow` or `backspace`/`delete` keys in chat if debug logging is
+  enabled)*.
+- The logo has been compressed more to reduce the final jar's size.
 
 Release notes:
 
@@ -568,6 +577,6 @@ Changes:
 
 Release notes:
 
-- This mod does not currently work in Books, Sign, etc. It should work in chat and creative mode search.
+- This mod does not currently work in Books, Signs, etc. It should work in chat and creative mode search.
 - This version was exported using the wrong Gradle task and was distributed as a `-dev.jar` file. Therefore, this
   version will not work in a real Minecraft environment.
