@@ -1,0 +1,4 @@
+[bugtraq]
+  url = https://github.com/Omegabird113/CMD_Delete/issues/%BUGID%
+  loglinkregex = "#\\d+"
+  logregex = \\d+
