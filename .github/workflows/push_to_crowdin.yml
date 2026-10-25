@@ -8,6 +8,9 @@ on:
       - '.github/workflows/push_to_crowdin.yml'
   workflow_dispatch: { }
 
+permissions:
+  contents: read
+
 jobs:
   crowdin-push:
     runs-on: ubuntu-latest
