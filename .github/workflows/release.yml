@@ -259,7 +259,7 @@ jobs:
             $PRERELEASE_FLAG
 
       - name: Publish Fabric to Modrinth & CurseForge
-        uses: Kira-NT/mc-publish@52307b03863581dec6b652b83e597aec02ebb075 # v3.3.1
+        uses: Kira-NT/mc-publish@c23376546a97f5ba7984e94445da359459b14419 # v3.3.2
         with:
           modrinth-id: xrOWVab9
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
@@ -280,7 +280,7 @@ jobs:
           fail-mode: skip
 
       - name: Publish NeoForge to Modrinth & CurseForge
-        uses: Kira-NT/mc-publish@52307b03863581dec6b652b83e597aec02ebb075 # v3.3.1
+        uses: Kira-NT/mc-publish@c23376546a97f5ba7984e94445da359459b14419 # v3.3.2
         with:
           modrinth-id: xrOWVab9
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
