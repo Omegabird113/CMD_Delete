@@ -6,6 +6,10 @@ on:
       timezone: 'America/New_York'
   workflow_dispatch: { }
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   crowdin-pull:
     runs-on: ubuntu-latest
