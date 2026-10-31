@@ -38,6 +38,7 @@ import java.util.zip.GZIPOutputStream;
 
 public final class ShareCodeGenerator {
 	public static final @NonNull Base58 BASE_58 = new Base58();
+	public static final int COMPRESSED_TEXT_BYTES_THRESHOLD = 10_000_000; // 10 mb
 
 	private ShareCodeGenerator() {
 	}
@@ -86,7 +87,10 @@ public final class ShareCodeGenerator {
 	public static @NonNull String decodeCoreShareCode(final @NonNull String input) throws IOException {
 		try (final ByteArrayInputStream bais = new ByteArrayInputStream(BASE_58.decode(input));
 			 final GZIPInputStream gzip = new GZIPInputStream(bais)) {
-			return new String(gzip.readAllBytes(), StandardCharsets.UTF_8);
+			final byte[] bytes = gzip.readNBytes(COMPRESSED_TEXT_BYTES_THRESHOLD);
+			if (bytes.length == COMPRESSED_TEXT_BYTES_THRESHOLD)
+				throw new IOException("The sharecode provided was way too large! Sharecodes that decompress to 10mb or more are not allowed.");
+			return new String(bytes, StandardCharsets.UTF_8);
 		}
 	}
 
