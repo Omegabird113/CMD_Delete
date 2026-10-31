@@ -21,7 +21,9 @@ run/**
 .idea/**/tasks.xml
 .idea/**/usage.statistics.xml
 .idea/**/shelf*.iws
-.idea/**/aws.xml.idea/**/contentModel.xml.idea/**/dataSources/
+.idea/**/aws.xml
+.idea/**/contentModel.xml
+.idea/**/dataSources/
 .idea/**/dataSources.ids
 .idea/**/dataSources.local.xml
 .idea/**/sqlDataSources.xml

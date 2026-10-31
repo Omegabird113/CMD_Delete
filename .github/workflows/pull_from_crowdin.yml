@@ -6,6 +6,10 @@ on:
       timezone: 'America/New_York'
   workflow_dispatch: { }
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   crowdin-pull:
     runs-on: ubuntu-latest
@@ -13,7 +17,7 @@ jobs:
       - uses: actions/checkout@v7
 
       - name: Pull translations from Crowdin
-        uses: crowdin/github-action@9c23991700c0ec5256fd41089b9d9d7d540e424e #v3.3.0
+        uses: crowdin/github-action@959dc74ac104447731cba99a016f85d0ae719788 #v3.5.0
         with:
           config: crowdin.yml
           crowdin_branch_name: master
@@ -38,10 +42,6 @@ jobs:
       - name: Rename files to lowercase
         if: success()
         run: |
-          # Install rename utility
-          sudo apt-get install -y rename
-
-          # Rename all language files to lowercase
           find common/src/main/resources/assets -type f -name "*.json" | while read file; do
             dir=$(dirname "$file")
             filename=$(basename "$file")
@@ -52,20 +52,17 @@ jobs:
             fi
           done
 
-      - name: Commit changes locally
+      - name: Discard unrelated changes
         if: success()
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "actions@github.com"
-          git add common/src/main/resources/assets/**/lang/*.json
-          git diff --quiet && git diff --staged --quiet || git commit -m "Rename language files to lowercase"
-          # no git push here — create-pull-request handles branching + pushing
+        run: git checkout -- . ':!common/src/main/resources/assets'
 
       - name: Create Pull Request
         if: success()
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 #v8.1.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "New Crowdin translations"
+          add-paths: common/src/main/resources/assets/**/lang/*.json
           title: "New Crowdin translations"
           body: |
             Updated translations from Crowdin.

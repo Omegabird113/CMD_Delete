@@ -8,6 +8,9 @@ on:
       - '.github/workflows/push_to_crowdin.yml'
   workflow_dispatch: { }
 
+permissions:
+  contents: read
+
 jobs:
   crowdin-push:
     runs-on: ubuntu-latest
@@ -15,7 +18,7 @@ jobs:
       - uses: actions/checkout@v7
 
       - name: Push sources to Crowdin
-        uses: crowdin/github-action@9c23991700c0ec5256fd41089b9d9d7d540e424e #v3.3.0
+        uses: crowdin/github-action@959dc74ac104447731cba99a016f85d0ae719788 #v3.5.0
         with:
           config: crowdin.yml
           crowdin_branch_name: master
