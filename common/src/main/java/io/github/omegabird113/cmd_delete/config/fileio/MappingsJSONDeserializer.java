@@ -20,6 +20,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.data.FeatureFlags;
@@ -56,6 +57,14 @@ public final class MappingsJSONDeserializer {
 		if (strictMode)
 			throw new JsonParseException(message);
 		LOGGER.warn(message);
+	}
+
+	public static void validateMappingsStringAndThrowIfNeeded(@NonNull String mappingsStr) {
+		final JsonElement json = JsonParser.parseString(mappingsStr);
+		if (!json.isJsonObject())
+			throw new JsonParseException("Expected a JSON object at root");
+		final String id = requireFilenameSafeString(requireObject(json.getAsJsonObject(), "meta"), "id");
+		deserialize(json, id, true);
 	}
 
 	public static @NonNull MappingsRegistry deserialize(final @NonNull JsonElement json, final @NonNull String fileName, final boolean custom) throws JsonParseException {
