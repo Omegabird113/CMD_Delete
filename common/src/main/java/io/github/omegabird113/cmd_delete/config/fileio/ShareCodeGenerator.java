@@ -129,7 +129,7 @@ public final class ShareCodeGenerator {
 		if (actualChecksum != expectedChecksum)
 			throw new IllegalArgumentException("Invalid share code (Checksum mismatch): " + shareCode);
 
-		MappingsJSONDeserializer.validateMappingsStringAndThrowIfNeeded(coreDecoded);
+		MappingsJSONDeserializer.validateMappingsString(coreDecoded);
 
 		return coreDecoded;
 	}

@@ -59,7 +59,7 @@ public final class MappingsJSONDeserializer {
 		LOGGER.warn(message);
 	}
 
-	public static void validateMappingsStringAndThrowIfNeeded(@NonNull String mappingsStr) {
+	public static void validateMappingsString(@NonNull String mappingsStr) {
 		final JsonElement json = JsonParser.parseString(mappingsStr);
 		if (!json.isJsonObject())
 			throw new JsonParseException("Expected a JSON object at root");
