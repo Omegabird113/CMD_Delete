@@ -1,7 +1,8 @@
 # Changelog
 
 This is a collection of all historical CMD + Delete changelogs for every release of the mod. Note that some release
-notes were retroactively added and the formatting was retroactively changed in some versions to fix typos and other issues and make inter-version formatting more consistent.
+notes were retroactively added and the formatting was retroactively changed in some versions to fix typos and other
+issues and make inter-version formatting more consistent.
 
 ### 1.5.0 Beta 4
 
@@ -10,7 +11,8 @@ notes were retroactively added and the formatting was retroactively changed in s
 Changes:
 
 - Added a new `builtin:vanilla` mappings set.
-- Added a `nativeStyleWordBoundaries` feature flag that allows support for using native OS style detection of where word boundaries are.
+- Added a `nativeStyleWordBoundaries` feature flag that allows support for using native OS style detection of where word
+  boundaries are.
 - Mappings should now always be sorted in alphabetical order when listed.
 - Improve logging and fix some issues with inaccurate logging.
 - Internal code improvements.

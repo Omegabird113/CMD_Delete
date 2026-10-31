@@ -16,7 +16,8 @@ mappings, JSONs and sharecodes, in-game switching, and more!
 
 ## Some Context
 
-1. This mod is useful even on Windows or Linux as it improves sign navigation to make using left/right arrow keys between the lines of signs possible and it improves word boundary detection to be closer to the native OS.
+1. This mod is useful even on Windows or Linux as it improves sign navigation to make using left/right arrow keys
+   between the lines of signs possible and it improves word boundary detection to be closer to the native OS.
 2. You can basically disable the mod, if need be, by running the command `/navmappings set builtin vanilla`.
 3. If you have any problems with this mod, **please report them as Issues on GitHub**. This mod is Open Source, and Pull
    Requests are very much welcome! :)
@@ -62,7 +63,8 @@ it will set you to use Windows/Linux shortcuts.
 
 CMD + Delete also now provides these other builtin mappings:
 
-- `builtin:emacs_mac` the standard macOS Cocoa shortcuts for text navigation in Emacs to the best replication I can make.
+- `builtin:emacs_mac` the standard macOS Cocoa shortcuts for text navigation in Emacs to the best replication I can
+  make.
 - `builtin:emacs_windows_linux` the standard Windows/Linux shortcuts for text navigation in Emacs to the best
   replication I can make.
 - `builtin:readline` the standard shortcuts for text navigation in GNU Readline to the best replication I can make.
