@@ -15,10 +15,10 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Set up JDK 25
+      - name: Set up JDK 17
         uses: actions/setup-java@v5
         with:
-          java-version: '25'
+          java-version: '17'
           distribution: 'temurin'
           cache: gradle
 
@@ -47,18 +47,18 @@ jobs:
             build_task: :fabric:build
             client_task: :fabric:runCiClient
             client_args: ""
-          - loader: neoforge
-            build_task: :neoforge:build
-            client_task: :neoforge:runClient
+          - loader: forge
+            build_task: :forge:build
+            client_task: :forge:runClient
             client_args: -Dcmd_delete.ci.stopMinecraftAfterLoad=true
 
     steps:
       - uses: actions/checkout@v7
 
-      - name: Set up JDK 25
+      - name: Set up JDK 17
         uses: actions/setup-java@v5
         with:
-          java-version: '25'
+          java-version: '17'
           distribution: 'temurin'
           cache: gradle
 

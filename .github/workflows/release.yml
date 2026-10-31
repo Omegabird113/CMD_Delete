@@ -29,10 +29,10 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Set up JDK 25
+      - name: Set up JDK 17
         uses: actions/setup-java@v5
         with:
-          java-version: '25'
+          java-version: '17'
           distribution: 'temurin'
           cache: gradle
 
@@ -61,9 +61,9 @@ jobs:
             build_task: :fabric:clean :fabric:build
             client_task: :fabric:runCiClient
             client_args: ""
-          - loader: neoforge
-            build_task: :neoforge:clean :neoforge:build
-            client_task: :neoforge:runClient
+          - loader: forge
+            build_task: :forge:clean :forge:build
+            client_task: :forge:runClient
             client_args: -Dcmd_delete.ci.stopMinecraftAfterLoad=true
 
     steps:
@@ -73,7 +73,7 @@ jobs:
       - name: Set up JDK 25
         uses: actions/setup-java@v5
         with:
-          java-version: 25
+          java-version: 17
           distribution: "temurin"
           cache: gradle
 
@@ -212,11 +212,11 @@ jobs:
 
           common_jar="$(find_release_jar common)" || exit 1
           fabric_jar="$(find_release_jar fabric)" || exit 1
-          neoforge_jar="$(find_release_jar neoforge)" || exit 1
+          forge_jar="$(find_release_jar forge)" || exit 1
 
           echo "common=${common_jar}" >> "$GITHUB_OUTPUT"
           echo "fabric=${fabric_jar}" >> "$GITHUB_OUTPUT"
-          echo "neoforge=${neoforge_jar}" >> "$GITHUB_OUTPUT"
+          echo "forge=${forge_jar}" >> "$GITHUB_OUTPUT"
 
       - name: Locate documentation archives
         id: docs
@@ -249,7 +249,7 @@ jobs:
           gh release create "${{ steps.props.outputs.version }}" \
             "${{ steps.jars.outputs.common }}" \
             "${{ steps.jars.outputs.fabric }}" \
-            "${{ steps.jars.outputs.neoforge }}" \
+            "${{ steps.jars.outputs.forge }}" \
             "${{ steps.docs.outputs.docs }}" \
             "${{ steps.docs.outputs.site }}" \
             --target "${{ github.sha }}" \
@@ -269,30 +269,30 @@ jobs:
           version: ${{ steps.props.outputs.version }}-fabric
           version-type: ${{ inputs.release_type }}
           changelog-file: changelog.md
-          java: 21
+          java: 17
           game-versions: |
-            >=1.20.5 <1.21.6
+            1.20.1
           loaders: |
             fabric
             quilt
           environment: client
           fail-mode: skip
 
-      - name: Publish NeoForge to Modrinth & CurseForge
+      - name: Publish Forge to Modrinth & CurseForge
         uses: Kira-NT/mc-publish@52307b03863581dec6b652b83e597aec02ebb075 # v3.3.1
         with:
           modrinth-id: xrOWVab9
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           curseforge-id: 1455987
           curseforge-token: ${{ secrets.CF_API_TOKEN }}
-          files: ${{ steps.jars.outputs.neoforge }}
-          name: ${{ inputs.release_title }} (NeoForge)
-          version: ${{ steps.props.outputs.version }}-neoforge
+          files: ${{ steps.jars.outputs.forge }}
+          name: ${{ inputs.release_title }} (Forge)
+          version: ${{ steps.props.outputs.version }}-forge
           version-type: ${{ inputs.release_type }}
           changelog-file: changelog.md
-          java: 25
+          java: 17
           game-versions: |
-            >=1.20.5 <1.21.6
-          loaders: neoforge
+            1.20.1
+          loaders: forge
           environment: client
           fail-mode: skip
