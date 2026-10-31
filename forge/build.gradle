@@ -35,6 +35,7 @@ dependencies {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
+            jvmArg "-Dcmd_delete.ci.stopMinecraftAfterLoad=${System.getProperty('cmd_delete.ci.stopMinecraftAfterLoad', 'false')}"
             mods {
                 cmd_delete {
                     source sourceSets.main
