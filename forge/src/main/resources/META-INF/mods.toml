@@ -1,0 +1,29 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="Apache-2.0"
+
+[[mods]]
+modId="cmd_delete"
+version="${version}"
+displayName="CMD + Delete"
+description="Fix macOS text navigation shortcuts in chat/books/signs/etc + allow custom shortcuts."
+displayURL="https://omegabird113.github.io/CMD_Delete/"
+issueTrackerURL="https://github.com/Omegabird113/CMD_Delete/issues"
+authors="Omegabird113"
+
+[[mixins]]
+config="cmd_delete.mixins.json"
+
+[[dependencies.cmd_delete]]
+modId="forge"
+mandatory=true
+versionRange="[${forge_min_version},)"
+ordering="NONE"
+side="CLIENT"
+
+[[dependencies.cmd_delete]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.20.1,1.20.2)"
+ordering="NONE"
+side="CLIENT"

@@ -1,0 +1,92 @@
+import com.github.jengelman.gradle.plugins.shadow.relocation.SimpleRelocator
+
+plugins {
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'maven-publish'
+}
+
+version = "${rootProject.version}-forge"
+base { archivesName = project.archives_base_name }
+
+configurations { shadeOnly }
+
+sourceSets {
+    main {
+        java.srcDirs += project(":common").sourceSets.main.java.srcDirs
+        resources.srcDirs += project(":common").sourceSets.main.resources.srcDirs
+        compileClasspath += configurations.shadeOnly
+        runtimeClasspath += configurations.shadeOnly
+    }
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${project.forge_version}"
+    implementation project(":common")
+    shadeOnly 'com.google.code.gson:gson:2.14.0'
+    shadeOnly 'org.jspecify:jspecify:1.0.0'
+    shadeOnly 'commons-codec:commons-codec:1.22.1'
+}
+
+ minecraft {
+    mappings channel: 'official', version: project.minecraft_version
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            mods {
+                cmd_delete {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(17)
+    withSourcesJar()
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = "UTF-8"
+    options.release = 17
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "forge_min_version", project.forge_min_version
+    filteringCharset "UTF-8"
+    filesMatching("META-INF/mods.toml") {
+        expand "version": project.version, "forge_min_version": project.forge_min_version
+    }
+}
+
+tasks.shadowJar {
+    configurations = [project.configurations.shadeOnly]
+    relocators.add(new SimpleRelocator(
+        'org.apache.commons.codec',
+        'io.github.omegabird113.cmd_delete.libs.commons.codec',
+        [] as List<String>,
+        [] as List<String>
+    ))
+    relocators.add(new SimpleRelocator(
+        'com.google',
+        'io.github.omegabird113.cmd_delete.libs.google',
+        [] as List<String>,
+        [] as List<String>
+    ))
+    relocators.add(new SimpleRelocator(
+        'org.jspecify',
+        'io.github.omegabird113.cmd_delete.libs.jspecify',
+        [] as List<String>,
+        [] as List<String>
+    ))
+    archiveClassifier.set('')
+    from("${rootDir}/LICENSE") { rename { "LICENSE.txt" } }
+    from("${rootDir}/licenses/") { into("licenses/") }
+}
+
+tasks.jar { archiveClassifier.set('dev') }
+tasks.build { dependsOn tasks.shadowJar }

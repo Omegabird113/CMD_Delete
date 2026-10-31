@@ -1,7 +1,9 @@
-### 1.4.3b
+### 1.5.0 Beta 3
 
 Changes:
 
-- Fixed a dependency configuration issue on 1.21.11 and earlier that actually caused the crash in 1.4.3/1.4.3a.
+- Add machine-translated [Crowdin translations](https://crowdin.com/project/cmd-delete-mcmod).
+- Use `win` instead of `sup` for more native terminology in KeyCombo names on Windows.
+- Internal code improvements.
 
-Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.4.3a+mc1.21.11...1.4.3b+mc1.21.11
+Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.5.0-beta.2+mc26.3...1.5.0-beta.3+mc26.3
