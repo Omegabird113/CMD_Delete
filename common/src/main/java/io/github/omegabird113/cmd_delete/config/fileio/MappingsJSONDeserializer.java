@@ -249,7 +249,7 @@ public final class MappingsJSONDeserializer {
 		return results;
 	}
 
-	private static @NonNull Set<Os> parseSystems(final @NonNull JsonArray systemsArray, final int fv, final boolean strictMode) {
+	private static @NonNull Set<@NonNull Os> parseSystems(final @NonNull JsonArray systemsArray, final int fv, final boolean strictMode) {
 		final Set<Os> systems = new LinkedHashSet<>();
 
 		for (JsonElement systemElement : systemsArray) {
@@ -267,7 +267,7 @@ public final class MappingsJSONDeserializer {
 
 	private record MetadataContainer(@NonNull String name, @NonNull String author, @NonNull String version,
 									 @NonNull String description, @NonNull String id,
-									 @NonNull Set<Os> systems,
+									 @NonNull Set<@NonNull Os> systems,
 									 @Nullable String credits, @Nullable String license) {
 	}
 }

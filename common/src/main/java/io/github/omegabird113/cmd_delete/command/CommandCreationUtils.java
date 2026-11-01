@@ -19,8 +19,10 @@ package io.github.omegabird113.cmd_delete.command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import io.github.omegabird113.cmd_delete.config.fileio.MappingsJSONManager;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
@@ -31,22 +33,22 @@ import java.util.List;
 
 public final class CommandCreationUtils {
 	public static final @NonNull DynamicCommandExceptionType UNKNOWN_CUSTOM_MAPPINGS = new DynamicCommandExceptionType(
-			id -> Component.translatable("commands.cmd_delete.error.unknown_custom_mappings", id)
+			(final Object id) -> Component.translatable("commands.cmd_delete.error.unknown_custom_mappings", id)
 	);
 	public static final @NonNull DynamicCommandExceptionType UNKNOWN_BUILTIN_MAPPINGS = new DynamicCommandExceptionType(
-			id -> Component.translatable("commands.cmd_delete.error.unknown_builtin_mappings", id)
+			(final Object id) -> Component.translatable("commands.cmd_delete.error.unknown_builtin_mappings", id)
 	);
 	public static final @NonNull DynamicCommandExceptionType FAILED_CUSTOM_MAPPINGS_IMPORT = new DynamicCommandExceptionType(
-			location -> Component.translatable("commands.cmd_delete.error.failed_custom_mappings_import", location)
+			(final Object location) -> Component.translatable("commands.cmd_delete.error.failed_custom_mappings_import", location)
 	);
 	public static final @NonNull DynamicCommandExceptionType INVALID_SHARE_CODE = new DynamicCommandExceptionType(
-			shareCode -> Component.translatable("commands.cmd_delete.error.invalid_share_code", shareCode)
+			(final Object shareCode) -> Component.translatable("commands.cmd_delete.error.invalid_share_code", shareCode)
 	);
 
 	public static final @NonNull SuggestionProvider<@NonNull SharedSuggestionProvider> BUILTIN_SUGGESTIONS =
-			(_, builder) -> SharedSuggestionProvider.suggest(List.of("emacs_mac", "emacs_windows_linux", "mac", "readline", "vanilla", "windows_linux"), builder);
+			(final CommandContext<@NonNull SharedSuggestionProvider> _, final @NonNull SuggestionsBuilder builder) -> SharedSuggestionProvider.suggest(List.of("emacs_mac", "emacs_windows_linux", "mac", "readline", "vanilla", "windows_linux"), builder);
 	public static final @NonNull SuggestionProvider<@NonNull SharedSuggestionProvider> CUSTOM_SUGGESTIONS =
-			(_, builder) -> SharedSuggestionProvider.suggest(MappingsJSONManager.getAvailableOptions(false), builder);
+			(final CommandContext<@NonNull SharedSuggestionProvider> _, final @NonNull SuggestionsBuilder builder) -> SharedSuggestionProvider.suggest(MappingsJSONManager.getAvailableOptions(false), builder);
 
 	private CommandCreationUtils() {
 	}
@@ -57,7 +59,7 @@ public final class CommandCreationUtils {
 	}
 
 	@Contract(value = "_, _ -> new", pure = true)
-	public static <T> @NonNull RequiredArgumentBuilder<@NonNull SharedSuggestionProvider, T> argument(final @NonNull String name, final @NonNull ArgumentType<T> type) {
+	public static <T> @NonNull RequiredArgumentBuilder<@NonNull SharedSuggestionProvider, @NonNull T> argument(final @NonNull String name, final @NonNull ArgumentType<@NonNull T> type) {
 		return RequiredArgumentBuilder.argument(name, type);
 	}
 }
