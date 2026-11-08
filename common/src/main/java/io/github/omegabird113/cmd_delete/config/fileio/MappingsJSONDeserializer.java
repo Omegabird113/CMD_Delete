@@ -20,6 +20,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.actions.NavAction;
 import io.github.omegabird113.cmd_delete.config.data.FeatureFlags;
@@ -56,6 +57,14 @@ public final class MappingsJSONDeserializer {
 		if (strictMode)
 			throw new JsonParseException(message);
 		LOGGER.warn(message);
+	}
+
+	public static void validateMappingsString(@NonNull String mappingsStr) {
+		final JsonElement json = JsonParser.parseString(mappingsStr);
+		if (!json.isJsonObject())
+			throw new JsonParseException("Expected a JSON object at root");
+		final String id = requireFilenameSafeString(requireObject(json.getAsJsonObject(), "meta"), "id");
+		deserialize(json, id, true);
 	}
 
 	public static @NonNull MappingsRegistry deserialize(final @NonNull JsonElement json, final @NonNull String fileName, final boolean custom) throws JsonParseException {
@@ -222,7 +231,7 @@ public final class MappingsJSONDeserializer {
 		return results;
 	}
 
-	private static @NonNull Set<Os> parseSystems(final @NonNull JsonArray systemsArray) {
+	private static @NonNull Set<@NonNull Os> parseSystems(final @NonNull JsonArray systemsArray) {
 		final Set<Os> systems = new LinkedHashSet<>();
 
 		for (JsonElement systemElement : systemsArray) {
@@ -240,7 +249,7 @@ public final class MappingsJSONDeserializer {
 
 	private record MetadataContainer(@NonNull String name, @NonNull String author, @NonNull String version,
 									 @NonNull String description, @NonNull String id,
-									 @NonNull Set<Os> systems,
+									 @NonNull Set<@NonNull Os> systems,
 									 @Nullable String credits, @Nullable String license) {
 	}
 }

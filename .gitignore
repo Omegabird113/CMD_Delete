@@ -33,6 +33,7 @@ run/**
 .idea/modules.xml
 .idea/copilotDiffState.xml
 .idea/shelf/
+.idea/jarRepositories.xml
 *.iml
 *.ipr
 .idea/modules/*

@@ -50,7 +50,7 @@ public final class CmdDeleteClient {
 	public static @NonNull IPlatform getPlatform() {
 		final IPlatform currentPlatform = platform;
 		if (currentPlatform == null)
-			throw new IllegalStateException("No CmdDeleteClient class instance defined");
+			throw new IllegalStateException("No platform was set for CmdDeleteClient.");
 		return currentPlatform;
 	}
 

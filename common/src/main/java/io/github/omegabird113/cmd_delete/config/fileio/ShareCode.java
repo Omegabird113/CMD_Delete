@@ -36,10 +36,11 @@ import java.util.zip.CRC32;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-public final class ShareCodeGenerator {
+public final class ShareCode {
 	public static final @NonNull Base58 BASE_58 = new Base58();
+	public static final int COMPRESSED_TEXT_BYTES_THRESHOLD = 10_000_000; // 10 mb
 
-	private ShareCodeGenerator() {
+	private ShareCode() {
 	}
 
 	public static @NonNull String collapseWhitespace(final @NonNull Path path) throws IOException {
@@ -63,11 +64,6 @@ public final class ShareCodeGenerator {
 		return new String(BASE_58.encode(byteArrayOutputStream.toByteArray()), StandardCharsets.UTF_8);
 	}
 
-	public static @NonNull String generateCoreShareCode(final @NonNull String namespacedId) throws IOException {
-		final Path path = PathConstants.getPathOf(namespacedId);
-		return compressAndBase58Encode(collapseWhitespace(path));
-	}
-
 	public static long genCRC32checksum(final @NonNull String contents) {
 		byte[] bytes = contents.getBytes(StandardCharsets.UTF_8);
 		final CRC32 crc32 = new CRC32();
@@ -75,18 +71,26 @@ public final class ShareCodeGenerator {
 		return crc32.getValue();
 	}
 
-	public static @NonNull String encode(final @NonNull String namespacedId) throws IOException {
+	public static @NonNull String of(final @NonNull String contents) throws IOException {
 		return "CDS:"
 				+ "EV" + CmdDeleteClient.SHARECODE_FORMAT_VERSION + ":"
-				+ generateCoreShareCode(namespacedId) + ":"
-				+ genCRC32checksum(collapseWhitespace(namespacedId));
+				+ compressAndBase58Encode(contents) + ":"
+				+ genCRC32checksum(contents);
+	}
+
+	public static @NonNull String encode(final @NonNull String namespacedId) throws IOException {
+		final String contents = collapseWhitespace(namespacedId);
+		return of(contents);
 	}
 
 	@Contract("_ -> new")
 	public static @NonNull String decodeCoreShareCode(final @NonNull String input) throws IOException {
 		try (final ByteArrayInputStream bais = new ByteArrayInputStream(BASE_58.decode(input));
 			 final GZIPInputStream gzip = new GZIPInputStream(bais)) {
-			return new String(gzip.readAllBytes(), StandardCharsets.UTF_8);
+			final byte[] bytes = gzip.readNBytes(COMPRESSED_TEXT_BYTES_THRESHOLD);
+			if (bytes.length == COMPRESSED_TEXT_BYTES_THRESHOLD)
+				throw new IOException("The sharecode provided was way too large! Sharecodes that decompress to 10mb or more are not allowed.");
+			return new String(bytes, StandardCharsets.UTF_8);
 		}
 	}
 
@@ -124,6 +128,8 @@ public final class ShareCodeGenerator {
 
 		if (actualChecksum != expectedChecksum)
 			throw new IllegalArgumentException("Invalid share code (Checksum mismatch): " + shareCode);
+
+		MappingsJSONDeserializer.validateMappingsString(coreDecoded);
 
 		return coreDecoded;
 	}
