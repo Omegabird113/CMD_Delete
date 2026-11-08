@@ -27,6 +27,7 @@ import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.config.data.MappingsRegistry;
 import io.github.omegabird113.cmd_delete.config.fileio.ActiveMappingsManager;
 import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
+import io.github.omegabird113.cmd_delete.config.fileio.ShareCode;
 import io.github.omegabird113.cmd_delete.mappings.MappingsState;
 import io.github.omegabird113.cmd_delete.mappings.MappingsType;
 import io.github.omegabird113.cmd_delete.mappings.NavMappingsManager;
@@ -82,6 +83,7 @@ public final class NavMappingsCommand {
 						.then(literal("dumpMappingsState").executes(NavMappingsCommand::dumpMappingsState))
 						.then(literal("sendDocsLink").executes(NavMappingsCommand::sendDocsLink))
 						.then(literal("sendIssuesLink").executes(NavMappingsCommand::sendIssuesLink))
+						.then(literal("generateShareCodeOfText").then(argument("text", StringArgumentType.greedyString()).executes(NavMappingsCommand::generateShareCodeOfText)))
 				)
 				.then(literal("export")
 						.then(literal("builtin")
@@ -295,6 +297,19 @@ public final class NavMappingsCommand {
 
 	private static int sendIssuesLink(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) {
 		CmdDeleteClient.getPlatform().sendCommandFeedback(context.getSource(), Component.translatable("commands.cmd_delete.issues_link", CmdDeleteClient.ISSUE_TRACKER_URL_STRING));
+		return 1;
+	}
+
+	private static int generateShareCodeOfText(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) throws CommandSyntaxException {
+		final String text = StringArgumentType.getString(context, "text");
+		try {
+			final String shareCode = ShareCode.of(text);
+			CmdDeleteClient.getPlatform().sendCommandFeedback(context.getSource(), Component.translatable("commands.cmd_delete.share_code_of_text", shareCode));
+			Minecraft.getInstance().keyboardHandler.setClipboard(shareCode);
+		}
+		catch (IOException e) {
+			throw INVALID_SHARE_CODE.create(e);
+		}
 		return 1;
 	}
 }
