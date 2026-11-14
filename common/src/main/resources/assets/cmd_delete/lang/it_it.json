@@ -28,5 +28,6 @@
   "commands.cmd_delete.mappings_info.coverage": "Queste mappature hanno una copertura di azione %s%% con combinazioni di chiavi %s registrate con il supporto per %s.",
   "commands.cmd_delete.mappings_info.description": "Descrizione:\n%s\nCredits:\n%s",
   "commands.cmd_delete.docs_link": "Link di documentazione:\n%s",
-  "commands.cmd_delete.issues_link": "Link Problemi GitHub:\n%s"
+  "commands.cmd_delete.issues_link": "Link Problemi GitHub:\n%s",
+  "commands.cmd_delete.share_code_of_text": "Share code of text:\n%s"
 }

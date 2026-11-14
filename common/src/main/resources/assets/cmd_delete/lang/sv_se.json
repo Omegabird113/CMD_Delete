@@ -28,5 +28,6 @@
   "commands.cmd_delete.mappings_info.coverage": "Dessa mappningar har %s%% åtgärdstäckning med %s -nyckelkombinationer registrerade med stöd för %s.",
   "commands.cmd_delete.mappings_info.description": "Beskrivning:\n%s\nCredits:\n%s",
   "commands.cmd_delete.docs_link": "Dokumentationslänk:\n%s",
-  "commands.cmd_delete.issues_link": "GitHub-problemlänk:\n%s"
+  "commands.cmd_delete.issues_link": "GitHub-problemlänk:\n%s",
+  "commands.cmd_delete.share_code_of_text": "Share code of text:\n%s"
 }

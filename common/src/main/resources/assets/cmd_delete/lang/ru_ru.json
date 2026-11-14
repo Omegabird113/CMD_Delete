@@ -28,5 +28,6 @@
   "commands.cmd_delete.mappings_info.coverage": "Эти сопоставления имеют %s%% покрытие действий с ключевыми комбинациями %s , зарегистрированными с поддержкой %s.",
   "commands.cmd_delete.mappings_info.description": "Описание:\n%s\nКредиты:\n%s",
   "commands.cmd_delete.docs_link": "Ссылка на документацию:\n%s",
-  "commands.cmd_delete.issues_link": "Ссылка на GitHub:\n%s"
+  "commands.cmd_delete.issues_link": "Ссылка на GitHub:\n%s",
+  "commands.cmd_delete.share_code_of_text": "Share code of text:\n%s"
 }

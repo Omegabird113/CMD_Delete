@@ -28,5 +28,6 @@
   "commands.cmd_delete.mappings_info.coverage": "Näissä kartoituksissa on %s%% toiminnon kattavuus %s avainyhdistelmillä, jotka on rekisteröity tuella %s.",
   "commands.cmd_delete.mappings_info.description": "Kuvaus:\n%s\nHyvitykset:\n%s",
   "commands.cmd_delete.docs_link": "Dokumentaation linkki:\n%s",
-  "commands.cmd_delete.issues_link": "GitHub ongelmien linkki:\n%s"
+  "commands.cmd_delete.issues_link": "GitHub ongelmien linkki:\n%s",
+  "commands.cmd_delete.share_code_of_text": "Share code of text:\n%s"
 }
