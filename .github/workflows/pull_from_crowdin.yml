@@ -56,23 +56,6 @@ jobs:
         if: success()
         run: |
           git restore --source=HEAD --staged --worktree -- . ':(exclude)common/src/main/resources/assets'
-      
-      - name: Diagnose unexpected Git changes
-        run: |
-          echo "=== Git status ==="
-          git status --short
-      
-          echo "=== gradlew.bat unstaged diff ==="
-          git diff -- gradlew.bat
-      
-          echo "=== gradlew.bat staged diff ==="
-          git diff --cached -- gradlew.bat
-      
-          echo "=== gradlew.bat line endings ==="
-          git ls-files --eol gradlew.bat
-      
-          echo "=== Git autocrlf setting ==="
-          git config --show-origin --get core.autocrlf || true
 
       - name: Create Pull Request
         if: success()
