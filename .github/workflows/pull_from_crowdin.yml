@@ -54,8 +54,9 @@ jobs:
 
       - name: Discard unrelated changes
         if: success()
-        run: git checkout -- . ':!common/src/main/resources/assets'
-
+        run: |
+          git restore --source=HEAD --staged --worktree -- . ':(exclude)common/src/main/resources/assets'
+  
       - name: Create Pull Request
         if: success()
         uses: peter-evans/create-pull-request@3ffccacd46053766916f087ce41d627c0b8cf2d1 #v8.1.3
