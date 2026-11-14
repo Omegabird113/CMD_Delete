@@ -28,5 +28,6 @@
   "commands.cmd_delete.mappings_info.coverage": "Disse tilknytninger har %s%% handling dækning med %s tastekombinationer registreret med understøttelse af %s.",
   "commands.cmd_delete.mappings_info.description": "Beskrivelse:\n%s\nCredits:\n%s",
   "commands.cmd_delete.docs_link": "Dokumentationslink:\n%s",
-  "commands.cmd_delete.issues_link": "GitHub Problemer link:\n%s"
+  "commands.cmd_delete.issues_link": "GitHub Problemer link:\n%s",
+  "commands.cmd_delete.share_code_of_text": "Share code of text:\n%s"
 }

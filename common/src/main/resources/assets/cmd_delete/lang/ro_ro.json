@@ -28,5 +28,6 @@
   "commands.cmd_delete.mappings_info.coverage": "Aceste mapări au %s%% acoperire acțiune cu combinații cheie %s înregistrate cu suport pentru %s.",
   "commands.cmd_delete.mappings_info.description": "Descriere:\n%s\nCredite:\n%s",
   "commands.cmd_delete.docs_link": "Link documentație:\n%s",
-  "commands.cmd_delete.issues_link": "Link pentru probleme GitHub:\n%s"
+  "commands.cmd_delete.issues_link": "Link pentru probleme GitHub:\n%s",
+  "commands.cmd_delete.share_code_of_text": "Share code of text:\n%s"
 }

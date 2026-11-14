@@ -28,5 +28,6 @@
   "commands.cmd_delete.mappings_info.coverage": "Tyto mapování mají %spokrytí akcemi%% s kombinacemi kláves %s registrovanými s podporou %s.",
   "commands.cmd_delete.mappings_info.description": "Popis:\n%s\nCredits:\n%s",
   "commands.cmd_delete.docs_link": "Odkaz na dokumentaci:\n%s",
-  "commands.cmd_delete.issues_link": "Odkaz na GitHub problémy:\n%s"
+  "commands.cmd_delete.issues_link": "Odkaz na GitHub problémy:\n%s",
+  "commands.cmd_delete.share_code_of_text": "Share code of text:\n%s"
 }

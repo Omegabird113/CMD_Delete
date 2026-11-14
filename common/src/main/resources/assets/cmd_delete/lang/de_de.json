@@ -28,5 +28,6 @@
   "commands.cmd_delete.mappings_info.coverage": "Diese Zuordnungen haben %s%% Aktionsabdeckung mit %s Tastenkombinationen, die mit Unterstützung für %s registriert sind.",
   "commands.cmd_delete.mappings_info.description": "Beschreibung:\n%s\nCredits:\n%s",
   "commands.cmd_delete.docs_link": "Dokumentationslink:\n%s",
-  "commands.cmd_delete.issues_link": "GitHub Issues Link:\n%s"
+  "commands.cmd_delete.issues_link": "GitHub Issues Link:\n%s",
+  "commands.cmd_delete.share_code_of_text": "Share code of text:\n%s"
 }

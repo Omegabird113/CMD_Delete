@@ -28,5 +28,6 @@
   "commands.cmd_delete.mappings_info.coverage": "これらのマッピングには %s%% %s キーの組み合わせが %s のサポートで登録されています。",
   "commands.cmd_delete.mappings_info.description": "説明:\n%s\nクレジット:\n%s",
   "commands.cmd_delete.docs_link": "ドキュメントリンク:\n%s",
-  "commands.cmd_delete.issues_link": "GitHub Issuesリンク:\n%s"
+  "commands.cmd_delete.issues_link": "GitHub Issuesリンク:\n%s",
+  "commands.cmd_delete.share_code_of_text": "Share code of text:\n%s"
 }

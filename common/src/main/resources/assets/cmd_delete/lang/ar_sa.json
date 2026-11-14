@@ -28,5 +28,6 @@
   "commands.cmd_delete.mappings_info.coverage": "هذه التعيينات تحتوي على تغطية إجراء %s%% مع تركيبات مفاتيح %s مسجلة مع دعم %s.",
   "commands.cmd_delete.mappings_info.description": "الوصف:\n%s\nالاعتمادات\n%s",
   "commands.cmd_delete.docs_link": "رابط الوثائق:\n%s",
-  "commands.cmd_delete.issues_link": "رابط مشاكل GitHub :\n%s"
+  "commands.cmd_delete.issues_link": "رابط مشاكل GitHub :\n%s",
+  "commands.cmd_delete.share_code_of_text": "Share code of text:\n%s"
 }
