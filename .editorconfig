@@ -44,7 +44,7 @@ ij_java_blank_lines_around_method = 1
 ij_java_blank_lines_around_field = 0
 ij_java_blank_lines_before_method_body = 0
 
-ij_java_imports_layout = *,java.**,javax.**,$*
+ij_java_imports_layout = *, java.**, javax.**, $*
 ij_java_class_count_to_use_import_on_demand = 5
 ij_java_names_count_to_use_import_on_demand = 5
 ij_java_layout_static_imports_separately = true
@@ -82,8 +82,6 @@ indent_size = 2
 
 [*.xml]
 indent_style = space
-indent_size = 4
 
 [*.gradle]
 indent_style = space
-indent_size = 4

@@ -217,6 +217,7 @@
   },
   "flags": {
     "overrideVanillaNavigation": true,
-    "crossLineSignMovement": true
+    "crossLineSignMovement": true,
+    "nativeStyleWordBoundaries": true
   }
 }

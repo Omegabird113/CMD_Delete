@@ -49,7 +49,10 @@ public final class KeyComboTest {
 			Assertions.assertTrue(s.contains("cmd+"), "On mac, superCommand should appear as cmd+");
 			Assertions.assertTrue(s.contains("opt+"), "On mac, altOption should appear as opt+");
 		} else {
-			Assertions.assertTrue(s.contains("sup+"), "On non-mac, superCommand should appear as sup+");
+			if (Os.IS_USING_LINUX)
+				Assertions.assertTrue(s.contains("sup+"), "On Linux, superCommand should appear as sup+");
+			else
+				Assertions.assertTrue(s.contains("win+"), "On Windows, superCommand should appear as sup+");
 			Assertions.assertTrue(s.contains("alt+"), "On non-mac, altOption should appear as alt+");
 		}
 
