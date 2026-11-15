@@ -42,7 +42,7 @@ public final class NavMappingsManager {
 		return current;
 	}
 
-	public static @NonNull Optional<MappingsState> getOptionalMappingsState() {
+	public static @NonNull Optional<@NonNull MappingsState> getOptionalMappingsState() {
 		return Optional.ofNullable(currentMappingsState);
 	}
 
