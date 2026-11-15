@@ -61,7 +61,7 @@ dependencies {
 
     compileOnly "net.fabricmc:sponge-mixin:0.17.4+"
 
-    shadeOnly 'com.google.code.gson:gson:2.14.0'
+    shadeOnly 'com.google.code.gson:gson:2.15.0'
     shadeOnly 'org.jspecify:jspecify:1.0.1'
     shadeOnly 'commons-codec:commons-codec:1.23.0'
 

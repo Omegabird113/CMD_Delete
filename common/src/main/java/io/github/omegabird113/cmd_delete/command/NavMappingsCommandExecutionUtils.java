@@ -26,7 +26,7 @@ import io.github.omegabird113.cmd_delete.CmdDeleteClient;
 import io.github.omegabird113.cmd_delete.config.data.MappingsIdResolutionUtils;
 import io.github.omegabird113.cmd_delete.config.fileio.JsonParsingUtils;
 import io.github.omegabird113.cmd_delete.config.fileio.PathConstants;
-import io.github.omegabird113.cmd_delete.config.fileio.ShareCodeGenerator;
+import io.github.omegabird113.cmd_delete.config.fileio.ShareCode;
 import io.github.omegabird113.cmd_delete.mappings.MappingsType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -52,7 +52,7 @@ final class NavMappingsCommandExecutionUtils {
 		final String namespacedId = MappingsIdResolutionUtils.resolveNamespacedId(MappingsType.fromIfCustom(custom), idStr);
 		final String shareCode;
 		try {
-			shareCode = ShareCodeGenerator.encode(namespacedId);
+			shareCode = ShareCode.encode(namespacedId);
 		} catch (IOException e) {
 			LOGGER.error("Failed to generate share code.", e);
 			throw CommandCreationUtils.INVALID_SHARE_CODE.create(idStr);
@@ -108,7 +108,7 @@ final class NavMappingsCommandExecutionUtils {
 
 	static void importShareCode(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context, final @NonNull String shareCode) throws CommandSyntaxException {
 		try {
-			final String decoded = ShareCodeGenerator.decode(shareCode.trim());
+			final String decoded = ShareCode.decode(shareCode.trim());
 
 			final JsonObject jsonObject = CmdDeleteClient.GSON.fromJson(decoded, JsonObject.class);
 			final JsonObject meta = JsonParsingUtils.requireObject(jsonObject, "meta");
