@@ -22,5 +22,6 @@ This is a table of the /navmnappings sub-commands and what they do:
 | `/navmappings debug dumpRegistry`                                         | Dumps a detailed string representation of the currently used MappingsRegistry.                                                        |
 | `/navmappings debug dumpKeyMap`                                           | Dumps a map of all friendly keyname and their raw GLFW keycodes or SDL3 scancodes.                                                    |
 | `/navmappings debug dumpMappingsState`                                    | Dumps a string interpration of the current MappingsState in chat.                                                                     |
+| `/navmappings debug generateShareCodeOfText`                              | Generates a sharecode of any inputted text regardless of whether it is a valid mappings set or even a valid JSON at all.              |
 | `/navmappings debug sendDocsLink`                                         | Sends the URL to the website for this documentation in chat.                                                                          |
 | `/navmappings debug sendIssuesLink`                                       | Sends the URL to the GitHub Issues tracker for this mod in chat.                                                                      |

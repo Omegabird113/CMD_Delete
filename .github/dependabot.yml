@@ -7,6 +7,20 @@ updates:
       time: "15:00"
       timezone: "America/New_York"
     assignees:
-    - Omegabird113
+      - Omegabird113
     labels:
-    - dependencies
+      - dependencies
+    cooldown:
+      default-days: 2
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "15:00"
+      timezone: "America/New_York"
+    assignees:
+      - Omegabird113
+    labels:
+      - dependencies
+    cooldown:
+      default-days: 2
