@@ -115,7 +115,7 @@ loom {
     runs {
         client {
             client()
-            getJvmArguments().add("-Dcmd_delete.allowVerboseLogs=true")
+            vmArg "-Dcmd_delete.allowVerboseLogs=true"
         }
 
         ciClient {
