@@ -29,5 +29,5 @@
   "commands.cmd_delete.mappings_info.description": "Opis:\n%s\nKredyty:\n%s",
   "commands.cmd_delete.docs_link": "Link do dokumentacji:\n%s",
   "commands.cmd_delete.issues_link": "Link do zgłoszeń GitHub:\n%s",
-  "commands.cmd_delete.share_code_of_text": "Share code of text:\n%s"
+  "commands.cmd_delete.share_code_of_text": "Udostępnij kod tekstu:\n%s"
 }
