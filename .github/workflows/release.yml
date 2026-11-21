@@ -271,7 +271,7 @@ jobs:
           changelog-file: changelog.md
           java: 17
           game-versions: |
-            1.20.1
+            >=1.20 <=1.20.1
           loaders: |
             fabric
             quilt
@@ -292,7 +292,7 @@ jobs:
           changelog-file: changelog.md
           java: 17
           game-versions: |
-            1.20.1
+            >=1.20 <=1.20.1
           loaders: forge
           environment: client
           fail-mode: skip
