@@ -92,7 +92,6 @@ This is a list of all friendly keynames available in CMD + Delete for mappings J
 | `f22`              | `311`        | `113`         |
 | `f23`              | `312`        | `114`         |
 | `f24`              | `313`        | `115`         |
-| `f25` (Deprecated) | `314`        | `N/A`         |
 | `numpad_0`         | `320`        | `98`          |
 | `numpad_1`         | `321`        | `89`          |
 | `numpad_2`         | `322`        | `90`          |
