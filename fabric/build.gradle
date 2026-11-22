@@ -164,7 +164,11 @@ tasks.shadowJar {
     from("${rootDir}/licenses/") {
         into("licenses/")
     }
-    archiveClassifier.set('')
+    archiveClassifier.set('dev-shadow')
+}
+
+tasks.remapJar {
+    inputFile.set(tasks.shadowJar.archiveFile)
 }
 
 tasks.jar {
