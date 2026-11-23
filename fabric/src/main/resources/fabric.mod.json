@@ -35,6 +35,8 @@
     ]
   },
   "breaks": {
-    "macos-chat-fixes": "*"
+    "macos-chat-fixes": "*",
+    "macos_fixes": "*",
+    "better-selection": "*"
   }
 }
