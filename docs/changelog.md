@@ -12,7 +12,7 @@ Changes:
 
 - Fix [#70](https://github.com/Omegabird113/CMD_Delete/issues/70): a crash on obfuscated Minecraft versions on the Fabric builds due to the mod jar not being properly remapped after the multiplatform architecture rewrite.
 
-Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.5.0+mc1.21.11...1.5.0a+1.21.11
+Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.5.0+mc1.21.11...1.5.0a+mc1.21.11
 
 ### 1.5.0
 
