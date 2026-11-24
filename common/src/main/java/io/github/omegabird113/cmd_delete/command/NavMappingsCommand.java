@@ -84,6 +84,7 @@ public final class NavMappingsCommand {
 						.then(literal("sendDocsLink").executes(NavMappingsCommand::sendDocsLink))
 						.then(literal("sendIssuesLink").executes(NavMappingsCommand::sendIssuesLink))
 						.then(literal("generateShareCodeOfText").then(argument("text", StringArgumentType.greedyString()).executes(NavMappingsCommand::generateShareCodeOfText)))
+						.then(literal("dumpPathToMappings").then(argument("namespacedId", StringArgumentType.greedyString()).executes(NavMappingsCommand::dumpPathToMappings)))
 				)
 				.then(literal("export")
 						.then(literal("builtin")
@@ -310,6 +311,13 @@ public final class NavMappingsCommand {
 		catch (IOException e) {
 			throw INVALID_SHARE_CODE.create(e);
 		}
+		return 1;
+	}
+
+	private static int dumpPathToMappings(final @NonNull CommandContext<@NonNull SharedSuggestionProvider> context) {
+		final String namespacedId = StringArgumentType.getString(context, "namespacedId");
+		final Path path = PathConstants.getPathOf(namespacedId);
+		CmdDeleteClient.getPlatform().sendCommandFeedback(context.getSource(), Component.translatable("commands.cmd_delete.path_to_mappings", namespacedId, path.toAbsolutePath().toString()));
 		return 1;
 	}
 }
