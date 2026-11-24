@@ -53,4 +53,15 @@ public interface IPlatform {
 	interface ICommandRegistration<S extends SharedSuggestionProvider> {
 		void register(@NonNull CommandDispatcher<S> dispatcher);
 	}
+
+	default String getDumpString() {
+		return "IPlatform{"
+				+ "platformName=\"" + this.getPlatformName() + "\""
+				+ ", modVersion=\"" + this.getModVersion() + "\""
+				+ ", gamePath=\"" + this.getGamePath() + "\""
+				+ ", resourcePath=\"" + this.getResourcePath() + "\""
+				+ ", feedbackMethod=\"" + this.getFeedbackMethod() + "\""
+				+ ", platformLogger=\"" + this.getPlatformLogger() + "\""
+				+ "}";
+	}
 }
