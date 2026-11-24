@@ -29,5 +29,7 @@
   "commands.cmd_delete.mappings_info.description": "Popis:\n%s\nCredits:\n%s",
   "commands.cmd_delete.docs_link": "Odkaz na dokumentaci:\n%s",
   "commands.cmd_delete.issues_link": "Odkaz na GitHub problémy:\n%s",
-  "commands.cmd_delete.share_code_of_text": "Kód pro sdílení textu:\n%s"
+  "commands.cmd_delete.share_code_of_text": "Kód pro sdílení textu:\n%s",
+  "commands.cmd_delete.path_to_mappings": "Cesta k \"%s\" je:\n%s",
+  "commands.cmd_delete.dump_platform": "Schodek platformy:\n%s"
 }

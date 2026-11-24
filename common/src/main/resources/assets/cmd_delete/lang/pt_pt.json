@@ -29,5 +29,7 @@
   "commands.cmd_delete.mappings_info.description": "Descrição:\n%s\nCréditos:\n%s",
   "commands.cmd_delete.docs_link": "Link de documentação:\n%s",
   "commands.cmd_delete.issues_link": "Link de problemas no GitHub:\n%s",
-  "commands.cmd_delete.share_code_of_text": "Compartilhar código do texto:\n%s"
+  "commands.cmd_delete.share_code_of_text": "Compartilhar código do texto:\n%s",
+  "commands.cmd_delete.path_to_mappings": "The path to \"%s\" is:\n%s",
+  "commands.cmd_delete.dump_platform": "Depósito de plataforma:\n%s"
 }
