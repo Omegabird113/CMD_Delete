@@ -29,5 +29,7 @@
   "commands.cmd_delete.mappings_info.description": "Опис:\n%s\n\n Кредит:\n%s",
   "commands.cmd_delete.docs_link": "Documentation link:\n%s",
   "commands.cmd_delete.issues_link": "GitHub Issues link:\n%s",
-  "commands.cmd_delete.share_code_of_text": "Поділіться кодом тексту:\n%s"
+  "commands.cmd_delete.share_code_of_text": "Поділіться кодом тексту:\n%s",
+  "commands.cmd_delete.path_to_mappings": "The path to \"%s\" is:\n%s",
+  "commands.cmd_delete.dump_platform": "Platform dump:\n%s"
 }
