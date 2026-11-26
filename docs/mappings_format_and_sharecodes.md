@@ -1,14 +1,18 @@
 # The Mappings Format and Sharecodes
 
 You can define your own custom mappings in configuration files with the location and name:
-`<minecraft install>/config/cmd_delete/mappings/<id>.json`. These allow you to customize the text navigation shortcut
-behavior in Minecraft for your own taste and configuration. You can also easily share your mappings via sharecodes!
+`<minecraft install>/config/cmd_delete/mappings/<id>.json`. There's also a set of builtin JSON files within the mod's 
+jar. These custom mappings allow you to customize the text navigation shortcut behavior in Minecraft for your own taste, 
+accessibility needs, or configuration. You can also easily share any mappings for distribution via sharecodes!
+
+This file serves as the formal specification for the Mappings Format, describing the structure and behavior of the 
+mappings format in detail.
 
 ## Mappings Format Features
 
 Custom mappings can:
 
-- Use wildcard expansion where any modifier not included in a key combo is treated as `true` OR `false`.
+- Use wildcard expansion where any modifier not included in a KeyCombo is treated as `true` OR `false`.
 - Use [friendly keyname strings](friendly_keynames.md) defined by CMD + Delete instead of GLFW/SDL3 keycodes. If a
   keyname is not defined, you can still choose to use a raw keycode in your JSON.
 - Inherit keybinds from the builtin mappings or other custom mappings by setting the top-level `inherits` value to
@@ -32,7 +36,7 @@ Note that:
   an old format version, an exception is generally thrown. Actions of a new format version in an old format version also
   cause exceptions. Feature flags never cause exception when they are not recognized and are designed to be able to be
   changed without an FV bump. Unknown feature flags are always ignored allowing additions/removals/renamings without an
-  FV bump. Outside of strict mode, duplicate registrations are logged and skipped, though they cause exceptions in
+  FV bump. Outside strict mode, duplicate registrations are logged and skipped, though they cause exceptions in
   strict mode.
 
 ### Example
@@ -70,7 +74,7 @@ Complete format example of a `sample.json` file:
 		"description": "This example demonstrates inheritance, patching, and more! Though, these keybinds are made up, and people wouldn't use these most likely...",
 		"version": "2.1.0",
 		"license": "CC-BY-4.0",
-		"credits": "Thanks to you for Reading this!",
+		"credits": "Thanks to you for reading this!",
 		"id": "sample",
 		"systems": [
 			"mac",
@@ -119,7 +123,7 @@ Below is a table explaining each `meta` field and whether it is required:
 | `author`      | `String`       | No (Defaults to `unknown`)                 | The creator(s) of the mappings JSON.                                                                                                                                                                                                                                                                   |
 | `description` | `String`       | No (Defaults to `No description provided`) | A detailed description of the mappings set.                                                                                                                                                                                                                                                            |
 | `version`     | `String`       | No (Defaults to `unknown`)                 | The version/revision of the mappings set                                                                                                                                                                                                                                                               |
-| `credits`     | `String`       | No (Defaults to `No credits provided`)     | Credits to those who helped, inspired, or or were otherwise involved with the mappings set.                                                                                                                                                                                                            |
+| `credits`     | `String`       | No (Defaults to `No credits provided`)     | Credits to those who helped, inspired, or were otherwise involved with the mappings set.                                                                                                                                                                                                               |
 | `license`     | `String`       | No (Defaults to `unknown`)                 | The SPDX license identifier of the mappings set.                                                                                                                                                                                                                                                       |
 
 ### Actions JSON Syntax
@@ -134,12 +138,12 @@ modifier fields, where if excluded get treated as `true` or `false` via wildcard
 (Windows Key/Super/Command depending on platform), `altOption` (Alt/Option depending on platform).
 
 Keys can be disabled when inheritance is used by using an optional `boolean` field named `enabled` (which defaults to
-`true`) in the key combo and setting it to `false` to disable the key.
+`true`) in the KeyCombo and setting it to `false` to disable the key.
 
 The way wildcarding works is that the JSON deserializer expands the list<KeyCombos> where omitted values become `true`
 or `false` and it does it so that all combinations possible become keys in the key registry. In CMD + Delete code, a
 KeyCombo must have all values specified, so wildcarding expands in `2^n` KeyCombos where `n` is the number of
-unspecified modifiers. For example, a key combo leaving all `4` modifiers unspecified becomes `16` (`2^4`) key combo
+unspecified modifiers. For example, a KeyCombo leaving all `4` modifiers unspecified becomes `16` (`2^4`) KeyCombo
 registrations in the final registry.
 
 Syntax Example (This is only an illustrative example as it uses invalid actions, keycodes, and keynames):
@@ -225,7 +229,8 @@ applying the formula: `parent's enabled bindings` - `child's disabled bindings` 
 There is no maximum on the levels of inheritance allowed, though any cyclical
 inheritance is treated as an error and the parser fails. If you try to remove a binding that doesn't exist anywhere in
 the parent mappings, it does nothing. If you try to disable a binding in the wrong NavAction (one where it wasn't
-registered by the parent), the removal does nothing and may leave a conflicting key combo registered.
+registered by the parent), the removal does nothing and may leave a conflicting KeyCombo registered. Wildcarding also
+applies to disabled KeyCombos like it does to enabled ones.
 
 In steps, the inheritance algorithm is:
 
@@ -233,8 +238,8 @@ In steps, the inheritance algorithm is:
    other) to the final child.
 2. Create a temporary registry with the last inherited mappings' enabled bindings.
 3. Then for each next mappings set which inherits a previous in the chain:
-   a. Remove its disabled bindings first.
-   b. Then add its enabled bindings.
+   a. Remove all the mappings' disabled bindings first.
+   b. Then add all the mappings' enabled bindings.
 4. Use the final child’s metadata.
 
 Note that strict mode and FV are properties of a mappings JSON that are lost after deserialization. This means there
@@ -254,12 +259,12 @@ not needed and builtin mappings should themselves be a complete source of truth.
 
 Sharecodes follow the format of `CDS:EV1:<base58(gzip(JSON))>:<crc32(JSON)>`. The segments are as follows:
 
-| Segment (in order) | Description                                                                                                                                                                                                                      |
-|:-------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `CDS`              | The prefix for a `CMD + Delete share`.                                                                                                                                                                                           |
-| `EV1`              | The version of the sharecode encoding format (currently `1`). This represents how the sharecodes are encoded, and is different than the `FV` (Format Version) of the mappings JSONs which represents the JSON schema version.    |
-| the payload        | The `Base58` encoded (Using the Apache Commons Codec implementation which uses the Bitcoin Base58 alphabet) `gzip` compressed payload of the mappings JSON after being re-serialized without whitespace/pretty-printing by GSON. |
-| the checksum       | The `CRC32` checksum of the uncompressed mappings JSON as UTF-8 bytes after being re-serialized without whitespace/pretty-printing by GSON.                                                                                      |
+| Segment (in order) | Description                                                                                                                                                                                                                        |
+|:-------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `CDS`              | The prefix for a `CMD + Delete share`.                                                                                                                                                                                             |
+| `EV1`              | The version of the sharecode encoding format (currently `1`). This represents how the sharecodes are encoded, and is different than the `FV` (Format Version) of the mappings JSON files which represents the JSON schema version. |
+| the payload        | The `Base58` encoded (Using the Apache Commons Codec implementation which uses the Bitcoin Base58 alphabet) `gzip` compressed payload of the mappings JSON after being re-serialized without whitespace/pretty-printing by GSON.   |
+| the checksum       | The `CRC32` checksum, in an unsigned decimal number format, of the uncompressed mappings JSON as UTF-8 bytes after being re-serialized without whitespace/pretty-printing by GSON.                                                 |
 
 ### Example
 
