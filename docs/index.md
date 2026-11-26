@@ -8,12 +8,13 @@ This is a file that explains the contents of the documentation sorted alphabetic
 - [docs_license.md](docs_license.md) - a copy of the CC BY 4.0 license which these docs are licensed under
 - [friendly_keynames.md](friendly_keynames.md) - a list of every possible friendly keyname alongside its corresponding
   raw GLFW keycode and SDL3 scancode
+- [index.md](index.md) - this index
 - [jvm_arguments.md](jvm_arguments.md) - a list of every single JVM argument that affects the mod's behavior
 - [mappings_format_and_sharecodes.md](mappings_format_and_sharecodes.md) - explains the mappings format and sharecode
   specifications
 - [navmappings_command.md](navmappings_command.md) - an explanation of every sub-command of the client /navmappings
   command
-- [index.md](index.md) - this index
+- [similar_mods_comparison.md](similar_mods_comparison.md) - a comparison of CMD + Delete to other similar mods
 
 ## Where to Download
 
