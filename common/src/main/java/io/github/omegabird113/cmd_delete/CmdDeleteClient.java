@@ -56,7 +56,7 @@ public final class CmdDeleteClient {
 
 	public static void setPlatform(final @NonNull IPlatform platform) {
 		CmdDeleteClient.platform = platform;
-		LoggingManager.traceLog(platform.getPlatformLogger(), "Platform set... Using the provided platform logger to send this.");
+		LoggingManager.traceLog(platform.getPlatformLogger(), "Platform set... Using the provided platform logger to send this dump: {}", platform.getDumpString());
 		LoggingManager.debugLog(LOGGER, "CmdDeleteClient platform set to \"{}\"", platform.getPlatformName());
 	}
 

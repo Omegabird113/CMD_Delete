@@ -19,6 +19,22 @@
             </SchemaInfo>
           </value>
         </entry>
+        <entry key="Sponge Mixin configuration">
+          <value>
+            <SchemaInfo>
+              <option name="name" value="Sponge Mixin configuration" />
+              <option name="relativePathToSchema" value="https://www.schemastore.org/sponge-mixins.json" />
+              <option name="applicationDefined" value="true" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="common/src/main/resources/cmd_delete.mixins.json" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
         <entry key="crowdin.yml">
           <value>
             <SchemaInfo>

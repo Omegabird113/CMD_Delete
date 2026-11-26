@@ -4,6 +4,16 @@ This is a collection of all historical CMD + Delete changelogs for every release
 notes were retroactively added and the formatting was retroactively changed in some versions to fix typos and other
 issues and make inter-version formatting more consistent.
 
+### 1.5.0a
+
+[Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.5.0a%2Bmc1.21.11) on November 22nd, 2026.
+
+Changes:
+
+- Fix [#70](https://github.com/Omegabird113/CMD_Delete/issues/70): a crash on obfuscated Minecraft versions on the Fabric builds due to the mod jar not being properly remapped after the multiplatform architecture rewrite.
+
+Full changelog: https://github.com/Omegabird113/CMD_Delete/compare/1.5.0+mc1.21.11...1.5.0a+mc1.21.11
+
 ### 1.5.0
 
 [Released](https://github.com/Omegabird113/CMD_Delete/releases/tag/1.5.0%2Bmc26.3) on November 20th, 2026.
