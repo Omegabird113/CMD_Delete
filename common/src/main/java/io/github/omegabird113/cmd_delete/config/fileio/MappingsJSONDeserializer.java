@@ -31,7 +31,6 @@ import io.github.omegabird113.cmd_delete.utils.LoggingManager;
 import io.github.omegabird113.cmd_delete.utils.Os;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.*;
@@ -250,6 +249,6 @@ public final class MappingsJSONDeserializer {
 	private record MetadataContainer(@NonNull String name, @NonNull String author, @NonNull String version,
 									 @NonNull String description, @NonNull String id,
 									 @NonNull Set<@NonNull Os> systems,
-									 @Nullable String credits, @Nullable String license) {
+									 @NonNull String credits, @NonNull String license) {
 	}
 }
