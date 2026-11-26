@@ -10,15 +10,14 @@ Custom mappings can:
 
 - Use wildcard expansion where any modifier not included in a key combo is treated as `true` OR `false`.
 - Use [friendly keyname strings](friendly_keynames.md) defined by CMD + Delete instead of GLFW/SDL3 keycodes. If a
-  keyname is
-  not defined, you can still choose to use a raw keycode in your JSON.
+  keyname is not defined, you can still choose to use a raw keycode in your JSON.
 - Inherit keybinds from the builtin mappings or other custom mappings by setting the top-level `inherits` value to
   `custom:<id>` to inherit a custom JSON, or `builtin:<id>` or just `<id>` to inherit a builtin JSON.
 - Patch and override the mappings they inherit by setting the keybind to have `enabled` property as `false`. Note that
   CMD + Delete always removes your disabled keybinds before adding your enabled keybinds, allowing a
   patch-then-reimplement pattern to be easily done.
 - Set certain boolean feature flags to control the mod's behavior.
-- Enable `strict` mode (as a top-level JSON boolean) which would prevent your mappings from loading if they have certain
+- Enable `strict` mode (as a top-level JSON boolean) which prevents your mappings from loading if they have certain
   recoverable issues like keybind conflicts or unknown actions.
 
 Note that:
@@ -29,10 +28,16 @@ Note that:
   loading either `builtin:windows_linux` or `builtin:mac` depending on the user's OS. Note that `"inherits": ""` means a
   mappings JSON does not inherit anything, so it is impossible to inherit from the default behavior.
 - The parser generally enforces JSON value types strictly to avoid errors.
+- Unknown fields are generally ignored, but if a field is specific to a new format version and present in mappings with
+  an old format version, an exception is generally thrown. Actions of a new format version in an old format version also
+  cause exceptions. Feature flags never cause exception when they are not recognized and are designed to be able to be
+  changed without an FV bump. Unknown feature flags are always ignored allowing additions/removals/renamings without an
+  FV bump. Outside of strict mode, duplicate registrations are logged and skipped, though they cause exceptions in
+  strict mode.
 
 ### Example
 
-Minimum possible mappings example of the `my-mappings.json` file
+Minimum possible example of the mappings format, a `my-mappings.json` file:
 
 ```json
 {
@@ -53,7 +58,7 @@ Minimum possible mappings example of the `my-mappings.json` file
 }
 ```
 
-Complete example of the `sample.json` file:
+Complete format example of a `sample.json` file:
 
 ```json
 {
@@ -106,23 +111,23 @@ disables that keybinding and replaces it with some new ones.
 
 Below is a table explaining each `meta` field and whether it is required:
 
-| Field name    | Type           | Required                                   | Description                                                                                                                                                                                        |
-|:--------------|:---------------|:-------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `id`          | `String`       | Yes                                        | The non-namespaced ID of your mappings JSON. Note that it must match the filename of the JSON (unless being imported through /navmappings) and may not contain the `/` or `\` characters.          |
-| `systems`     | `List<String>` | Yes                                        | A metadata field of which systems your mappings are designed to run on. Note that it is not enforced that a user is on one of these systems. Acceptable systems are `windows`, `mac`, and `linux`. |
-| `name`        | `String`       | No (Defaults to `Unnamed Custom Mappings`) | The display/common name of your mappings set.                                                                                                                                                      |
-| `author`      | `String`       | No (Defaults to `unknown`)                 | The creator(s) of the mappings JSON.                                                                                                                                                               |
-| `description` | `String`       | No (Defaults to `No description provided`) | A detailed description of the mappings set.                                                                                                                                                        |
-| `version`     | `String`       | No (Defaults to `unknown`)                 | The version/revision of the mappings set                                                                                                                                                           |
-| `credits`     | `String`       | No (Defaults to `No credits provided`)     | Credits to those who helped, inspired, or or were otherwise involved with the mappings set.                                                                                                        |
-| `license`     | `String`       | No (Defaults to `unknown`)                 | The SPDX license identifier of the mappings set.                                                                                                                                                   |
+| Field name    | Type           | Required                                   | Description                                                                                                                                                                                                                                                                                            |
+|:--------------|:---------------|:-------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`          | `String`       | Yes                                        | The non-namespaced ID of your mappings JSON. Note that it must match the filename of the JSON (unless being imported through /navmappings) and may not contain the `/` or `\` characters.                                                                                                              |
+| `systems`     | `List<String>` | Yes                                        | A metadata field of which operating systems a mappings set is designed to run on. Note that it is not enforced that a user must be using one of these systems, this field exists for metadata only. Acceptable values are `windows`, `mac`, and `linux`. Duplicate values will be removed when loaded. |
+| `name`        | `String`       | No (Defaults to `Unnamed Custom Mappings`) | The display/common name of your mappings set.                                                                                                                                                                                                                                                          |
+| `author`      | `String`       | No (Defaults to `unknown`)                 | The creator(s) of the mappings JSON.                                                                                                                                                                                                                                                                   |
+| `description` | `String`       | No (Defaults to `No description provided`) | A detailed description of the mappings set.                                                                                                                                                                                                                                                            |
+| `version`     | `String`       | No (Defaults to `unknown`)                 | The version/revision of the mappings set                                                                                                                                                                                                                                                               |
+| `credits`     | `String`       | No (Defaults to `No credits provided`)     | Credits to those who helped, inspired, or or were otherwise involved with the mappings set.                                                                                                                                                                                                            |
+| `license`     | `String`       | No (Defaults to `unknown`)                 | The SPDX license identifier of the mappings set.                                                                                                                                                                                                                                                       |
 
 ### Actions JSON Syntax
 
-The primary part of a Mappings JSON is the actual `actions` section mapping [NavActions](actions_list.md) to key combos.
+The primary part of a Mappings JSON is the actual `actions` section mapping [NavActions](actions_list.md) to KeyCombos.
 
 This is done using an action sub-dictionary where an Action is a key and a list of KeyCombos is the value. You cannot
-use `NONE` as a key. Then each KeyCombo is a `key` value of a `String` [Friendly keyname](friendly_keynames.md) or an
+use `NONE` as a key. Each KeyCombo is a `key` value of a `String` [Friendly keyname](friendly_keynames.md) or an
 Integer GLFW keycode/SDL3 scancode (GLFW on any Minecraft version before `26.3 Snapshot 4` and SDL3 on any version
 after, due to Mojang's decision to change the game's input library in that version), and a set of optional boolean
 modifier fields, where if excluded get treated as `true` or `false` via wildcarding: `shift`, `control`, `superCommand`
@@ -137,7 +142,7 @@ KeyCombo must have all values specified, so wildcarding expands in `2^n` KeyComb
 unspecified modifiers. For example, a key combo leaving all `4` modifiers unspecified becomes `16` (`2^4`) key combo
 registrations in the final registry.
 
-Syntax Template Example (This does not actually work because it uses fake actions, keycodes, and keynames):
+Syntax Example (This is only an illustrative example as it uses invalid actions, keycodes, and keynames):
 
 ```json
 {
@@ -188,7 +193,7 @@ Syntax Template Example (This does not actually work because it uses fake action
 ### Feature Flags
 
 Feature flags are configurable optional boolean values within a `flags` top-level JSON object that mappings can specify.
-Feature flags can be added/removed/name-changed without a change to the mappings format Version. These are the available
+Feature flags can be added/removed/name-changed without a change to the mappings format version. These are the available
 feature flags to be used by mappings:
 
 | Feature flag name           | Default Value | Description                                                                                                                                                                                                                                                                       |
@@ -202,41 +207,58 @@ feature flags to be used by mappings:
 Strict mode can be enabled by setting a top-level optional `boolean` field named `strict` to `true` and causes the
 deserializer to change its behavior on the following issues:
 
-| Issue                                                                                                | Behavior Outside of Strict Mode                                                                       | Behavior in Strict Mode |
-|:-----------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------|:------------------------|
-| A duplicate action registration after wildcarding                                                    | Logs a warning                                                                                        | Throws an exception     |
-| Conflicts between different actions where a KeyCombo is registered twice after wildcarding           | Logs a warning                                                                                        | Throws an exception     |
-| An unknown friendly keyname is specified                                                             | Logs a warning                                                                                        | Throws an exception     |
-| An unknown action name is specified                                                                  | Logs a warning                                                                                        | Throws an exception     |
-| Action names or `systems` entries have leading/trailing whitespace or have the wrong capitalization. | If FV `5` or higher, throw an exception. Before that, remove whitespaces and corrects capitialization | Throws an exception     |
-| Numbers that don't adhere to the strict number RegEx but would pass `Integer.parseInt()`             | Number is accepted                                                                                    | Throws an exception     |
+| Issue                                                                                                | Behavior Outside of Strict Mode          | Behavior in Strict Mode |
+|:-----------------------------------------------------------------------------------------------------|:-----------------------------------------|:------------------------|
+| A duplicate KeyCombo definition inside an action registration after wildcarding                      | Logs a warning                           | Throws an exception     |
+| Conflicts between different actions where a KeyCombo is registered twice after wildcarding           | Logs a warning, 2nd registration skipped | Throws an exception     |
+| An unknown friendly keyname is specified                                                             | Logs a warning                           | Throws an exception     |
+| An unknown action name is specified                                                                  | Logs a warning                           | Throws an exception     |
+| Action names or `systems` entries have leading/trailing whitespace or have the wrong capitalization. | Throws an exception                      | Throws an exception     |
+| Numbers that don't adhere to the strict number RegEx but would pass `Integer.parseInt()`             | Number is accepted                       | Throws an exception     |
 
 The strict number RegEx is `-?(0|[1-9]\d*)`.
 
 ### Inheritance
 
-NavAction/KeyCombo pairs are inherited through an iterative `parent's enabled bindings` - `child's disabled bindings` +
-`child's enabled bindings` process. There is no maximum on the levels of inheritance allowed, though any cyclical
+NavAction/KeyCombo pairs are inherited through an iterative process that can be basically described as repeatedly
+applying the formula: `parent's enabled bindings` - `child's disabled bindings` + `child's enabled bindings`.
+There is no maximum on the levels of inheritance allowed, though any cyclical
 inheritance is treated as an error and the parser fails. If you try to remove a binding that doesn't exist anywhere in
 the parent mappings, it does nothing. If you try to disable a binding in the wrong NavAction (one where it wasn't
 registered by the parent), the removal does nothing and may leave a conflicting key combo registered.
 
+In steps, the inheritance algorithm is:
+
+1. Construct an inheritance chain from the last inherited mappings (aka the end mappings set that does not inherit any
+   other) to the final child.
+2. Create a temporary registry with the last inherited mappings' enabled bindings.
+3. Then for each next mappings set which inherits a previous in the chain:
+   a. Remove its disabled bindings first.
+   b. Then add its enabled bindings.
+4. Use the final child’s metadata.
+
+Note that strict mode and FV are properties of a mappings JSON that are lost after deserialization. This means there
+would be nothing preventing mappings from inheriting from others with a different FV if multiple FVs were supported.
+Also, each individual mappings set in the chain decides if it uses strict mode and that only applies to it.
+
 Feature flags inherit the parent's feature flag if the child feature flag is not specified, otherwise, they use the
 child's feature flag.
 
-The entire contents of the `meta` object and the strict mode value are not inherited and entirely determined by the last
-child in the chain.
+The entire contents of the `meta` object value are not inherited and are entirely determined by the last child in the 
+inheritance chain.
 
-As of right now, builtin mappings can use inheritance but the code, but they currently do not as builtin mappings should
-themselves be a complete source of truth.
+Currently, builtin mappings can use inheritance in the code, but they currently do not do so, as inheritance is
+not needed and builtin mappings should themselves be a complete source of truth.
 
 ## Sharecode Syntax
+
+Sharecodes follow the format of `CDS:EV1:<base58(gzip(JSON))>:<crc32(JSON)>`. The segments are as follows:
 
 | Segment (in order) | Description                                                                                                                                                                                                                      |
 |:-------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `CDS`              | The prefix for a `CMD + Delete share`.                                                                                                                                                                                           |
 | `EV1`              | The version of the sharecode encoding format (currently `1`). This represents how the sharecodes are encoded, and is different than the `FV` (Format Version) of the mappings JSONs which represents the JSON schema version.    |
-| the payload        | The `Base58` encoded (Using the Apache Commons Codec implementation which uses the Bitcoin Base58 alphabet) `GZip` compressed payload of the mappings JSON after being re-serialized without whitespace/pretty-printing by GSON. |
+| the payload        | The `Base58` encoded (Using the Apache Commons Codec implementation which uses the Bitcoin Base58 alphabet) `gzip` compressed payload of the mappings JSON after being re-serialized without whitespace/pretty-printing by GSON. |
 | the checksum       | The `CRC32` checksum of the uncompressed mappings JSON as UTF-8 bytes after being re-serialized without whitespace/pretty-printing by GSON.                                                                                      |
 
 ### Example
